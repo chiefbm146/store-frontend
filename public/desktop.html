@@ -1772,6 +1772,27 @@
         }
     </script>
 
+    <!-- Config System: Theme & Content Loaders -->
+    <script type="module">
+        import { injectTheme } from './js/theme-injector.js?v=11.0.12';
+        import { loadPageContent } from './js/content-loader.js?v=11.0.12';
+
+        // Initialize theme and content on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('[Desktop] Initializing theme and content from config...');
+
+            // Inject theme CSS variables
+            injectTheme();
+
+            // Load page content (pageName=null for main chat page)
+            loadPageContent(null, {
+                updateMetaTags: true,
+                updateTitle: false, // Keep existing title for chat page
+                logChanges: true
+            });
+        });
+    </script>
+
     <script src="./js/portal-store.js?v=11.0.12" type="module"></script>
     <script src="./js/tts-manager.js?v=11.0.12" type="module"></script>
     <script src="./js/jarvis-ui-manager.js?v=11.0.12" type="module"></script>

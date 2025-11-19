@@ -44,102 +44,31 @@
         </div>
     </div>
 
+    <!-- Config System: Theme & Content Loaders -->
     <script type="module">
-        // Import services config for images
-        import servicesConfig from './js/config/services-config.js';
+        import { injectTheme } from './js/theme-injector.js';
+        import { loadPageContent } from './js/content-loader.js';
+        import { getAllServices, services } from './js/config/index.js';
 
-        // Workshop Registry (from smart-message-renderer.js lines 19-160)
-        const workshopRegistry = {
-            'kairos-blanket-inperson': {
-                name: 'Kairos Blanket Exercise - In-Person',
-                emoji: '🛏️',
-                description: 'Kairos Blanket Exercise - In-Person',
-                price: '$225 (Community) / $375 (Corporate)',
-                duration: '3 hours'
-            },
-            'kairos-blanket-virtual': {
-                name: 'Kairos Blanket Exercise - Virtual',
-                emoji: '🛏️',
-                description: 'Kairos Blanket Exercise - Virtual',
-                price: '$225 (Community) / $375 (Corporate)',
-                duration: '3 hours'
-            },
-            'cedar-bracelet': {
-                name: 'Cedar Woven Bracelet',
-                emoji: '🪵',
-                description: 'Cedar Woven Bracelet',
-                price: '$70 (Community) / $95 (Corporate)',
-                duration: '2 hours'
-            },
-            'cedar-rope-bracelet': {
-                name: 'Cedar Rope Bracelet with Beads',
-                emoji: '🪵',
-                description: 'Cedar Rope Bracelet with Beads',
-                price: '$55 (Community) / $75 (Corporate)',
-                duration: '2 hours'
-            },
-            'cedar-heart': {
-                name: 'Weaving a Cedar Heart',
-                emoji: '❤️',
-                description: 'Weaving a Cedar Heart',
-                price: '$70 (Community) / $95 (Corporate)',
-                duration: '2 hours'
-            },
-            'medicine-pouch': {
-                name: 'Healing Through Medicine Pouch Making',
-                emoji: '🫶',
-                description: 'Healing Through Medicine Pouch Making',
-                price: '$70 (Community) / $95 (Corporate)',
-                duration: '2 hours'
-            },
-            'orange-shirt-day-inperson': {
-                name: 'Orange Shirt Day Awareness Beading - In-Person',
-                emoji: '🧡',
-                description: 'Orange Shirt Day Awareness Beading - In-Person',
-                price: '$120 (Community) / $160 (Corporate)',
-                duration: '4 hours'
-            },
-            'orange-shirt-day-virtual': {
-                name: 'Orange Shirt Day Awareness Beading - Virtual',
-                emoji: '🧡',
-                description: 'Orange Shirt Day Awareness Beading - Virtual',
-                price: '$105 (Community) / $145 (Corporate)',
-                duration: '4 hours'
-            },
-            'mmiwg2s-inperson': {
-                name: 'MMIWG2S Awareness Beading - In-Person',
-                emoji: '🤝',
-                description: 'MMIWG2S Awareness Beading - In-Person',
-                price: '$120 (Community) / $160 (Corporate)',
-                duration: '4 hours'
-            },
-            'mmiwg2s-virtual': {
-                name: 'MMIWG2S Awareness Beading - Virtual',
-                emoji: '🤝',
-                description: 'MMIWG2S Awareness Beading - Virtual',
-                price: '$105 (Community) / $145 (Corporate)',
-                duration: '4 hours'
-            },
-            'cedar-coasters': {
-                name: 'Cedar Woven Coasters',
-                emoji: '☕',
-                description: 'Cedar Woven Coasters',
-                price: '$70 (Community) / $95 (Corporate)',
-                duration: '2 hours'
-            },
-            'cedar-basket': {
-                name: 'Cedar Basket Weaving',
-                emoji: '🧺',
-                description: 'Cedar Basket Weaving',
-                price: '$120 (Community) / $160 (Corporate)',
-                duration: '4 hours'
-            }
-        };
+        // Initialize theme and content
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('[Workshop List] Initializing from config...');
 
-        // Populate the grid
+            // Inject theme
+            injectTheme();
+
+            // Load page content
+            loadPageContent('services', { updateMetaTags: true, updateTitle: true });
+        });
+
+        // Populate workshop grid from config system
         const grid = document.getElementById('workshopGrid');
+        const allServices = getAllServices();
 
-        for (const [workshopId, workshop] of Object.entries(workshopRegistry)) {
+        // Filter to only show workshops (type === 'workshop')
+        const workshops = allServices.filter(service => service.type === 'workshop');
+
+        workshops.forEach(workshop => {
             // Create card
             const card = document.createElement('div');
             card.className = 'service-card';
@@ -149,17 +78,9 @@
             const imageDiv = document.createElement('div');
             imageDiv.className = 'service-card-image';
 
-            // Try to load image, fall back to emoji placeholder
-            const imagePath = servicesConfig.getImagePath(workshopId);
-
-            if (imagePath === null) {
-                // Explicitly use emoji placeholder (no image config)
-                imageDiv.classList.add('placeholder');
-                imageDiv.textContent = workshop.emoji || '🎯';
-            } else {
-                // Try to load image with fallback to emoji
+            if (workshop.image) {
                 const img = document.createElement('img');
-                img.src = imagePath;
+                img.src = workshop.image;
                 img.alt = workshop.name;
                 img.onerror = () => {
                     // If image fails to load, use emoji placeholder
@@ -167,6 +88,10 @@
                     imageDiv.classList.add('placeholder');
                 };
                 imageDiv.appendChild(img);
+            } else {
+                // Use emoji placeholder
+                imageDiv.classList.add('placeholder');
+                imageDiv.textContent = workshop.emoji || '🎯';
             }
 
             card.appendChild(imageDiv);
@@ -197,13 +122,20 @@
             const meta = document.createElement('div');
             meta.className = 'service-card-meta';
 
+            // Format price from config
             const priceItem = document.createElement('div');
             priceItem.className = 'service-meta-item';
-            priceItem.innerHTML = `Price: <span class="service-meta-value">${workshop.price}</span>`;
+            if (workshop.pricing && workshop.pricing.enabled) {
+                const communityPrice = (workshop.pricing.community / 100).toFixed(2);
+                const corporatePrice = (workshop.pricing.corporate / 100).toFixed(2);
+                priceItem.innerHTML = `Price: <span class="service-meta-value">$${communityPrice} (Community) / $${corporatePrice} (Corporate)</span>`;
+            } else {
+                priceItem.innerHTML = `Price: <span class="service-meta-value">Contact for pricing</span>`;
+            }
 
             const durationItem = document.createElement('div');
             durationItem.className = 'service-meta-item';
-            durationItem.innerHTML = `Duration: <span class="service-meta-value">${workshop.duration}</span>`;
+            durationItem.innerHTML = `Duration: <span class="service-meta-value">${workshop.duration || 'Contact for details'}</span>`;
 
             meta.appendChild(priceItem);
             meta.appendChild(durationItem);
@@ -212,11 +144,11 @@
             // Action button
             const actionBtn = document.createElement('button');
             actionBtn.className = 'service-card-action';
-            actionBtn.textContent = 'Book Workshop';
+            actionBtn.textContent = 'View Details';
 
-            // Click handler - navigate to chat with auto-booking
+            // Click handler - navigate to workshop detail page
             const navigateToDetail = () => {
-                window.location.href = `/chat?book=${workshopId}`;
+                window.location.href = `/workshop-detail?id=${workshop.id}`;
             };
 
             actionBtn.addEventListener('click', navigateToDetail);
@@ -231,7 +163,7 @@
             });
 
             grid.appendChild(card);
-        }
+        });
     </script>
 
     <script>
