@@ -16,164 +16,14 @@ import soundManager from './soundManager.js';
 
 export class SmartMessageRenderer {
     constructor() {
-        this.workshopRegistry = {
-            'kairos-blanket-inperson': {
-                name: 'Kairos Blanket Exercise - In-Person',
-                emoji: '🛏️',
-                description: 'Kairos Blanket Exercise - In-Person',
-                price: '$225 (Community) / $375 (Corporate)',
-                community: 22500, // in cents
-                corporate: 37500, // in cents
-                per_person: true,
-                duration: '3 hours',
-                keywords: ['kairos', 'blanket', 'exercise', 'reconciliation', 'inperson', 'in-person']
-            },
-            'kairos-blanket-virtual': {
-                name: 'Kairos Blanket Exercise - Virtual',
-                emoji: '🛏️',
-                description: 'Kairos Blanket Exercise - Virtual',
-                price: '$225 (Community) / $375 (Corporate)',
-                community: 22500,
-                corporate: 37500,
-                per_person: true,
-                duration: '3 hours',
-                keywords: ['kairos', 'blanket', 'exercise', 'reconciliation', 'virtual', 'online']
-            },
-            'cedar-bracelet': {
-                name: 'Cedar Woven Bracelet',
-                emoji: '🪵',
-                description: 'Cedar Woven Bracelet',
-                price: '$70 (Community) / $95 (Corporate)',
-                community: 7000,
-                corporate: 9500,
-                per_person: true,
-                duration: '2 hours',
-                keywords: ['cedar', 'bracelet', 'weaving', 'woven']
-            },
-            'cedar-rope-bracelet': {
-                name: 'Cedar Rope Bracelet with Beads',
-                emoji: '🪵',
-                description: 'Cedar Rope Bracelet with Beads',
-                price: '$55 (Community) / $75 (Corporate)',
-                community: 5500,
-                corporate: 7500,
-                per_person: true,
-                duration: '2 hours',
-                keywords: ['cedar', 'rope', 'bracelet', 'beads', 'beading']
-            },
-            'cedar-heart': {
-                name: 'Weaving a Cedar Heart',
-                emoji: '❤️',
-                description: 'Weaving a Cedar Heart',
-                price: '$70 (Community) / $95 (Corporate)',
-                community: 7000,
-                corporate: 9500,
-                per_person: true,
-                duration: '2 hours',
-                keywords: ['cedar', 'heart', 'weaving']
-            },
-            'medicine-pouch': {
-                name: 'Healing Through Medicine Pouch Making',
-                emoji: '🫶',
-                description: 'Healing Through Medicine Pouch Making',
-                price: '$70 (Community) / $95 (Corporate)',
-                community: 7000,
-                corporate: 9500,
-                per_person: true,
-                duration: '2 hours',
-                keywords: ['medicine', 'pouch', 'healing', 'sacred']
-            },
-            'orange-shirt-day-inperson': {
-                name: 'Orange Shirt Day Awareness Beading - In-Person',
-                emoji: '🧡',
-                description: 'Orange Shirt Day Awareness Beading - In-Person',
-                price: '$120 (Community) / $160 (Corporate)',
-                community: 12000,
-                corporate: 16000,
-                per_person: true,
-                duration: '4 hours',
-                keywords: ['orange', 'shirt', 'day', 'awareness', 'beading', 'inperson', 'in-person']
-            },
-            'orange-shirt-day-virtual': {
-                name: 'Orange Shirt Day Awareness Beading - Virtual',
-                emoji: '🧡',
-                description: 'Orange Shirt Day Awareness Beading - Virtual',
-                price: '$105 (Community) / $145 (Corporate)',
-                community: 10500,
-                corporate: 14500,
-                per_person: true,
-                duration: '4 hours',
-                keywords: ['orange', 'shirt', 'day', 'awareness', 'beading', 'virtual', 'online']
-            },
-            'mmiwg2s-inperson': {
-                name: 'MMIWG2S Awareness Beading - In-Person',
-                emoji: '🤝',
-                description: 'MMIWG2S Awareness Beading - In-Person',
-                price: '$120 (Community) / $160 (Corporate)',
-                community: 12000,
-                corporate: 16000,
-                per_person: true,
-                duration: '4 hours',
-                keywords: ['mmiwg2s', 'murdered', 'missing', 'women', 'girls', 'beading', 'inperson', 'in-person']
-            },
-            'mmiwg2s-virtual': {
-                name: 'MMIWG2S Awareness Beading - Virtual',
-                emoji: '🤝',
-                description: 'MMIWG2S Awareness Beading - Virtual',
-                price: '$105 (Community) / $145 (Corporate)',
-                community: 10500,
-                corporate: 14500,
-                per_person: true,
-                duration: '4 hours',
-                keywords: ['mmiwg2s', 'murdered', 'missing', 'women', 'girls', 'beading', 'virtual', 'online']
-            },
-            'cedar-coasters': {
-                name: 'Cedar Woven Coasters',
-                emoji: '☕',
-                description: 'Cedar Woven Coasters',
-                price: '$70 (Community) / $95 (Corporate)',
-                community: 7000,
-                corporate: 9500,
-                per_person: true,
-                duration: '2 hours',
-                keywords: ['cedar', 'coasters', 'functional']
-            },
-            'cedar-basket': {
-                name: 'Cedar Basket Weaving',
-                emoji: '🧺',
-                description: 'Cedar Basket Weaving',
-                price: '$120 (Community) / $160 (Corporate)',
-                community: 12000,
-                corporate: 16000,
-                per_person: true,
-                duration: '4 hours',
-                keywords: ['cedar', 'basket', 'weaving', 'baskets']
-            },
-            // 'test-product': {
-            //     name: 'Test Product',
-            //     emoji: '🧪',
-            //     description: 'A test product for development and testing purposes.',
-            //     price: '$0.50',
-            //     duration: 'Instant',
-            //     keywords: ['test', 'product', 'development']
-            // }
-        };
+        // BOOKING FLOW REMOVED - Now using cart-based checkout system
+        // Workshop data moved to config/content/services.js
 
-        // === NEW: Hardcoded Booking Flow State ===
-        this.bookingState = {
-            workshop_id: null,
-            organization_type: null,
-            participants: null,
-            requested_date: null,
-            requested_time: null,
-            total_cost: null
-        };
-        // === END NEW ===
-
+        // Keep these for potential future use with cart/product selection
         this.selectedWorkshop = null;
         this.selectedOrgType = null;
         this.selectedParticipants = null;
-        this.filteredWorkshops = null; // Will be set based on context
+        this.filteredWorkshops = null;
         this.conversationContext = null;
 
         // === Modal state tracking for browser history integration ===
@@ -197,7 +47,6 @@ export class SmartMessageRenderer {
 
     /**
      * Reset all internal state variables to defaults
-     * Called when exiting booking flow to ensure clean state for next interaction
      */
     resetState() {
         console.log("🔄 Resetting SmartMessageRenderer internal state...");
@@ -206,16 +55,6 @@ export class SmartMessageRenderer {
         this.selectedParticipants = null;
         this.filteredWorkshops = null;
         this.conversationContext = null;
-        // === NEW: Reset booking state ===
-        this.bookingState = {
-            workshop_id: null,
-            organization_type: null,
-            participants: null,
-            requested_date: null,
-            requested_time: null,
-            total_cost: null
-        };
-        // === END NEW ===
         console.log("✓ SmartMessageRenderer state reset complete.");
     }
 
@@ -273,244 +112,18 @@ export class SmartMessageRenderer {
 
     // === NEW: HARDCODED BOOKING FLOW METHODS ===
 
-    /**
-     * Get hardcoded AI responses for each booking flow step
-     */
-    getHardcodedResponse(step, data = {}) {
-        const { workshop_name, organization_type, participants } = data;
-
-        const responses = {
-            welcome_to_booking: `Excellent choice! The <special>${workshop_name}</special> workshop it is. To help us tailor the experience, please tell us: is this booking for a <special>corporate team</special> or a <special>community group</special>?`,
-            ask_org_type: `For the <special>${workshop_name}</special> workshop, is this for a <special>corporate team</special> or a <special>community group</special> (like a non-profit or school)?`,
-            ask_participants: `Wonderful! For the <special>${workshop_name}</special> workshop with your <special>${organization_type}</special> group, how many participants will be joining us? (Please note: we have a minimum of <special>10 participants</special>.)`,
-            ask_date_time: `Perfect! You've indicated <special>${participants} participants</special> for the <special>${workshop_name}</special> workshop. When would you like to schedule this? Please share your preferred date and time.`,
-            confirm_details_ready: `Excellent! You've selected the <special>${workshop_name}</special> workshop for <special>${participants} ${organization_type}</special> participants on <special>${data.requested_date}</special> in the <special>${data.requested_time}</special>. The total estimated cost is <price>$${data.total_cost}</price>. Does everything look correct?`,
-            exit_booking: `Got it. The booking has been cancelled. We're here whenever you're ready to explore our transformative experiences again.`
-        };
-
-        return responses[step] || '';
-    }
-
-    /**
-     * Calculate workshop cost based on org type and participants
-     * Mirrors backend logic from main.py
-     */
-    calculateWorkshopCost() {
-        const { workshop_id, organization_type, participants } = this.bookingState;
-
-        if (!workshop_id || !organization_type || !participants) {
-            return null;
-        }
-
-        const workshop = this.workshopRegistry[workshop_id];
-        if (!workshop) return null;
-
-        const priceInCents = workshop[organization_type.toLowerCase()];
-        const minParticipants = 10;
-        const effectiveParticipants = Math.max(participants, minParticipants);
-        const totalCostInCents = priceInCents * effectiveParticipants;
-        const totalCostInDollars = (totalCostInCents / 100).toFixed(2);
-
-        return totalCostInDollars;
-    }
-
-    /**
-     * Main method to handle hardcoded booking flow steps
-     * Returns { aiText, action } or { aiText: null, action: null } to fall through to AI
-     */
-    async handleHardcodedBookingFlow(userMessage) {
-        let aiText = null;
-        let action = null;
-
-        // Step 1: User initiates booking with BOOK_WORKSHOP:: command
-        if (userMessage.startsWith("BOOK_WORKSHOP::") && !this.bookingState.workshop_id) {
-            const workshopId = userMessage.split("::")[1];
-            const workshop = this.workshopRegistry[workshopId];
-
-            if (workshop) {
-                this.resetState(); // Hard reset for new booking
-                this.bookingState.workshop_id = workshopId;
-                aiText = this.getHardcodedResponse('welcome_to_booking', {
-                    workshop_name: workshop.description
-                });
-                console.log(`[SmartRenderer] Booking initiated for: ${workshop.description}`);
-            } else {
-                aiText = "I'm sorry, I couldn't find that workshop. Please try again.";
-                this.resetState();
-            }
-        }
-        // Step 2: User selects organization type with ORG_TYPE:: command
-        else if (userMessage.startsWith("ORG_TYPE::") && this.bookingState.workshop_id && !this.bookingState.organization_type) {
-            const orgType = userMessage.split("::")[1];
-            if (['community', 'corporate'].includes(orgType)) {
-                this.bookingState.organization_type = orgType;
-                const workshop = this.workshopRegistry[this.bookingState.workshop_id];
-                aiText = this.getHardcodedResponse('ask_participants', {
-                    workshop_name: workshop.description,
-                    organization_type: this._capitalize(orgType)
-                });
-                console.log(`[SmartRenderer] Organization type set to: ${orgType}`);
-            } else {
-                aiText = "Please select either <special>corporate</special> or <special>community</special>.";
-            }
-        }
-        // Step 3: User enters participants with PARTICIPANTS:: command
-        else if (userMessage.startsWith("PARTICIPANTS::") && this.bookingState.workshop_id && this.bookingState.organization_type && !this.bookingState.participants) {
-            const participants = parseInt(userMessage.split("::")[1]);
-            if (!isNaN(participants) && participants >= 10) {
-                this.bookingState.participants = participants;
-                const workshop = this.workshopRegistry[this.bookingState.workshop_id];
-                aiText = this.getHardcodedResponse('ask_date_time', {
-                    workshop_name: workshop.description,
-                    organization_type: this._capitalize(this.bookingState.organization_type),
-                    participants: participants
-                });
-                console.log(`[SmartRenderer] Participants set to: ${participants}`);
-            } else {
-                aiText = "Please enter a valid number (minimum <special>10 participants</special>).";
-            }
-        }
-        // Step 4: User selects date/time with DATE_TIME:: command
-        else if (userMessage.startsWith("DATE_TIME::") && this.bookingState.workshop_id && this.bookingState.organization_type && this.bookingState.participants && !this.bookingState.requested_date) {
-            const parts = userMessage.split("::");
-            const date = parts[1];
-            const time = parts[2];
-
-            if (date && time) {
-                this.bookingState.requested_date = date;
-                this.bookingState.requested_time = time;
-                this.bookingState.total_cost = this.calculateWorkshopCost();
-
-                const workshop = this.workshopRegistry[this.bookingState.workshop_id];
-                aiText = this.getHardcodedResponse('confirm_details_ready', {
-                    workshop_name: workshop.description,
-                    organization_type: this._capitalize(this.bookingState.organization_type),
-                    participants: this.bookingState.participants,
-                    requested_date: date,
-                    requested_time: time,
-                    total_cost: this.bookingState.total_cost
-                });
-                console.log(`[SmartRenderer] Date/Time set to: ${date}, ${time}. Cost: $${this.bookingState.total_cost}`);
-            } else {
-                aiText = "Please provide both a date and time.";
-            }
-        }
-        // Step 5: User confirms booking with CONFIRM_BOOKING_DETAILS command
-        else if (userMessage === "CONFIRM_BOOKING_DETAILS" && this.bookingState.workshop_id && this.bookingState.requested_date) {
-            const workshop = this.workshopRegistry[this.bookingState.workshop_id];
-            action = {
-                type: "SHOW_STRIPE_CHECKOUT",
-                payload: {
-                    workshop_id: this.bookingState.workshop_id,
-                    workshop_name: workshop.description,
-                    organization_type: this.bookingState.organization_type,
-                    participants: this.bookingState.participants,
-                    requested_date: this.bookingState.requested_date,
-                    requested_time: this.bookingState.requested_time,
-                    total_cost: this.bookingState.total_cost
-                }
-            };
-            console.log('[SmartRenderer] Booking confirmed. Triggering payment module.');
-            this.resetState();
-        }
-        // Step 6: User exits booking flow with EXIT_BOOKING command
-        else if (userMessage === "EXIT_BOOKING_FLOW") {
-            aiText = this.getHardcodedResponse('exit_booking');
-            this.resetState();
-            console.log('[SmartRenderer] Exiting booking flow.');
-        }
-        // If not a hardcoded booking command, return null to signal AI fallback
-        else if (!userMessage.startsWith("BOOK_WORKSHOP::") && !userMessage.startsWith("ORG_TYPE::") && !userMessage.startsWith("PARTICIPANTS::") && !userMessage.startsWith("DATE_TIME::") && userMessage !== "CONFIRM_BOOKING_DETAILS" && userMessage !== "EXIT_BOOKING_FLOW") {
-            // Regular message - not a booking command
-            return { aiText: null, action: null };
-        }
-
-        return { aiText, action };
-    }
-
-    /**
-     * Capitalize first letter of string
-     */
-    _capitalize(str) {
-        if (!str) return '';
-        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-    }
-
-    // === END NEW HARDCODED BOOKING FLOW METHODS ===
-
-    /**
-     * Detect what workshop(s) user is talking about
-     * STRICT keyword matching - only user input matters, AI response ignored
-     * Returns: { matchedIds: [], confidence: 0.0-1.0, mode: 'specific' | 'vague' }
-     */
-    analyzeConversationContext(aiText, userText = '') {
-        if (!userText) return { matchedIds: [], confidence: 0.0, mode: 'vague' };
-
-        // ONLY use user text for matching (AI response can confuse things)
-        const userLower = userText.toLowerCase();
-        const matches = {};
-
-        // Score each workshop based on keyword matches in USER TEXT ONLY
-        for (const [id, workshop] of Object.entries(this.workshopRegistry)) {
-            let score = 0;
-            // Count how many keywords from this workshop appear in user text
-            for (const keyword of workshop.keywords) {
-                // Use word boundary matching to avoid "basket" matching in "basketball"
-                const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
-                const keywordMatches = userLower.match(regex);
-                if (keywordMatches) {
-                    score += keywordMatches.length; // Add for each occurrence
-                }
-            }
-            if (score > 0) {
-                matches[id] = score;
-            }
-        }
-
-        // Sort by score (higher = more keywords matched)
-        const sortedMatches = Object.entries(matches)
-            .sort((a, b) => b[1] - a[1])
-            .map(([id]) => id);
-
-        // Determine mode based on whether ANY keywords matched user input
-        const mode = sortedMatches.length > 0 ? 'specific' : 'vague';
-
-        const maxScore = Math.max(...Object.values(matches), 0);
-        const confidence = Math.min(maxScore / 2, 1.0);
-
-        console.log('🔍 Workshop filtering analysis:', {
-            userText,
-            matchedIds: sortedMatches,
-            mode,
-            confidence: confidence.toFixed(2),
-            allMatches: Object.fromEntries(Object.entries(matches))
-        });
-
-        return {
-            matchedIds: sortedMatches, // ALL matches, sorted by relevance
-            confidence,
-            mode
-        };
-    }
-
-    /**
-     * Get filtered workshops based on context
-     * If specific mode: show ONLY matched workshops (no extras)
-     * If vague mode: show all workshops
-     */
-    getFilteredWorkshops(context) {
-        if (context.mode === 'vague') {
-            return Object.entries(this.workshopRegistry);
-        }
-
-        if (context.mode === 'specific' && context.matchedIds.length > 0) {
-            // Show ONLY matched workshops - no extras
-            const matched = context.matchedIds.map(id => [id, this.workshopRegistry[id]]);
-            return matched;
-        }
-
-        return Object.entries(this.workshopRegistry);
-    }
+    // ===== BOOKING FLOW DELETED =====
+    // The following booking flow methods have been removed:
+    // - getHardcodedResponse()
+    // - calculateWorkshopCost()
+    // - handleHardcodedBookingFlow()
+    // - _capitalize()
+    // - analyzeConversationContext()
+    // - getFilteredWorkshops()
+    //
+    // Reason: Replaced with cart-based checkout system
+    // Workshop data now in config/content/services.js
+    // ================================
 
     /**
      * Render smart message with CONTEXT-AWARE workshop filtering

@@ -13,15 +13,15 @@ import soundManager from './soundManager.js';
 import audioStateManager from './audioStateManager.js';
 import hamburgerMenu from './hamburger-menu.js';
 
-// NEW: Import the preloader and the list of images
+// NEW: Import the preloader and config system
 import assetPreloader from './asset-preloader.js';
-import { IMAGE_PATHS_TO_PRELOAD } from './config/services-config.js';
+import { settings, brand, getPreloadImages } from './config/index.js';
 import WaterBackground from './water.js';
 import TextAnimator from './text_animator.js';
 
 const UI = {}; // Cache for DOM elements
 let welcomeMessageRendered = false; // Guard to ensure welcome message is only created once
-const BACKEND_URL = "https://reconciliation-backend-934410532991.us-central1.run.app";
+const BACKEND_URL = settings.backend.aiChatUrl; // From config system
 const messageAudioCache = {}; // Local cache for message audio
 let sessionId = null; // Will hold the current session ID
 let ttsFirstUnlocked = false; // Track if this is the first TTS unlock (for big glow animation)
@@ -165,10 +165,11 @@ async function initializeDeviceDetector() {
 async function initializeShared3DAssets() {
     console.log("🚀 Initializing Shared 3D Assets (One-Time Load)...");
     try {
-        const gltf = await shared3D.gltfLoader.loadAsync('/moon_logo_3d.glb?v=11.0.12');
+        const modelPath = settings.threeD.mainLogoModel + '?v=' + settings.version; // From config
+        const gltf = await shared3D.gltfLoader.loadAsync(modelPath);
         shared3D.loadedModel = gltf.scene;
         shared3D.animations = gltf.animations;
-        console.log("✅ 3D Moon model pre-loaded successfully!");
+        console.log("✅ 3D model pre-loaded successfully from:", modelPath);
 
         // --- START THE SINGLE, GLOBAL RENDER LOOP ---
         function globalAnimateLoop() {
@@ -296,7 +297,8 @@ class PortalController {
             this.wakeupPingSent = true;
         }
 
-        assetPreloader.init(IMAGE_PATHS_TO_PRELOAD);
+        // Initialize asset preloader with images from config system
+        assetPreloader.init(getPreloadImages());
 
         // The intro loader sequence is now complete (handled by index.html).
         // The app UI is already visible, so we can proceed directly to rendering the first message.
@@ -612,24 +614,7 @@ async function handleSendMessage() {
     UI.inputWrapper.classList.remove('active');
 
     try {
-        // === NEW: Check if this is a hardcoded booking flow command ===
-        console.log("📤 Processing message...");
-        const { aiText: hardcodedAiText, action: hardcodedAction } = await smartMessageRenderer.handleHardcodedBookingFlow(userText);
-
-        if (hardcodedAiText !== null || hardcodedAction !== null) {
-            console.log("✅ SmartMessageRenderer handled booking flow locally (no API call).");
-            // If the hardcoded flow gives an AI response, dispatch it
-            if (hardcodedAiText) {
-                portalStore.dispatch('receiveAiResponse', { aiText: hardcodedAiText });
-            }
-            // If the hardcoded flow gives an action (e.g., SHOW_STRIPE_CHECKOUT), handle it
-            if (hardcodedAction) {
-                handleJarvisAction(hardcodedAction);
-            }
-            return; // Do NOT send to backend
-        }
-        // === END NEW ===
-
+        // BOOKING FLOW REMOVED - Now using cart-based checkout
         console.log("📤 Sending message to backend AI...");
 
         // === LAYER 6: Get fingerprint signature (cached) ===
@@ -640,15 +625,8 @@ async function handleSendMessage() {
             session_id: getSessionId(),
             device_fingerprint: deviceFingerprint,
             fingerprint_signature: signatureData.signature,
-            fingerprint_timestamp: signatureData.timestamp,
-            // Always attach the current booking state from smartMessageRenderer
-            // The backend will know what to do with it.
-            organization_type: window.smartMessageRenderer?.bookingState?.organization_type || null,
-            participants: window.smartMessageRenderer?.bookingState?.participants || null,
-            requested_date: window.smartMessageRenderer?.bookingState?.requested_date || null,
-            requested_time: window.smartMessageRenderer?.bookingState?.requested_time || null,
-            // Also send workshop_id if available, to complete the context
-            workshop_id: window.smartMessageRenderer?.bookingState?.workshop_id || null
+            fingerprint_timestamp: signatureData.timestamp
+            // BOOKING STATE REMOVED - Now using cart-based checkout
         };
 
         console.log('📤 [DEBUG] Exact payload being sent to backend:', JSON.stringify(requestPayload, null, 2));
@@ -805,7 +783,8 @@ async function render() {
             // Only run this block if the welcome message has NEVER been rendered before.
             // Skip if window.skipWelcomeMessage is set (e.g., auto-booking from workshop detail pages)
 
-            const welcomeText = "Welcome to <special>Moon Tide Reconciliation</special>. We are a collective of <special>Indigenous Elders</special>, <special>knowledge keepers</special>, and facilitators guided by our lead contact, <special>Shona Sparrow</special>.\n\nOur mission is to foster true <special>reconciliation</special> through powerful, shared experiences. We offer a variety of transformative <special>cultural workshops</special> designed to open hearts and guide organizations on a meaningful journey.\n\nFeel free to explore. You can click on any of the highlighted <special>special terms</special> to learn more about them. How may I help you today?";
+            // Welcome message from config system
+            const welcomeText = settings.chat.welcomeMessage;
             const welcomeElement = await createMessageElement(welcomeText, 'ai');
             UI.messagesDiv.appendChild(welcomeElement);
 
