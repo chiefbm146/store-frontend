@@ -644,6 +644,25 @@
         </section>
     </div>
 
+    <!-- Config System: Theme & Content Loaders -->
+    <script type="module">
+        import { injectTheme } from './js/theme-injector.js';
+        import { loadPageContent } from './js/content-loader.js';
+
+        // Initialize theme immediately (before DOMContentLoaded)
+        injectTheme();
+        console.log('[Workshop Detail] Theme injected');
+
+        // Load page content when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPageContent(null, {
+                updateMetaTags: false, // Workshop loader handles title
+                updateTitle: false,
+                logChanges: true
+            });
+        });
+    </script>
+
     <script type="module">
         import WorkshopLoader from './js/workshop-loader.js';
 
@@ -661,13 +680,14 @@
         document.addEventListener('DOMContentLoaded', () => {
             WorkshopLoader.init();
 
-            // Update CTA buttons to include workshop ID for auto-booking
+            // Update CTA buttons to navigate to workshop detail (no auto-booking)
             const workshopId = WorkshopLoader.getWorkshopId();
             if (workshopId) {
                 const heroCta = document.getElementById('hero-cta');
                 const ctaButton = document.getElementById('cta-button');
-                if (heroCta) heroCta.href = `/chat?book=${workshopId}`;
-                if (ctaButton) ctaButton.href = `/chat?book=${workshopId}`;
+                // Link to contact/chat instead of auto-booking
+                if (heroCta) heroCta.href = `/contact`;
+                if (ctaButton) ctaButton.href = `/contact`;
             }
         });
     </script>

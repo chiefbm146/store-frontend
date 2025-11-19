@@ -371,6 +371,25 @@
         <p class="footer-location">Douglas Lake & Vancouver, BC</p>
     </footer>
 
+    <!-- Config System: Theme & Content Loaders -->
+    <script type="module">
+        import { injectTheme } from './js/theme-injector.js';
+        import { loadPageContent } from './js/content-loader.js';
+
+        // Initialize theme immediately
+        injectTheme();
+        console.log('[About Page Desk] Theme injected');
+
+        // Load page content when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPageContent('about', {
+                updateMetaTags: true,
+                updateTitle: true,
+                logChanges: true
+            });
+        });
+    </script>
+
     <script>
         function navigateBack() {
             window.location.href = '/menu';
