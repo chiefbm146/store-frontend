@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Printer Portal - Config Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            min-height: 150px;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .validation-results {
+            margin-top: 20px;
+        }
+
+        .validation-item {
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            border-left: 4px solid;
+        }
+
+        .validation-item.error {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+
+        .validation-item.warning {
+            background: #e7f3ff;
+            border-left-color: #2196F3;
+        }
+
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .api-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .api-info code {
+            background: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            border-bottom-color: #667eea;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏪 Store Printer Portal</h1>
+            <p class="subtitle">AI-Powered Store Configuration Manager</p>
+        </header>
+
+        <div class="card">
+            <h2>🔧 Configuration Manager</h2>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('generate')">🤖 Generate with AI</div>
+                <div class="tab" onclick="showTab('manage')">📝 Manage Config</div>
+                <div class="tab" onclick="showTab('deploy')">🚀 Deploy</div>
+                <div class="tab" onclick="showTab('api')">📚 API Docs</div>
+            </div>
+
+            <!-- Generate Tab -->
+            <div class="tab-content active" id="generate-tab">
+                <div class="form-group">
+                    <label for="uid">User ID (UID from Firebase Auth)</label>
+                    <input type="text" id="uid" placeholder="Enter Firebase UID">
+                </div>
+
+                <div class="form-group">
+                    <label for="configType">Config Type</label>
+                    <select id="configType">
+                        <option value="full">Full Store Config</option>
+                        <option value="theme">Theme Only</option>
+                        <option value="brand">Brand Only</option>
+                        <option value="services">Services Only</option>
+                        <option value="products">Products Only</option>
+                        <option value="pages">Pages Only</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="prompt">Describe Your Store</label>
+                    <textarea id="prompt" placeholder="Example: I run a cozy coffee shop in Vancouver called 'Brew Haven'. We specialize in locally roasted coffee and homemade pastries. Our brand colors are warm browns and cream. We offer coffee subscriptions and barista workshops..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="autoSave"> Auto-save if valid
+                    </label>
+                </div>
+
+                <button onclick="generateConfig()">
+                    🤖 Generate with AI
+                </button>
+
+                <div id="generateResult" class="result"></div>
+            </div>
+
+            <!-- Manage Tab -->
+            <div class="tab-content" id="manage-tab">
+                <div class="form-group">
+                    <label for="manageUid">User ID</label>
+                    <input type="text" id="manageUid" placeholder="Enter Firebase UID">
+                </div>
+
+                <div class="button-group">
+                    <button onclick="loadConfig()">📥 Load Config</button>
+                    <button onclick="validateCurrentConfig()">🔍 Validate</button>
+                    <button onclick="saveConfig()">💾 Save Config</button>
+                </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="configEditor">Config JSON</label>
+                    <textarea id="configEditor" placeholder="Config JSON will appear here..."></textarea>
+                </div>
+
+                <div id="manageResult" class="result"></div>
+                <div id="validationResults" class="validation-results"></div>
+            </div>
+
+            <!-- Deploy Tab -->
+            <div class="tab-content" id="deploy-tab">
+                <div class="form-group">
+                    <label for="deployUid">User ID</label>
+                    <input type="text" id="deployUid" placeholder="Enter Firebase UID">
+                </div>
+
+                <div class="button-group">
+                    <button onclick="checkDeployStatus()">📊 Check Status</button>
+                    <button onclick="publishConfig()">🚀 Publish to Storefront</button>
+                </div>
+
+                <div id="deployResult" class="result"></div>
+            </div>
+
+            <!-- API Docs Tab -->
+            <div class="tab-content" id="api-tab">
+                <h3>📡 API Endpoints</h3>
+
+                <div class="api-info">
+                    <h4>Generate Config</h4>
+                    <p><strong>POST</strong> <code>/api/generate</code></p>
+                    <pre>{
+  "prompt": "description of store",
+  "config_type": "full",
+  "uid": "firebase-uid",
+  "auto_save": false
+}</pre>
+                </div>
+
+                <div class="api-info">
+                    <h4>Get Config</h4>
+                    <p><strong>GET</strong> <code>/api/config/:uid</code></p>
+                </div>
+
+                <div class="api-info">
+                    <h4>Save Config</h4>
+                    <p><strong>POST</strong> <code>/api/config/:uid</code></p>
+                    <pre>{
+  "config": { ...config object... },
+  "validate": true,
+  "strict": false
+}</pre>
+                </div>
+
+                <div class="api-info">
+                    <h4>Publish Config</h4>
+                    <p><strong>POST</strong> <code>/api/deploy/:uid/publish</code></p>
+                    <pre>{
+  "config": { ...config object... },
+  "force": false
+}</pre>
+                </div>
+
+                <div class="api-info">
+                    <h4>Frontend Fetch Config</h4>
+                    <p><strong>GET</strong> <code>/api/deploy/:uid</code></p>
+                    <p>This is called by the storefront to get its configuration.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
