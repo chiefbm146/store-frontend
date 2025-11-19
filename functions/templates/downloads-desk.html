@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloads - Moon Tide Reconciliation</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background: #FEFDFB;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        .close-button {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background: rgba(30, 144, 255, 0.95);
+            border: 2px solid #0047AB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10000;
+            transition: all 0.3s ease;
+            font-size: 26px;
+            color: #FFFFFF;
+            box-shadow: 0 4px 20px rgba(30, 144, 255, 0.3);
+        }
+
+        .close-button:hover {
+            background: #0047AB;
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 60px 60px;
+            text-align: center;
+            background: linear-gradient(135deg, #F5F1E8 0%, #E8E4DC 100%);
+        }
+
+        .hero-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1E90FF, #0047AB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Resources Section */
+        .resources-section {
+            padding: 60px 60px 80px;
+            background: #FFFFFF;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #1E90FF;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .section-content {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .resource-card {
+            background: #FFFFFF;
+            padding: 30px;
+            border-radius: 0;
+            border-left: 4px solid #1E90FF;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .resource-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 30px rgba(30, 144, 255, 0.15);
+        }
+
+        .resource-card:nth-child(1) { border-left-color: #E63E54; }
+        .resource-card:nth-child(2) { border-left-color: #F4A261; }
+        .resource-card:nth-child(3) { border-left-color: #2A9D8F; }
+        .resource-card:nth-child(4) { border-left-color: #9B59B6; }
+        .resource-card:nth-child(5) { border-left-color: #E63E54; }
+        .resource-card:nth-child(6) { border-left-color: #F4A261; }
+
+        .resource-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .resource-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .resource-type {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(30, 144, 255, 0.12);
+            color: #1E90FF;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .resource-desc {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .resource-link {
+            display: inline-block;
+            font-size: 0.95rem;
+            color: #1E90FF;
+            font-weight: 600;
+        }
+
+        /* Coming Soon Section */
+        .coming-section {
+            padding: 60px 60px 80px;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.05), rgba(42, 157, 143, 0.05));
+        }
+
+        .coming-box {
+            background: #FFFFFF;
+            border: 2px dashed #1E90FF;
+            border-radius: 12px;
+            padding: 40px 50px;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .coming-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            opacity: 0.6;
+        }
+
+        .coming-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1E90FF;
+            margin-bottom: 12px;
+        }
+
+        .coming-text {
+            font-size: 1.05rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 60px 60px;
+            background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .cta-text {
+            font-size: 1.05rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 20px 50px;
+            background: #FFFFFF;
+            color: #1E90FF;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 60px;
+            background: #1a1a1a;
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="close-button" onclick="navigateBack()">✕</div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-icon">📥</div>
+        <h1 class="hero-title">Downloads</h1>
+        <p class="hero-subtitle">Educational materials, guides, and resources for your reconciliation journey</p>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="resources-section">
+        <div class="section-container">
+            <div class="section-label">External Resources</div>
+            <h2 class="section-title">Recommended Materials</h2>
+            <div class="section-content">
+                <p>Explore these valuable external resources for learning about Indigenous history, culture, and reconciliation.</p>
+            </div>
+
+            <div class="resource-grid">
+                <div class="resource-card" onclick="window.open('https://www.rcaanc-cirnac.gc.ca/eng/1450124405592/1529106060525', '_blank')">
+                    <div class="resource-icon">📜</div>
+                    <h3 class="resource-title">TRC Reports</h3>
+                    <span class="resource-type">PDF Documents</span>
+                    <p class="resource-desc">Access the complete Truth and Reconciliation Commission reports, including the 94 Calls to Action and comprehensive documentation of residential school history.</p>
+                    <span class="resource-link">Visit Resource →</span>
+                </div>
+
+                <div class="resource-card" onclick="window.open('https://www.ictinc.ca/resources', '_blank')">
+                    <div class="resource-icon">👨‍🏫</div>
+                    <h3 class="resource-title">Teacher Resources</h3>
+                    <span class="resource-type">Lesson Plans</span>
+                    <p class="resource-desc">Curriculum resources and lesson plans for educators looking to incorporate Indigenous perspectives and reconciliation education into their classrooms.</p>
+                    <span class="resource-link">Visit Resource →</span>
+                </div>
+
+                <div class="resource-card" onclick="window.open('https://www.firstnationspedagogy.ca/', '_blank')">
+                    <div class="resource-icon">📖</div>
+                    <h3 class="resource-title">First Nations Pedagogy</h3>
+                    <span class="resource-type">Educational Materials</span>
+                    <p class="resource-desc">Online resources exploring Indigenous teaching methods, cultural protocols, and ways to create culturally responsive learning environments.</p>
+                    <span class="resource-link">Visit Resource →</span>
+                </div>
+
+                <div class="resource-card" onclick="window.open('https://native-land.ca/', '_blank')">
+                    <div class="resource-icon">🗺️</div>
+                    <h3 class="resource-title">Native Land Map</h3>
+                    <span class="resource-type">Interactive Tool</span>
+                    <p class="resource-desc">Interactive map showing Indigenous territories, treaties, and languages across Turtle Island. Essential for land acknowledgments and understanding traditional territories.</p>
+                    <span class="resource-link">Visit Resource →</span>
+                </div>
+
+                <div class="resource-card" onclick="window.open('https://www.nctr.ca/education/', '_blank')">
+                    <div class="resource-icon">🎓</div>
+                    <h3 class="resource-title">NCTR Education Resources</h3>
+                    <span class="resource-type">Archives & Materials</span>
+                    <p class="resource-desc">National Centre for Truth and Reconciliation educational resources, including survivor testimonies, archival materials, and teaching guides.</p>
+                    <span class="resource-link">Visit Resource →</span>
+                </div>
+
+                <div class="resource-card" onclick="window.open('https://www.lss.bc.ca/resources/indigenous-cultural-competency', '_blank')">
+                    <div class="resource-icon">🤝</div>
+                    <h3 class="resource-title">Cultural Competency Guides</h3>
+                    <span class="resource-type">Professional Development</span>
+                    <p class="resource-desc">Resources for developing cultural competency when working with Indigenous peoples and communities, including protocols and best practices.</p>
+                    <span class="resource-link">Visit Resource →</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coming Soon Section - MOVED TO BOTTOM -->
+    <section class="coming-section">
+        <div class="section-container">
+            <div class="section-label">Moon Tide Resources</div>
+            <h2 class="section-title">Our Educational Materials</h2>
+
+            <div class="coming-box">
+                <div class="coming-icon">📚</div>
+                <h3 class="coming-title">Resource Library Coming Soon</h3>
+                <p class="coming-text">Our downloadable resources are being prepared. These will include workshop guides, educational handouts, cultural teaching materials, and more.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2 class="cta-title">Need Custom Resources?</h2>
+        <p class="cta-text">Contact us to discuss creating customized educational materials for your organization</p>
+        <a href="/desktop" class="cta-button">Contact Us</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">Douglas Lake & Vancouver, BC</p>
+    </footer>
+
+    <script>
+        function navigateBack() {
+            window.location.href = '/menu';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') navigateBack();
+        });
+    </script>
+</body>
+</html>

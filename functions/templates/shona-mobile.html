@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Shona Sparrow - Moon Tide Reconciliation</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="About Shona Sparrow">
+    <meta property="og:description" content="Meet Shona Sparrow, lead contact and guiding force behind Moon Tide Reconciliation.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --warm-white: #FBF8F3;
+            --border-color: #E8DDD4;
+            --text-primary: #333;
+            --text-secondary: #666;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a15 0%, #1a0a2e 50%, #0a0a15 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Fixed Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Back button */
+        .back-button {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10001;
+            transition: all 0.3s;
+            font-size: 24px;
+            color: white;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-button:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Scrollable Container */
+        .container {
+            margin-top: 80px;
+            padding: 0 15px 20px;
+            background: var(--warm-white);
+            min-height: calc(100vh - 80px);
+        }
+
+        .content {
+            padding: 20px 15px;
+            line-height: 1.7;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 15px;
+            border: 4px solid #1E90FF;
+            box-shadow: 0 8px 24px rgba(30, 144, 255, 0.3);
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1E90FF;
+            margin-bottom: 8px;
+        }
+
+        .profile-role {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* About Section */
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #1E90FF;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            border-bottom: 3px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .section p {
+            margin-bottom: 14px;
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .section strong {
+            color: #0047AB;
+            font-weight: 600;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: #ADD8E6;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 6px solid #1E90FF;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .contact-section h2 {
+            color: #0047AB;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .contact-item {
+            margin-bottom: 20px;
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            color: #0047AB;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .contact-value {
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            word-break: break-word;
+            cursor: pointer;
+            padding: 8px;
+            margin: -8px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .contact-value:active {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .contact-value.no-copy {
+            cursor: default;
+        }
+
+        /* Copy Feedback */
+        .copy-feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 10002;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .copy-feedback.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="back-button" onclick="navigateBack()">✕</div>
+
+    <div class="header">
+        <h1><span>👤</span> About Shona</h1>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <img src="/images/MOON TIDE/SHONA.jpg" alt="Shona Sparrow" class="profile-image">
+                <div class="profile-name">Shona Sparrow</div>
+                <div class="profile-role">Lead Contact & Guiding Force</div>
+            </div>
+
+            <!-- About Section -->
+            <div class="section">
+                <h2>Moon Tide Reconciliation</h2>
+                <p>
+                    <strong>Shona Sparrow</strong> leads a collective of Indigenous Elders, knowledge keepers, artists, and facilitators deeply rooted in ancestral wisdom and living traditions.
+                </p>
+                <p>
+                    We create <strong>powerful moments of connection</strong> that foster empathy, dialogue, and healing, guiding individuals and organizations on a transformative journey from awareness toward meaningful action.
+                </p>
+                <p>
+                    Through experiential workshops, traditional arts, and ceremony, we translate reconciliation from abstract concept into lived, felt experience.
+                </p>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="contact-section">
+                <h2>Get In Touch</h2>
+                <div class="contact-item">
+                    <p class="contact-label">Phone</p>
+                    <p class="contact-value" onclick="copyToClipboard('236-300-3005')">📞 236-300-3005</p>
+                </div>
+                <div class="contact-item">
+                    <p class="contact-label">Email</p>
+                    <p class="contact-value" onclick="copyToClipboard('shona@moontidereconciliation.com')">📧 shona@moontidereconciliation.com</p>
+                </div>
+                <div class="contact-item">
+                    <p class="contact-label">Website</p>
+                    <p class="contact-value" onclick="copyToClipboard('www.moontidereconciliation.com')">🔗 www.moontidereconciliation.com</p>
+                </div>
+                <div class="contact-item">
+                    <p class="contact-label">Locations</p>
+                    <p class="contact-value no-copy">📍 Douglas Lake & Vancouver, BC</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copy Feedback -->
+    <div class="copy-feedback" id="copyFeedback">✓ Copied!</div>
+
+    <script>
+        function navigateBack() {
+            window.location.href = '/menu';
+        }
+
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                const feedback = document.getElementById('copyFeedback');
+                feedback.classList.add('show');
+                setTimeout(() => {
+                    feedback.classList.remove('show');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+            }
+        }
+
+        // ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') navigateBack();
+        });
+    </script>
+</body>
+</html>

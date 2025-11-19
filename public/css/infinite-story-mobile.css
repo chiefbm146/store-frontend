@@ -1,0 +1,682 @@
+/* ============================================================
+   Infinite Story Player - Mobile Version
+   Full-screen Immersive Story Experience for Mobile Devices
+   ============================================================ */
+
+:root {
+    --story-bg-dark: #0a0e1a;
+    --story-bg-darker: #050810;
+    --story-primary: #1e90ff;
+    --story-primary-glow: rgba(30, 144, 255, 0.6);
+    --story-secondary: #4db8ff;
+    --story-accent: #00d4ff;
+    --story-text-primary: #e8ecf4;
+    --story-text-secondary: #a8b4cc;
+    --story-text-muted: #6b7a99;
+    --story-border: rgba(30, 144, 255, 0.3);
+    --story-glass: rgba(15, 20, 35, 0.7);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, var(--story-bg-darker) 0%, var(--story-bg-dark) 100%);
+    color: var(--story-text-primary);
+    overflow: hidden;
+}
+
+/* ============================================================
+   Background & Ambient Effects
+   ============================================================ */
+
+.story-ambient-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.particle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, var(--story-accent) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0.7;
+    animation: float 25s infinite ease-in-out;
+    box-shadow: 0 0 20px var(--story-accent), 0 0 40px rgba(0, 212, 255, 0.3);
+}
+
+.particle:nth-child(1) {
+    width: 12px;
+    height: 12px;
+    top: 10%;
+    left: 5%;
+    animation-delay: 0s;
+}
+
+.particle:nth-child(2) {
+    width: 10px;
+    height: 10px;
+    top: 50%;
+    right: 8%;
+    animation-delay: 2s;
+}
+
+.particle:nth-child(3) {
+    width: 14px;
+    height: 14px;
+    bottom: 20%;
+    left: 10%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) translateX(0px); }
+    25% { transform: translateY(-30px) translateX(20px); }
+    50% { transform: translateY(-60px) translateX(-20px); }
+    75% { transform: translateY(-30px) translateX(20px); }
+}
+
+/* ============================================================
+   Header (Mobile - Smaller, Optimized)
+   ============================================================ */
+
+.story-header-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(180deg, rgba(30, 144, 255, 0.1) 0%, rgba(30, 144, 255, 0.05) 100%);
+    border-bottom: 1px solid var(--story-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.story-back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--story-accent);
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    padding: 8px;
+    opacity: 0.8;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+}
+
+.story-back-btn:active {
+    transform: scale(0.95);
+    opacity: 1;
+}
+
+.story-title-mobile {
+    font-size: 18px;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+    color: var(--story-accent);
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0 10px;
+}
+
+.story-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--story-accent);
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    padding: 8px;
+    opacity: 0.8;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+}
+
+.story-menu-btn:active {
+    transform: scale(0.95);
+    opacity: 1;
+}
+
+/* ============================================================
+   Mobile Menu Panel
+   ============================================================ */
+
+.story-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 8, 16, 0.6);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.story-menu-backdrop.story-menu-open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.story-menu-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, rgba(15, 20, 35, 0.95) 0%, rgba(5, 8, 16, 0.95) 100%);
+    border-left: 1px solid var(--story-border);
+    z-index: 201;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.story-menu-backdrop.story-menu-open .story-menu-panel {
+    transform: translateX(0);
+}
+
+.story-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid var(--story-border);
+}
+
+.story-menu-header h2 {
+    font-size: 18px;
+    color: var(--story-accent);
+    margin: 0;
+}
+
+.story-menu-close {
+    background: none;
+    border: none;
+    color: var(--story-accent);
+    cursor: pointer;
+    font-size: 20px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.story-menu-close:active {
+    opacity: 0.7;
+}
+
+.story-menu-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+}
+
+.story-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 16px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(30, 144, 255, 0.1);
+    color: var(--story-text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.story-menu-item:active {
+    background: rgba(30, 144, 255, 0.1);
+}
+
+.story-menu-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.story-menu-label {
+    font-size: 14px;
+    font-weight: 500;
+    flex: 1;
+}
+
+.story-voice-menu-item {
+    position: relative;
+}
+
+.story-voice-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: transparent;
+    flex-shrink: 0;
+}
+
+.story-voice-indicator.story-voice-active {
+    background: var(--story-accent);
+    box-shadow: 0 0 10px var(--story-accent);
+}
+
+/* ============================================================
+   Main Container (Mobile - Full Screen)
+   ============================================================ */
+
+.story-main-mobile {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    padding-top: 70px;
+    padding-bottom: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Custom scrollbar - invisible but functional */
+.story-main-mobile::-webkit-scrollbar {
+    width: 4px;
+}
+
+.story-main-mobile::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.story-main-mobile::-webkit-scrollbar-thumb {
+    background: rgba(30, 144, 255, 0.3);
+    border-radius: 2px;
+}
+
+.story-main-mobile::-webkit-scrollbar-thumb:hover {
+    background: rgba(30, 144, 255, 0.5);
+}
+
+/* ============================================================
+   Prologue Box (Mobile - Only on Chapter 1)
+   ============================================================ */
+
+.story-prologue-box-mobile {
+    width: 90%;
+    max-width: 100%;
+    background: var(--story-glass);
+    border: 1px solid var(--story-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    margin-top: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    animation: fadeInUp 0.6s ease 0.2s both;
+}
+
+.prologue-icon-mobile {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.prologue-content-mobile {
+    flex: 1;
+}
+
+.prologue-content-mobile p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--story-text-secondary);
+}
+
+/* ============================================================
+   Narrative Section (Mobile)
+   ============================================================ */
+
+.story-narrative-section-mobile {
+    width: 90%;
+    max-width: 100%;
+    background: var(--story-glass);
+    border: 1px solid var(--story-border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    animation: fadeInUp 0.6s ease 0.4s both;
+}
+
+.narrative-scroll-container-mobile {
+    max-height: 280px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 12px;
+    padding-right: 6px;
+}
+
+.narrative-scroll-container-mobile::-webkit-scrollbar {
+    width: 4px;
+}
+
+.narrative-scroll-container-mobile::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.narrative-scroll-container-mobile::-webkit-scrollbar-thumb {
+    background: rgba(30, 144, 255, 0.3);
+    border-radius: 2px;
+}
+
+.narrative-text-mobile {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--story-text-primary);
+}
+
+.narrative-text-mobile p {
+    margin-bottom: 12px;
+}
+
+.narrative-text-mobile p:last-child {
+    margin-bottom: 0;
+}
+
+.story-tts-control-mobile {
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid var(--story-border);
+    padding-top: 12px;
+}
+
+.tts-button-mobile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--story-primary), var(--story-secondary));
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.4);
+}
+
+.tts-button-mobile:active {
+    transform: scale(0.95);
+}
+
+.tts-button-mobile i {
+    font-size: 14px;
+}
+
+/* ============================================================
+   Choices Section (Mobile)
+   ============================================================ */
+
+.story-choices-section-mobile {
+    width: 90%;
+    max-width: 100%;
+    background: var(--story-glass);
+    border: 1px solid var(--story-border);
+    border-radius: 12px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    animation: fadeInUp 0.6s ease 0.6s both;
+    margin-bottom: 20px;
+}
+
+.choices-header-mobile {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.choices-header-mobile h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--story-accent);
+    margin-bottom: 6px;
+}
+
+.choices-hint-mobile {
+    font-size: 12px;
+    color: var(--story-text-muted);
+}
+
+.choices-container-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.choice-item-mobile {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(30, 144, 255, 0.05);
+    border: 1px solid var(--story-border);
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.choice-item-mobile:active {
+    background: rgba(30, 144, 255, 0.15);
+    border-color: var(--story-accent);
+    transform: scale(0.98);
+}
+
+.choice-number-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, var(--story-primary), var(--story-secondary));
+    border-radius: 50%;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    font-size: 13px;
+    box-shadow: 0 0 10px rgba(30, 144, 255, 0.4);
+}
+
+.choice-content-mobile {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.choice-text-mobile {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--story-text-primary);
+    flex: 1;
+}
+
+.choice-tts-btn-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 212, 255, 0.2);
+    border: 1px solid var(--story-accent);
+    border-radius: 6px;
+    color: var(--story-accent);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    font-size: 12px;
+    padding: 0;
+}
+
+.choice-tts-btn-mobile:active {
+    background: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+}
+
+/* ============================================================
+   Loading Overlay (Mobile)
+   ============================================================ */
+
+.story-loading-overlay-mobile {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 8, 16, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.story-loading-overlay-mobile.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-spinner-mobile {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.spinner-ring-mobile {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(30, 144, 255, 0.2);
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+}
+
+.spinner-ring-mobile:nth-child(2) {
+    border-color: var(--story-primary);
+    animation-delay: -0.5s;
+    border-top-color: transparent;
+}
+
+.spinner-ring-mobile:nth-child(3) {
+    border-color: var(--story-accent);
+    animation-delay: -1s;
+    border-top-color: transparent;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text-mobile {
+    font-size: 14px;
+    color: var(--story-text-secondary);
+    text-align: center;
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================
+   Mobile Touch Optimizations
+   ============================================================ */
+
+@media (max-width: 480px) {
+    .story-header-mobile {
+        height: 56px;
+        padding: 0 12px;
+    }
+
+    .story-title-mobile {
+        font-size: 16px;
+    }
+
+    .story-main-mobile {
+        padding-top: 66px;
+    }
+
+    .story-prologue-box-mobile {
+        margin-top: 4px;
+        margin-bottom: 12px;
+    }
+
+    .story-narrative-section-mobile,
+    .story-choices-section-mobile {
+        width: 95%;
+        margin-bottom: 12px;
+    }
+
+    .narrative-scroll-container-mobile {
+        max-height: 240px;
+    }
+
+    .choice-item-mobile {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .choice-number-mobile {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .choice-text-mobile {
+        font-size: 12px;
+    }
+}

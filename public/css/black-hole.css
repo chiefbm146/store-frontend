@@ -1,0 +1,17 @@
+black-hole {
+  position: absolute;
+  bottom: -10%;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 30%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+black-hole canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

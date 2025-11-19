@@ -1,0 +1,811 @@
+/* --- CORE VARIABLES (reused for brand consistency) --- */
+:root {
+    /* Musqueam Color Palette - Red, Black, and White */
+    --musqueam-red: #C41E3A;
+    --musqueam-black: #1a1a1a;
+    --musqueam-white: #F5F1E8;
+    --musqueam-red-dark: #8B1528;
+    --musqueam-red-light: #E63E54;
+
+    /* Theme Variables */
+    --bg-window: #FFFFFF;
+    --bg-secondary: #EBE5DC;
+    --text-primary: #1a1a1a;
+    --text-secondary: #4A4A4A;
+    --bg-ai: #FFFFFF;
+    --text-ai: #1a1a1a;
+    --bg-user: #1E90FF;
+    --text-user: #FFFFFF;
+    --accent-primary: #1E90FF;
+    --accent-gold: #0047AB;
+    --border-color: #D4C4B8;
+}
+
+/* --- MOBILE-FIRST FOUNDATION --- */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling of the whole page */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    background-color: var(--bg-window);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* ================================================================
+   LOADING SPINNER - Mobile Initialization Screen (Glassmorphism Theme)
+   ================================================================ */
+
+.loading-spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+    pointer-events: none;
+}
+
+.loading-spinner-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-out;
+}
+
+.loading-spinner-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 260px;
+    height: 260px;
+}
+
+/* 4-Layer Animated Spinner Rings with Glassmorphism */
+.loading-spinner-ring {
+    position: absolute;
+    border-radius: 50%;
+    border-left-color: transparent;
+    border-right-color: transparent;
+}
+
+/* Innermost layer - Moon Blue */
+.loading-spinner-ring:nth-child(1) {
+    width: 200px;
+    height: 200px;
+    border: 3px solid #0A84FF;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    animation: rotate 2s cubic-bezier(0.26, 1.36, 0.74, -0.29) infinite;
+}
+
+/* Second layer - Cyan */
+.loading-spinner-ring:nth-child(2) {
+    width: 220px;
+    height: 220px;
+    border: 3px solid #3bc9db;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    animation: rotate2 2s cubic-bezier(0.26, 1.36, 0.74, -0.29) infinite;
+}
+
+/* Third layer - Moon Blue */
+.loading-spinner-ring:nth-child(3) {
+    width: 240px;
+    height: 240px;
+    border: 3px solid #0A84FF;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    animation: rotate 2s cubic-bezier(0.26, 1.36, 0.74, -0.29) infinite;
+}
+
+/* Outermost layer - Cyan */
+.loading-spinner-ring:nth-child(4) {
+    width: 260px;
+    height: 260px;
+    border: 3px solid #3bc9db;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    animation: rotate2 2s cubic-bezier(0.26, 1.36, 0.74, -0.29) infinite;
+}
+
+/* Counter-clockwise rotation */
+@keyframes rotate {
+    0% { transform: rotateZ(-360deg); }
+    100% { transform: rotateZ(0deg); }
+}
+
+/* Clockwise rotation */
+@keyframes rotate2 {
+    0% { transform: rotateZ(360deg); }
+    100% { transform: rotateZ(0deg); }
+}
+
+.loading-spinner-text {
+    position: absolute;
+    bottom: -60px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    letter-spacing: 2px;
+    animation: pulse-text 2s ease-in-out infinite;
+    font-family: Arial, sans-serif;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes pulse-text {
+    0%, 100% {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+/* ================================================================
+   MAIN APP LAYOUT (Flexbox) --- */
+.ai-portal {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-window);
+}
+
+/* --- HEADER (Simplified for Mobile) --- */
+.portal-header {
+    background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+    padding: 12px 15px;
+    text-align: left;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    min-height: 60px;
+}
+
+.portal-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    flex: 1;
+}
+
+/* Status indicator positioned on the right */
+.ai-status {
+    position: relative;
+    display: none;
+    align-items: center;
+    gap: 6px;
+}
+.status-indicator {
+    width: 8px; height: 8px; border-radius: 50%;
+    background-color: #00FF88;
+    box-shadow: 0 0 8px #00FF88;
+}
+.status-text { display: none; /* Hide text on mobile to save space */ }
+
+/* Header buttons container - groups Speaker, Cart, and Hamburger */
+.header-buttons-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* Floating Cart Button for Mobile - MOVED TO HEADER */
+#floating-cart-container {
+    position: relative;
+    top: auto;
+    right: auto;
+    z-index: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#floating-cart-container.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+}
+
+#cart-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    color: var(--musqueam-red);
+}
+
+#cart-button:hover {
+    transform: scale(1.1);
+}
+
+#cart-button:active {
+    transform: scale(0.95);
+}
+
+#cart-item-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #FF0000;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    line-height: 1;
+    box-shadow: 0 2px 10px rgba(255, 0, 0, 0.5);
+}
+
+/* Master Speaker Button - MOVED TO HEADER */
+#master-speaker-btn {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: auto;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: var(--musqueam-red);
+}
+
+#master-speaker-btn:hover {
+    transform: scale(1.1);
+}
+
+#master-speaker-btn.on {
+    background: #FFD700;
+}
+
+/* Hamburger Button - MOVED TO HEADER */
+#hamburger-button {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    border: none;
+    background: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: auto;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: none;
+    color: var(--musqueam-red);
+}
+
+#hamburger-button:hover {
+    transform: scale(1.05);
+}
+
+#hamburger-button:active {
+    transform: scale(0.95);
+}
+
+/* --- MESSAGES AREA (Scrollable) --- */
+.messages-container {
+    flex: 1; /* This makes it take all available vertical space */
+    overflow-y: auto;
+    padding: 15px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.message {
+    padding: 12px 18px;
+    border-radius: 20px;
+    max-width: 85%; /* Messages don't take the full screen width */
+    line-height: 1.5;
+    font-size: 15px;
+    word-wrap: break-word;
+}
+
+/* Classic mobile chat alignment */
+.ai-message {
+    background: var(--bg-ai);
+    color: var(--text-ai);
+    align-self: flex-start;
+    border: 1px solid var(--border-color);
+    border-bottom-left-radius: 5px;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.user-message {
+    background: white;
+    color: #1E90FF;
+    align-self: flex-end;
+    border: 2px solid #1E90FF;
+    border-radius: 5px;
+}
+
+/* --- CRITICAL: HIDE DESKTOP-ONLY FLOATING IMAGES --- */
+.booking-image-boxes-wrapper {
+    display: none !important;
+}
+
+/* Make smart concierge UI full-width on mobile */
+.concierge-ui-complete {
+    width: 100%;
+}
+
+/* --- INPUT AREA (Optimized for Mobile) --- */
+.input-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+#userInput {
+    flex: 1;
+    padding: 12px 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    background: white;
+    color: var(--text-primary);
+    font-size: 16px;
+    outline: none;
+}
+#userInput:focus {
+    border-color: var(--accent-gold);
+    /* Prevent iOS auto-zoom on focus */
+    font-size: 16px;
+}
+
+/* Disable blur event focus jumps on mobile */
+#userInput {
+    -webkit-user-select: text;
+}
+
+#sendButton {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: var(--accent-primary);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- STYLES FOR DYNAMIC & MODULE CONTENT (reused from desktop) --- */
+.typing-indicator { display: none; align-self: flex-start; padding: 10px 15px; background: white; border-radius: 15px; border: 1px solid var(--border-color); margin-top: 20px; }
+.typing-indicator.visible { display: flex; align-items: center; }
+.typing-dot { height: 8px; width: 8px; background: var(--accent-gold); border-radius: 50%; display: inline-block; margin: 0 3px; animation: wave 1.4s ease-in-out infinite; }
+.typing-dot:nth-child(2) { animation-delay: -1.1s; }
+.typing-dot:nth-child(3) { animation-delay: -0.9s; }
+@keyframes wave { 0%, 60%, 100% { transform: initial; } 30% { transform: translateY(-8px); } }
+
+.ai-message .smart-message-text special { font-weight: 700; color: #0056b3; cursor: pointer; }
+.ai-message .smart-message-text price { font-weight: 700; color: #c82333; }
+.message-play-button { background: #1E90FF; color: white; border: none; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; transition: all 0.2s ease; outline: none; box-shadow: 0 2px 8px rgba(30, 144, 255, 0.3); }
+.message-play-button:hover { background: #0047AB; transform: scale(1.1); box-shadow: 0 4px 12px rgba(30, 144, 255, 0.5); }
+.message-play-button:active { transform: scale(0.95); }
+.message-play-button-container { position: absolute; bottom: 8px; right: 8px; }
+
+/* =========================================== */
+/* == MOBILE UI FIXES (Simple Version)      == */
+/* =========================================== */
+
+/* 1. Make the AI message bubble take the full screen width, as requested. */
+.ai-message {
+    max-width: 100%; /* Removes the 85% width limit */
+    width: 100%;     /* Ensures it fills the container */
+    box-sizing: border-box; /* Prevents padding from breaking the layout */
+}
+
+/* 2. Add extra scroll space at the bottom ONLY when the Stripe form is visible. */
+.messages-container:has(.booking-form-module) {
+    padding-bottom: 120px; /* Adds empty space to scroll into */
+}
+
+/* =========================================== */
+/* == MOBILE STRIPE PAYMENT FORM FIX        == */
+/* =========================================== */
+
+/* Make the booking form module scrollable on mobile */
+.booking-form-module.jarvis-module {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    padding: 20px !important;
+    margin: 0 !important;
+    margin-left: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: #FFFFFF !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    flex-direction: column !important;
+    display: flex !important;
+}
+
+/* Ensure the booking form content scrolls */
+.booking-form-full {
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    background: transparent !important;
+    margin-left: 0 !important;
+}
+
+/* Stripe payment element should be full width */
+#payment-element,
+#address-element {
+    width: 100%;
+}
+
+/* Stripe pay button styling for mobile */
+.stripe-pay-btn {
+    width: 100%;
+    padding: 16px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, #C41E3A 0%, #A01425 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.stripe-pay-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(196, 30, 58, 0.4);
+}
+
+.stripe-pay-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Booking header minimal styling for mobile */
+.booking-header-minimal {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #E8DDD4;
+}
+
+.booking-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.booking-header-workshop {
+    font-size: 18px;
+    font-weight: 700;
+    color: #4A4A4A;
+}
+
+.booking-header-subtext {
+    font-size: 14px;
+    color: #6B6B6B;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.booking-header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.booking-header-price-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.booking-header-price-label {
+    font-size: 12px;
+    color: #6B6B6B;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.booking-header-total {
+    font-size: 20px;
+    font-weight: 700;
+    color: #C41E3A;
+}
+
+/* Exit booking button styling */
+#exit-booking-btn {
+    width: 100%;
+    padding: 14px 20px;
+    margin-top: 20px;
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#exit-booking-btn:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+}
+
+#exit-booking-btn:active {
+    transform: translateY(0);
+}
+
+/* =========================================== */
+/* == MOBILE PARTICIPANT SELECTOR UPGRADES   == */
+/* =========================================== */
+
+/* Make slider much wider on mobile for better control */
+.participant-slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+}
+
+/* Improve slider styling for mobile touch */
+.participant-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+}
+
+.participant-slider::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+}
+
+/* Number control row - centered with - and + buttons on sides */
+.number-control-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+/* Decrement button styling */
+.participant-decrement-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    border: 2px solid #16a34a;
+    background: white;
+    color: #15803d;
+    font-size: 24px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.participant-decrement-btn:active {
+    background: #f0fdf4;
+    transform: scale(0.95);
+}
+
+/* Number input field styling */
+.participant-value-input {
+    width: 80px;
+    height: 50px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 8px;
+    border: 2px solid #16a34a;
+    border-radius: 8px;
+    background: white;
+    color: #15803d;
+    flex-shrink: 0;
+}
+
+/* Increment button styling */
+.participant-increment-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    border: 2px solid #16a34a;
+    background: #16a34a;
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.participant-increment-btn:active {
+    background: #15803d;
+    transform: scale(0.95);
+}
+
+/* Slider container should be full width */
+.slider-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+}
+
+/* --- ENABLE SOUND MODAL --- */
+#enable-sound-backdrop {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+}
+
+#enable-sound-modal {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+}
+
+#enable-sound-modal h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+#enable-sound-modal p {
+    margin: 0 0 20px 0;
+    color: #666;
+    max-width: 300px;
+}
+
+#confirm-enable-sound {
+    padding: 12px 24px;
+    background: var(--musqueam-red);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* ====== NEW: Expand World Button Styles (Mobile) ====== */
+#expand-world-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
+    color: white;
+    font-size: 26px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 4px 15px rgba(30, 144, 255, 0.4),
+        0 0 20px rgba(30, 144, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 100;
+    pointer-events: auto;
+}
+
+#expand-world-btn::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.05);
+    }
+}
+
+#expand-world-btn:active {
+    transform: scale(0.95);
+}
+
+#expand-world-btn i {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+/* ====== END: Expand World Button Styles (Mobile) ====== */

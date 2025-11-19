@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcasts - Moon Tide Reconciliation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="./css/podcast-player.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a15 0%, #1a0a2e 50%, #0a0a15 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        .close-button {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background: rgba(30, 144, 255, 0.95);
+            border: 2px solid #0047AB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10000;
+            transition: all 0.3s ease;
+            font-size: 26px;
+            color: #FFFFFF;
+            box-shadow: 0 4px 20px rgba(30, 144, 255, 0.3);
+        }
+
+        .close-button:hover {
+            background: #0047AB;
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 120px 60px 60px;
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #1E90FF, #2A9D8F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .page-subtitle {
+            font-size: 1.6rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Featured Player Section */
+        .featured-section {
+            padding: 60px 60px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #2A9D8F;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 40px;
+        }
+
+        /* Recommended Section */
+        .recommended-section {
+            padding: 80px 60px;
+            background: rgba(255, 255, 255, 0.03);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .recommended-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .podcast-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .podcast-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .podcast-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 12px 40px rgba(30, 144, 255, 0.3);
+        }
+
+        .podcast-card:nth-child(1) { border-left-color: #E63E54; }
+        .podcast-card:nth-child(2) { border-left-color: #F4A261; }
+        .podcast-card:nth-child(3) { border-left-color: #2A9D8F; }
+        .podcast-card:nth-child(4) { border-left-color: #9B59B6; }
+
+        .podcast-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .podcast-card-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+        }
+
+        .podcast-card-host {
+            font-size: 1rem;
+            color: #2A9D8F;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .podcast-card-desc {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .podcast-card-link {
+            display: inline-block;
+            font-size: 1rem;
+            color: #1E90FF;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 60px;
+            background: rgba(30, 144, 255, 0.1);
+            border-top: 1px solid rgba(30, 144, 255, 0.2);
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #FFFFFF;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 45px;
+            background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(30, 144, 255, 0.5);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px 60px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .podcast-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="close-button" onclick="navigateBack()">✕</div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">🎙️ Podcasts</h1>
+        <p class="page-subtitle">Listen to Indigenous voices sharing wisdom, stories, and cultural teachings</p>
+    </div>
+
+    <!-- Featured Player Section -->
+    <section class="featured-section">
+        <div class="section-label">Moon Tide Podcasts</div>
+        <h2 class="section-title">Featured Episode</h2>
+
+        <!-- Podcast Player Container -->
+        <div id="podcastPlayerContainer"></div>
+    </section>
+
+    <!-- Recommended Section -->
+    <section class="recommended-section">
+        <div class="recommended-container">
+            <div class="section-label">Recommended Listening</div>
+            <h2 class="section-title">Indigenous Podcasts to Explore</h2>
+
+            <div class="podcast-grid">
+                <div class="podcast-card" onclick="window.open('https://www.cbc.ca/radio/unreserved', '_blank')">
+                    <div class="podcast-card-icon">📻</div>
+                    <h3 class="podcast-card-title">Unreserved</h3>
+                    <p class="podcast-card-host">CBC Radio - Rosanna Deerchild</p>
+                    <p class="podcast-card-desc">A national radio program featuring Indigenous perspectives on arts, culture, and current events. Host Rosanna Deerchild brings powerful stories from Indigenous communities across Canada.</p>
+                    <span class="podcast-card-link">Listen Now →</span>
+                </div>
+
+                <div class="podcast-card" onclick="window.open('https://www.cbc.ca/radio/thecurrent', '_blank')">
+                    <div class="podcast-card-icon">🎧</div>
+                    <h3 class="podcast-card-title">The Current</h3>
+                    <p class="podcast-card-host">CBC Radio</p>
+                    <p class="podcast-card-desc">National current affairs program regularly featuring Indigenous voices and perspectives on issues affecting Indigenous communities and reconciliation efforts.</p>
+                    <span class="podcast-card-link">Listen Now →</span>
+                </div>
+
+                <div class="podcast-card" onclick="window.open('https://www.aptnnews.ca/', '_blank')">
+                    <div class="podcast-card-icon">📰</div>
+                    <h3 class="podcast-card-title">APTN News</h3>
+                    <p class="podcast-card-host">Aboriginal Peoples Television Network</p>
+                    <p class="podcast-card-desc">Canada's first national Indigenous broadcaster, providing news and stories from Indigenous perspectives across the country.</p>
+                    <span class="podcast-card-link">Visit Site →</span>
+                </div>
+
+                <div class="podcast-card" onclick="window.open('https://www.cbc.ca/listen/live-radio/1-63-all-my-relations', '_blank')">
+                    <div class="podcast-card-icon">👥</div>
+                    <h3 class="podcast-card-title">All My Relations</h3>
+                    <p class="podcast-card-host">CBC Podcasts</p>
+                    <p class="podcast-card-desc">Exploring Indigenous life, culture, and history through conversations with Indigenous knowledge keepers, artists, and community leaders.</p>
+                    <span class="podcast-card-link">Listen Now →</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2 class="cta-title">Want to Be Notified?</h2>
+        <p class="cta-text">Get in touch to be notified when we launch new podcast episodes</p>
+        <a href="/desktop" class="cta-button">Contact Us</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">Douglas Lake & Vancouver, BC</p>
+    </footer>
+
+    <script type="module">
+        import PodcastPlayer from './js/podcasts.js';
+
+        function navigateBack() {
+            window.location.href = '/menu';
+        }
+
+        window.navigateBack = navigateBack;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') navigateBack();
+        });
+
+        // Initialize podcast player with all episodes
+        document.addEventListener('DOMContentLoaded', () => {
+            const podcastsData = [
+                {
+                    id: 'reconciliation_structural_justice',
+                    title: 'Reconciliation Must Be Structural Justice, Not Apology',
+                    host: 'Moon Tide Reconciliation',
+                    date: 'Season 1, Episode 1',
+                    description: 'A powerful conversation exploring why true reconciliation requires fundamental structural changes in our institutions and society, not just symbolic gestures and apologies. Join us as we discuss the path forward towards meaningful justice and healing.',
+                    audioUrl: './sounds/podcasts/Reconciliation_Must_Be_Structural_Justice_Not_Apology.m4a'
+                },
+                {
+                    id: 'genocide_present_continuous',
+                    title: 'Genocide Is the Present Continuous Trauma',
+                    host: 'Moon Tide Reconciliation',
+                    date: 'Season 1, Episode 2',
+                    description: 'An important discussion about the ongoing impacts of genocide on Indigenous communities. This episode explores how historical trauma continues to shape present-day experiences and the path toward healing and restoration.',
+                    audioUrl: './sounds/podcasts/Genocide_Is_the_Present_Continuous_Trauma.m4a'
+                },
+                {
+                    id: 'true_cost_indigenous_survival',
+                    title: 'The True Cost of Indigenous Survival',
+                    host: 'Moon Tide Reconciliation',
+                    date: 'Season 1, Episode 3',
+                    description: 'Examining the resilience and sacrifices of Indigenous peoples in maintaining their cultures, languages, and traditions despite centuries of oppression. Hear from knowledge keepers about the true cost of survival and the strength of Indigenous communities.',
+                    audioUrl: './sounds/podcasts/The_True_Cost_of_Indigenous_Survival.m4a'
+                }
+            ];
+
+            new PodcastPlayer('podcastPlayerContainer', podcastsData);
+        });
+    </script>
+</body>
+</html>

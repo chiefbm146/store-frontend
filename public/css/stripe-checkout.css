@@ -1,0 +1,589 @@
+/**
+ * ================================================================
+ * STRIPE CHECKOUT - INDEPENDENT FULL-SCREEN OVERLAY STYLES
+ * ================================================================
+ *
+ * This CSS is COMPLETELY INDEPENDENT from the chat UI.
+ * No viewport constraints. No CSS fighting. Just clean, modern styling.
+ *
+ * Design Philosophy:
+ * - Full-screen overlay with z-index above everything
+ * - Responsive 2-column layout (desktop) → single column (mobile)
+ * - Clean, modern card-based UI
+ * - Proper spacing and typography
+ * - NO !important hacks needed
+ */
+
+/* ================================================================
+   FULL-SCREEN OVERLAY CONTAINER
+   ================================================================ */
+
+.stripe-checkout-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    z-index: 10000; /* Above EVERYTHING */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Main Container */
+.stripe-checkout-container {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 1200px;
+    width: 100%;
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: stripe-slide-up 0.3s ease-out;
+}
+
+@keyframes stripe-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ================================================================
+   HEADER
+   ================================================================ */
+
+.stripe-checkout-header {
+    background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+    padding: 24px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #0047AB;
+    flex-shrink: 0;
+}
+
+.stripe-header-left {
+    flex: 1;
+}
+
+.stripe-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.stripe-checkout-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.stripe-checkout-subtitle {
+    margin: 4px 0 0 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.stripe-close-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stripe-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Exit Booking Button */
+.stripe-exit-booking-btn {
+    padding: 10px 16px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    background: transparent;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.stripe-exit-booking-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.stripe-exit-booking-btn:active {
+    transform: translateY(0);
+}
+
+/* ================================================================
+   MAIN CONTENT AREA - 2 COLUMN LAYOUT
+   ================================================================ */
+
+.stripe-checkout-content {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 0;
+    flex: 1;
+    overflow-y: auto;  /* Allow vertical scrolling for payment fields */
+}
+
+/* ================================================================
+   LEFT PANEL - ORDER SUMMARY
+   ================================================================ */
+
+.stripe-order-summary {
+    background: #f8f9fa;
+    padding: 30px;
+    border-right: 1px solid #e9ecef;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.stripe-section-title {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stripe-section-title i {
+    color: #1E90FF;
+    font-size: 20px;
+}
+
+/* Order Items */
+.stripe-order-items {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+}
+
+.stripe-order-item {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.stripe-order-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.order-item-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #f8f9fa;
+}
+
+.order-item-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.order-item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.order-item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.3;
+}
+
+.order-item-meta {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.order-item-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1E90FF;
+    text-align: right;
+}
+
+/* Order Total */
+.stripe-order-total {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.order-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.order-shipping {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.order-total-final {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    padding-top: 12px;
+    border-top: 2px solid #1E90FF;
+}
+
+.total-amount {
+    font-size: 24px;
+    color: #1E90FF;
+}
+
+/* ================================================================
+   RIGHT PANEL - PAYMENT FORM
+   ================================================================ */
+
+.stripe-payment-panel {
+    background: #ffffff;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.stripe-payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Stripe Elements Containers */
+.stripe-element-container {
+    min-height: 200px;      /* Space for PaymentElement (card only) */
+    padding: 12px 0;
+}
+
+/* Error Message */
+.stripe-error-message {
+    background: #ffebee;
+    border-left: 4px solid #f44336;
+    border-radius: 8px;
+    padding: 16px;
+    color: #c62828;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Submit Button */
+.stripe-submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 18px 24px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 16px rgba(30, 144, 255, 0.3);
+}
+
+.stripe-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(30, 144, 255, 0.4);
+}
+
+.stripe-submit-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.stripe-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#stripe-loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Security Badge */
+.stripe-security-badge {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 12px;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.stripe-security-badge i {
+    color: #28a745;
+    font-size: 14px;
+}
+
+/* ================================================================
+   RESPONSIVE - MOBILE LAYOUT
+   ================================================================ */
+
+@media (max-width: 768px) {
+    .stripe-checkout-overlay {
+        padding: 0;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .stripe-checkout-container {
+        max-width: 100%;
+        max-height: 100%;
+        height: 100%;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* Container doesn't scroll, content inside does */
+    }
+
+    .stripe-checkout-content {
+        grid-template-columns: 1fr; /* Single column on mobile */
+        overflow-y: auto; /* Only the content area scrolls */
+        overflow-x: hidden;
+        flex: 1; /* Take remaining space */
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .stripe-order-summary {
+        border-right: none;
+        border-bottom: 2px solid #e9ecef;
+        padding: 20px;
+        overflow: visible; /* Don't scroll independently */
+        flex: 0 0 auto; /* Don't flex, let content dictate size */
+    }
+
+    .stripe-order-summary .stripe-order-items {
+        flex: 0 0 auto; /* Items should show all */
+    }
+
+    .stripe-payment-panel {
+        padding: 20px;
+        overflow: visible; /* Don't scroll independently */
+        flex: 0 0 auto; /* Don't flex, let content dictate size */
+    }
+
+    .stripe-checkout-header {
+        padding: 16px 20px;
+        flex-shrink: 0; /* Header stays fixed */
+    }
+
+    .stripe-checkout-title {
+        font-size: 20px;
+    }
+
+    .stripe-order-item {
+        grid-template-columns: 40px 1fr auto;
+        padding: 12px;
+    }
+
+    .order-item-image,
+    .order-item-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .stripe-submit-btn {
+        font-size: 16px;
+        padding: 16px 20px;
+    }
+
+    .stripe-header-right {
+        gap: 8px;
+    }
+
+    .stripe-exit-booking-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+        border-radius: 6px;
+    }
+}
+
+/* ================================================================
+   TABLET LAYOUT
+   ================================================================ */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .stripe-checkout-content {
+        grid-template-columns: 350px 1fr;
+    }
+
+    .stripe-order-summary,
+    .stripe-payment-panel {
+        padding: 24px;
+    }
+}
+
+/* ================================================================
+   CUSTOM BILLING FORM STYLES
+   ================================================================ */
+
+.stripe-customer-info {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.stripe-customer-title {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stripe-customer-title i {
+    color: #1E90FF;
+    font-size: 14px;
+}
+
+.stripe-custom-input {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.stripe-custom-input:focus {
+    outline: none;
+    border-color: #1e90ff;
+    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.1);
+}
+
+.stripe-custom-input::placeholder {
+    color: #98a2b3;
+}
+
+/* Terms & Conditions Checkbox */
+.stripe-terms-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 12px;
+    background: #f3f4f6;
+    border-radius: 8px;
+}
+
+.stripe-terms-wrapper input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.stripe-terms-wrapper label {
+    color: #4a5568;
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer;
+    margin: 0;
+}
+
+.stripe-policy-link {
+    color: #1e90ff;
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid #1e90ff;
+    transition: all 0.2s ease;
+}
+
+.stripe-policy-link:hover {
+    color: #0047ab;
+    border-bottom-color: #0047ab;
+}
+
+/* Payment Section */
+.stripe-payment-section {
+    margin-bottom: 8px;
+}
+
+.stripe-payment-section .stripe-section-title {
+    margin-top: 0;
+    margin-bottom: 12px;
+}

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Your Data - Moon Tide Reconciliation</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Delete Your Data">
+    <meta property="og:description" content="Request permanent deletion of your personal information from Moon Tide Reconciliation.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --warm-white: #FBF8F3;
+            --border-color: #E8DDD4;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --red-primary: #C41E3A;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a15 0%, #1a0a2e 50%, #0a0a15 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            padding: 40px 20px;
+        }
+
+        /* Back button */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10000;
+            transition: all 0.3s;
+            font-size: 28px;
+            color: white;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--warm-white);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #C41E3A 0%, #8B0000 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .content {
+            padding: 50px;
+            line-height: 1.8;
+        }
+
+        .info-section {
+            margin-bottom: 40px;
+        }
+
+        .info-section h2 {
+            color: var(--red-primary);
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            border-bottom: 3px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .info-section p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+        }
+
+        .info-section ul,
+        .info-section ol {
+            margin: 12px 0;
+            padding-left: 30px;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .form-section {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 5px solid var(--red-primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .form-section h2 {
+            color: var(--red-primary);
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="email"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid rgba(196, 30, 58, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: white;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .form-group input[type="email"]:focus {
+            outline: none;
+            border-color: var(--red-primary);
+            box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--red-primary);
+        }
+
+        .checkbox-group label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #C41E3A 0%, #8B0000 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: linear-gradient(135deg, #999999 0%, #666666 100%);
+        }
+
+        .form-note {
+            font-size: 0.95rem;
+            color: #666;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(196, 30, 58, 0.05);
+            border-radius: 6px;
+            border-left: 3px solid var(--red-primary);
+        }
+
+        .response-message {
+            display: none;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .response-message.success {
+            background: #E8F5E9;
+            border-left: 4px solid #4CAF50;
+            color: #2E7D32;
+        }
+
+        .response-message.error {
+            background: #FFEBEE;
+            border-left: 4px solid #F44336;
+            color: #C62828;
+        }
+
+        .response-message.info {
+            background: #E3F2FD;
+            border-left: 4px solid #2196F3;
+            color: #0D47A1;
+        }
+
+        .response-message h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .response-message p {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 30px 25px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .info-section h2,
+            .form-section h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="back-button" onclick="navigateBack()">✕</div>
+
+    <div class="container">
+        <div class="header">
+            <h1><span>🗑️</span> Delete Your Data</h1>
+            <p>Request permanent deletion of your personal information</p>
+        </div>
+
+        <div class="content">
+            <!-- What This Does -->
+            <div class="info-section">
+                <h2>What This Does</h2>
+                <p>When you submit a data deletion request, we will:</p>
+                <ul>
+                    <li>Remove your personal information (name, email, phone) from our system</li>
+                    <li>Anonymize any transaction records associated with your account</li>
+                    <li>Keep records only as required by law for financial compliance</li>
+                    <li>Process your request within 30 days</li>
+                </ul>
+            </div>
+
+            <!-- What We Keep -->
+            <div class="info-section">
+                <h2>What We Keep</h2>
+                <ul>
+                    <li>Transaction amounts (for financial reconciliation)</li>
+                    <li>Workshop booking dates (for business records)</li>
+                    <li>No personal details connected to these records</li>
+                </ul>
+            </div>
+
+            <!-- How It Works -->
+            <div class="info-section">
+                <h2>How It Works</h2>
+                <ol>
+                    <li>Enter your email address below</li>
+                    <li>Submit the deletion request</li>
+                    <li>Our admin will review your request (within 24 hours)</li>
+                    <li>Your data will be permanently deleted</li>
+                    <li>You'll receive confirmation via email</li>
+                </ol>
+            </div>
+
+            <!-- Form -->
+            <div class="form-section">
+                <h2>Submit Deletion Request</h2>
+
+                <div class="form-group">
+                    <label for="delete-email">Email Address:</label>
+                    <input
+                        type="email"
+                        id="delete-email"
+                        placeholder="Enter your email address"
+                        required
+                    />
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="delete-confirm" />
+                    <label for="delete-confirm">
+                        I understand that this action cannot be undone and my data will be permanently deleted
+                    </label>
+                </div>
+
+                <button id="delete-submit-btn" class="submit-btn" disabled>
+                    Submit Deletion Request
+                </button>
+
+                <p class="form-note">
+                    ⓘ You will receive a confirmation email at the address provided.
+                    Please check your spam folder if you don't see it within 5 minutes.
+                </p>
+
+                <div id="delete-response" class="response-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateBack() {
+            window.location.href = '/menu';
+        }
+
+        const confirmCheckbox = document.getElementById('delete-confirm');
+        const submitBtn = document.getElementById('delete-submit-btn');
+        const emailInput = document.getElementById('delete-email');
+        const responseDiv = document.getElementById('delete-response');
+
+        // Enable/disable submit button
+        function toggleSubmitBtn() {
+            const isConfirmed = confirmCheckbox.checked;
+            const hasEmail = emailInput.value.trim().length > 0;
+            submitBtn.disabled = !(isConfirmed && hasEmail);
+        }
+
+        confirmCheckbox.addEventListener('change', toggleSubmitBtn);
+        emailInput.addEventListener('input', toggleSubmitBtn);
+
+        // Handle form submission
+        submitBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await submitDeletionRequest(emailInput.value);
+        });
+
+        // Allow Enter key to submit
+        emailInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !submitBtn.disabled) {
+                submitBtn.click();
+            }
+        });
+
+        async function submitDeletionRequest(email) {
+            const originalText = submitBtn.innerText;
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Submitting...';
+
+                // Validate email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    throw new Error('Please enter a valid email address');
+                }
+
+                // Send request to admin console backend
+                const response = await fetch(
+                    'https://admin-console-backend-338017041631.us-central1.run.app/api/admin/pii/search',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer guest-request'
+                        },
+                        body: JSON.stringify({ email: email.toLowerCase() })
+                    }
+                );
+
+                if (response.status === 401 || response.status === 403) {
+                    // Expected for anonymous user - show success
+                    responseDiv.className = 'response-message success';
+                    responseDiv.innerHTML = `
+                        <h3>✓ Deletion Request Submitted</h3>
+                        <p>
+                            Your data deletion request has been submitted successfully.
+                        </p>
+                        <p>
+                            <strong>What happens next:</strong>
+                            Our admin will review your request within 24 hours and send you a confirmation
+                            email at <strong>${email}</strong>. Your data will be permanently deleted after confirmation.
+                        </p>
+                        <p style="font-size: 0.9rem; opacity: 0.8;">
+                            Please check your spam folder if you don't receive the email within 5 minutes.
+                        </p>
+                    `;
+                    responseDiv.style.display = 'block';
+                    emailInput.value = '';
+                    confirmCheckbox.checked = false;
+                } else if (response.ok) {
+                    const data = await response.json();
+
+                    if (data.status === 'found') {
+                        responseDiv.className = 'response-message success';
+                        responseDiv.innerHTML = `
+                            <h3>✓ Deletion Request Submitted</h3>
+                            <p>
+                                Your data deletion request has been submitted successfully.
+                                Our admin has been notified and will process your request within 24 hours.
+                            </p>
+                            <p>
+                                <strong>Found ${data.moon_records} record(s)</strong> associated with <strong>${email}</strong>
+                            </p>
+                            <p>
+                                You will receive a confirmation email when your data has been deleted.
+                            </p>
+                        `;
+                    } else {
+                        responseDiv.className = 'response-message info';
+                        responseDiv.innerHTML = `
+                            <h3>ⓘ No records found</h3>
+                            <p>
+                                No records found for <strong>${email}</strong> in our system.
+                            </p>
+                            <p>
+                                If you have made a purchase, it may be under a different email address.
+                                Please try again with the correct email.
+                            </p>
+                        `;
+                    }
+                    responseDiv.style.display = 'block';
+                    emailInput.value = '';
+                    confirmCheckbox.checked = false;
+                } else {
+                    throw new Error('Failed to submit deletion request');
+                }
+
+                submitBtn.innerText = originalText;
+            } catch (error) {
+                console.error('Error:', error);
+
+                responseDiv.className = 'response-message error';
+                responseDiv.innerHTML = `
+                    <h3>⚠️ Error Submitting Request</h3>
+                    <p>${error.message}</p>
+                    <p>Please try again or contact us at shona@moontidereconciliation.com</p>
+                `;
+                responseDiv.style.display = 'block';
+
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') navigateBack();
+        });
+    </script>
+</body>
+</html>

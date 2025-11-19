@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon Tide Reconciliation - Vision & Mission</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Moon Tide Reconciliation - Our Vision">
+    <meta property="og:description" content="Indigenous-led reconciliation through transformative cultural experiences and ancestral wisdom.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background: #FEFDFB;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        .close-button {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background: rgba(30, 144, 255, 0.95);
+            border: 2px solid #0047AB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10000;
+            transition: all 0.3s ease;
+            font-size: 26px;
+            color: #FFFFFF;
+            box-shadow: 0 4px 20px rgba(30, 144, 255, 0.3);
+        }
+
+        .close-button:hover {
+            background: #0047AB;
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #F5F1E8 0%, #E8E4DC 100%);
+            padding: 80px 60px;
+            position: relative;
+        }
+
+        .hero-logo {
+            width: 180px;
+            height: 180px;
+            border-radius: 20px;
+            border: 4px solid #1E90FF;
+            box-shadow: 0 10px 40px rgba(30, 144, 255, 0.3);
+            margin-bottom: 50px;
+            object-fit: cover;
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #1E90FF, #0047AB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: #555;
+            text-align: center;
+            max-width: 900px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .hero-tagline {
+            font-size: 1.3rem;
+            color: #1E90FF;
+            text-align: center;
+            font-style: italic;
+            max-width: 700px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            font-size: 2.5rem;
+            color: #1E90FF;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Vision Section */
+        .vision-section {
+            padding: 120px 60px;
+            background: #FFFFFF;
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #1E90FF;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #1a1a1a;
+            margin-bottom: 40px;
+            line-height: 1.1;
+        }
+
+        .section-content {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .section-content p {
+            margin-bottom: 30px;
+        }
+
+        .section-content strong {
+            color: #1E90FF;
+            font-weight: 700;
+        }
+
+        /* Mission Section */
+        .mission-section {
+            padding: 120px 60px;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.08), rgba(42, 157, 143, 0.08));
+        }
+
+        /* Values Grid */
+        .values-section {
+            padding: 120px 60px;
+            background: #FEFDFB;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 50px;
+            max-width: 1400px;
+            margin: 60px auto 0;
+        }
+
+        .value-card {
+            background: #FFFFFF;
+            padding: 50px;
+            border-radius: 0;
+            border-left: 6px solid #1E90FF;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 30px rgba(30, 144, 255, 0.15);
+        }
+
+        .value-card:nth-child(1) { border-left-color: #E63E54; }
+        .value-card:nth-child(2) { border-left-color: #F4A261; }
+        .value-card:nth-child(3) { border-left-color: #2A9D8F; }
+        .value-card:nth-child(4) { border-left-color: #9B59B6; }
+
+        .value-icon {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .value-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .value-text {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .value-text p {
+            margin-bottom: 15px;
+        }
+
+        .value-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .value-text strong {
+            color: #1E90FF;
+            font-weight: 700;
+        }
+
+        /* Quote Section */
+        .quote-section {
+            padding: 100px 60px;
+            background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        .quote-content {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .quote-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-style: italic;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .quote-attribution {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 60px;
+            background: #1a1a1a;
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        .footer-location {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="close-button" onclick="navigateBack()">✕</div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <img src="/images/MOON TIDE/moon-logo.png" alt="Moon Tide Logo" class="hero-logo">
+        <h1 class="hero-title">Moon Tide Reconciliation</h1>
+        <p class="hero-subtitle">Indigenous Elders, Knowledge Keepers & Cultural Facilitators</p>
+        <p class="hero-tagline">A collective rooted in ancestral wisdom, creating transformative experiences that bridge communities through understanding.</p>
+        <div class="scroll-indicator">↓</div>
+    </section>
+
+    <!-- Vision Section -->
+    <section class="vision-section">
+        <div class="section-container">
+            <div class="section-label">Our Vision</div>
+            <h2 class="section-title">The Tide That Invites Understanding</h2>
+            <div class="section-content">
+                <p>Our name reflects the natural, cyclical pull toward understanding—a <strong>tide that invites everyone</strong> to engage in the vital work of reconciliation.</p>
+                <p>We believe that true reconciliation is not built on words alone, but through <strong>shared, tangible experiences</strong> that open hearts and minds. Like the tide, reconciliation ebbs and flows, requiring patience, commitment, and collective movement toward a shared horizon.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission-section">
+        <div class="section-container">
+            <div class="section-label">Our Mission</div>
+            <h2 class="section-title">Creating Powerful Moments of Connection</h2>
+            <div class="section-content">
+                <p>We create <strong>powerful moments of connection</strong> that foster empathy, dialogue, and healing across communities.</p>
+                <p>We guide individuals and organizations on a <strong>transformative journey from awareness toward meaningful action</strong>, building pathways to a more just and equitable future for all who share this land.</p>
+                <p>Through experiential workshops, traditional arts, and ceremony, we translate reconciliation from abstract concept into lived, felt experience.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+        <div class="section-container">
+            <div class="section-label">How We Work</div>
+            <h2 class="section-title">Our Approach & Values</h2>
+
+            <div class="values-grid">
+                <!-- Experiential Learning -->
+                <div class="value-card">
+                    <span class="value-icon">🎨</span>
+                    <h3 class="value-title">Experiential Learning</h3>
+                    <div class="value-text">
+                        <p><strong>Interactive Workshops:</strong> Kairos Blanket Exercise, MMIWG2S+ awareness sessions that engage hearts and minds.</p>
+                        <p><strong>Traditional Arts:</strong> Cedar weaving, medicine pouch creation, smudging ceremonies that connect hands to culture.</p>
+                        <p><strong>Safe Spaces:</strong> Environments for genuine dialogue, reflection, and transformation rooted in cultural safety protocols.</p>
+                    </div>
+                </div>
+
+                <!-- Authenticity -->
+                <div class="value-card">
+                    <span class="value-icon">💎</span>
+                    <h3 class="value-title">Authenticity</h3>
+                    <div class="value-text">
+                        <p>We honor <strong>ancestral wisdom</strong> passed down through generations while embracing contemporary understanding and methodologies.</p>
+                        <p>Our facilitators are Indigenous Elders and knowledge keepers deeply rooted in their communities and traditions, ensuring every workshop is culturally grounded and authentic.</p>
+                    </div>
+                </div>
+
+                <!-- Inclusion -->
+                <div class="value-card">
+                    <span class="value-icon">🤝</span>
+                    <h3 class="value-title">Inclusion</h3>
+                    <div class="value-text">
+                        <p>We welcome <strong>individuals and organizations of all backgrounds</strong> to join this vital work—from schools and nonprofits to corporations and government bodies.</p>
+                        <p>Reconciliation is a collective responsibility that requires diverse voices, perspectives, and commitments working in concert toward systemic change.</p>
+                    </div>
+                </div>
+
+                <!-- Healing -->
+                <div class="value-card">
+                    <span class="value-icon">💚</span>
+                    <h3 class="value-title">Healing</h3>
+                    <div class="value-text">
+                        <p>We prioritize creating <strong>trauma-informed spaces</strong> where genuine connection, vulnerability, and transformation can emerge safely.</p>
+                        <p>Healing happens not through performative gestures but through sustained engagement, deep listening, and the courage to sit with discomfort while moving toward understanding.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote Section -->
+    <section class="quote-section">
+        <div class="quote-content">
+            <p class="quote-text">"We cannot command the tide, only learn to navigate its currents together toward a shared horizon."</p>
+            <p class="quote-attribution">A continuous journey of humility, wisdom, and commitment to meaningful change.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-location">Douglas Lake & Vancouver, BC</p>
+    </footer>
+
+    <script>
+        function navigateBack() {
+            window.location.href = '/menu';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') navigateBack();
+        });
+    </script>
+</body>
+</html>

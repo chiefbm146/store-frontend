@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "reconciliation-475704"
+  },
+  "targets": {
+    "reconciliation-475704": {
+      "hosting": {
+        "reconciliation-storefront": [
+          "reconciliation-storefront"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Moon Tide Reconciliation</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Contact Moon Tide Reconciliation">
+    <meta property="og:description" content="Get in touch with Moon Tide Reconciliation for transformative cultural workshops.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background: #F5F1E8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        /* Close Button */
+        .close-button {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            background: #1E90FF;
+            border: 2px solid #0047AB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10000;
+            transition: all 0.3s ease;
+            font-size: 24px;
+            color: #FFFFFF;
+            box-shadow: 0 4px 20px rgba(30, 144, 255, 0.3);
+        }
+
+        .close-button:active {
+            background: #0047AB;
+            transform: scale(1.05);
+        }
+
+        /* Container */
+        .contact-container {
+            padding: 80px 20px 50px;
+        }
+
+        /* Header */
+        .contact-header {
+            margin-bottom: 40px;
+        }
+
+        .contact-title {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #1E90FF, #0047AB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .contact-subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        /* Info Section */
+        .info-section {
+            margin-bottom: 35px;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #999;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .info-note {
+            font-size: 1.1rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .copy-button {
+            background: #1E90FF;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 0;
+        }
+
+        .copy-button:active {
+            background: #0047AB;
+            transform: translateX(3px);
+        }
+
+        .copy-button.copied {
+            background: #28a745;
+        }
+
+        /* Contact Details */
+        .contact-details {
+            background: #FFFFFF;
+            padding: 40px 25px;
+            border-left: 6px solid #1E90FF;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+            margin-top: 40px;
+        }
+
+        .detail-block {
+            padding-bottom: 30px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .detail-block:last-child {
+            padding-bottom: 0;
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .detail-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-content {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .detail-content p {
+            margin-bottom: 8px;
+        }
+
+        .detail-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-highlight {
+            font-size: 1.15rem;
+            color: #1E90FF;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="close-button" onclick="navigateBack()">✕</div>
+
+    <div class="contact-container">
+        <!-- Header -->
+        <div class="contact-header">
+            <h1 class="contact-title">Get in Touch</h1>
+            <p class="contact-subtitle">Connect with Moon Tide Reconciliation for transformative cultural workshops and Indigenous-led reconciliation experiences.</p>
+
+            <div class="info-section">
+                <div class="info-label">Email</div>
+                <div class="info-value">shona@moontidereconciliation.com</div>
+                <button class="copy-button" onclick="copyToClipboard('shona@moontidereconciliation.com', this)">
+                    📋 Copy Email
+                </button>
+            </div>
+
+            <div class="info-section">
+                <div class="info-label">Phone</div>
+                <div class="info-note">New number coming soon!</div>
+            </div>
+        </div>
+
+        <!-- Contact Details -->
+        <div class="contact-details">
+            <div class="detail-block">
+                <h3 class="detail-title">📍 Locations</h3>
+                <div class="detail-content">
+                    <p class="detail-highlight">Douglas Lake, BC</p>
+                    <p class="detail-highlight">Vancouver, BC</p>
+                </div>
+            </div>
+
+            <div class="detail-block">
+                <h3 class="detail-title">👤 Lead Contact</h3>
+                <div class="detail-content">
+                    <p><strong>Shona Sparrow</strong></p>
+                    <p>Indigenous Elder & Cultural Facilitator</p>
+                </div>
+            </div>
+
+            <div class="detail-block">
+                <h3 class="detail-title">💬 What We Offer</h3>
+                <div class="detail-content">
+                    <p>Kairos Blanket Exercise</p>
+                    <p>Cedar Weaving & Traditional Arts</p>
+                    <p>Medicine Pouch Creation</p>
+                    <p>MMIWG2S+ Awareness Sessions</p>
+                    <p>Orange Shirt Day Programs</p>
+                    <p>Custom Cultural Workshops</p>
+                </div>
+            </div>
+
+            <div class="detail-block">
+                <h3 class="detail-title">🏫 Who We Serve</h3>
+                <div class="detail-content">
+                    <p>Schools & Educational Institutions</p>
+                    <p>Corporations & Organizations</p>
+                    <p>Government Bodies</p>
+                    <p>Nonprofit Organizations</p>
+                    <p>Community Groups</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateBack() {
+            window.location.href = '/menu';
+        }
+
+        async function copyToClipboard(text, button) {
+            try {
+                await navigator.clipboard.writeText(text);
+                const originalText = button.innerHTML;
+                button.innerHTML = '✓ Copied!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') navigateBack();
+        });
+    </script>
+</body>
+</html>

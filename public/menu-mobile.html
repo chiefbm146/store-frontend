@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌊 Menu - Moon Tide</title>
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://moontidereconciliation.com/menu">
+    <meta property="og:title" content="🌊 Moon Tide - Menu">
+    <meta property="og:description" content="Explore our navigation menu">
+    <meta property="og:image" content="https://moontidereconciliation.com/images/journey-keepers-logo.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            background: #F5F1E8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            overflow: hidden;
+            color: #1a1a1a;
+            position: relative;
+            overscroll-behavior: none;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image:
+                radial-gradient(circle at 25% 25%, #1E90FF 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, #E63E54 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: drift 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10px, -10px); }
+        }
+
+        /* Header with back button */
+        .menu-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid #1E90FF;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 1000;
+        }
+
+        .menu-header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .back-button {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 24px;
+            color: #FFFFFF;
+        }
+
+        .back-button:active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0.95);
+        }
+
+        /* Main menu container */
+        .menu-container {
+            width: 100%;
+            height: calc(100vh - 80px);
+            margin-top: 80px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        /* Custom Scrollbar */
+        .menu-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .menu-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .menu-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #1E90FF, #0047AB);
+            border-radius: 3px;
+        }
+
+        /* Menu list */
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Menu items */
+        .menu-item {
+            background: #FFFFFF;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            padding: 25px 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out backwards;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            min-height: 90px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.1), rgba(42, 157, 143, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu-item:active {
+            transform: scale(0.97);
+            border-color: rgba(30, 144, 255, 0.4);
+            box-shadow: 0 6px 16px rgba(30, 144, 255, 0.2);
+        }
+
+        .menu-item:active::before {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Stagger animation */
+        .menu-item:nth-child(1) { animation-delay: 0.05s; }
+        .menu-item:nth-child(2) { animation-delay: 0.1s; }
+        .menu-item:nth-child(3) { animation-delay: 0.15s; }
+        .menu-item:nth-child(4) { animation-delay: 0.2s; }
+        .menu-item:nth-child(5) { animation-delay: 0.25s; }
+        .menu-item:nth-child(6) { animation-delay: 0.3s; }
+        .menu-item:nth-child(7) { animation-delay: 0.35s; }
+        .menu-item:nth-child(8) { animation-delay: 0.4s; }
+        .menu-item:nth-child(9) { animation-delay: 0.45s; }
+        .menu-item:nth-child(10) { animation-delay: 0.5s; }
+        .menu-item:nth-child(11) { animation-delay: 0.55s; }
+        .menu-item:nth-child(12) { animation-delay: 0.6s; }
+        .menu-item:nth-child(13) { animation-delay: 0.65s; }
+
+        .menu-item-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .menu-icon {
+            font-size: 3rem;
+            flex-shrink: 0;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+        }
+
+        .menu-text {
+            flex: 1;
+        }
+
+        .menu-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #1a1a1a;
+        }
+
+        .menu-description {
+            font-size: 0.9rem;
+            color: #4A4A4A;
+            line-height: 1.4;
+        }
+
+        .menu-arrow {
+            font-size: 1.5rem;
+            color: #4A4A4A;
+            flex-shrink: 0;
+        }
+
+        /* Safe area for iOS notch */
+        @supports (padding: env(safe-area-inset-top)) {
+            .menu-header {
+                padding-top: env(safe-area-inset-top);
+                height: calc(80px + env(safe-area-inset-top));
+            }
+
+            .menu-container {
+                height: calc(100vh - 80px - env(safe-area-inset-top));
+                margin-top: calc(80px + env(safe-area-inset-top));
+                padding-bottom: calc(100px + env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="menu-header">
+        <div class="menu-header-title">Menu</div>
+        <div class="back-button" onclick="navigateBack()">✕</div>
+    </div>
+
+    <!-- Menu Container -->
+    <div class="menu-container">
+        <div class="menu-list">
+            <!-- 1. Account -->
+            <div class="menu-item" onclick="navigateTo('/Account')">
+                <div class="menu-item-content">
+                    <img src="./libs/google/google.svg" alt="Account" class="menu-icon" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">
+                    <div class="menu-text">
+                        <div class="menu-title">Account</div>
+                        <div class="menu-description">Sign in with your Google account</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 2. About Shona Sparrow -->
+            <div class="menu-item" onclick="navigateTo('/shona')">
+                <div class="menu-item-content">
+                    <div class="menu-icon">👤</div>
+                    <div class="menu-text">
+                        <div class="menu-title">About Shona Sparrow</div>
+                        <div class="menu-description">Learn about our founder and mission</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 3. Moon Tide Reconciliation -->
+            <div class="menu-item" onclick="navigateTo('/moon-tide')">
+                <div class="menu-item-content">
+                    <div class="menu-icon">🌊</div>
+                    <div class="menu-text">
+                        <div class="menu-title">Moon Tide Reconciliation</div>
+                        <div class="menu-description">Our workshops and vision</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 4. Workshops -->
+            <div class="menu-item" onclick="navigateTo('/workshops')">
+                <div class="menu-item-content">
+                    <div class="menu-icon">🎯</div>
+                    <div class="menu-text">
+                        <div class="menu-title">Workshops</div>
+                        <div class="menu-description">Browse all available workshops</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 5. Reconciliation Story -->
+            <div class="menu-item" onclick="navigateTo('/infinite-story')">
+                <div class="menu-item-content">
+                    <div class="menu-icon">📖</div>
+                    <div class="menu-text">
+                        <div class="menu-title">Reconciliation Story</div>
+                        <div class="menu-description">Begin an interactive narrative journey</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 6. Custom Creations -->
+            <div class="menu-item" onclick="navigateTo('/custom-creations')">
+                <div class="menu-item-content">
+                    <img src="images/webp/moon9.webp" alt="Custom Creations" class="menu-icon" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">
+                    <div class="menu-text">
+                        <div class="menu-title">Custom Creations</div>
+                        <div class="menu-description">Explore our custom Salish art and designs</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 7. Reconciliation -->
+            <div class="menu-item" onclick="navigateTo('/reconciliation')">
+                <div class="menu-item-content">
+                    <div class="menu-icon">🕊️</div>
+                    <div class="menu-text">
+                        <div class="menu-title">Reconciliation</div>
+                        <div class="menu-description">Explore resources, stories, and pathways toward truth and healing</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 8. Podcasts -->
+            <div class="menu-item" onclick="navigateTo('/podcasts')">
+                <div class="menu-item-content">
+                    <div class="menu-icon">🎙️</div>
+                    <div class="menu-text">
+                        <div class="menu-title">Podcasts</div>
+                        <div class="menu-description">Listen to voices sharing wisdom, stories, and cultural teachings</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 9. Downloads -->
+            <div class="menu-item" onclick="navigateTo('/downloads')">
+                <div class="menu-item-content">
+                    <div class="menu-icon">📥</div>
+                    <div class="menu-text">
+                        <div class="menu-title">Downloads</div>
+                        <div class="menu-description">Access educational materials, guides, and resources</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 10. Book a Workshop -->
+            <div class="menu-item" onclick="navigateTo('/workshop-list')">
+                <div class="menu-item-content">
+                    <div class="menu-icon">📅</div>
+                    <div class="menu-text">
+                        <div class="menu-title">Book a Workshop</div>
+                        <div class="menu-description">Schedule a transformative workshop</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 11. Contact -->
+            <div class="menu-item" onclick="navigateTo('/contact')">
+                <div class="menu-item-content">
+                    <div class="menu-icon">📬</div>
+                    <div class="menu-text">
+                        <div class="menu-title">Contact</div>
+                        <div class="menu-description">Get in touch with us</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 12. Contact Developer -->
+            <div class="menu-item" onclick="navigateTo('/developer')">
+                <div class="menu-item-content">
+                    <div class="menu-icon">👨‍💻</div>
+                    <div class="menu-text">
+                        <div class="menu-title">Contact Developer</div>
+                        <div class="menu-description">Get in touch with the development team</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- 13. Delete Data -->
+            <div class="menu-item" onclick="navigateTo('/delete-data')">
+                <div class="menu-item-content">
+                    <div class="menu-icon">🗑️</div>
+                    <div class="menu-text">
+                        <div class="menu-title">Delete Data</div>
+                        <div class="menu-description">Request your data to be deleted</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateTo(path) {
+            window.location.href = path;
+        }
+
+        function navigateBack() {
+            window.location.href = '/chat';
+        }
+
+        // Prevent pull-to-refresh on the menu container
+        const menuContainer = document.querySelector('.menu-container');
+        let startY = 0;
+
+        menuContainer.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].pageY;
+        }, { passive: true });
+
+        menuContainer.addEventListener('touchmove', (e) => {
+            const y = e.touches[0].pageY;
+            // Only prevent if at the top of the menu container and pulling down
+            if (y > startY && menuContainer.scrollTop === 0) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // ESC key to go back
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                navigateBack();
+            }
+        });
+    </script>
+</body>
+</html>

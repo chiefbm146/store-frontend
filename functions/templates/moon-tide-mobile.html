@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon Tide Reconciliation - Our Vision & Mission</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Moon Tide Reconciliation">
+    <meta property="og:description" content="A collective of Indigenous Elders, knowledge keepers, artists, and facilitators deeply rooted in ancestral wisdom.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --musqueam-red: #C41E3A;
+            --musqueam-black: #1a1a1a;
+            --warm-white: #FBF8F3;
+            --border-color: #E8DDD4;
+            --text-primary: #333;
+            --text-secondary: #666;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a15 0%, #1a0a2e 50%, #0a0a15 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Fixed Header with Back Button */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Back button */
+        .back-button {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10001;
+            transition: all 0.3s;
+            font-size: 24px;
+            color: white;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-button:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Scrollable Content Area */
+        .container {
+            margin-top: 80px;
+            padding: 0 15px 20px;
+            background: var(--warm-white);
+            min-height: calc(100vh - 80px);
+        }
+
+        .content {
+            padding: 20px 15px;
+            line-height: 1.7;
+        }
+
+        .logo-image-container {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        .logo-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 15px;
+            border: 4px solid #1E90FF;
+            box-shadow: 0 8px 24px rgba(30, 144, 255, 0.3);
+            object-fit: cover;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #1E90FF;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            border-bottom: 3px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: var(--musqueam-black);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 20px 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section p {
+            margin-bottom: 14px;
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .section strong {
+            color: #0047AB;
+            font-weight: 600;
+        }
+
+        .motto-section {
+            background: #ADD8E6;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 6px solid #1E90FF;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .motto-section p:first-child {
+            font-style: italic;
+            color: #1E90FF;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="back-button" onclick="navigateBack()">✕</div>
+
+    <div class="header">
+        <h1><span>🌊</span> Moon Tide Reconciliation</h1>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <!-- Logo Image -->
+            <div class="logo-image-container">
+                <img src="/images/MOON TIDE/moon-logo.png" alt="Moon Tide Reconciliation" class="logo-image">
+            </div>
+
+            <!-- Our Vision -->
+            <div class="section">
+                <h2>Our Vision</h2>
+                <p>
+                    <strong>Moon Tide Reconciliation</strong> is a collective of Indigenous Elders, knowledge keepers, artists, and facilitators deeply rooted in the ancestral wisdom and living traditions of our peoples. Our name reflects the natural, cyclical pull toward understanding—a tide that invites everyone to engage in the vital work of reconciliation.
+                </p>
+                <p>
+                    We believe that true <strong>reconciliation is not built on words alone</strong>, but through <strong>shared, tangible experiences</strong> that open hearts and minds.
+                </p>
+            </div>
+
+            <!-- Our Mission -->
+            <div class="section">
+                <h2>Our Mission</h2>
+                <p>
+                    Our mission is to create <strong>powerful moments of connection</strong> that foster empathy, dialogue, and healing. We guide individuals and organizations on a <strong>transformative journey from awareness toward meaningful action</strong>, building a more just and equitable future for all who share this land.
+                </p>
+                <p>
+                    We offer a variety of <strong>transformative cultural workshops</strong> designed to engage hearts and minds, from interactive experiences to hands-on artistic practices that honor Indigenous wisdom.
+                </p>
+            </div>
+
+            <!-- Our Approach -->
+            <div class="section">
+                <h2>Our Approach</h2>
+
+                <div>
+                    <h3>🎓 Education & Dialogue</h3>
+                    <p>
+                        Through workshops like the Kairos Blanket Exercise, we create spaces where participants engage with the complex history of Indigenous peoples in Canada, fostering deeper understanding and empathy.
+                    </p>
+                </div>
+
+                <div>
+                    <h3>🎨 Artistic Practices</h3>
+                    <p>
+                        From cedar weaving to medicine pouch making, our workshops teach traditional arts while creating meaningful connections to Indigenous knowledge and spiritual practices.
+                    </p>
+                </div>
+
+                <div>
+                    <h3>💚 Healing & Connection</h3>
+                    <p>
+                        We create safe spaces where dialogue, reflection, and shared experience lead to genuine transformation and healing for individuals and organizations.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Core Values -->
+            <div class="section">
+                <h2>Our Core Values</h2>
+                <p>
+                    <strong>Authenticity:</strong> We honor ancestral wisdom while embracing contemporary understanding.
+                </p>
+                <p>
+                    <strong>Inclusion:</strong> We welcome individuals and organizations of all backgrounds to join this vital work.
+                </p>
+                <p>
+                    <strong>Healing:</strong> We prioritize creating spaces for genuine connection and transformation.
+                </p>
+                <p>
+                    <strong>Respect:</strong> We honor the land, our communities, and each person's journey toward understanding.
+                </p>
+            </div>
+
+            <!-- Our Motto -->
+            <div class="motto-section">
+                <p>"We cannot command the tide, only learn to navigate its currents toward a shared horizon."</p>
+                <p style="color: #666; font-size: 0.95rem; margin: 0;">
+                    This reflects our belief that reconciliation is a continuous journey, one we undertake together with humility, wisdom, and commitment to creating meaningful change.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateBack() {
+            window.location.href = '/menu';
+        }
+
+        // ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') navigateBack();
+        });
+    </script>
+</body>
+</html>

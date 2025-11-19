@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon Tide Workshops - Mobile</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Moon Tide Workshops">
+    <meta property="og:description" content="Browse all transformative cultural workshops and experiences offered by Moon Tide Reconciliation.">
+
+    <link rel="stylesheet" href="/css/fullscreen-modals.css">
+</head>
+<body>
+    <div class="fullscreen-modal-backdrop">
+        <div class="fullscreen-modal">
+            <!-- Header -->
+            <div class="modal-header-game">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="modal-title-emoji">📅</span>
+                    <h1 class="modal-title-game" style="margin: 0;">Moon Tide Workshops</h1>
+                </div>
+                <div class="modal-header-disclaimer">
+                    All workshop prices shown are per person and based on a minimum of 10 participants.
+                </div>
+                <button class="modal-close-btn" onclick="navigateBack()" title="Close">✕</button>
+            </div>
+
+            <!-- Mobile Disclaimer (appears after header on mobile) -->
+            <div class="modal-disclaimer-mobile">
+                All workshop prices shown are per person and based on a minimum of 10 participants.
+            </div>
+
+            <!-- Content Area -->
+            <div class="modal-content-game">
+                <div class="services-grid" id="workshopGrid">
+                    <!-- Workshop cards will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Footer Close Button -->
+            <button class="modal-footer-close-btn" onclick="navigateBack()">Close</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import services config for images
+        import servicesConfig from './js/config/services-config.js';
+
+        // Workshop Registry (from smart-message-renderer.js lines 19-160)
+        const workshopRegistry = {
+            'kairos-blanket-inperson': {
+                name: 'Kairos Blanket Exercise - In-Person',
+                emoji: '🛏️',
+                description: 'Kairos Blanket Exercise - In-Person',
+                price: '$225 (Community) / $375 (Corporate)',
+                duration: '3 hours'
+            },
+            'kairos-blanket-virtual': {
+                name: 'Kairos Blanket Exercise - Virtual',
+                emoji: '🛏️',
+                description: 'Kairos Blanket Exercise - Virtual',
+                price: '$225 (Community) / $375 (Corporate)',
+                duration: '3 hours'
+            },
+            'cedar-bracelet': {
+                name: 'Cedar Woven Bracelet',
+                emoji: '🪵',
+                description: 'Cedar Woven Bracelet',
+                price: '$70 (Community) / $95 (Corporate)',
+                duration: '2 hours'
+            },
+            'cedar-rope-bracelet': {
+                name: 'Cedar Rope Bracelet with Beads',
+                emoji: '🪵',
+                description: 'Cedar Rope Bracelet with Beads',
+                price: '$55 (Community) / $75 (Corporate)',
+                duration: '2 hours'
+            },
+            'cedar-heart': {
+                name: 'Weaving a Cedar Heart',
+                emoji: '❤️',
+                description: 'Weaving a Cedar Heart',
+                price: '$70 (Community) / $95 (Corporate)',
+                duration: '2 hours'
+            },
+            'medicine-pouch': {
+                name: 'Healing Through Medicine Pouch Making',
+                emoji: '🫶',
+                description: 'Healing Through Medicine Pouch Making',
+                price: '$70 (Community) / $95 (Corporate)',
+                duration: '2 hours'
+            },
+            'orange-shirt-day-inperson': {
+                name: 'Orange Shirt Day Awareness Beading - In-Person',
+                emoji: '🧡',
+                description: 'Orange Shirt Day Awareness Beading - In-Person',
+                price: '$120 (Community) / $160 (Corporate)',
+                duration: '4 hours'
+            },
+            'orange-shirt-day-virtual': {
+                name: 'Orange Shirt Day Awareness Beading - Virtual',
+                emoji: '🧡',
+                description: 'Orange Shirt Day Awareness Beading - Virtual',
+                price: '$105 (Community) / $145 (Corporate)',
+                duration: '4 hours'
+            },
+            'mmiwg2s-inperson': {
+                name: 'MMIWG2S Awareness Beading - In-Person',
+                emoji: '🤝',
+                description: 'MMIWG2S Awareness Beading - In-Person',
+                price: '$120 (Community) / $160 (Corporate)',
+                duration: '4 hours'
+            },
+            'mmiwg2s-virtual': {
+                name: 'MMIWG2S Awareness Beading - Virtual',
+                emoji: '🤝',
+                description: 'MMIWG2S Awareness Beading - Virtual',
+                price: '$105 (Community) / $145 (Corporate)',
+                duration: '4 hours'
+            },
+            'cedar-coasters': {
+                name: 'Cedar Woven Coasters',
+                emoji: '☕',
+                description: 'Cedar Woven Coasters',
+                price: '$70 (Community) / $95 (Corporate)',
+                duration: '2 hours'
+            },
+            'cedar-basket': {
+                name: 'Cedar Basket Weaving',
+                emoji: '🧺',
+                description: 'Cedar Basket Weaving',
+                price: '$120 (Community) / $160 (Corporate)',
+                duration: '4 hours'
+            }
+        };
+
+        // Populate the grid
+        const grid = document.getElementById('workshopGrid');
+
+        for (const [workshopId, workshop] of Object.entries(workshopRegistry)) {
+            // Create card
+            const card = document.createElement('div');
+            card.className = 'service-card';
+            card.style.cursor = 'pointer';
+
+            // Image section
+            const imageDiv = document.createElement('div');
+            imageDiv.className = 'service-card-image';
+
+            // Try to load image, fall back to emoji placeholder
+            const imagePath = servicesConfig.getImagePath(workshopId);
+
+            if (imagePath === null) {
+                // Explicitly use emoji placeholder (no image config)
+                imageDiv.classList.add('placeholder');
+                imageDiv.textContent = workshop.emoji || '🎯';
+            } else {
+                // Try to load image with fallback to emoji
+                const img = document.createElement('img');
+                img.src = imagePath;
+                img.alt = workshop.name;
+                img.onerror = () => {
+                    // If image fails to load, use emoji placeholder
+                    imageDiv.textContent = workshop.emoji || '🎯';
+                    imageDiv.classList.add('placeholder');
+                };
+                imageDiv.appendChild(img);
+            }
+
+            card.appendChild(imageDiv);
+
+            // Content section
+            const cardContent = document.createElement('div');
+            cardContent.className = 'service-card-content';
+
+            // Emoji
+            const emoji = document.createElement('div');
+            emoji.className = 'service-card-emoji';
+            emoji.textContent = workshop.emoji || '🎯';
+            cardContent.appendChild(emoji);
+
+            // Name
+            const name = document.createElement('h3');
+            name.className = 'service-card-name';
+            name.textContent = workshop.name;
+            cardContent.appendChild(name);
+
+            // Description
+            const description = document.createElement('p');
+            description.className = 'service-card-description';
+            description.textContent = workshop.description;
+            cardContent.appendChild(description);
+
+            // Meta information
+            const meta = document.createElement('div');
+            meta.className = 'service-card-meta';
+
+            const priceItem = document.createElement('div');
+            priceItem.className = 'service-meta-item';
+            priceItem.innerHTML = `Price: <span class="service-meta-value">${workshop.price}</span>`;
+
+            const durationItem = document.createElement('div');
+            durationItem.className = 'service-meta-item';
+            durationItem.innerHTML = `Duration: <span class="service-meta-value">${workshop.duration}</span>`;
+
+            meta.appendChild(priceItem);
+            meta.appendChild(durationItem);
+            cardContent.appendChild(meta);
+
+            // Action button
+            const actionBtn = document.createElement('button');
+            actionBtn.className = 'service-card-action';
+            actionBtn.textContent = 'Book Workshop';
+
+            // Click handler - navigate to chat with auto-booking
+            const navigateToDetail = () => {
+                window.location.href = `/chat?book=${workshopId}`;
+            };
+
+            actionBtn.addEventListener('click', navigateToDetail);
+            card.addEventListener('click', navigateToDetail);
+
+            cardContent.appendChild(actionBtn);
+            card.appendChild(cardContent);
+
+            // Add touch effect for mobile
+            card.addEventListener('touchstart', () => {
+                card.style.transform = 'scale(0.98)';
+            });
+
+            card.addEventListener('touchend', () => {
+                card.style.transform = '';
+            });
+
+            grid.appendChild(card);
+        }
+    </script>
+
+    <script>
+        function navigateBack() {
+            window.location.href = '/menu';
+        }
+
+        // Prevent pull-to-refresh on the modal content area
+        const modalContent = document.querySelector('.modal-content-game');
+        let startY = 0;
+
+        if (modalContent) {
+            modalContent.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].pageY;
+            }, { passive: true });
+
+            modalContent.addEventListener('touchmove', (e) => {
+                const y = e.touches[0].pageY;
+                // Only prevent if at the top of the modal content and pulling down
+                if (y > startY && modalContent.scrollTop === 0) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        }
+
+        // ESC key support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                navigateBack();
+            }
+        });
+    </script>
+</body>
+</html>

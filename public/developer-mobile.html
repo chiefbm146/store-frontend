@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Digital Architect - Custom Web Solutions</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Digital Architect - Enterprise Web Solutions">
+    <meta property="og:description" content="Transform your vision into intelligent, secure digital ecosystems">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #F5F1E8;
+            color: #1a1a1a;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.08;
+            background-image:
+                radial-gradient(circle at 25% 25%, #1E90FF 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, #E63E54 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: drift 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10px, -10px); }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid #1E90FF;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(30, 144, 255, 0.2);
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .back-button {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 22px;
+            color: #FFFFFF;
+        }
+
+        .back-button:active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0.95);
+        }
+
+        /* Main content */
+        .content {
+            margin-top: 70px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero section */
+        .hero {
+            padding: 60px 20px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1E90FF, #0047AB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            padding-bottom: 5px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: #4A4A4A;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.6s ease-out 0.2s backwards;
+        }
+
+        .hero-tagline {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.6s ease-out 0.4s backwards;
+        }
+
+        .hero-email-container {
+            background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+            border-radius: 15px;
+            padding: 25px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 0 auto;
+            max-width: 500px;
+            box-shadow: 0 8px 30px rgba(30, 144, 255, 0.3);
+            animation: fadeInUp 0.6s ease-out 0.6s backwards;
+        }
+
+        .hero-email-address {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            flex: 1;
+            word-break: break-all;
+        }
+
+        .hero-copy-button {
+            background: rgba(255, 255, 255, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+        }
+
+        .hero-copy-button:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .hero-copy-icon {
+            font-size: 1.3rem;
+            color: #FFFFFF;
+        }
+
+        .hero-copy-feedback {
+            font-size: 0.85rem;
+            color: #1E90FF;
+            font-weight: 600;
+            margin-top: 10px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: fadeInUp 0.6s ease-out 0.8s backwards;
+        }
+
+        .hero-copy-feedback.show {
+            opacity: 1;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section container */
+        .section {
+            margin: 40px 20px;
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(30, 144, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out backwards;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #1E90FF, #0047AB);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+        .section:nth-child(6) { animation-delay: 0.6s; }
+
+        .section-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1E90FF;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .section-copy {
+            font-size: 1rem;
+            color: #4A4A4A;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: rgba(30, 144, 255, 0.1);
+            color: #0047AB;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 5px 5px 5px 0;
+            border: 1px solid rgba(30, 144, 255, 0.2);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin: 40px 20px 60px;
+            background: linear-gradient(135deg, #1E90FF 0%, #0047AB 100%);
+            border-radius: 20px;
+            padding: 40px 25px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(30, 144, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(45deg,
+                rgba(255, 255, 255, 0.15) 0%,
+                transparent 30%,
+                transparent 70%,
+                rgba(255, 255, 255, 0.15) 100%);
+            animation: rotate 15s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-title, .cta-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 20px;
+        }
+
+        .cta-text {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .email-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .email-address {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            flex: 1;
+            word-break: break-all;
+        }
+
+        .copy-button {
+            background: rgba(255, 255, 255, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+        }
+
+        .copy-button:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .copy-icon {
+            font-size: 1.3rem;
+            color: #FFFFFF;
+        }
+
+        .copy-feedback {
+            font-size: 0.9rem;
+            color: #FFFFFF;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .copy-feedback.show {
+            opacity: 1;
+        }
+
+        /* Divider */
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(30, 144, 255, 0.3), transparent);
+            margin: 50px 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-title">Portfolio</div>
+        <div class="back-button" onclick="navigateBack()">✕</div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Hero -->
+        <div class="hero">
+            <h1 class="hero-title">Enjoying the Moon Tide Experience?</h1>
+            <p class="hero-subtitle">This isn't just a website. It's a precisely engineered, intelligent ecosystem.</p>
+            <p class="hero-tagline">I build digital transformations.</p>
+
+            <!-- Email Contact -->
+            <div class="hero-email-container">
+                <span class="hero-email-address" id="heroEmailAddress">aaries.luxi.ai@gmail.com</span>
+                <button class="hero-copy-button" onclick="copyEmail()" aria-label="Copy email">
+                    <span class="hero-copy-icon" id="heroCopyIcon">📋</span>
+                </button>
+            </div>
+            <div class="hero-copy-feedback" id="heroCopyFeedback">✓ Email copied to clipboard!</div>
+        </div>
+
+        <!-- Section 1: AI Intelligence -->
+        <div class="section">
+            <div class="section-icon">🧠</div>
+            <h2 class="section-title">The Power of True Intelligence: Beyond the Chatbot</h2>
+            <p class="section-copy">You've experienced a conversational AI that operates far beyond a simple chatbot. It possesses a distinct personality, understands nuanced intent, and guides users with contextual awareness, reflecting a brand's unique voice. This is an AI ambassador, custom-trained and integrated to turn casual browsing into meaningful, intelligent dialogue.</p>
+            <div class="tech-badge">Custom AI Personas</div>
+            <div class="tech-badge">Context Management</div>
+            <div class="tech-badge">Dynamic Narratives</div>
+            <div class="tech-badge">TTS Integration</div>
+        </div>
+
+        <!-- Section 2: Security -->
+        <div class="section">
+            <div class="section-icon">🛡️</div>
+            <h2 class="section-title">Architecting Digital Fortresses: Uncompromising Security</h2>
+            <p class="section-copy">Behind every seamless interaction on Moon Tide lies an enterprise-grade, multi-layered security architecture – a testament to resilient system design. My approach weaves proactive defenses into the very fabric of the infrastructure, protecting against a spectrum of threats from brute-force attacks and sophisticated spoofing to DDoS events. Your digital assets, customer data, and financial transactions are safeguarded with intelligent, adaptive measures that ensure unwavering trust and operational continuity.</p>
+            <div class="tech-badge">6-Layer Defense</div>
+            <div class="tech-badge">Fingerprint Validation</div>
+            <div class="tech-badge">DDoS Protection</div>
+            <div class="tech-badge">Real-time Monitoring</div>
+        </div>
+
+        <!-- Section 3: E-commerce -->
+        <div class="section">
+            <div class="section-icon">💳</div>
+            <h2 class="section-title">Seamless E-commerce & Advanced System Integration</h2>
+            <p class="section-copy">The payment experience you've navigated on Moon Tide is powered by a sophisticated, PCI-compliant e-commerce engine, adept at handling everything from simple product sales to intricate workshop bookings. This includes intelligent routing for multi-party payments via Stripe Connect and real-time data synchronization across disparate cloud projects – ensuring every transaction is accurate, transparent, and effortlessly managed. I engineer e-commerce solutions that scale with complex business logic, not against it.</p>
+            <div class="tech-badge">Stripe Connect</div>
+            <div class="tech-badge">Multi-Party Payments</div>
+            <div class="tech-badge">Cross-Project Sync</div>
+            <div class="tech-badge">PCI Compliant</div>
+        </div>
+
+        <!-- Section 4: UX -->
+        <div class="section">
+            <div class="section-icon">✨</div>
+            <h2 class="section-title">Immersive & Responsive Digital Experiences</h2>
+            <p class="section-copy">Every interaction on this platform is crafted for an intuitive, visually stunning experience, adapting flawlessly across any device – desktop, mobile, or tablet. From ambient animations and glassmorphic UIs to interactive narrative branching (like the Infinite Story player), I create digital environments that not only captivate but immerse users, transforming visitors into engaged participants and active brand advocates. Deliver a polished, high-performance user experience that builds immediate credibility and drives conversion.</p>
+            <div class="tech-badge">Device-Agnostic</div>
+            <div class="tech-badge">Clean URLs</div>
+            <div class="tech-badge">Modular Architecture</div>
+            <div class="tech-badge">Glassmorphism</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2 class="cta-title">Let's Build Your Vision</h2>
+            <p class="cta-text">If you're ready to transcend ordinary websites and deploy a digital ecosystem that intelligently engages, securely transacts, and dynamically adapts – let's discuss how my proven expertise can transform your vision into a powerful, performant, and memorable reality.</p>
+        </div>
+    </div>
+
+    <script>
+        function navigateBack() {
+            window.location.href = '/menu';
+        }
+
+        function copyEmail() {
+            const email = document.getElementById('heroEmailAddress').textContent;
+            const icon = document.getElementById('heroCopyIcon');
+            const feedback = document.getElementById('heroCopyFeedback');
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(email).then(() => {
+                // Change icon to checkmark
+                icon.textContent = '✓';
+
+                // Show feedback
+                feedback.classList.add('show');
+
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    icon.textContent = '📋';
+                    feedback.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = email;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                icon.textContent = '✓';
+                feedback.classList.add('show');
+                setTimeout(() => {
+                    icon.textContent = '📋';
+                    feedback.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        // ESC key support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                navigateBack();
+            }
+        });
+    </script>
+</body>
+</html>

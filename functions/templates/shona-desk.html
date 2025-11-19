@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shona Sparrow - Moon Tide Reconciliation</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Shona Sparrow - Indigenous Elder & Cultural Bridge Builder">
+    <meta property="og:description" content="Meet the visionary leader guiding communities toward reconciliation through ancestral wisdom and transformative cultural experiences.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            overflow-y: auto;
+            background: #F5F1E8;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            color: #1a1a1a;
+        }
+
+        /* Newspaper Page */
+        .newspaper-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #FEFDFB;
+        }
+
+        /* Masthead */
+        .masthead {
+            background: #1a1a1a;
+            color: #FFF;
+            padding: 20px 60px;
+            border-bottom: 4px solid #C41E3A;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .masthead-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            font-family: 'Georgia', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .masthead-date {
+            font-size: 0.9rem;
+            font-family: -apple-system, sans-serif;
+            opacity: 0.8;
+        }
+
+        .close-button {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 24px;
+            color: #FFF;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        /* Main Content */
+        .content-wrapper {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 350px 1fr 320px;
+            gap: 0;
+            padding: 40px 60px 60px 60px;
+        }
+
+        /* Left Column - Photo */
+        .photo-column {
+            padding-right: 30px;
+            border-right: 1px solid #D0D0D0;
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            border: 1px solid #333;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .photo-caption {
+            margin-top: 12px;
+            font-size: 0.75rem;
+            font-family: -apple-system, sans-serif;
+            color: #666;
+            line-height: 1.4;
+            font-style: italic;
+            border-top: 1px solid #D0D0D0;
+            padding-top: 8px;
+        }
+
+        .photo-caption strong {
+            font-style: normal;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .quick-contact {
+            margin-top: 25px;
+            padding: 18px;
+            background: #F8F8F8;
+            border: 1px solid #D0D0D0;
+            font-family: -apple-system, sans-serif;
+        }
+
+        .quick-contact h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            color: #C41E3A;
+            font-weight: 700;
+        }
+
+        .quick-contact-item {
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .quick-contact-item strong {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .copyable {
+            color: #C41E3A;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .copyable:hover {
+            opacity: 0.7;
+            text-decoration: underline;
+        }
+
+        /* Center Column - Article */
+        .article-column {
+            padding: 0 35px;
+            border-right: 1px solid #D0D0D0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-header {
+            margin-bottom: 20px;
+            border-bottom: 3px double #333;
+            padding-bottom: 18px;
+        }
+
+        .article-kicker {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #C41E3A;
+            font-weight: 700;
+            font-family: -apple-system, sans-serif;
+            margin-bottom: 8px;
+        }
+
+        .article-headline {
+            font-size: 2.6rem;
+            line-height: 1.1;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .article-subhead {
+            font-size: 1.1rem;
+            color: #555;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .article-body {
+            columns: 2;
+            column-gap: 30px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            text-align: justify;
+        }
+
+        .article-body p {
+            margin-bottom: 14px;
+        }
+
+        .article-body .drop-cap::first-letter {
+            font-size: 4rem;
+            line-height: 0.85;
+            float: left;
+            margin-right: 8px;
+            margin-top: 6px;
+            font-weight: 900;
+            color: #C41E3A;
+        }
+
+        .article-body strong {
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .pullquote {
+            break-inside: avoid;
+            margin: 18px 0;
+            padding: 20px;
+            background: #FFF9F0;
+            border-left: 4px solid #C41E3A;
+            font-size: 1.15rem;
+            font-style: italic;
+            line-height: 1.5;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Right Column - Sidebar */
+        .sidebar-column {
+            padding-left: 30px;
+        }
+
+        .sidebar-box {
+            background: #1a1a1a;
+            color: #FFF;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #333;
+        }
+
+        .sidebar-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 2px solid #C41E3A;
+            padding-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .sidebar-box ul {
+            list-style: none;
+        }
+
+        .sidebar-box li {
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            font-family: -apple-system, sans-serif;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .sidebar-box li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #C41E3A;
+            font-weight: 700;
+        }
+
+        .stat-box {
+            background: #F8F8F8;
+            border: 1px solid #D0D0D0;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-family: -apple-system, sans-serif;
+        }
+
+        .stat-item {
+            margin-bottom: 18px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #C41E3A;
+            line-height: 1;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            font-family: -apple-system, sans-serif;
+        }
+
+        .quote-box {
+            background: #C41E3A;
+            color: #FFF;
+            padding: 25px;
+            font-size: 1rem;
+            font-style: italic;
+            line-height: 1.6;
+            border: 1px solid #333;
+        }
+
+        .quote-box::before {
+            content: '"';
+            font-size: 4rem;
+            line-height: 0;
+            position: relative;
+            top: 20px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Newspaper Page -->
+    <div class="newspaper-page">
+        <!-- Masthead -->
+        <div class="masthead">
+            <div class="masthead-title">Moon Tide Tribune</div>
+            <div class="masthead-date">SPECIAL FEATURE • VANCOUVER, BC</div>
+            <div class="close-button" onclick="navigateBack()">✕</div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="content-wrapper">
+            <!-- Left Column: Photo -->
+            <div class="photo-column">
+                <img src="/images/MOON TIDE/SHONA.jpg" alt="Shona Sparrow" class="profile-photo">
+                <div class="photo-caption">
+                    <strong>SHONA SPARROW</strong> photographed at Douglas Lake, BC. The Indigenous Elder and cultural facilitator has spent three decades building bridges between communities through ancestral teachings and transformative reconciliation experiences.
+                </div>
+
+                <div class="quick-contact">
+                    <h3>Contact Information</h3>
+                    <div class="quick-contact-item">
+                        <strong>Phone</strong>
+                        <div class="copyable" onclick="copyPhone()">236-300-3005</div>
+                    </div>
+                    <div class="quick-contact-item">
+                        <strong>Email</strong>
+                        <div class="copyable" onclick="copyEmail()">shona@moontidereconciliation.com</div>
+                    </div>
+                    <div class="quick-contact-item">
+                        <strong>Based In</strong>
+                        <div>Douglas Lake & Vancouver, BC</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Column: Article -->
+            <div class="article-column">
+                <div class="article-header">
+                    <div class="article-kicker">Indigenous Leadership</div>
+                    <h1 class="article-headline">Shona Sparrow: Architect of Cultural Understanding</h1>
+                    <p class="article-subhead">How one Elder is transforming reconciliation from abstract concept into lived experience across British Columbia</p>
+                </div>
+
+                <div class="article-body">
+                    <p class="drop-cap">For over thirty years, Shona Sparrow has stood at the intersection of tradition and transformation. As the lead cultural facilitator and guiding force behind Moon Tide Reconciliation, she brings the weight of ancestral knowledge and the urgency of contemporary healing to every workshop, every ceremony, every conversation.</p>
+
+                    <p>Her approach is deceptively simple: <strong>reconciliation cannot be taught through lectures alone</strong>. It must be felt in the hands weaving cedar, experienced in the stories of the Kairos Blanket Exercise, and embodied in the sacred act of creating medicine pouches. Shona doesn't just teach about Indigenous culture—she creates portals for genuine understanding.</p>
+
+                    <p>"People arrive with good intentions," Shona explains, her voice carrying the calm authority of decades in this work. "But intentions without experience are hollow. My role is to guide them through moments that shift something fundamental inside—moments they carry with them long after the workshop ends."</p>
+
+                    <div class="pullquote">
+                        "We cannot command the tide toward reconciliation. We can only learn to navigate its currents together, toward a shared horizon."
+                    </div>
+
+                    <p>This philosophy has taken Shona from corporate boardrooms to school gymnasiums, from intimate circles of Elders to packed auditoriums of educators. She's facilitated workshops for <strong>over 10,000 participants</strong>, trained hundreds of teachers in Indigenous pedagogy, and advised organizations on authentic engagement with Indigenous communities.</p>
+
+                    <p>What sets her apart is the seamless integration of <strong>deep cultural knowledge with contemporary facilitation expertise</strong>. Shona holds traditional teachings passed down through generations while maintaining certifications in trauma-informed practice, cultural safety protocols, and experiential education methodologies.</p>
+
+                    <p>Her workshops are meticulously crafted experiences. The Kairos Blanket Exercise becomes a visceral journey through colonization's impact. Cedar weaving transforms into meditation on interconnection. Orange Shirt Day commemorations evolve into collective commitments to action. Each element is intentional, culturally rooted, and psychologically impactful.</p>
+
+                    <p>"Shona doesn't perform reconciliation," says one school district coordinator who has worked with her for five years. "She facilitates transformation. Participants don't just learn facts—they experience perspective shifts that ripple through their entire approach to Indigenous relationships."</p>
+
+                    <p>Based between Douglas Lake and Vancouver, Shona remains deeply connected to her community while extending her influence across the province. She mentors emerging Indigenous facilitators, collaborates with Elders from diverse nations, and continuously refines her practice based on participant feedback and evolving cultural protocols.</p>
+
+                    <p>Her vision for Moon Tide Reconciliation extends beyond individual workshops. She's building a network of cultural facilitators, developing resources for ongoing learning, and creating pathways for organizations to move from performative acknowledgment to <strong>substantive, sustained engagement</strong> with Indigenous communities.</p>
+
+                    <p>As reconciliation conversations intensify across Canada, Shona's work represents a crucial model: <strong>Indigenous-led, experientially grounded, and uncompromisingly authentic</strong>. She doesn't soften hard truths, but she creates containers safe enough to hold them. She doesn't demand immediate solutions, but she guides participants toward meaningful action.</p>
+
+                    <p>In Shona Sparrow's hands, reconciliation becomes what it should be: not a checkbox or a workshop series, but an ongoing relationship—complex, challenging, and ultimately transformative for all involved.</p>
+                </div>
+            </div>
+
+            <!-- Right Column: Sidebar -->
+            <div class="sidebar-column">
+                <div class="sidebar-box">
+                    <h3>Expertise</h3>
+                    <ul>
+                        <li>Kairos Blanket Exercise Facilitation</li>
+                        <li>Traditional Cedar Weaving</li>
+                        <li>Medicine Pouch Creation</li>
+                        <li>MMIWG2S+ Awareness Training</li>
+                        <li>Orange Shirt Day Programs</li>
+                        <li>Cultural Safety Consultation</li>
+                        <li>Indigenous Pedagogy Training</li>
+                        <li>Trauma-Informed Practice</li>
+                    </ul>
+                </div>
+
+                <div class="stat-box">
+                    <h3>Impact By Numbers</h3>
+                    <div class="stat-item">
+                        <span class="stat-number">10K+</span>
+                        <div class="stat-label">Workshop Participants</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">30+</span>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100+</span>
+                        <div class="stat-label">Schools & Organizations</div>
+                    </div>
+                </div>
+
+                <div class="quote-box">
+                    True reconciliation happens in the space between discomfort and understanding—where hearts open and perspectives shift forever.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateBack() {
+            window.location.href = '/menu';
+        }
+
+        async function copyPhone() {
+            try {
+                await navigator.clipboard.writeText('236-300-3005');
+                showCopyFeedback(event.target);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+            }
+        }
+
+        async function copyEmail() {
+            try {
+                await navigator.clipboard.writeText('shona@moontidereconciliation.com');
+                showCopyFeedback(event.target);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+            }
+        }
+
+        function showCopyFeedback(element) {
+            const original = element.textContent;
+            element.textContent = '✓ Copied!';
+            setTimeout(() => {
+                element.textContent = original;
+            }, 1500);
+        }
+
+        // ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') navigateBack();
+        });
+    </script>
+</body>
+</html>
