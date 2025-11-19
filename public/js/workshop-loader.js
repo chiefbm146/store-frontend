@@ -3,7 +3,7 @@
  * Reads URL parameters and populates the page with appropriate workshop info
  */
 
-import workshopData from './workshop-data.js';
+import { getService, brand } from './config/index.js';
 
 const WorkshopLoader = {
     /**
@@ -15,10 +15,42 @@ const WorkshopLoader = {
     },
 
     /**
-     * Get workshop data by ID
+     * Get workshop data by ID from config system
      */
     getWorkshop(id) {
-        return workshopData[id] || null;
+        const service = getService(id);
+        if (!service) return null;
+
+        // Map service config structure to workshop-loader expected fields
+        return {
+            id: service.id,
+            title: service.name,
+            type: service.type === 'workshop' ? (service.category === 'in-person' ? 'In-Person' : 'Virtual') : service.type,
+            image: service.image,
+            description: service.description,
+            longDescription: service.longDescription || service.description,
+            duration: service.duration,
+            participants: service.participants ?
+                `${service.participants.min}-${service.participants.max} people` :
+                'Contact for details',
+            location: service.category === 'in-person' ? 'On-site at your location' : 'Online via video conference',
+            highlights: service.highlights || [],
+            price: this.formatPrice(service.pricing),
+            emoji: service.emoji
+        };
+    },
+
+    /**
+     * Format pricing from config structure to display string
+     */
+    formatPrice(pricing) {
+        if (!pricing || !pricing.enabled) return 'Contact for pricing';
+
+        const { community, corporate, currency } = pricing;
+        const communityPrice = (community / 100).toFixed(2);
+        const corporatePrice = (corporate / 100).toFixed(2);
+
+        return `Corporate: $${corporatePrice}/person | Community: $${communityPrice}/person`;
     },
 
     /**
@@ -146,8 +178,8 @@ const WorkshopLoader = {
             pricingGrid.innerHTML = pricingHTML;
         }
 
-        // Update page title
-        document.title = `${workshop.title} - Moon Tide Reconciliation`;
+        // Update page title from config
+        document.title = `${workshop.title} - ${brand.companyName}`;
     },
 
     /**
