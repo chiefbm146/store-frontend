@@ -250,6 +250,25 @@
         </div>
     </div>
 
+    <!-- Config System: Theme & Content Loaders -->
+    <script type="module">
+        import { injectTheme } from './js/theme-injector.js';
+        import { loadPageContent } from './js/content-loader.js';
+
+        // Initialize theme immediately
+        injectTheme();
+        console.log('[Contact Page Mobile] Theme injected');
+
+        // Load page content when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPageContent('contact', {
+                updateMetaTags: true,
+                updateTitle: true,
+                logChanges: true
+            });
+        });
+    </script>
+
     <script>
         function navigateBack() {
             window.location.href = '/menu';

@@ -418,6 +418,15 @@
         </div>
     </div>
 
+    <!-- Config System: Theme Injection (Menu content will remain static) -->
+    <script type="module">
+        import { injectTheme } from './js/theme-injector.js';
+
+        // Initialize theme immediately
+        injectTheme();
+        console.log('[Menu Mobile] Theme injected');
+    </script>
+
     <script>
         function navigateTo(path) {
             window.location.href = path;
