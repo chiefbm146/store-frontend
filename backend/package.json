@@ -1,0 +1,21 @@
+{
+  "name": "store-printer-portal-backend",
+  "version": "1.0.0",
+  "description": "Store Printer Portal - AI-powered config generator for multi-tenant storefronts",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["store-printer", "config-generator", "ai", "multi-tenant"],
+  "author": "Your Company",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "firebase-admin": "^12.0.0",
+    "@google/generative-ai": "^0.2.1"
+  }
+}
