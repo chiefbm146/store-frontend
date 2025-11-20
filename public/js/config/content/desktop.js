@@ -76,7 +76,7 @@ export const desktopPage = {
         tagline: 'Your Store Platform - Launch Your Business Today',
         links: [
             { text: 'Demo Store', url: '/shop-desk.html' },
-            { text: 'About', url: '/moon-tide-desk.html' },
+            { text: 'About', url: '/about-desk.html' },
             { text: 'Contact', url: '/contact-desk.html' }
         ],
         copyright: '© 2025 Your Store Platform. All rights reserved.'
