@@ -150,211 +150,24 @@ function isMobileDevice(userAgent) {
 }
 
 /**
- * Server-Side Rendering (SSR) - Pre-render index.html with content
- * Eliminates content flash by injecting data server-side
+ * Serve index.html with device-specific CSS
  * @param {boolean} isMobile - Device type
- * @returns {string} Pre-rendered HTML
+ * @returns {string} index.html with inlined critical CSS
  */
-function renderIndexHTML(isMobile) {
-  // Load content config
-  const contentPath = path.join(__dirname, '..', 'public', 'js', 'config', 'content', 'desktop.js');
+function serveIndexHTML(isMobile) {
+  // Read the static index.html file
+  const indexPath = path.join(__dirname, '..', 'public', 'index.html');
+  let html = fs.readFileSync(indexPath, 'utf8');
 
-  let content = {
-    hero: {
-      icon: '🏪',
-      title: 'Build Your Store in Minutes',
-      subtitle: 'Create a professional online store with AI-powered chat - no coding required',
-      description: 'Launch your custom store selling workshops, products, or services with intelligent chatbots that help your customers 24/7.',
-      ctaPrimary: { text: 'See Demo Store', link: '/demo-desk.html' }
-    },
-    features: {
-      title: 'Why Choose Our Platform',
-      subtitle: 'Everything you need to launch your store',
-      items: [
-        { icon: '🎓', title: 'Sell Workshops', description: 'Create stores that sell educational workshops with booking, scheduling, and payment processing built-in.' },
-        { icon: '📦', title: 'Sell Products', description: 'Launch product catalogs with inventory management, checkout, and order tracking automatically configured.' },
-        { icon: '⚙️', title: 'Sell Services', description: 'Offer professional services with consultation booking, service packages, and client management tools.' },
-        { icon: '🤖', title: 'Custom AI Chatbots', description: 'Each store includes an intelligent AI assistant trained on your business to help customers 24/7.' }
-      ]
-    },
-    chat: {
-      title: 'Try the AI Assistant (Demo)',
-      subtitle: 'Every store gets a custom chatbot trained on your business',
-      placeholder: 'Ask about creating your store, features, pricing...'
-    },
-    about: {
-      title: 'The Platform for Modern Businesses',
-      subtitle: 'Build, launch, and grow your online store effortlessly',
-      content: [
-        'We provide the platform that makes it easy for businesses to create their own professional online stores. Whether you\'re selling workshops, physical products, or professional services, our system handles everything - from product catalogs to checkout to customer support.',
-        'Every store comes with a custom AI chatbot trained on your specific business. Your customers get instant answers about your offerings, pricing, and availability 24/7. No coding required, no technical expertise needed - just configure your content and launch.'
-      ],
-      emoji: '🚀'
-    },
-    cta: {
-      title: 'Ready to Launch Your Store?',
-      description: 'See our demo store in action - explore how your customers will shop workshops, products, and services with AI assistance.',
-      buttonText: 'View Demo Store',
-      buttonLink: '/shop-desk.html'
-    },
-    footer: {
-      tagline: 'Your Store Platform - Launch Your Business Today',
-      links: [
-        { text: 'Demo Store', url: '/shop-desk.html' },
-        { text: 'About', url: '/about-desk.html' },
-        { text: 'Contact', url: '/contact-desk.html' }
-      ],
-      copyright: '© 2025 Your Store Platform. All rights reserved.'
-    }
-  };
+  // Add device-specific CSS link if mobile
+  if (isMobile) {
+    html = html.replace(
+      '<link rel="stylesheet" href="./css/desktop.css">',
+      '<link rel="stylesheet" href="./css/desktop.css">\n    <link rel="stylesheet" href="./css/mobile-index.css">'
+    );
+  }
 
-  // Build features HTML
-  const featuresHTML = content.features.items
-    .map(f => `
-      <div class="feature-card">
-        <span class="feature-icon">${f.icon}</span>
-        <h3 class="feature-title">${f.title}</h3>
-        <p class="feature-description">${f.description}</p>
-      </div>
-    `)
-    .join('');
-
-  // Build about paragraphs HTML
-  const aboutHTML = content.about.content
-    .map(p => `<p>${p}</p>`)
-    .join('');
-
-  // Build footer links HTML
-  const footerLinksHTML = content.footer.links
-    .map(link => `<a href="${link.url}">${link.text}</a>`)
-    .join('');
-
-  // Build starter message HTML
-  const starterMessageHTML = `
-    <div class="message ai-message">
-      <div class="message-content">
-        <span class="message-icon">🤖</span>
-        <div class="message-text">
-          <p>Hi! 👋 I'm your AI assistant. I can help you learn about creating your store, features, pricing, or answer any questions about our platform. What would you like to know?</p>
-        </div>
-      </div>
-    </div>
-  `;
-
-  // Determine CSS to load
-  const cssFile = isMobile ? 'mobile-index.css' : 'desktop.css';
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${content.footer.tagline}</title>
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Your Store Platform - Build Your Store in Minutes">
-    <meta property="og:description" content="Create a professional online store with AI-powered chat - no coding required">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
-
-    <link rel="stylesheet" href="./css/desktop.css">
-    ${isMobile ? `<link rel="stylesheet" href="./css/mobile-index.css">` : ''}
-    <link rel="stylesheet" href="./libs/fontawesome/all.min.css">
-    <link rel="stylesheet" href="./libs/flatpickr/flatpickr.min.css">
-    <script src="./libs/flatpickr/flatpickr.min.js"></script>
-</head>
-<body>
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-content">
-            <span class="hero-icon">${content.hero.icon}</span>
-            <h1 class="hero-title">${content.hero.title}</h1>
-            <p class="hero-subtitle">${content.hero.subtitle}</p>
-            <p class="hero-description">${content.hero.description}</p>
-            <div class="hero-buttons">
-                <a href="${content.hero.ctaPrimary.link}" class="btn btn-primary">${content.hero.ctaPrimary.text}</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features-section">
-        <div class="section-header">
-            <h2 class="section-title">${content.features.title}</h2>
-            <p class="section-subtitle">${content.features.subtitle}</p>
-        </div>
-        <div class="features-grid">
-            ${featuresHTML}
-        </div>
-    </section>
-
-    <!-- Chat Section -->
-    <section class="chat-section" id="chat">
-        <div class="chat-wrapper">
-            <div class="section-header">
-                <h2 class="section-title">${content.chat.title}</h2>
-                <p class="section-subtitle">${content.chat.subtitle}</p>
-            </div>
-            <div class="chat-container">
-                <div class="chat-header">
-                    <span class="chat-icon">🤖</span>
-                    <h3 class="chat-title">AI Chat Assistant</h3>
-                </div>
-                <div class="messages-container">
-                    <div class="messages">
-                        ${starterMessageHTML}
-                    </div>
-                </div>
-                <div class="input-area">
-                    <div class="input-wrapper">
-                        <input type="text" id="userInput" placeholder="${content.chat.placeholder}" autocomplete="off" maxlength="4000">
-                    </div>
-                    <button id="sendButton">Send</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about-section" id="about">
-        <div class="about-content">
-            <div class="about-text">
-                <h2>${content.about.title}</h2>
-                <h3>${content.about.subtitle}</h3>
-                <div>
-                    ${aboutHTML}
-                </div>
-            </div>
-            <div class="about-visual">
-                <span class="about-emoji">${content.about.emoji}</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="cta-content">
-            <h2>${content.cta.title}</h2>
-            <p>${content.cta.description}</p>
-            <a href="${content.cta.buttonLink}" class="btn btn-primary">${content.cta.buttonText}</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <p class="footer-tagline">${content.footer.tagline}</p>
-            <div class="footer-links">
-                ${footerLinksHTML}
-            </div>
-            <p class="footer-copyright">${content.footer.copyright}</p>
-        </div>
-    </footer>
-
-    <audio id="ttsPlayer" style="display: none;"></audio>
-
-    <script src="./js/device-detector.js"></script>
-    <script src="./js/version-manager.js"></script>
-</body>
-</html>`;
+  return html;
 }
 
 /**
@@ -378,15 +191,22 @@ exports.deviceRouter = functions.https.onRequest((req, res) => {
   console.log(`[Device Router] User-Agent: ${userAgent}`);
   console.log(`[Device Router] Detected as: ${isMobile ? 'MOBILE' : 'DESKTOP'}`);
 
-  // === SPECIAL CASE: Root path / or index - Use SSR ===
+  // === SPECIAL CASE: Root path / or index - Serve with device-specific CSS ===
   if (requestPath === '' || requestPath === 'index') {
-    console.log('[Device Router] Serving SSR-rendered index.html');
-    const renderedHTML = renderIndexHTML(isMobile);
-    res.set('Content-Type', 'text/html; charset=utf-8');
-    res.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
-    res.set('Pragma', 'no-cache');
-    res.set('Expires', '0');
-    return res.status(200).send(renderedHTML);
+    console.log('[Device Router] Serving index.html with device-specific CSS');
+    try {
+      const html = serveIndexHTML(isMobile);
+      res.set('Content-Type', 'text/html; charset=utf-8');
+      res.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+      res.set('Pragma', 'no-cache');
+      res.set('Expires', '0');
+      return res.status(200).send(html);
+    } catch (err) {
+      console.error('[Device Router] Error serving index.html:', err);
+      res.set('Content-Type', 'text/html; charset=utf-8');
+      res.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+      return res.status(500).send('<h1>Error loading page</h1>');
+    }
   }
 
   // Determine correct file
