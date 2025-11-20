@@ -1,103 +1,193 @@
-<!-- CI/CD Pipeline Test: GitHub Actions Auto-Deploy Active -->
-<!-- TEST -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moon Tide Reconciliation</title>
+    <title>Your Store Platform - Build Your Store in Minutes</title>
 
-    <!-- Open Graph / Facebook Meta Tags (Router) -->
-    <!-- VERSION: 11.0.12 - DO NOT MANUALLY EDIT - Updated by version-update.js -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://reconciliation-storefront.web.app/">
-    <meta property="og:title" content="Moon Tide Reconciliation">
-    <meta property="og:description" content="Moon Tide Reconciliation: Transformative workshops and Indigenous cultural experiences celebrating ancestral wisdom and reconciliation.">
-    <meta property="og:image" content="https://reconciliation-storefront.web.app/images/musqueam/moon9.png">
-    <meta property="og:image:width" content="794">
-    <meta property="og:image:height" content="1123">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:site_name" content="Moon Tide Reconciliation">
-    <meta property="og:updated_time" content="2025-11-12T20:00:00.000Z">
+    <meta property="og:title" content="Your Store Platform - Build Your Store in Minutes">
+    <meta property="og:description" content="Create a professional online store with AI-powered chat - no coding required">
 
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://reconciliation-storefront.web.app/">
-    <meta name="twitter:title" content="Moon Tide Reconciliation">
-    <meta name="twitter:description" content="Join transformative reconciliation workshops and explore Indigenous cultural wisdom at Moon Tide Reconciliation.">
-    <meta name="twitter:image" content="https://reconciliation-storefront.web.app/images/musqueam/moon9.png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
 
-    <!-- Additional Meta Tags -->
-    <meta name="description" content="Moon Tide Reconciliation: Transformative workshops, cultural education, and Indigenous experiences celebrating ancestral wisdom.">
-    <meta name="author" content="Moon Tide Reconciliation Collective">
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/desktop.css">
+    <link rel="stylesheet" href="./libs/fontawesome/all.min.css">
 
-    <!-- Ensure body takes up full viewport for intro loader -->
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-    </style>
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="./libs/flatpickr/flatpickr.min.css">
+    <script src="./libs/flatpickr/flatpickr.min.js"></script>
 </head>
 <body>
-    <!-- CRITICAL: Include the device detector script -->
-    <script src="./js/device-detector.js?v=11.0.12"></script>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <span class="hero-icon" id="hero-icon"></span>
+            <h1 class="hero-title" id="hero-title"></h1>
+            <p class="hero-subtitle" id="hero-subtitle"></p>
+            <p class="hero-description" id="hero-description"></p>
+            <div class="hero-buttons">
+                <a href="/demo-desk.html" class="btn btn-primary" id="hero-cta-primary"></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="section-header">
+            <h2 class="section-title" id="features-title"></h2>
+            <p class="section-subtitle" id="features-subtitle"></p>
+        </div>
+        <div class="features-grid" id="features-grid">
+            <!-- Populated by JS -->
+        </div>
+    </section>
+
+    <!-- Chat Section -->
+    <section class="chat-section" id="chat">
+        <div class="chat-wrapper">
+            <div class="section-header">
+                <h2 class="section-title" id="chat-title"></h2>
+                <p class="section-subtitle" id="chat-subtitle"></p>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h3 class="chat-title">AI Chat Assistant</h3>
+                </div>
+
+                <div class="messages-container" id="messagesContainer">
+                    <div class="messages" id="messages"></div>
+                    <div class="typing-indicator" id="typingIndicator">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </div>
+                    <div id="moduleContainer"></div>
+                </div>
+
+                <div class="input-area">
+                    <div class="input-wrapper">
+                        <input type="text" id="userInput" placeholder="Ask about our products, services, or workshops..." autocomplete="off" maxlength="4000">
+                    </div>
+                    <button id="sendButton">Send</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="about-content">
+            <div class="about-text">
+                <h2 id="about-title"></h2>
+                <h3 id="about-subtitle"></h3>
+                <div id="about-paragraphs">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="about-visual">
+                <span class="about-emoji" id="about-emoji"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2 id="cta-title"></h2>
+            <p id="cta-description"></p>
+            <a href="/shop-desk.html" class="btn btn-primary" id="cta-button"></a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-tagline" id="footer-tagline"></p>
+            <div class="footer-links" id="footer-links">
+                <!-- Populated by JS -->
+            </div>
+            <p class="footer-copyright" id="footer-copyright"></p>
+        </div>
+    </footer>
+
+    <!-- Hidden audio player for TTS -->
+    <audio id="ttsPlayer" style="display: none;"></audio>
+
+    <!-- Scripts -->
+    <script src="./js/version-manager.js"></script>
+    <script src="./js/device-detector.js"></script>
+
+    <!-- Config System: Theme & Content -->
     <script type="module">
-        // Wait for DOM to be fully ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initAndRoute);
-        } else {
-            initAndRoute();
-        }
+        import { injectTheme } from './js/theme-injector.js';
+        import desktopPage from './js/config/content/desktop.js';
 
-        async function initAndRoute() {
-            // Check if this is a known crawler/bot that needs OG meta tags
-            const userAgent = navigator.userAgent;
-            const isCrawler = /facebookexternalhit|Twitterbot|LinkedInBot|Googlebot|bingbot/i.test(userAgent);
+        // Inject theme FIRST
+        injectTheme();
 
-            // If it's a crawler, don't redirect - serve index.html with OG meta tags
-            if (isCrawler) {
-                console.log('Crawler detected - serving index.html with OG meta tags');
-                return;
-            }
+        // Populate landing page content
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hero Section
+            document.getElementById('hero-icon').textContent = desktopPage.hero.icon;
+            document.getElementById('hero-title').textContent = desktopPage.hero.title;
+            document.getElementById('hero-subtitle').textContent = desktopPage.hero.subtitle;
+            document.getElementById('hero-description').textContent = desktopPage.hero.description;
+            document.getElementById('hero-cta-primary').textContent = desktopPage.hero.ctaPrimary.text;
+            document.getElementById('hero-cta-primary').href = desktopPage.hero.ctaPrimary.link;
 
-            // For regular users, initialize audio system and run the intro loader first, then redirect.
-            try {
-                // STEP 1: Import and initialize the audio state manager for intro loader sounds
-                const audioStateModule = await import('./js/audioStateManager.js?v=11.0.12');
-                const audioStateManager = audioStateModule.default;
-                audioStateManager.init();
-                console.log('[index.html] Audio state manager initialized');
+            // Features Section
+            document.getElementById('features-title').textContent = desktopPage.features.title;
+            document.getElementById('features-subtitle').textContent = desktopPage.features.subtitle;
 
-                // STEP 2: Import and initialize the intro loader
-                const introLoaderModule = await import('./js/intro-loader.js?v=11.0.12');
-                const introLoader = introLoaderModule.default;
+            const featuresGrid = document.getElementById('features-grid');
+            featuresGrid.innerHTML = desktopPage.features.items.map(feature => `
+                <div class="feature-card">
+                    <span class="feature-icon">${feature.icon}</span>
+                    <h3 class="feature-title">${feature.title}</h3>
+                    <p class="feature-description">${feature.description}</p>
+                </div>
+            `).join('');
 
-                // STEP 3: Initialize and display the intro loader UI.
-                // This happens immediately on page load.
-                console.log('[index.html] Initializing intro loader...');
-                introLoader.init();
+            // Chat Section
+            document.getElementById('chat-title').textContent = desktopPage.chat.title;
+            document.getElementById('chat-subtitle').textContent = desktopPage.chat.subtitle;
+            document.getElementById('userInput').placeholder = desktopPage.chat.placeholder;
 
-                // STEP 4: Wait for the loader's hide() promise to resolve.
-                // This promise handles user clicks, minimum display time, and fade-out animations.
-                console.log('[index.html] Waiting for intro loader to complete...');
-                await introLoader.hide();
+            // About Section
+            document.getElementById('about-title').textContent = desktopPage.about.title;
+            document.getElementById('about-subtitle').textContent = desktopPage.about.subtitle;
+            document.getElementById('about-emoji').textContent = desktopPage.about.emoji;
 
-                // STEP 5: Redirect to desktop.html
-                console.log('[index.html] Intro complete, redirecting to desktop.html...');
-                const search = window.location.search;
-                const hash = window.location.hash;
-                const finalUrl = `./desktop.html${search}${hash}`;
-                window.location.replace(finalUrl);
-            } catch (error) {
-                console.error('Intro loader failed:', error);
-                window.location.replace('./desktop.html' + window.location.search + window.location.hash);
-            }
-        }
+            const aboutParagraphs = document.getElementById('about-paragraphs');
+            aboutParagraphs.innerHTML = desktopPage.about.content.map(p => `<p>${p}</p>`).join('');
+
+            // CTA Section
+            document.getElementById('cta-title').textContent = desktopPage.cta.title;
+            document.getElementById('cta-description').textContent = desktopPage.cta.description;
+            document.getElementById('cta-button').textContent = desktopPage.cta.buttonText;
+            document.getElementById('cta-button').href = desktopPage.cta.buttonLink;
+
+            // Footer
+            document.getElementById('footer-tagline').textContent = desktopPage.footer.tagline;
+            document.getElementById('footer-copyright').textContent = desktopPage.footer.copyright;
+
+            const footerLinks = document.getElementById('footer-links');
+            footerLinks.innerHTML = desktopPage.footer.links.map(link =>
+                `<a href="${link.url}">${link.text}</a>`
+            ).join('');
+
+            console.log('[Index] Platform landing page loaded from config');
+        });
     </script>
 
+    <!-- Chat functionality -->
+    <script src="./js/portal-store.js" type="module"></script>
+    <script src="./js/tts-manager.js" type="module"></script>
+    <script src="./js/jarvis-ui-manager.js" type="module"></script>
+    <script src="./js/portal-controller.js" type="module"></script>
 </body>
 </html>
