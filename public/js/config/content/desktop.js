@@ -12,11 +12,7 @@ export const desktopPage = {
         description: 'Launch your custom store selling workshops, products, or services with intelligent chatbots that help your customers 24/7.',
         ctaPrimary: {
             text: 'See Demo Store',
-            link: '/shop-desk.html'
-        },
-        ctaSecondary: {
-            text: 'Learn More',
-            link: '#about'
+            link: '/demo-desk.html'
         }
     },
 

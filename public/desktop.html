@@ -21,13 +21,6 @@
     <script src="./libs/flatpickr/flatpickr.min.js"></script>
 </head>
 <body>
-    <!-- Floating Hamburger Menu -->
-    <button class="floating-menu-button" onclick="window.location.href='/menu-desk.html'" title="Menu">
-        <span class="menu-bar"></span>
-        <span class="menu-bar"></span>
-        <span class="menu-bar"></span>
-    </button>
-
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
@@ -36,8 +29,7 @@
             <p class="hero-subtitle" id="hero-subtitle">Your one-stop shop for amazing products, services, and workshops</p>
             <p class="hero-description" id="hero-description">Discover quality products, professional services, and engaging workshops tailored to your needs.</p>
             <div class="hero-buttons">
-                <a href="/shop-desk.html" class="btn btn-primary" id="hero-cta-primary">Browse Store</a>
-                <a href="#about" class="btn btn-secondary" id="hero-cta-secondary">Learn More</a>
+                <a href="/demo-desk.html" class="btn btn-primary" id="hero-cta-primary">See Demo Store</a>
             </div>
         </div>
     </section>
@@ -146,8 +138,6 @@
             document.getElementById('hero-description').textContent = desktopPage.hero.description;
             document.getElementById('hero-cta-primary').textContent = desktopPage.hero.ctaPrimary.text;
             document.getElementById('hero-cta-primary').href = desktopPage.hero.ctaPrimary.link;
-            document.getElementById('hero-cta-secondary').textContent = desktopPage.hero.ctaSecondary.text;
-            document.getElementById('hero-cta-secondary').href = desktopPage.hero.ctaSecondary.link;
 
             // Features Section
             document.getElementById('features-title').textContent = desktopPage.features.title;
