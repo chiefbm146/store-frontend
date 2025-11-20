@@ -39,24 +39,33 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-right: auto;
 }
 
-.nav-back-arrow {
-    font-size: 3rem;
-    color: var(--color-primary, #1E90FF);
+.nav-back-button {
+    background: var(--color-primary, #1E90FF);
+    color: #FFFFFF;
     text-decoration: none;
     width: 50px;
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: 12px;
+    border: 2px solid var(--color-secondary, #0047AB);
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(30, 144, 255, 0.3);
 }
 
-.nav-back-arrow:hover {
-    background: rgba(30, 144, 255, 0.1);
+.nav-back-button:hover {
+    background: var(--color-secondary, #0047AB);
     transform: translateX(-3px);
+    box-shadow: 0 6px 20px rgba(30, 144, 255, 0.5);
+}
+
+.nav-back-button svg {
+    width: 24px;
+    height: 24px;
 }
 
 .nav-logo {
@@ -106,42 +115,6 @@ body {
     color: var(--color-primary, #1E90FF);
 }
 
-/* === HAMBURGER MENU === */
-.hamburger-menu {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    width: 45px;
-    height: 45px;
-    background: transparent;
-    border: 2px solid var(--color-primary, #1E90FF);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    padding: 8px;
-}
-
-.hamburger-menu:hover {
-    background: rgba(30, 144, 255, 0.1);
-}
-
-.menu-bar {
-    width: 100%;
-    height: 3px;
-    background: var(--color-primary, #1E90FF);
-    border-radius: 2px;
-    transition: all 0.3s ease;
-}
-
-.hamburger-menu:hover .menu-bar:nth-child(1) {
-    transform: translateY(-2px);
-}
-
-.hamburger-menu:hover .menu-bar:nth-child(3) {
-    transform: translateY(2px);
-}
 
 /* === HERO SECTION === */
 .hero-section {
@@ -589,6 +562,23 @@ body {
     margin-bottom: 15px;
 }
 
+.footer-links {
+    margin: 10px 0;
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.footer-link:hover {
+    color: #FFFFFF;
+    border-bottom-color: #FFFFFF;
+}
+
 .footer-copyright {
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.9rem;
@@ -598,10 +588,6 @@ body {
 @media (max-width: 768px) {
     .nav-links {
         display: none;
-    }
-
-    .hamburger-menu {
-        display: flex;
     }
 
     .about-content {

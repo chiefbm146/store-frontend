@@ -20,7 +20,11 @@
     <nav class="nav-bar">
         <div class="nav-container">
             <div class="nav-left">
-                <a href="/desktop.html" class="nav-back-arrow" title="Back to Platform">◄</a>
+                <a href="/desktop.html" class="nav-back-button" title="Back to Platform">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
                 <a href="/desktop.html" class="nav-logo">
                     <span class="nav-logo-icon" id="store-icon">🏪</span>
                     <span id="store-name">Premium Goods Co.</span>
@@ -28,16 +32,11 @@
             </div>
             <div class="nav-links">
                 <a href="/shop-desk.html" class="nav-link"><span>🛍️</span> Store</a>
-                <a href="#about" class="nav-link"><span>ℹ️</span> About</a>
+                <a href="/about-desk.html" class="nav-link"><span>ℹ️</span> About</a>
                 <a href="/contact-desk.html" class="nav-link"><span>📬</span> Contact</a>
                 <a href="/ai-chat-desk.html" class="nav-link"><span>🤖</span> A.I. Chat</a>
                 <a href="/cart-desk.html" class="nav-link"><span>🛒</span> Cart</a>
             </div>
-            <button class="hamburger-menu" onclick="window.location.href='/menu-desk.html'" title="Menu">
-                <span class="menu-bar"></span>
-                <span class="menu-bar"></span>
-                <span class="menu-bar"></span>
-            </button>
         </div>
     </nav>
 
@@ -89,6 +88,9 @@
     <!-- Footer -->
     <footer class="footer">
         <p class="footer-tagline" id="footer-tagline">Premium Goods Co. - Quality for Modern Living</p>
+        <p class="footer-links">
+            <a href="/developer-desk.html" class="footer-link">Contact the Developer</a>
+        </p>
         <p class="footer-copyright" id="footer-copyright">© 2025 Premium Goods Co. All rights reserved.</p>
     </footer>
 
