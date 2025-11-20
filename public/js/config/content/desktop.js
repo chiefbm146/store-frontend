@@ -7,11 +7,11 @@ export const desktopPage = {
     // Hero Section
     hero: {
         icon: '🏪',
-        title: 'Welcome to Your Store',
-        subtitle: 'Your one-stop shop for amazing products, services, and workshops',
-        description: 'Discover quality products, professional services, and engaging workshops tailored to your needs.',
+        title: 'Build Your Store in Minutes',
+        subtitle: 'Create a professional online store with AI-powered chat - no coding required',
+        description: 'Launch your custom store selling workshops, products, or services with intelligent chatbots that help your customers 24/7.',
         ctaPrimary: {
-            text: 'Browse Store',
+            text: 'See Demo Store',
             link: '/shop-desk.html'
         },
         ctaSecondary: {
@@ -22,68 +22,68 @@ export const desktopPage = {
 
     // Features Section
     features: {
-        title: 'Why Choose Us',
-        subtitle: 'Everything you need in one place',
+        title: 'Why Choose Our Platform',
+        subtitle: 'Everything you need to launch your store',
         items: [
             {
                 icon: '🎓',
-                title: 'Expert Workshops',
-                description: 'Learn new skills with our interactive workshops led by experienced facilitators.'
+                title: 'Sell Workshops',
+                description: 'Create stores that sell educational workshops with booking, scheduling, and payment processing built-in.'
             },
             {
                 icon: '📦',
-                title: 'Quality Products',
-                description: 'Premium products crafted with attention to detail and exceptional quality.'
+                title: 'Sell Products',
+                description: 'Launch product catalogs with inventory management, checkout, and order tracking automatically configured.'
             },
             {
                 icon: '⚙️',
-                title: 'Professional Services',
-                description: 'Comprehensive services tailored to meet your specific needs and goals.'
+                title: 'Sell Services',
+                description: 'Offer professional services with consultation booking, service packages, and client management tools.'
             },
             {
                 icon: '🤖',
-                title: 'AI Assistant',
-                description: 'Get instant answers to your questions with our intelligent AI chat assistant.'
+                title: 'Custom AI Chatbots',
+                description: 'Each store includes an intelligent AI assistant trained on your business to help customers 24/7.'
             }
         ]
     },
 
     // Chat Section
     chat: {
-        title: 'Have Questions? Ask Our AI Assistant',
-        subtitle: 'Get instant help with product info, booking, and more',
-        placeholder: 'Ask about our products, services, or workshops...'
+        title: 'Try the AI Assistant (Demo)',
+        subtitle: 'Every store gets a custom chatbot trained on your business',
+        placeholder: 'Ask about creating your store, features, pricing...'
     },
 
     // About Section
     about: {
-        title: 'About Your Store',
-        subtitle: 'Quality and excellence in everything we do',
+        title: 'The Platform for Modern Businesses',
+        subtitle: 'Build, launch, and grow your online store effortlessly',
         content: [
-            'We are dedicated to providing exceptional products, services, and educational experiences to our customers. Every item in our catalog has been carefully selected to meet our high standards of quality and value.',
-            'Whether you\'re looking to purchase a product, book a service, or attend a workshop, our team is here to ensure you have the best possible experience. We believe in building lasting relationships with our customers through trust, transparency, and outstanding service.'
+            'We provide the platform that makes it easy for businesses to create their own professional online stores. Whether you\'re selling workshops, physical products, or professional services, our system handles everything - from product catalogs to checkout to customer support.',
+            'Every store comes with a custom AI chatbot trained on your specific business. Your customers get instant answers about your offerings, pricing, and availability 24/7. No coding required, no technical expertise needed - just configure your content and launch.'
         ],
         image: null, // Can add image path here
-        emoji: '🎯'
+        emoji: '🚀'
     },
 
     // Final CTA Section
     cta: {
-        title: 'Ready to Get Started?',
-        description: 'Browse our full catalog of products, services, and workshops today.',
-        buttonText: 'Explore Store',
+        title: 'Ready to Launch Your Store?',
+        description: 'See our demo store in action - explore how your customers will shop workshops, products, and services with AI assistance.',
+        buttonText: 'View Demo Store',
         buttonLink: '/shop-desk.html'
     },
 
     // Footer
     footer: {
-        tagline: 'Your Store - Quality You Can Trust',
+        tagline: 'Your Store Platform - Launch Your Business Today',
         links: [
-            { text: 'Shop', url: '/shop-desk.html' },
-            { text: 'About Us', url: '/moon-tide-desk.html' },
+            { text: 'Demo Store', url: '/shop-desk.html' },
+            { text: 'About', url: '/moon-tide-desk.html' },
             { text: 'Contact', url: '/contact-desk.html' }
         ],
-        copyright: '© 2025 Your Store. All rights reserved.'
+        copyright: '© 2025 Your Store Platform. All rights reserved.'
     }
 };
 
