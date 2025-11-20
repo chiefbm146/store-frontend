@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product - Your Store</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Product Details">
+    <meta property="og:description" content="Learn more about this product from Your Store">
+
+    <link rel="stylesheet" href="./css/product-detail.css">
+</head>
+<body>
+    <nav class="back-nav">
+        <button class="back-button" onclick="navigateBack()">Back to Shop</button>
+        <div class="nav-breadcrumb">
+            <a href="/menu-desk.html">Store</a> / <a href="/shop-desk.html">Shop</a> / <span id="breadcrumb-title">Product Details</span>
+        </div>
+    </nav>
+
+    <div id="error-container" style="display: none;">
+        <div class="error-message">
+            <h2>Product Not Found</h2>
+            <p>We couldn't find the product you're looking for.</p>
+            <button class="back-button" onclick="navigateBack()">Return to Shop</button>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="workshop-badge" id="product-type">Product</div>
+                    <h1 class="hero-title" id="product-title">Loading Product...</h1>
+                    <p class="hero-description" id="product-description">Please wait...</p>
+                </div>
+                <div class="hero-image-container" id="product-icon-container">
+                    <span id="product-emoji" class="product-emoji-icon" style="font-size: 8rem;">📦</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="section-wrapper">
+                <div class="section-header">
+                    <div class="section-label">Overview</div>
+                    <h2 class="section-title">About This Product</h2>
+                </div>
+                <div class="about-content" id="product-long-description">
+                    <p>Loading product information...</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="section-wrapper">
+                <div class="section-header">
+                    <div class="section-label">Features</div>
+                    <h2 class="section-title">Product Highlights</h2>
+                </div>
+                <div class="highlights-grid" id="product-highlights"></div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="section-wrapper">
+                <div class="section-header">
+                    <div class="section-label">Details</div>
+                    <h2 class="section-title">Specifications</h2>
+                </div>
+                <div class="pricing-grid" id="product-specs"></div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Purchase?</h2>
+                <p class="cta-text">Add this product to your cart and complete your order.</p>
+                <button class="cta-button" onclick="addToCart()">Add to Cart</button>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        import { injectTheme } from './js/theme-injector.js';
+        import { getProduct } from './js/config/content/products.js';
+
+        injectTheme();
+
+        function getProductId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        function renderProduct() {
+            const productId = getProductId();
+            if (!productId) {
+                document.getElementById('error-container').style.display = 'flex';
+                document.getElementById('main-content').style.display = 'none';
+                return;
+            }
+
+            const product = getProduct(productId);
+            if (!product) {
+                document.getElementById('error-container').style.display = 'flex';
+                document.getElementById('main-content').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('product-type').textContent = product.category || 'Product';
+            document.getElementById('product-title').textContent = product.name;
+            document.getElementById('product-description').textContent = product.description;
+            document.getElementById('breadcrumb-title').textContent = product.name;
+
+            if (product.image) {
+                document.getElementById('product-icon-container').innerHTML = 
+                    `<img src="${product.image}" alt="${product.name}" class="workshop-image">`;
+            } else {
+                document.getElementById('product-emoji').textContent = product.emoji;
+            }
+
+            const descDiv = document.getElementById('product-long-description');
+            descDiv.innerHTML = product.longDescription
+                .split('\n\n')
+                .map(para => `<p>${para}</p>`)
+                .join('');
+
+            const highlightsGrid = document.getElementById('product-highlights');
+            highlightsGrid.innerHTML = product.highlights.map(h => `
+                <div class="highlight-card">
+                    <div class="highlight-icon">✓</div>
+                    <div class="highlight-text">${h}</div>
+                </div>
+            `).join('');
+
+            const specsGrid = document.getElementById('product-specs');
+            if (product.specifications) {
+                specsGrid.innerHTML = Object.entries(product.specifications).map(([key, value]) => `
+                    <div class="pricing-card">
+                        <h3 class="pricing-title">${key}</h3>
+                        <p class="pricing-description">${value}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        window.navigateBack = function() {
+            window.location.href = '/shop-desk.html';
+        };
+
+        window.addToCart = function() {
+            const productId = getProductId();
+            console.log('[Product Detail] Adding to cart:', productId);
+            alert('Item added to cart! (Cart functionality coming soon)');
+        };
+
+        document.addEventListener('DOMContentLoaded', renderProduct);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') window.navigateBack();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store - Your Store</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Your Store - Shop">
+    <meta property="og:description" content="Browse our workshops, products, and services">
+
+    <!-- CSS: Separated and using CSS variables -->
+    <link rel="stylesheet" href="./css/shop.css">
+</head>
+<body>
+    <div class="back-button" onclick="navigateBack()" title="Back to Menu">✕</div>
+
+    <!-- Tabs -->
+    <div class="tabs-container">
+        <button class="tab-button active" onclick="switchTab('workshops')">Workshops</button>
+        <button class="tab-button" onclick="switchTab('products')">Products</button>
+        <button class="tab-button" onclick="switchTab('services')">Services</button>
+    </div>
+
+    <div class="shop-container">
+        <!-- Workshops Tab -->
+        <div id="workshops-tab" class="tab-content active">
+            <h1 class="shop-title">Our Workshops</h1>
+            <div class="items-grid" id="workshops-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Products Tab -->
+        <div id="products-tab" class="tab-content">
+            <h1 class="shop-title">Our Products</h1>
+            <div class="items-grid" id="products-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Services Tab -->
+        <div id="services-tab" class="tab-content">
+            <h1 class="shop-title">Our Services</h1>
+            <div class="items-grid" id="services-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Config System: Theme Injection + Content Loading -->
+    <script type="module">
+        import { injectTheme } from './js/theme-injector.js';
+        import { getAllServices } from './js/config/content/services.js';
+        import { getAllProducts } from './js/config/content/products.js';
+        import { getAllServiceItems } from './js/config/content/services-catalog.js';
+
+        // Inject theme CSS variables
+        injectTheme();
+        console.log('[Shop Page] Theme injected');
+
+        // Render item card
+        function renderItemCard(item, detailPage) {
+            const useImage = item.image && item.image !== null;
+            const imageHTML = useImage
+                ? `<img src="${item.image}" alt="${item.name}" class="item-image">`
+                : `<span class="item-emoji-icon">${item.emoji}</span>`;
+
+            const durationHTML = item.duration ? `<div class="item-duration">${item.duration}</div>` : '';
+            const priceHTML = item.pricing && item.pricing.displayPrice
+                ? `<div class="item-price">${item.pricing.displayPrice}</div>`
+                : '';
+
+            return `
+                <div class="item-card" onclick="navigateToItem('${item.id}', '${detailPage}')">
+                    <div class="item-icon-wrapper">
+                        ${imageHTML}
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">${item.name}</div>
+                        </div>
+                        ${durationHTML}
+                        ${priceHTML}
+                        <div class="item-learn-more">Learn More</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load workshops
+        function loadWorkshops() {
+            const workshops = getAllServices();
+            const grid = document.getElementById('workshops-grid');
+            grid.innerHTML = workshops.map(w => renderItemCard(w, 'workshop-detail-desk.html')).join('');
+        }
+
+        // Load products
+        function loadProducts() {
+            const products = getAllProducts();
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = products.map(p => renderItemCard(p, 'product-detail-desk.html')).join('');
+        }
+
+        // Load services
+        function loadServices() {
+            const services = getAllServiceItems();
+            const grid = document.getElementById('services-grid');
+            grid.innerHTML = services.map(s => renderItemCard(s, 'service-detail-desk.html')).join('');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadWorkshops();
+            loadProducts();
+            loadServices();
+            console.log('[Shop Page] All items loaded');
+        });
+
+        // Make navigateToItem global
+        window.navigateToItem = function(itemId, detailPage) {
+            window.location.href = `/${detailPage}?id=${itemId}`;
+        };
+    </script>
+
+    <script>
+        function navigateBack() {
+            window.location.href = '/menu-desk.html';
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+
+            // Activate button
+            event.target.classList.add('active');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                navigateBack();
+            }
+        });
+    </script>
+</body>
+</html>

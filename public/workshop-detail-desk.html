@@ -16,9 +16,9 @@
 <body>
     <!-- Navigation -->
     <nav class="back-nav">
-        <button class="back-button" onclick="navigateBack()">Back to Services</button>
+        <button class="back-button" onclick="navigateBack()">Back to Shop</button>
         <div class="nav-breadcrumb">
-            <a href="/menu-desk.html">Store</a> / <a href="/workshops-desk.html">Services</a> / <span id="breadcrumb-title">Service Details</span>
+            <a href="/menu-desk.html">Store</a> / <a href="/shop-desk.html">Shop</a> / <span id="breadcrumb-title">Workshop Details</span>
         </div>
     </nav>
 
@@ -97,9 +97,9 @@
         <!-- CTA Section -->
         <section class="cta-section">
             <div class="cta-content">
-                <h2 class="cta-title">Ready to Book This Service?</h2>
-                <p class="cta-text">Schedule this transformative experience for your group or organization. Our team will guide you through every step of the process.</p>
-                <a href="/chat" class="cta-button" id="cta-button">Schedule Service →</a>
+                <h2 class="cta-title">Ready to Book This Workshop?</h2>
+                <p class="cta-text">Add this workshop to your cart and complete your purchase. Our team will contact you to schedule your session.</p>
+                <button class="cta-button" id="add-to-cart-button" onclick="addToCart()">Add to Cart</button>
             </div>
         </section>
     </div>
@@ -114,7 +114,15 @@
 
         // Step 2: Initialize WorkshopLoader
         window.navigateBack = function() {
-            window.location.href = '/workshops-desk.html';
+            window.location.href = '/shop-desk.html';
+        };
+
+        // Add to cart function
+        window.addToCart = function() {
+            const workshopId = WorkshopLoader.getWorkshopId();
+            console.log('[Workshop Detail] Adding to cart:', workshopId);
+            // TODO: Implement cart logic
+            alert('Item added to cart! (Cart functionality coming soon)');
         };
 
         document.addEventListener('keydown', (e) => {
