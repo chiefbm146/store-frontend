@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconciliation - Moon Tide World</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --moon-blue: #0A84FF;
+            --deep-blue: #005EB8;
+            --musqueam-red: #C41E3A;
+            --musqueam-white: #F5F1E8;
+            --ocean-teal: #2A9D8F;
+            --deep-ocean: #264653;
+
+            /* Glassmorphism colors */
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-text-light: #F5F1E8;
+            --glass-accent: #0A84FF;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(12, 74, 110, 0.95) 40%, rgba(8, 47, 73, 0.95) 100%);
+            color: var(--glass-text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        #water-background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #water-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(12, 74, 110, 0.95) 40%, rgba(8, 47, 73, 0.95) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .back-to-world {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            color: var(--glass-text-light);
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-to-world:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+            border-color: var(--glass-accent);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 40px 60px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 50px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-icon {
+            font-size: 5em;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--moon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5em;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title i {
+            color: white;
+            font-size: 0.8em;
+        }
+
+        .section-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .section-content p {
+            margin-bottom: 20px;
+        }
+
+        .principle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .principle-card {
+            background: rgba(30, 144, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            border-left: 4px solid var(--moon-blue);
+            transition: all 0.3s ease;
+        }
+
+        .principle-card:hover {
+            transform: translateY(-5px);
+            background: rgba(30, 144, 255, 0.15);
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.3);
+        }
+
+        .principle-number {
+            font-size: 3em;
+            color: white;
+            font-weight: bold;
+            opacity: 0.5;
+            margin-bottom: 10px;
+        }
+
+        .principle-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .principle-desc {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.6;
+        }
+
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .resource-list li {
+            padding: 20px;
+            margin-bottom: 15px;
+            background: rgba(30, 144, 255, 0.1);
+            border-left: 4px solid var(--moon-blue);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .resource-list li:hover {
+            background: rgba(30, 144, 255, 0.2);
+            transform: translateX(10px);
+        }
+
+        .resource-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .resource-desc {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .cta-text {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, var(--moon-blue) 0%, var(--deep-blue) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(30, 144, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5em;
+            }
+
+            .container {
+                padding: 80px 20px 40px;
+            }
+
+            .principle-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="water-background-container"></div>
+    <div id="water-overlay"></div>
+
+    <a href="./world-desk.html" class="back-to-world">
+        <i class="fas fa-arrow-left"></i>
+        Back to Moon Tide World
+    </a>
+
+    <div class="container">
+        <div class="hero">
+            <div class="hero-icon">
+                <i class="fas fa-hands-helping"></i>
+            </div>
+            <h1 class="hero-title">Reconciliation</h1>
+            <p class="hero-subtitle">
+                Journey toward truth, healing, and building respectful relationships between Indigenous and non-Indigenous peoples
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-heart"></i>
+                What is Reconciliation?
+            </h2>
+            <div class="section-content">
+                <p>
+                    Reconciliation is about establishing and maintaining a mutually respectful relationship between
+                    Indigenous and non-Indigenous peoples. For this to happen, there has to be awareness of the past,
+                    acknowledgement of the harm that has been inflicted, atonement for the causes, and action to change behavior.
+                </p>
+                <p>
+                    The Truth and Reconciliation Commission (TRC) was created to document the truth of survivors, families,
+                    communities, and anyone personally affected by the residential school experience. Through this process,
+                    we are called to learn about our shared history and commit to building a better future together.
+                </p>
+                <p>
+                    Moon Tide Reconciliation is committed to being part of this journey, offering education, cultural experiences,
+                    and pathways to understanding that honor Indigenous wisdom and traditions.
+                </p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-book-open"></i>
+                The 94 Calls to Action
+            </h2>
+            <div class="section-content">
+                <p>
+                    The Truth and Reconciliation Commission released 94 Calls to Action in 2015, outlining concrete steps
+                    toward reconciliation. These calls address child welfare, education, language and culture, health, and justice.
+                </p>
+                <div class="principle-grid">
+                    <div class="principle-card">
+                        <div class="principle-number">1-42</div>
+                        <div class="principle-title">Legacy</div>
+                        <div class="principle-desc">
+                            Addressing child welfare, education, language and culture, health, and justice reform
+                        </div>
+                    </div>
+                    <div class="principle-card">
+                        <div class="principle-number">43-76</div>
+                        <div class="principle-title">Reconciliation</div>
+                        <div class="principle-desc">
+                            Government, churches, commemoration, missing children, and education for reconciliation
+                        </div>
+                    </div>
+                    <div class="principle-card">
+                        <div class="principle-number">77-94</div>
+                        <div class="principle-title">Professional Development</div>
+                        <div class="principle-desc">
+                            Training for public servants, health professionals, journalists, lawyers, and beyond
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-link"></i>
+                Resources & Learning
+            </h2>
+            <div class="section-content">
+                <ul class="resource-list">
+                    <li onclick="window.open('https://www.rcaanc-cirnac.gc.ca/eng/1450124405592/1529106060525', '_blank')">
+                        <div class="resource-title"><i class="fas fa-external-link-alt"></i> Truth and Reconciliation Commission</div>
+                        <div class="resource-desc">Learn about the TRC's findings, calls to action, and ongoing work</div>
+                    </li>
+                    <li onclick="window.open('https://www.21things.ca/', '_blank')">
+                        <div class="resource-title"><i class="fas fa-external-link-alt"></i> 21 Things You May Not Know About the Indian Act</div>
+                        <div class="resource-desc">Essential context for understanding Indigenous history in Canada</div>
+                    </li>
+                    <li onclick="window.open('https://www.nctr.ca/', '_blank')">
+                        <div class="resource-title"><i class="fas fa-external-link-alt"></i> National Centre for Truth and Reconciliation</div>
+                        <div class="resource-desc">Access archives, survivor testimonies, and educational resources</div>
+                    </li>
+                    <li onclick="window.open('https://www.ictinc.ca/', '_blank')">
+                        <div class="resource-title"><i class="fas fa-external-link-alt"></i> Indigenizing the Classroom</div>
+                        <div class="resource-desc">Resources for educators to incorporate Indigenous perspectives</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2 class="cta-title">Ready to Learn More?</h2>
+            <p class="cta-text">
+                Book a workshop or connect with us to explore reconciliation education for your organization
+            </p>
+            <a href="./desktop.html" class="cta-button">
+                <i class="fas fa-envelope"></i>
+                Contact Us
+            </a>
+        </div>
+    </div>
+
+    <script type="module">
+        import WaterBackground from './js/water.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const waterContainer = document.getElementById('water-background-container');
+            if (waterContainer && typeof THREE !== 'undefined') {
+                console.log('[Reconciliation] Initializing water background...');
+                WaterBackground.init(waterContainer);
+            }
+        });
+    </script>
+</body>
+</html>

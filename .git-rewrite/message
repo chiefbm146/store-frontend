@@ -1,0 +1,20 @@
+Add browser back button support to Schedule Workshop modal
+
+Integrates Schedule Workshop modal with browser history API to match
+the behavior of other modules (About Founder, Contact, etc.).
+
+Changes to smart-message-renderer.js:
+- Constructor: Added isModalOpen and currentModalBackdrop state tracking
+- Constructor: Added popstate event listener to detect back button
+- showFullscreenServiceModal: Pushes #workshop-modal to history on open
+- showFallbackModal: Pushes #workshop-modal to history on open
+- closeFullscreenModal: Resets state and calls history.back() when needed
+
+Behavior:
+- Opening modal: Adds #workshop-modal to browser history
+- Back button: Triggers popstate event, closes modal, returns to mobile.html
+- Click close: Closes modal and calls history.back() to clean up hash
+- Result: Consistent navigation flow across all modules
+
+Fixes issue where Schedule Workshop was the only module that didn't
+respond to the back button properly.

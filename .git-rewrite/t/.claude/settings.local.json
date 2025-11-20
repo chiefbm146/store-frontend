@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/koryp/OneDrive/Desktop/**)",
+      "Bash(nul)",
+      "Bash(dir \"C:\\Users\\koryp\\OneDrive\\Desktop\\front-store\")",
+      "Bash(dir:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(python -m py_compile:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Workshop - Moon Tide Reconciliation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --moon-blue: #0A84FF;
+            --deep-blue: #005EB8;
+            --musqueam-red: #C41E3A;
+            --musqueam-white: #F5F1E8;
+            --ocean-teal: #2A9D8F;
+            --deep-ocean: #264653;
+
+            /* Glassmorphism colors */
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-text-light: #F5F1E8;
+            --glass-accent: #0A84FF;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(12, 74, 110, 0.95) 40%, rgba(8, 47, 73, 0.95) 100%);
+            color: var(--glass-text-light);
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        #water-background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #water-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(12, 74, 110, 0.95) 40%, rgba(8, 47, 73, 0.95) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .back-to-world {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            color: var(--glass-text-light);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-to-world:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+            border-color: var(--glass-accent);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            padding: 80px 15px 40px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .workshop-icon {
+            font-size: 3em;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .workshop-image {
+            width: 100%;
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .workshop-title {
+            font-size: 2em;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--moon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.3;
+        }
+
+        .workshop-type-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            color: white;
+            border: 1px solid white;
+        }
+
+        .workshop-description {
+            font-size: 1.1em;
+            color: white;
+            line-height: 1.5;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: var(--glass-text-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            font-size: 0.8em;
+            color: white;
+        }
+
+        .workshop-long-description p {
+            font-size: 1em;
+            line-height: 1.7;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .details-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border-left: 4px solid var(--glass-accent);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-item i {
+            font-size: 1.5em;
+            color: white;
+            margin-top: 3px;
+        }
+
+        .detail-item strong {
+            display: block;
+            font-size: 1em;
+            margin-bottom: 4px;
+            color: white;
+        }
+
+        .detail-item p {
+            color: white;
+            font-size: 0.95em;
+        }
+
+        .highlights-list, .expect-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .highlights-list li, .expect-list li {
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-left: 4px solid var(--glass-accent);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+
+        .highlights-list li::before {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: white;
+            line-height: 1.3;
+        }
+
+        .cta-text {
+            font-size: 1em;
+            color: white;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(135deg, var(--moon-blue) 0%, var(--deep-blue) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.5);
+        }
+
+        #error-container {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 0 20px;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .error-message i {
+            font-size: 3em;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .error-message h2 {
+            font-size: 1.8em;
+            margin-bottom: 12px;
+            line-height: 1.3;
+            color: white;
+        }
+
+        .error-message p {
+            font-size: 1em;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--moon-blue) 0%, var(--deep-blue) 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="water-background-container"></div>
+    <div id="water-overlay"></div>
+
+    <a href="./world-mobile.html" class="back-to-world">
+        <i class="fas fa-arrow-left"></i>
+        Back to World
+    </a>
+
+    <div id="error-container"></div>
+
+    <div id="main-content" class="container">
+        <div class="hero">
+            <div class="workshop-icon">
+                <i id="workshop-icon" class="fas fa-users"></i>
+            </div>
+            <img id="workshop-image" class="workshop-image" src="" alt="Workshop" style="display: none;">
+            <h1 class="workshop-title" id="workshop-title">Loading...</h1>
+            <div class="workshop-type-badge" id="workshop-type">Loading...</div>
+            <p class="workshop-description" id="workshop-description">Loading workshop details...</p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-info-circle"></i>
+                About This Workshop
+            </h2>
+            <div class="workshop-long-description" id="workshop-long-description">
+                <p>Loading...</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-list-ul"></i>
+                Workshop Details
+            </h2>
+            <div class="details-grid" id="workshop-details">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-star"></i>
+                What's Included
+            </h2>
+            <ul class="highlights-list" id="workshop-highlights">
+                <!-- Populated by JS -->
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-compass"></i>
+                What to Expect
+            </h2>
+            <ul class="expect-list" id="workshop-expect">
+                <!-- Populated by JS -->
+            </ul>
+        </div>
+
+        <div class="cta-section">
+            <h2 class="cta-title">Ready to Book This Workshop?</h2>
+            <p class="cta-text">Contact us to schedule this transformative experience for your group or organization.</p>
+            <a href="./mobile.html" class="cta-button">
+                <i class="fas fa-calendar-check"></i>
+                Schedule Workshop
+            </a>
+        </div>
+    </div>
+
+    <!-- SVG Filter for Liquid Glass Effect -->
+    <svg style="display: none">
+        <filter id="lg-dist" x="0%" y="0%" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" seed="92" result="noise" />
+            <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+            <feDisplacementMap in="SourceGraphic" in2="blurred" scale="70" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
+
+    <script type="module">
+        import WaterBackground from './js/water.js';
+        import WorkshopLoader from './js/workshop-loader.js';
+
+        // Initialize water background
+        document.addEventListener('DOMContentLoaded', () => {
+            const waterContainer = document.getElementById('water-background-container');
+            if (waterContainer && typeof THREE !== 'undefined') {
+                console.log('[Workshop Detail Mobile] Initializing water background...');
+                WaterBackground.init(waterContainer);
+            }
+
+            // Load workshop data
+            WorkshopLoader.init();
+
+            // Update CTA button to include workshop ID for auto-booking
+            const workshopId = WorkshopLoader.getWorkshopId();
+            if (workshopId) {
+                const ctaButton = document.querySelector('.cta-button');
+                if (ctaButton) {
+                    ctaButton.href = `./mobile.html?book=${workshopId}`;
+                    console.log('[Workshop Detail Mobile] CTA button updated with workshop ID:', workshopId);
+                }
+            }
+        });
+    </script>
+
+    <!-- Browser Back Button Navigation -->
+    <script>
+        // Push current state to enable back button navigation
+        window.history.pushState({ page: 'workshop-detail-mobile' }, '', window.location.href);
+
+        // Handle back button to navigate to world-mobile.html
+        window.addEventListener('popstate', function(event) {
+            window.location.href = 'https://moontidereconciliation.com/world-mobile.html';
+        });
+    </script>
+</body>
+</html>

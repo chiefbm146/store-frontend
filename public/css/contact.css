@@ -1,0 +1,207 @@
+/**
+ * Contact Page Styles
+ * Uses CSS variables from theme-injector.js
+ * All colors/fonts are configurable via theme.js
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--color-background, #F5F1E8);
+    font-family: var(--font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif);
+    color: var(--color-text, #1a1a1a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+}
+
+.close-button {
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    width: 60px;
+    height: 60px;
+    background: var(--color-primary, #1E90FF);
+    border: 2px solid var(--color-primary-dark, #0047AB);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10000;
+    transition: all 0.3s ease;
+    font-size: 26px;
+    color: #FFFFFF;
+    box-shadow: 0 4px 20px rgba(30, 144, 255, 0.3);
+}
+
+.close-button:hover {
+    background: var(--color-primary-dark, #0047AB);
+    transform: scale(1.1) rotate(90deg);
+}
+
+.contact-container {
+    width: 100%;
+    max-width: 1400px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+}
+
+/* Left Column */
+.contact-header {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-title {
+    font-size: 5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--color-primary, #1E90FF), var(--color-primary-dark, #0047AB));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 30px;
+    line-height: 1.1;
+}
+
+.contact-subtitle {
+    font-size: 1.6rem;
+    color: var(--color-text-secondary, #555);
+    margin-bottom: 60px;
+    line-height: 1.6;
+}
+
+.info-section {
+    margin-bottom: 50px;
+}
+
+.info-label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.info-value {
+    font-size: 1.8rem;
+    color: var(--color-text, #1a1a1a);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.info-note {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary, #666);
+    font-style: italic;
+}
+
+.copy-button {
+    background: var(--color-primary, #1E90FF);
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 0;
+}
+
+.copy-button:hover {
+    background: var(--color-primary-dark, #0047AB);
+    transform: translateX(5px);
+}
+
+.copy-button.copied {
+    background: #28a745;
+}
+
+/* Right Column */
+.contact-details {
+    background: #FFFFFF;
+    padding: 60px;
+    border-left: 6px solid var(--color-primary, #1E90FF);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+}
+
+.detail-block {
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.detail-block:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.detail-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--color-text, #1a1a1a);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.detail-content {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary, #555);
+    line-height: 1.7;
+}
+
+.detail-content p {
+    margin-bottom: 10px;
+}
+
+.detail-content p:last-child {
+    margin-bottom: 0;
+}
+
+.detail-highlight {
+    font-size: 1.3rem;
+    color: var(--color-primary, #1E90FF);
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .contact-container {
+        grid-template-columns: 1fr;
+        gap: 60px;
+    }
+
+    .contact-title {
+        font-size: 4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 30px;
+    }
+
+    .contact-title {
+        font-size: 3rem;
+    }
+
+    .contact-details {
+        padding: 40px;
+    }
+}

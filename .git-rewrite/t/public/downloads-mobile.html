@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Downloads - Moon Tide World</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --moon-blue: #0A84FF;
+            --deep-blue: #005EB8;
+            --musqueam-red: #C41E3A;
+            --musqueam-white: #F5F1E8;
+            --ocean-teal: #2A9D8F;
+            --deep-ocean: #264653;
+        
+            /* Glassmorphism colors */
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-text-light: #F5F1E8;
+            --glass-accent: #0A84FF;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(12, 74, 110, 0.95) 40%, rgba(8, 47, 73, 0.95) 100%);
+            color: var(--glass-text-light);
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
+
+        #water-background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        
+        #water-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(12, 74, 110, 0.95) 40%, rgba(8, 47, 73, 0.95) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+.back-to-world {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 50px;
+            color: var(--glass-text-light);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .back-to-world:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(30, 144, 255, 0.4);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            padding: 80px 15px 40px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 16px;
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-icon {
+            font-size: 3.5em;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .hero-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--moon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.3;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        
+        .section-title i {
+            color: white;
+            font-size: 0.8em;
+        }
+.section-content {
+            font-size: 1em;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .section-content p {
+            margin-bottom: 15px;
+        }
+
+        .download-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .download-card {
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.15) 0%, rgba(42, 157, 143, 0.15) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+        }
+
+        .download-card:active {
+            transform: scale(0.98);
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.25) 0%, rgba(42, 157, 143, 0.25) 100%);
+        }
+
+        .download-icon {
+            font-size: 2.5em;
+            color: var(--moon-blue);
+            margin-bottom: 12px;
+        }
+
+        .download-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .download-type {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(30, 144, 255, 0.3);
+            border-radius: 15px;
+            font-size: 0.75em;
+            margin-bottom: 12px;
+            color: var(--moon-blue);
+            border: 1px solid var(--moon-blue);
+        }
+
+        .download-desc {
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .download-button {
+            display: inline-block;
+            padding: 8px 18px;
+            background: linear-gradient(135deg, var(--moon-blue) 0%, var(--deep-blue) 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .coming-soon {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(30, 144, 255, 0.1);
+            border-radius: 16px;
+            border: 2px dashed var(--moon-blue);
+        }
+
+        .coming-soon-icon {
+            font-size: 3em;
+            color: var(--moon-blue);
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+
+        .coming-soon-title {
+            font-size: 1.6em;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .coming-soon-text {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.2) 0%, rgba(42, 157, 143, 0.2) 100%);
+            border-radius: 20px;
+            border: 2px solid var(--moon-blue);
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: white;
+            line-height: 1.3;
+        }
+
+        .cta-text {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(135deg, var(--moon-blue) 0%, var(--deep-blue) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="water-background-container"></div>
+    <div id="water-overlay"></div>
+
+    <a href="./world-mobile.html" class="back-to-world">
+        <i class="fas fa-arrow-left"></i>
+        Back to World
+    </a>
+
+    <div class="container">
+        <div class="hero">
+            <div class="hero-icon">
+                <i class="fas fa-download"></i>
+            </div>
+            <h1 class="hero-title">Downloads</h1>
+            <p class="hero-subtitle">
+                Access educational materials, guides, and resources for your reconciliation journey
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-book-reader"></i>
+                Educational Resources
+            </h2>
+            <div class="section-content">
+                <p>
+                    We're developing a comprehensive library of educational materials to support reconciliation
+                    education, cultural learning, and understanding of Indigenous history and traditions.
+                </p>
+
+                <div class="coming-soon">
+                    <div class="coming-soon-icon">
+                        <i class="fas fa-file-download"></i>
+                    </div>
+                    <h3 class="coming-soon-title">Resource Library Coming Soon</h3>
+                    <p class="coming-soon-text">
+                        Our downloadable resources are being prepared. These will include workshop guides,
+                        educational handouts, cultural teaching materials, and more.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-external-link-alt"></i>
+                Recommended External Resources
+            </h2>
+            <div class="section-content">
+                <p>
+                    While we prepare our materials, explore these valuable external resources for learning
+                    about Indigenous history, culture, and reconciliation.
+                </p>
+
+                <div class="download-grid">
+                    <div class="download-card" onclick="window.open('https://www.rcaanc-cirnac.gc.ca/eng/1450124405592/1529106060525', '_blank')">
+                        <div class="download-icon"><i class="fas fa-scroll"></i></div>
+                        <h3 class="download-title">TRC Reports</h3>
+                        <span class="download-type">PDF Documents</span>
+                        <p class="download-desc">
+                            Access the complete Truth and Reconciliation Commission reports, including the 94 Calls to Action
+                            and comprehensive documentation of residential school history.
+                        </p>
+                        <span class="download-button">
+                            <i class="fas fa-external-link-alt"></i> Visit Resource
+                        </span>
+                    </div>
+
+                    <div class="download-card" onclick="window.open('https://www.ictinc.ca/resources', '_blank')">
+                        <div class="download-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <h3 class="download-title">Teacher Resources</h3>
+                        <span class="download-type">Lesson Plans</span>
+                        <p class="download-desc">
+                            Curriculum resources and lesson plans for educators looking to incorporate Indigenous
+                            perspectives and reconciliation education into their classrooms.
+                        </p>
+                        <span class="download-button">
+                            <i class="fas fa-external-link-alt"></i> Visit Resource
+                        </span>
+                    </div>
+
+                    <div class="download-card" onclick="window.open('https://www.firstnationspedagogy.ca/', '_blank')">
+                        <div class="download-icon"><i class="fas fa-users-class"></i></div>
+                        <h3 class="download-title">First Nations Pedagogy</h3>
+                        <span class="download-type">Educational Materials</span>
+                        <p class="download-desc">
+                            Online resources exploring Indigenous teaching methods, cultural protocols,
+                            and ways to create culturally responsive learning environments.
+                        </p>
+                        <span class="download-button">
+                            <i class="fas fa-external-link-alt"></i> Visit Resource
+                        </span>
+                    </div>
+
+                    <div class="download-card" onclick="window.open('https://native-land.ca/', '_blank')">
+                        <div class="download-icon"><i class="fas fa-map-marked-alt"></i></div>
+                        <h3 class="download-title">Native Land Map</h3>
+                        <span class="download-type">Interactive Tool</span>
+                        <p class="download-desc">
+                            Interactive map showing Indigenous territories, treaties, and languages across Turtle Island.
+                            Essential for land acknowledgments and understanding traditional territories.
+                        </p>
+                        <span class="download-button">
+                            <i class="fas fa-external-link-alt"></i> Visit Resource
+                        </span>
+                    </div>
+
+                    <div class="download-card" onclick="window.open('https://www.nctr.ca/education/', '_blank')">
+                        <div class="download-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h3 class="download-title">NCTR Education Resources</h3>
+                        <span class="download-type">Archives & Materials</span>
+                        <p class="download-desc">
+                            National Centre for Truth and Reconciliation educational resources, including
+                            survivor testimonies, archival materials, and teaching guides.
+                        </p>
+                        <span class="download-button">
+                            <i class="fas fa-external-link-alt"></i> Visit Resource
+                        </span>
+                    </div>
+
+                    <div class="download-card" onclick="window.open('https://www.lss.bc.ca/resources/indigenous-cultural-competency', '_blank')">
+                        <div class="download-icon"><i class="fas fa-handshake"></i></div>
+                        <h3 class="download-title">Cultural Competency Guides</h3>
+                        <span class="download-type">Professional Development</span>
+                        <p class="download-desc">
+                            Resources for developing cultural competency when working with Indigenous peoples
+                            and communities, including protocols and best practices.
+                        </p>
+                        <span class="download-button">
+                            <i class="fas fa-external-link-alt"></i> Visit Resource
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2 class="cta-title">Need Custom Resources?</h2>
+            <p class="cta-text">
+                Contact us to discuss creating customized educational materials for your organization
+            </p>
+            <a href="./mobile.html" class="cta-button">
+                <i class="fas fa-envelope"></i>
+                Contact Us
+            </a>
+        </div>
+    </div>
+
+    <script type="module">
+        import WaterBackground from './js/water.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const waterContainer = document.getElementById('water-background-container');
+            if (waterContainer && typeof THREE !== 'undefined') {
+                console.log('[Downloads Mobile] Initializing water background...');
+                WaterBackground.init(waterContainer);
+            }
+        });
+    </script>
+
+    <!-- Browser Back Button Navigation -->
+    <script>
+        // Push current state to enable back button navigation
+        window.history.pushState({ page: 'downloads-mobile' }, '', window.location.href);
+
+        // Handle back button to navigate to world-mobile.html
+        window.addEventListener('popstate', function(event) {
+            window.location.href = 'https://moontidereconciliation.com/world-mobile.html';
+        });
+    </script>
+</body>
+</html>

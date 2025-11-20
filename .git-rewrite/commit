@@ -1,0 +1,31 @@
+tree 0ced9a68054474e612bd07e15b8f607bab8b515b
+parent d25606eb2c4b41101b0312ca6407c2eb3717822f
+author Claude <noreply@anthropic.com> 1763262236 +0000
+committer Claude <noreply@anthropic.com> 1763262236 +0000
+gpgsig -----BEGIN SSH SIGNATURE-----
+ U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgrLzsfFISF4by8Q+FKz27YpkK1USsBB+m
+ amu1QkJnbDsAAAADZ2l0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAAQMOlzV2u
+ 194bayOtw7Zq5Iq1u7tsk42ZsTwLVJUnv/TtyjdWtUNmhY4aLZfIRZYr3G+f8/JprUWPgFHMDMAn
+ Vww=
+ -----END SSH SIGNATURE-----
+
+Add browser back button support to Schedule Workshop modal
+
+Integrates Schedule Workshop modal with browser history API to match
+the behavior of other modules (About Founder, Contact, etc.).
+
+Changes to smart-message-renderer.js:
+- Constructor: Added isModalOpen and currentModalBackdrop state tracking
+- Constructor: Added popstate event listener to detect back button
+- showFullscreenServiceModal: Pushes #workshop-modal to history on open
+- showFallbackModal: Pushes #workshop-modal to history on open
+- closeFullscreenModal: Resets state and calls history.back() when needed
+
+Behavior:
+- Opening modal: Adds #workshop-modal to browser history
+- Back button: Triggers popstate event, closes modal, returns to mobile.html
+- Click close: Closes modal and calls history.back() to clean up hash
+- Result: Consistent navigation flow across all modules
+
+Fixes issue where Schedule Workshop was the only module that didn't
+respond to the back button properly.

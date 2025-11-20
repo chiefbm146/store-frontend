@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/koryp/OneDrive/Desktop/moons/**)",
+      "Read(//c/Users/koryp/OneDrive/Desktop/Reconciliation/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

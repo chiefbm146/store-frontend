@@ -14,78 +14,90 @@
  */
 
 export const pageContent = {
-    // ===== ABOUT US PAGE =====
+    // ===== ABOUT US PAGE (Config-Driven) =====
     about: {
-        title: "About Your Company",
-        subtitle: "Our Mission & Vision",
+        title: "About Your Store",
+        description: "Learn about your store's vision and values",
 
-        // Hero section
+        // Hero section (uses emoji icon, no image path)
         hero: {
-            image: "/images/pages/about-hero.jpg",
-            heading: "Building the Future of Digital Commerce",
-            subheading: "We empower businesses with cutting-edge storefronts",
+            icon: "🏪",
+            title: "Your Store Name",
+            subtitle: "Your Store Tagline",
+            description: "Your store description goes here"
         },
 
-        // Main sections
-        sections: [
-            {
-                id: "mission",
-                heading: "Our Mission",
-                body: "To empower businesses with cutting-edge digital storefronts that combine beauty, intelligence, and performance. We believe every business deserves world-class e-commerce technology.",
-                image: "/images/pages/mission.jpg",
-                imagePosition: "right", // 'left' | 'right'
-            },
-            {
-                id: "vision",
-                heading: "Our Vision",
-                body: "A world where every business has access to world-class e-commerce technology. We're building the future of online retail, one store at a time.",
-                image: "/images/pages/vision.jpg",
-                imagePosition: "left",
-            },
-            {
-                id: "values",
-                heading: "Our Values",
-                body: "We are guided by four core values that shape everything we do:",
-                values: [
-                    {
-                        title: "Innovation",
-                        description: "We embrace change and continuously improve our products and services.",
-                        icon: "💡",
-                    },
-                    {
-                        title: "Excellence",
-                        description: "We strive for quality in everything we do, from code to customer service.",
-                        icon: "⭐",
-                    },
-                    {
-                        title: "Integrity",
-                        description: "We do what's right, always. Honesty and transparency guide our decisions.",
-                        icon: "🤝",
-                    },
-                    {
-                        title: "Customer Focus",
-                        description: "Your success is our success. We listen, adapt, and deliver.",
-                        icon: "🎯",
-                    },
-                ],
-            },
-        ],
-
-        // Stats
-        stats: [
-            { label: "Years in Business", value: "2+", icon: "📅" },
-            { label: "Clients Served", value: "500+", icon: "🤝" },
-            { label: "Projects Completed", value: "1,000+", icon: "✅" },
-            { label: "Customer Satisfaction", value: "98%", icon: "⭐" },
-        ],
-
-        // Call to action
-        cta: {
-            heading: "Ready to Build Your Store?",
-            body: "Join hundreds of businesses already using our platform.",
-            buttonText: "Get Started",
-            buttonUrl: "/contact",
+        // Vision section
+        vision: {
+            label: "Our Vision",
+            title: "Your Store's Future",
+            paragraphs: [
+                "Our vision is to empower you to build and grow a store that truly represents your brand. We create an environment where your products and services shine, connecting authentically with your customers.",
+                "We believe success is built through quality products, exceptional service, and genuine customer relationships. Your store is a reflection of your values, and we're here to help you bring that vision to life."
+            ]
         },
+
+        // Mission section
+        mission: {
+            label: "Our Mission",
+            title: "Making Your Store Successful",
+            paragraphs: [
+                "We make it easy to create, customize, and manage a beautiful online store that sells. Our platform combines simplicity with powerful features.",
+                "We guide you through every step—from setup to scaling—providing the tools and support you need to grow your business with confidence.",
+                "Your success is our success. We're committed to helping you build a store that works as hard as you do."
+            ]
+        },
+
+        // Values section (array for dynamic card rendering)
+        values: [
+            {
+                icon: "🛍️",
+                title: "Easy to Use",
+                content: [
+                    "Intuitive interface: Build your store without coding experience.",
+                    "Drag & drop: Customize your store your way with simple tools.",
+                    "Quick setup: Get online in minutes, not months."
+                ]
+            },
+            {
+                icon: "💪",
+                title: "Powerful Features",
+                content: [
+                    "Complete e-commerce: Products, inventory, payments, shipping all included.",
+                    "Professional design: Beautiful templates that convert visitors to customers.",
+                    "Flexible customization: Make it yours without limitations."
+                ]
+            },
+            {
+                icon: "🌍",
+                title: "Global Reach",
+                content: [
+                    "Sell worldwide: Accept payments from customers anywhere.",
+                    "Multi-currency support: Reach international markets with ease.",
+                    "Scalable platform: Grows with your business, no matter how fast."
+                ]
+            },
+            {
+                icon: "🤝",
+                title: "Expert Support",
+                content: [
+                    "Dedicated help: Our team is here to support your success.",
+                    "Resources & guides: Tutorials, docs, and best practices.",
+                    "Community: Learn from other successful store owners."
+                ]
+            }
+        ],
+
+        // Quote section
+        quote: {
+            text: "Your store, your way. We provide the platform; you provide the passion.",
+            attribution: "Building successful businesses, one store at a time."
+        },
+
+        // Footer section
+        footer: {
+            location: "Your Location Here"
+        }
     },
 
     // ===== FOUNDER PROFILE PAGE =====
@@ -114,8 +126,8 @@ When she's not building the future of e-commerce, Jane enjoys hiking, reading, a
             { label: "Years Experience", value: "10+", icon: "📊" },
             { label: "Clients Helped", value: "500+", icon: "🤝" },
             { label: "Team Members", value: "25", icon: "👥" },
-            { label: "Awards Won", value: "3", icon: "🏆" },
-        },
+            { label: "Awards Won", value: "3", icon: "🏆" }
+        ],
 
         // Career highlights
         highlights: [
@@ -155,87 +167,81 @@ When she's not building the future of e-commerce, Jane enjoys hiking, reading, a
         },
     },
 
-    // ===== CONTACT PAGE =====
+    // ===== CONTACT PAGE (Config-Driven) =====
     contact: {
-        heading: "Get In Touch",
-        subheading: "We'd love to hear from you. Reach out anytime!",
+        title: "Contact Your Store",
+        description: "Get in touch with our team",
 
-        // Contact methods
-        email: "contact@yourbrand.com",
-        phone: "(555) 555-5555",
-        phoneFormatted: "+1-555-555-5555",
-
-        // Address
-        address: {
-            street: "123 Main Street",
-            suite: "Suite 100",
-            city: "Your City",
-            province: "Your Province",
-            postal: "A1A 1A1",
-            country: "Canada",
+        // Hero section
+        hero: {
+            title: "Get in Touch",
+            subtitle: "Have questions about your store or need support? We're here to help.",
         },
 
-        // Formatted address string
-        addressFormatted: "123 Main Street, Suite 100\nYour City, YP A1A 1A1\nCanada",
+        // Left column - contact info
+        contactInfo: {
+            email: {
+                label: "Email",
+                value: "support@yourstore.com",
+                note: "Respond within 24 hours"
+            },
+            phone: {
+                label: "Phone",
+                note: "Call us during business hours"
+            }
+        },
 
-        // Operating hours
+        // Right column - details
+        details: [
+            {
+                icon: "📍",
+                title: "Locations",
+                content: [
+                    "Vancouver, BC",
+                    "Available Worldwide"
+                ]
+            },
+            {
+                icon: "👤",
+                title: "Support Team",
+                content: [
+                    "Dedicated Account Manager",
+                    "Email Support",
+                    "Live Chat Available"
+                ]
+            },
+            {
+                icon: "🛠️",
+                title: "What We Offer",
+                content: [
+                    "Store Setup & Configuration",
+                    "Design Customization",
+                    "Payment & Shipping Setup",
+                    "Marketing Support",
+                    "Technical Assistance",
+                    "24/7 Monitoring"
+                ]
+            },
+            {
+                icon: "🤝",
+                title: "Who We Serve",
+                content: [
+                    "Small to Medium Businesses",
+                    "Entrepreneurs & Startups",
+                    "Established Brands",
+                    "Online Retailers",
+                    "Service Providers"
+                ]
+            }
+        ],
+
+        // Hours
         hours: {
             heading: "Business Hours",
-            weekdays: "Monday - Friday: 9:00 AM - 5:00 PM",
-            weekends: "Saturday - Sunday: Closed",
+            weekdays: "Monday - Friday: 8:00 AM - 6:00 PM PT",
+            weekends: "Saturday - Sunday: Support Available",
             timezone: "Pacific Time (PT)",
-        },
-
-        // Map
-        mapEmbed: null, // Google Maps embed URL (future)
-        mapLink: "https://maps.google.com/?q=Your+City+YP",
-
-        // Departments
-        departments: [
-            {
-                name: "Sales",
-                email: "sales@yourbrand.com",
-                phone: "(555) 555-5551",
-                description: "Questions about our products or pricing",
-            },
-            {
-                name: "Support",
-                email: "support@yourbrand.com",
-                phone: "(555) 555-5552",
-                description: "Technical support and assistance",
-            },
-            {
-                name: "Billing",
-                email: "billing@yourbrand.com",
-                phone: "(555) 555-5553",
-                description: "Invoices, payments, and subscriptions",
-            },
-        ],
-
-        // Services offered
-        servicesOffered: [
-            "Custom Store Development",
-            "AI Integration",
-            "Payment Processing",
-            "Technical Support",
-            "Training & Onboarding",
-        ],
-
-        // Target audiences
-        audiences: [
-            "Small Businesses",
-            "Enterprise Companies",
-            "Non-Profit Organizations",
-            "Educational Institutions",
-        ],
-
-        // CTA
-        cta: {
-            heading: "Ready to Get Started?",
-            body: "Contact us today for a free consultation.",
-            buttonText: "Book a Call",
-            buttonUrl: "/chat",
-        },
+        }
     },
 
     // ===== MENU / HOME PAGE =====

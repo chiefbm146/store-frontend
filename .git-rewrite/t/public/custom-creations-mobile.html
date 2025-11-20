@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Custom Creations - Moon Tide World</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --moon-blue: #0A84FF;
+            --deep-blue: #005EB8;
+            --musqueam-red: #C41E3A;
+            --musqueam-white: #F5F1E8;
+            --ocean-teal: #2A9D8F;
+            --deep-ocean: #264653;
+        
+            /* Glassmorphism colors */
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-text-light: #F5F1E8;
+            --glass-accent: #0A84FF;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(12, 74, 110, 0.95) 40%, rgba(8, 47, 73, 0.95) 100%);
+            color: var(--glass-text-light);
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
+
+        #water-background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        
+        #water-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(12, 74, 110, 0.95) 40%, rgba(8, 47, 73, 0.95) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+.back-to-world {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 50px;
+            color: var(--glass-text-light);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .back-to-world:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(30, 144, 255, 0.4);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            padding: 80px 15px 40px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 16px;
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-icon {
+            font-size: 3.5em;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .hero-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--moon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.3;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        
+        .section-title i {
+            color: white;
+            font-size: 0.8em;
+        }
+.section-content {
+            font-size: 1em;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .section-content p {
+            margin-bottom: 15px;
+        }
+
+        .services-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .service-card {
+            background: rgba(30, 144, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            border-left: 4px solid var(--moon-blue);
+        }
+
+        .service-icon {
+            font-size: 2.5em;
+            color: var(--moon-blue);
+            margin-bottom: 12px;
+        }
+
+        .service-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .service-desc {
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.5;
+        }
+
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.15) 0%, rgba(42, 157, 143, 0.15) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .step-number {
+            font-size: 2.5em;
+            color: var(--moon-blue);
+            font-weight: bold;
+            opacity: 0.6;
+            margin-bottom: 8px;
+        }
+
+        .step-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.5;
+        }
+
+        .examples-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .examples-list li {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: rgba(30, 144, 255, 0.1);
+            border-left: 4px solid var(--moon-blue);
+            border-radius: 8px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .examples-list li::before {
+            content: '✓';
+            color: var(--moon-blue);
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.2) 0%, rgba(42, 157, 143, 0.2) 100%);
+            border-radius: 20px;
+            border: 2px solid var(--moon-blue);
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: white;
+            line-height: 1.3;
+        }
+
+        .cta-text {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(135deg, var(--moon-blue) 0%, var(--deep-blue) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="water-background-container"></div>
+    <div id="water-overlay"></div>
+
+    <a href="./world-mobile.html" class="back-to-world">
+        <i class="fas fa-arrow-left"></i>
+        Back to World
+    </a>
+
+    <div class="container">
+        <div class="hero">
+            <div class="hero-icon">
+                <i class="fas fa-paint-brush"></i>
+            </div>
+            <h1 class="hero-title">Custom Creations</h1>
+            <p class="hero-subtitle">
+                Unique Indigenous-inspired artwork, logos, designs, and carvings tailored to your vision
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-palette"></i>
+                Our Creative Services
+            </h2>
+            <div class="section-content">
+                <p>
+                    Moon Tide Reconciliation offers custom Indigenous-inspired artwork that honors traditional
+                    designs while bringing your unique vision to life. Every piece is created with cultural
+                    respect, authenticity, and deep connection to Indigenous artistic traditions.
+                </p>
+
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-signature"></i></div>
+                        <h3 class="service-title">Custom Logos</h3>
+                        <p class="service-desc">
+                            Indigenous-inspired logos for organizations, businesses, and initiatives that
+                            honor cultural traditions while representing your unique identity.
+                        </p>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-drafting-compass"></i></div>
+                        <h3 class="service-title">Original Designs</h3>
+                        <p class="service-desc">
+                            Custom artwork for events, publications, merchandise, and spaces that incorporate
+                            Indigenous art forms and symbolism with contemporary applications.
+                        </p>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-tree"></i></div>
+                        <h3 class="service-title">Wood Carvings</h3>
+                        <p class="service-desc">
+                            Traditional cedar carvings, talking sticks, and ceremonial pieces crafted
+                            with respect for ancestral carving techniques and spiritual significance.
+                        </p>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-gem"></i></div>
+                        <h3 class="service-title">Beadwork & Crafts</h3>
+                        <p class="service-desc">
+                            Custom beaded pieces, regalia elements, and handcrafted items that carry
+                            cultural meaning and are created with traditional methods.
+                        </p>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-book"></i></div>
+                        <h3 class="service-title">Educational Materials</h3>
+                        <p class="service-desc">
+                            Custom illustrations and designs for educational resources, curriculum materials,
+                            and publications about Indigenous culture and reconciliation.
+                        </p>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-gift"></i></div>
+                        <h3 class="service-title">Ceremonial Items</h3>
+                        <p class="service-desc">
+                            Sacred and ceremonial pieces created for specific purposes, protocols,
+                            and community needs with cultural guidance and approval.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-route"></i>
+                Our Process
+            </h2>
+            <div class="section-content">
+                <p>
+                    We work collaboratively with you to ensure your custom creation is authentic, meaningful,
+                    and perfectly suited to your needs.
+                </p>
+
+                <div class="process-steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Consultation</h3>
+                        <p class="step-desc">
+                            We discuss your vision, purpose, and how Indigenous artistic traditions
+                            can authentically represent your goals.
+                        </p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Cultural Guidance</h3>
+                        <p class="step-desc">
+                            We ensure all designs honor Indigenous protocols, symbolism,
+                            and cultural significance appropriately.
+                        </p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Design & Creation</h3>
+                        <p class="step-desc">
+                            Our artists develop your custom piece, incorporating your feedback
+                            throughout the creative process.
+                        </p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">Delivery & Education</h3>
+                        <p class="step-desc">
+                            We deliver your piece along with information about its cultural
+                            elements and how to use or display it respectfully.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>
+                Past Projects Include
+            </h2>
+            <div class="section-content">
+                <ul class="examples-list">
+                    <li>Organizational logos incorporating traditional Coast Salish design elements</li>
+                    <li>Custom talking sticks for schools and community organizations</li>
+                    <li>Beaded regalia pieces for cultural ceremonies and events</li>
+                    <li>Educational posters and materials featuring Indigenous artwork</li>
+                    <li>Cedar woven items for gifts and ceremonial purposes</li>
+                    <li>Custom designs for reconciliation events and Truth and Reconciliation Day</li>
+                    <li>Welcome poles and carved pieces for institutional spaces</li>
+                    <li>Commissioned artwork for publications and digital media</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2 class="cta-title">Ready to Create Something Meaningful?</h2>
+            <p class="cta-text">
+                Contact us to discuss your custom creation and begin the collaborative process
+            </p>
+            <a href="./mobile.html" class="cta-button">
+                <i class="fas fa-envelope"></i>
+                Start Your Project
+            </a>
+        </div>
+    </div>
+
+    <script type="module">
+        import WaterBackground from './js/water.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const waterContainer = document.getElementById('water-background-container');
+            if (waterContainer && typeof THREE !== 'undefined') {
+                console.log('[Custom Creations Mobile] Initializing water background...');
+                WaterBackground.init(waterContainer);
+            }
+        });
+    </script>
+
+    <!-- Browser Back Button Navigation -->
+    <script>
+        // Push current state to enable back button navigation
+        window.history.pushState({ page: 'custom-creations-mobile' }, '', window.location.href);
+
+        // Handle back button to navigate to world-mobile.html
+        window.addEventListener('popstate', function(event) {
+            window.location.href = 'https://moontidereconciliation.com/world-mobile.html';
+        });
+    </script>
+</body>
+</html>

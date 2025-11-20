@@ -282,6 +282,281 @@ function updateMetaTagsFromConfig(pageName = null) {
 }
 
 /**
+ * Render Workshop Detail Page
+ * Called by WorkshopLoader.js after loading workshop data
+ * Populates HTML template with workshop-specific content
+ */
+export function renderWorkshopDetail(workshopData) {
+    if (!workshopData) return 0;
+
+    let updates = 0;
+
+    // Hero section
+    if (workshopData.name) {
+        updates += setElementContent('[data-content="workshop.title"]', workshopData.name);
+        updates += setElementContent('[data-content="workshop.description"]', workshopData.description || '');
+        updates += setElementContent('[data-content="workshop.badge"]', workshopData.category || 'Workshop');
+    }
+
+    // Icon/Image
+    if (workshopData.icon) {
+        const iconElement = document.querySelector('[data-content="workshop.icon"]');
+        if (iconElement) {
+            iconElement.textContent = workshopData.icon;
+            updates++;
+        }
+    }
+
+    // Quick Info (duration, format, level, price)
+    updates += populateQuickInfo(workshopData);
+
+    // About section (full description)
+    if (workshopData.longDescription) {
+        const aboutContent = document.querySelector('[data-content="workshop.about"]');
+        if (aboutContent) {
+            aboutContent.innerHTML = `<p>${workshopData.longDescription.split('\n\n').join('</p><p>')}</p>`;
+            updates++;
+        }
+    }
+
+    // Highlights (features array)
+    if (workshopData.features && Array.isArray(workshopData.features)) {
+        updates += renderHighlights(workshopData.features);
+    }
+
+    // Pricing section (pricing array)
+    if (workshopData.pricing && Array.isArray(workshopData.pricing)) {
+        updates += renderPricing(workshopData.pricing);
+    }
+
+    return updates;
+}
+
+/**
+ * Populate quick info bar with workshop details
+ */
+function populateQuickInfo(workshopData) {
+    let updates = 0;
+
+    const quickInfoItems = document.querySelectorAll('.quick-info-item');
+    if (quickInfoItems.length === 0) return 0;
+
+    const infoData = [
+        { label: 'Duration', value: workshopData.duration || 'Flexible' },
+        { label: 'Format', value: workshopData.format || 'In-Person' },
+        { label: 'Level', value: workshopData.level || 'All Levels' },
+        { label: 'Price', value: workshopData.price || 'TBD' }
+    ];
+
+    quickInfoItems.forEach((item, index) => {
+        if (infoData[index]) {
+            const label = item.querySelector('.quick-info-label');
+            const value = item.querySelector('.quick-info-value');
+
+            if (label) {
+                label.textContent = infoData[index].label;
+                updates++;
+            }
+            if (value) {
+                value.textContent = infoData[index].value;
+                updates++;
+            }
+        }
+    });
+
+    return updates;
+}
+
+/**
+ * Render highlights/features as cards
+ */
+function renderHighlights(featuresArray) {
+    const container = document.querySelector('[data-content="workshop.highlights"]');
+    if (!container) return 0;
+
+    container.innerHTML = featuresArray.slice(0, 4).map((feature, idx) => `
+        <div class="highlight-card">
+            <div class="highlight-icon">${idx + 1}</div>
+            <div class="highlight-text">${feature}</div>
+        </div>
+    `).join('');
+
+    return 1;
+}
+
+/**
+ * Render pricing options as cards
+ */
+function renderPricing(pricingArray) {
+    const container = document.querySelector('[data-content="workshop.pricing"]');
+    if (!container) return 0;
+
+    container.innerHTML = pricingArray.map(option => `
+        <div class="pricing-card">
+            <div class="pricing-type">${option.type || 'Option'}</div>
+            <div class="pricing-amount">${option.amount || 'Contact'}</div>
+            <div class="pricing-period">${option.period || ''}</div>
+            ${option.features ? `
+                <ul class="pricing-features">
+                    ${option.features.map(feature => `<li>${feature}</li>`).join('')}
+                </ul>
+            ` : ''}
+        </div>
+    `).join('');
+
+    return 1;
+}
+
+/**
+ * Load Contact page content specifically (with hero, contact info, details array)
+ */
+export function loadContactPageContent() {
+    const pageConfig = getPageContent('contact');
+    if (!pageConfig) return 0;
+
+    let updates = 0;
+
+    // Hero section
+    if (pageConfig.hero) {
+        updates += setElementContent('[data-content="hero.title"]', pageConfig.hero.title);
+        updates += setElementContent('[data-content="hero.subtitle"]', pageConfig.hero.subtitle);
+    }
+
+    // Contact info (left column)
+    if (pageConfig.contactInfo) {
+        if (pageConfig.contactInfo.email) {
+            updates += setElementContent('[data-content="contact.email.label"]', pageConfig.contactInfo.email.label);
+            updates += setElementContent('[data-content="contact.email.value"]', pageConfig.contactInfo.email.value);
+            updates += setElementContent('[data-content="contact.email.note"]', pageConfig.contactInfo.email.note);
+        }
+        if (pageConfig.contactInfo.phone) {
+            updates += setElementContent('[data-content="contact.phone.label"]', pageConfig.contactInfo.phone.label);
+            updates += setElementContent('[data-content="contact.phone.note"]', pageConfig.contactInfo.phone.note);
+        }
+    }
+
+    // Details array (right column)
+    if (pageConfig.details && Array.isArray(pageConfig.details)) {
+        updates += renderContactDetails(pageConfig.details);
+    }
+
+    // Hours section
+    if (pageConfig.hours) {
+        updates += setElementContent('[data-content="hours.heading"]', pageConfig.hours.heading);
+        updates += setElementContent('[data-content="hours.weekdays"]', pageConfig.hours.weekdays);
+        updates += setElementContent('[data-content="hours.weekends"]', pageConfig.hours.weekends);
+        updates += setElementContent('[data-content="hours.timezone"]', pageConfig.hours.timezone);
+    }
+
+    return updates;
+}
+
+/**
+ * Render contact details from config array
+ */
+function renderContactDetails(detailsArray) {
+    const container = document.querySelector('[data-content="contact.details"]');
+    if (!container) return 0;
+
+    container.innerHTML = detailsArray.map(detail => `
+        <div class="detail-block">
+            <h3 class="detail-title">${detail.icon} ${detail.title}</h3>
+            <div class="detail-content">
+                ${detail.content.map(text => `<p>${text}</p>`).join('')}
+            </div>
+        </div>
+    `).join('');
+
+    return 1; // Count as 1 update (entire details section)
+}
+
+/**
+ * Load About page content specifically (with hero, sections, values array)
+ */
+export function loadAboutPageContent() {
+    const pageConfig = getPageContent('about');
+    if (!pageConfig) return 0;
+
+    let updates = 0;
+
+    // Hero section
+    if (pageConfig.hero) {
+        updates += setElementContent('[data-content="hero.title"]', pageConfig.hero.title);
+        updates += setElementContent('[data-content="hero.subtitle"]', pageConfig.hero.subtitle);
+        updates += setElementContent('[data-content="hero.description"]', pageConfig.hero.description);
+        updates += setElementContent('.hero-icon', pageConfig.hero.icon);
+    }
+
+    // Vision section
+    if (pageConfig.vision) {
+        updates += setElementContent('[data-content="vision.label"]', pageConfig.vision.label);
+        updates += setElementContent('[data-content="vision.title"]', pageConfig.vision.title);
+
+        // Handle vision paragraphs
+        const visionContent = document.querySelector('[data-content="vision.content"]');
+        if (visionContent && pageConfig.vision.paragraphs) {
+            visionContent.innerHTML = pageConfig.vision.paragraphs
+                .map(p => `<p>${p}</p>`)
+                .join('');
+            updates++;
+        }
+    }
+
+    // Mission section
+    if (pageConfig.mission) {
+        updates += setElementContent('[data-content="mission.label"]', pageConfig.mission.label);
+        updates += setElementContent('[data-content="mission.title"]', pageConfig.mission.title);
+
+        // Handle mission paragraphs
+        const missionContent = document.querySelector('[data-content="mission.content"]');
+        if (missionContent && pageConfig.mission.paragraphs) {
+            missionContent.innerHTML = pageConfig.mission.paragraphs
+                .map(p => `<p>${p}</p>`)
+                .join('');
+            updates++;
+        }
+    }
+
+    // Values array (render cards)
+    if (pageConfig.values && Array.isArray(pageConfig.values)) {
+        updates += renderValuesCards(pageConfig.values);
+    }
+
+    // Quote section
+    if (pageConfig.quote) {
+        updates += setElementContent('[data-content="quote.text"]', pageConfig.quote.text);
+        updates += setElementContent('[data-content="quote.attribution"]', pageConfig.quote.attribution);
+    }
+
+    // Footer section
+    if (pageConfig.footer) {
+        updates += setElementContent('[data-content="footer.location"]', pageConfig.footer.location);
+    }
+
+    return updates;
+}
+
+/**
+ * Render values cards from config array
+ */
+function renderValuesCards(valuesArray) {
+    const container = document.querySelector('[data-content="values.cards"]');
+    if (!container) return 0;
+
+    container.innerHTML = valuesArray.map(value => `
+        <div class="value-card">
+            <span class="value-icon">${value.icon}</span>
+            <h3 class="value-title">${value.title}</h3>
+            <div class="value-text">
+                ${value.content.map(text => `<p>${text}</p>`).join('')}
+            </div>
+        </div>
+    `).join('');
+
+    return 1; // Count as 1 update (entire card section)
+}
+
+/**
  * Load specific section content (e.g., founder profile)
  */
 export function loadSectionContent(sectionName, containerSelector) {

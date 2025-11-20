@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- CRITICAL: This meta tag is essential for a proper mobile experience -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Moon Tide Reconciliation - Workshops & Indigenous Art (Mobile)</title>
+
+    <!-- Open Graph / Facebook Meta Tags (Mobile Version) -->
+    <!-- VERSION: 11.0.12 - DO NOT MANUALLY EDIT - Updated by version-update.js -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://reconciliation-storefront.web.app/mobile.html">
+    <meta property="og:title" content="Moon Tide Reconciliation - Workshops & Indigenous Art">
+    <meta property="og:description" content="Moon Tide Reconciliation: Join transformative workshops and explore Indigenous cultural wisdom on mobile.">
+    <meta property="og:image" content="https://reconciliation-storefront.web.app/images/musqueam/moon9.png">
+    <meta property="og:image:width" content="794">
+    <meta property="og:image:height" content="1123">
+    <meta property="og:site_name" content="Moon Tide Reconciliation">
+    <meta property="og:updated_time" content="2025-11-12T20:00:00.000Z">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://reconciliation-storefront.web.app/mobile.html">
+    <meta name="twitter:title" content="Moon Tide Reconciliation - Workshops & Indigenous Art">
+    <meta name="twitter:description" content="Experience reconciliation workshops and handcrafted Indigenous art on mobile. Learn, create, and connect with ancestral wisdom.">
+    <meta name="twitter:image" content="https://reconciliation-storefront.web.app/images/musqueam/moon9.png">
+
+    <!-- Additional Meta Tags -->
+    <meta name="description" content="Moon Tide Reconciliation on mobile: Join transformative workshops and explore Indigenous cultural experiences.">
+    <meta name="keywords" content="reconciliation, indigenous workshops, moon tide, musqueam, mobile app, cultural education">
+    <meta name="author" content="Moon Tide Reconciliation Collective">
+
+    <!-- Favicon: Moon Tide emoji -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🌊</text></svg>">
+
+    <!-- External Libraries (same as desktop) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css?v=11.0.12">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css?v=11.0.12">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <!-- Linked CSS for Modals & Smart Messages (reused functionality) -->
+    <link rel="stylesheet" href="./css/smart-message.css?v=11.0.12">
+    <link rel="stylesheet" href="./css/fullscreen-modals.css?v=11.0.12">
+    <link rel="stylesheet" href="./css/hamburger-menu.css?v=11.0.12">
+    <link rel="stylesheet" href="./css/delete-data.css?v=11.0.12">
+    <link rel="stylesheet" href="./css/stripe-checkout.css?v=11.0.12">
+    <link rel="stylesheet" href="./css/mobile.css?v=11.0.12">
+
+    <!-- Three.js Libraries for 3D Moon Logo Rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js?v=11.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.134/examples/js/loaders/GLTFLoader.js?v=11.0.12"></script>
+
+    <!-- Device Detector (CRITICAL: Required for rate-limiting security system) -->
+    <script src="./js/device-detector.js?v=11.0.12"></script>
+
+    <!-- Audio System Modules (Production-Ready) -->
+    <script src="./js/audioStateManager.js?v=11.0.12" type="module"></script>
+    <script src="./js/audioPermissionUI.js?v=11.0.12" type="module"></script>
+    <script src="./js/soundManager.js?v=11.0.12" type="module"></script>
+</head>
+<body>
+    <!-- Loading Spinner - Shows after intro loader while UI initializes -->
+    <div class="loading-spinner-overlay hidden" id="loadingSpinnerOverlay">
+        <div class="loading-spinner-container">
+            <div class="loading-spinner-ring"></div>
+            <div class="loading-spinner-ring"></div>
+            <div class="loading-spinner-ring"></div>
+            <div class="loading-spinner-ring"></div>
+            <span class="loading-spinner-text">LOADING...</span>
+        </div>
+    </div>
+
+    <!-- Simplified HTML structure for the mobile app -->
+    <div class="ai-portal">
+        <div class="portal-header">
+            <h1 class="portal-title">🌊 Moon Tide</h1>
+            <div class="header-buttons-group">
+                <!-- Master Speaker Button - WILL BE ADDED BY JS -->
+                <div class="header-left-container" id="header-left-container"></div>
+                <!-- Floating Cart Button - MOVED TO HEADER -->
+                <!-- <div id="floating-cart-container">
+                    <button id="cart-button" title="View Cart">
+                        🛒
+                        <span id="cart-item-count">0</span>
+                    </button>
+                </div> -->
+                <!-- Hamburger Button - WILL BE ADDED BY JS -->
+                <div class="header-right-container" id="header-right-container"></div>
+            </div>
+            <div class="ai-status">
+                <div class="status-indicator"></div>
+                <span class="status-text">ONLINE</span>
+            </div>
+        </div>
+
+        <div class="messages-container" id="messagesContainer">
+            <div class="messages" id="messages">
+                <!-- Chat messages will appear here -->
+            </div>
+            <div class="typing-indicator" id="typingIndicator">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+            </div>
+            <div id="moduleContainer">
+                <!-- Jarvis UI modules will appear here -->
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper" id="inputWrapper">
+                <input type="text" id="userInput" placeholder="Send a message..." autocomplete="off" maxlength="4000">
+            </div>
+            <button id="sendButton"><i class="fas fa-arrow-up"></i></button>
+        </div>
+    </div>
+
+    <audio id="ttsPlayer" style="display: none;"></audio>
+
+    <!-- Advanced Version Manager - Cache Control & Facebook Messenger Optimization -->
+    <script src="./js/version-manager.js?v=11.0.12"></script>
+
+    <!-- Check for auto-booking BEFORE modules load to prevent welcome message -->
+    <script>
+        // Check for auto-book parameter and set flag immediately
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('book')) {
+            window.skipWelcomeMessage = true;
+            console.log('[Mobile] Skip welcome message flag set for auto-booking');
+        }
+    </script>
+
+    <!-- All JavaScript functionality is reused from the desktop version -->
+    <script src="./js/portal-store.js?v=11.0.12" type="module"></script>
+    <script src="./js/tts-manager.js?v=11.0.12" type="module"></script>
+    <script src="./js/jarvis-ui-manager.js?v=11.0.12" type="module"></script>
+    <script src="./js/portal-controller.js?v=11.0.12" type="module"></script>
+    <script src="./js/hamburger-menu.js?v=11.0.12" type="module"></script>
+
+    <!-- Auto-booking from workshop detail pages -->
+    <script type="module">
+        import SmartMessageRenderer from './js/smart-message-renderer.js?v=11.0.12';
+
+        // Check for auto-book parameter in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookWorkshopId = urlParams.get('book');
+
+        if (bookWorkshopId) {
+            console.log('[Mobile Auto-Book] Detected workshop booking request:', bookWorkshopId);
+
+            // Wait for SmartMessageRenderer to be ready, then trigger booking
+            const startBookingFlow = () => {
+                if (window.smartMessageRenderer && typeof window.smartMessageRenderer.selectWorkshop === 'function') {
+                    console.log('[Mobile Auto-Book] Starting booking flow for:', bookWorkshopId);
+
+                    // Small delay to ensure UI is ready
+                    setTimeout(() => {
+                        // Clear any existing messages (including the welcome message)
+                        const messagesDiv = document.getElementById('messages');
+                        if (messagesDiv) {
+                            messagesDiv.innerHTML = '';
+                            console.log('[Mobile Auto-Book] Cleared welcome message');
+                        }
+
+                        // Start the booking flow
+                        window.smartMessageRenderer.selectWorkshop(bookWorkshopId);
+
+                        // Clean up URL to remove the book parameter
+                        const cleanUrl = window.location.pathname;
+                        window.history.replaceState({}, document.title, cleanUrl);
+                    }, 500);
+                } else {
+                    console.log('[Mobile Auto-Book] SmartMessageRenderer not ready, retrying...');
+                    setTimeout(startBookingFlow, 100);
+                }
+            };
+
+            // Start trying to initiate booking flow
+            startBookingFlow();
+        }
+    </script>
+
+    <!-- Loading Spinner Management - Shows after intro loader, hides when UI ready -->
+    <script type="module">
+        import introLoader from './js/intro-loader.js?v=11.0.12';
+
+        const loadingSpinner = {
+            element: null,
+
+            init() {
+                this.element = document.getElementById('loadingSpinnerOverlay');
+
+                // Show spinner after intro loader completes
+                this.showAfterIntro();
+
+                // Hide spinner when UI is fully rendered
+                this.hideWhenReady();
+            },
+
+            async showAfterIntro() {
+                try {
+                    // Wait for intro loader to complete
+                    await introLoader.hide();
+                    console.log('[LoadingSpinner] Intro loader completed, showing UI spinner...');
+
+                    // Show the loading spinner
+                    if (this.element) {
+                        this.element.classList.remove('hidden');
+                    }
+                } catch (err) {
+                    console.error('[LoadingSpinner] Error showing spinner:', err);
+                }
+            },
+
+            hideWhenReady() {
+                // Wait for UI to be rendered (portal controller to finish initialization)
+                const checkUIReady = () => {
+                    const messagesDiv = document.getElementById('messages');
+                    const portalController = window.portalController;
+
+                    // Check if portal controller is initialized and messages div exists
+                    if (portalController && messagesDiv) {
+                        // Give it a small delay to ensure rendering is complete
+                        setTimeout(() => {
+                            console.log('[LoadingSpinner] UI fully rendered, hiding spinner...');
+                            if (this.element) {
+                                this.element.classList.add('hidden');
+
+                                // Remove spinner from DOM after transition
+                                setTimeout(() => {
+                                    if (this.element && this.element.parentNode) {
+                                        this.element.remove();
+                                        console.log('[LoadingSpinner] Spinner removed from DOM');
+                                    }
+                                }, 500); // Match CSS transition duration
+                            }
+                        }, 500); // Small delay for smooth transition
+                    } else {
+                        // Retry after 100ms
+                        setTimeout(checkUIReady, 100);
+                    }
+                };
+
+                // Start checking for UI readiness
+                checkUIReady();
+            }
+        };
+
+        // Initialize loading spinner management on DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => loadingSpinner.init());
+        } else {
+            loadingSpinner.init();
+        }
+    </script>
+
+</body>
+</html>

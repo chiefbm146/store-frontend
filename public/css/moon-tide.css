@@ -1,0 +1,283 @@
+/**
+ * Moon Tide About Us Page Styles
+ * Uses CSS variables from theme-injector.js
+ * All colors/fonts are configurable via theme.js
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--color-background, #FEFDFB);
+    font-family: var(--font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif);
+    color: var(--color-text, #1a1a1a);
+    overflow-x: hidden;
+}
+
+.close-button {
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    width: 60px;
+    height: 60px;
+    background: rgba(30, 144, 255, 0.95);
+    border: 2px solid var(--color-primary-dark, #0047AB);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10000;
+    transition: all 0.3s ease;
+    font-size: 26px;
+    color: #FFFFFF;
+    box-shadow: 0 4px 20px rgba(30, 144, 255, 0.3);
+}
+
+.close-button:hover {
+    background: var(--color-primary-dark, #0047AB);
+    transform: scale(1.1) rotate(90deg);
+}
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-background, #F5F1E8) 0%, rgba(232, 228, 220, 0.7) 100%);
+    padding: 80px 60px;
+    position: relative;
+}
+
+.hero-icon {
+    font-size: 120px;
+    margin-bottom: 50px;
+    display: block;
+}
+
+.hero-title {
+    font-size: 5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--color-primary, #1E90FF), var(--color-primary-dark, #0047AB));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 30px;
+    text-align: center;
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-size: 1.8rem;
+    color: var(--color-text-secondary, #555);
+    text-align: center;
+    max-width: 900px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.hero-tagline {
+    font-size: 1.3rem;
+    color: var(--color-primary, #1E90FF);
+    text-align: center;
+    font-style: italic;
+    max-width: 700px;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    font-size: 2.5rem;
+    color: var(--color-primary, #1E90FF);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+/* Vision Section */
+.vision-section {
+    padding: 120px 60px;
+    background: #FFFFFF;
+}
+
+.section-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.section-label {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-primary, #1E90FF);
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--color-text, #1a1a1a);
+    margin-bottom: 40px;
+    line-height: 1.1;
+}
+
+.section-content {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    color: var(--color-text-secondary, #555);
+}
+
+.section-content p {
+    margin-bottom: 30px;
+}
+
+.section-content strong {
+    color: var(--color-primary, #1E90FF);
+    font-weight: 700;
+}
+
+/* Mission Section */
+.mission-section {
+    padding: 120px 60px;
+    background: linear-gradient(135deg, rgba(30, 144, 255, 0.08), rgba(42, 157, 143, 0.08));
+}
+
+/* Values Grid */
+.values-section {
+    padding: 120px 60px;
+    background: var(--color-background, #FEFDFB);
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px;
+    max-width: 1400px;
+    margin: 60px auto 0;
+}
+
+.value-card {
+    background: #FFFFFF;
+    padding: 50px;
+    border-radius: 0;
+    border-left: 6px solid var(--color-primary, #1E90FF);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.value-card:hover {
+    transform: translateX(10px);
+    box-shadow: 0 8px 30px rgba(30, 144, 255, 0.15);
+}
+
+.value-card:nth-child(1) { border-left-color: #E63E54; }
+.value-card:nth-child(2) { border-left-color: #F4A261; }
+.value-card:nth-child(3) { border-left-color: #2A9D8F; }
+.value-card:nth-child(4) { border-left-color: #9B59B6; }
+
+.value-icon {
+    font-size: 3.5rem;
+    margin-bottom: 25px;
+    display: block;
+}
+
+.value-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--color-text, #1a1a1a);
+    margin-bottom: 20px;
+}
+
+.value-text {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary, #555);
+}
+
+.value-text p {
+    margin-bottom: 15px;
+}
+
+.value-text p:last-child {
+    margin-bottom: 0;
+}
+
+.value-text strong {
+    color: var(--color-primary, #1E90FF);
+    font-weight: 700;
+}
+
+/* Quote Section */
+.quote-section {
+    padding: 100px 60px;
+    background: linear-gradient(135deg, var(--color-primary, #1E90FF) 0%, var(--color-primary-dark, #0047AB) 100%);
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.quote-content {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.quote-text {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+.quote-attribution {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+/* Footer */
+.footer {
+    padding: 60px;
+    background: #1a1a1a;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.footer-location {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .quote-text {
+        font-size: 1.5rem;
+    }
+
+    .hero, .vision-section, .mission-section, .values-section {
+        padding: 60px 30px;
+    }
+}

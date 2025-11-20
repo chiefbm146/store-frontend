@@ -4,308 +4,86 @@
     <meta charset="UTF-8">
     <script src="./js/clean-url.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Moon Tide Reconciliation</title>
+    <title data-content="title">Contact Your Store</title>
 
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Contact Moon Tide Reconciliation">
-    <meta property="og:description" content="Get in touch with Moon Tide Reconciliation for transformative cultural workshops.">
+    <meta property="og:title" content="Contact Your Store">
+    <meta property="og:description" content="Get in touch with our team">
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            width: 100%;
-            min-height: 100vh;
-            background: #F5F1E8;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            color: #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px;
-        }
-
-        .close-button {
-            position: fixed;
-            top: 40px;
-            right: 40px;
-            width: 60px;
-            height: 60px;
-            background: #1E90FF;
-            border: 2px solid #0047AB;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10000;
-            transition: all 0.3s ease;
-            font-size: 26px;
-            color: #FFFFFF;
-            box-shadow: 0 4px 20px rgba(30, 144, 255, 0.3);
-        }
-
-        .close-button:hover {
-            background: #0047AB;
-            transform: scale(1.1) rotate(90deg);
-        }
-
-        .contact-container {
-            width: 100%;
-            max-width: 1400px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: start;
-        }
-
-        /* Left Column */
-        .contact-header {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .contact-title {
-            font-size: 5rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #1E90FF, #0047AB);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 30px;
-            line-height: 1.1;
-        }
-
-        .contact-subtitle {
-            font-size: 1.6rem;
-            color: #555;
-            margin-bottom: 60px;
-            line-height: 1.6;
-        }
-
-        .info-section {
-            margin-bottom: 50px;
-        }
-
-        .info-label {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #999;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .info-value {
-            font-size: 1.8rem;
-            color: #1a1a1a;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .info-note {
-            font-size: 1.2rem;
-            color: #666;
-            font-style: italic;
-        }
-
-        .copy-button {
-            background: #1E90FF;
-            color: white;
-            border: none;
-            padding: 16px 32px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            border-radius: 0;
-        }
-
-        .copy-button:hover {
-            background: #0047AB;
-            transform: translateX(5px);
-        }
-
-        .copy-button.copied {
-            background: #28a745;
-        }
-
-        /* Right Column */
-        .contact-details {
-            background: #FFFFFF;
-            padding: 60px;
-            border-left: 6px solid #1E90FF;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        .detail-block {
-            padding-bottom: 40px;
-            margin-bottom: 40px;
-            border-bottom: 1px solid #E0E0E0;
-        }
-
-        .detail-block:last-child {
-            padding-bottom: 0;
-            margin-bottom: 0;
-            border-bottom: none;
-        }
-
-        .detail-title {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #1a1a1a;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .detail-content {
-            font-size: 1.2rem;
-            color: #555;
-            line-height: 1.7;
-        }
-
-        .detail-content p {
-            margin-bottom: 10px;
-        }
-
-        .detail-content p:last-child {
-            margin-bottom: 0;
-        }
-
-        .detail-highlight {
-            font-size: 1.3rem;
-            color: #1E90FF;
-            font-weight: 600;
-        }
-
-        @media (max-width: 1200px) {
-            .contact-container {
-                grid-template-columns: 1fr;
-                gap: 60px;
-            }
-
-            .contact-title {
-                font-size: 4rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 30px;
-            }
-
-            .contact-title {
-                font-size: 3rem;
-            }
-
-            .contact-details {
-                padding: 40px;
-            }
-        }
-    </style>
+    <!-- CSS: Separated and using CSS variables -->
+    <link rel="stylesheet" href="./css/contact.css">
 </head>
 <body>
     <div class="close-button" onclick="navigateBack()">✕</div>
 
     <div class="contact-container">
-        <!-- Left Column -->
+        <!-- Left Column - Contact Header -->
         <div class="contact-header">
-            <h1 class="contact-title">Get in Touch</h1>
-            <p class="contact-subtitle">Connect with Moon Tide Reconciliation for transformative cultural workshops and Indigenous-led reconciliation experiences.</p>
+            <h1 class="contact-title" data-content="hero.title">Get in Touch</h1>
+            <p class="contact-subtitle" data-content="hero.subtitle">Have questions about your store or need support? We're here to help.</p>
 
+            <!-- Email Section -->
             <div class="info-section">
-                <div class="info-label">Email</div>
-                <div class="info-value">shona@moontidereconciliation.com</div>
-                <button class="copy-button" onclick="copyToClipboard('shona@moontidereconciliation.com', this)">
+                <div class="info-label" data-content="contact.email.label">Email</div>
+                <div class="info-value" data-content="contact.email.value">support@yourstore.com</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">
                     📋 Copy Email
                 </button>
             </div>
 
+            <!-- Phone Section -->
             <div class="info-section">
-                <div class="info-label">Phone</div>
-                <div class="info-note">New number coming soon!</div>
+                <div class="info-label" data-content="contact.phone.label">Phone</div>
+                <div class="info-note" data-content="contact.phone.note">Call us during business hours</div>
             </div>
         </div>
 
-        <!-- Right Column -->
+        <!-- Right Column - Contact Details -->
         <div class="contact-details">
-            <div class="detail-block">
-                <h3 class="detail-title">📍 Locations</h3>
-                <div class="detail-content">
-                    <p class="detail-highlight">Douglas Lake, BC</p>
-                    <p class="detail-highlight">Vancouver, BC</p>
-                </div>
+            <!-- Dynamic details blocks from config array -->
+            <div data-content="contact.details">
+                <!-- Details rendered dynamically from config -->
             </div>
 
+            <!-- Hours Section -->
             <div class="detail-block">
-                <h3 class="detail-title">👤 Lead Contact</h3>
+                <h3 class="detail-title"><span data-content="hours.heading">Business Hours</span></h3>
                 <div class="detail-content">
-                    <p><strong>Shona Sparrow</strong></p>
-                    <p>Indigenous Elder & Cultural Facilitator</p>
-                </div>
-            </div>
-
-            <div class="detail-block">
-                <h3 class="detail-title">💬 What We Offer</h3>
-                <div class="detail-content">
-                    <p>Kairos Blanket Exercise</p>
-                    <p>Cedar Weaving & Traditional Arts</p>
-                    <p>Medicine Pouch Creation</p>
-                    <p>MMIWG2S+ Awareness Sessions</p>
-                    <p>Orange Shirt Day Programs</p>
-                    <p>Custom Cultural Workshops</p>
-                </div>
-            </div>
-
-            <div class="detail-block">
-                <h3 class="detail-title">🏫 Who We Serve</h3>
-                <div class="detail-content">
-                    <p>Schools & Educational Institutions</p>
-                    <p>Corporations & Organizations</p>
-                    <p>Government Bodies</p>
-                    <p>Nonprofit Organizations</p>
-                    <p>Community Groups</p>
+                    <p><strong data-content="hours.weekdays">Monday - Friday: 8:00 AM - 6:00 PM PT</strong></p>
+                    <p><strong data-content="hours.weekends">Saturday - Sunday: Support Available</strong></p>
+                    <p><em data-content="hours.timezone">Pacific Time (PT)</em></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Config System: Theme & Content Loaders -->
+    <!-- Config System: Theme Injection + Content Loading -->
     <script type="module">
         import { injectTheme } from './js/theme-injector.js';
-        import { loadPageContent } from './js/content-loader.js';
+        import { loadContactPageContent } from './js/content-loader.js';
 
-        // Initialize theme immediately
+        // Step 1: Inject theme CSS variables
         injectTheme();
         console.log('[Contact Page Desk] Theme injected');
 
-        // Load page content when DOM is ready
+        // Step 2: Load page content from config
         document.addEventListener('DOMContentLoaded', () => {
-            loadPageContent('contact', {
-                updateMetaTags: true,
-                updateTitle: true,
-                logChanges: true
-            });
+            const updates = loadContactPageContent();
+            console.log(`[Contact Page Desk] ${updates} elements updated from config`);
         });
     </script>
 
     <script>
         function navigateBack() {
-            window.location.href = '/menu';
+            window.location.href = '/menu-desk.html';
         }
 
-        async function copyToClipboard(text, button) {
+        async function copyToClipboard(button) {
             try {
-                await navigator.clipboard.writeText(text);
+                const emailElement = document.querySelector('[data-content="contact.email.value"]');
+                const email = emailElement.textContent;
+
+                await navigator.clipboard.writeText(email);
                 const originalText = button.innerHTML;
                 button.innerHTML = '✓ Copied!';
                 button.classList.add('copied');

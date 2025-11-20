@@ -86,16 +86,15 @@
                 console.log('[index.html] Waiting for intro loader to complete...');
                 await introLoader.hide();
 
-                // STEP 5: Now that the loader is finished, redirect to clean URL /chat
-                // Device detection will happen in Cloud Function, not here
-                console.log('[index.html] Intro complete, redirecting to /chat...');
+                // STEP 5: Redirect to desktop.html
+                console.log('[index.html] Intro complete, redirecting to desktop.html...');
                 const search = window.location.search;
                 const hash = window.location.hash;
-                const finalUrl = `./chat${search}${hash}`;
+                const finalUrl = `./desktop.html${search}${hash}`;
                 window.location.replace(finalUrl);
             } catch (error) {
-                console.error('Device detection or intro loader failed:', error);
-                window.location.replace('./chat' + window.location.search + window.location.hash);
+                console.error('Intro loader failed:', error);
+                window.location.replace('./desktop.html' + window.location.search + window.location.hash);
             }
         }
     </script>

@@ -272,101 +272,29 @@
     <div class="back-button" onclick="navigateBack()" title="Back to Chat">✕</div>
 
     <div class="menu-container">
-        <h1 class="menu-title">Moon Tide Menu</h1>
+        <h1 class="menu-title">Store Menu</h1>
 
         <div class="menu-grid">
-            <!-- 1. Sign In / Account -->
-            <div class="menu-card" onclick="navigateTo('/Account')">
+            <!-- 1. Store -->
+            <div class="menu-card" onclick="navigateTo('/workshops-desk.html')">
                 <div class="card-content">
-                    <img src="./libs/google/google.svg" alt="Sign In" class="card-icon icon-image">
-                    <div class="card-title">Account</div>
-                    <div class="card-description">Sign in with your Google account</div>
+                    <span class="card-icon">🛍️</span>
+                    <div class="card-title">Store</div>
+                    <div class="card-description">Browse all available services</div>
                 </div>
             </div>
 
-            <!-- 2. About Shona Sparrow -->
-            <div class="menu-card" onclick="navigateTo('/shona')">
+            <!-- 2. About Us -->
+            <div class="menu-card" onclick="navigateTo('/moon-tide-desk.html')">
                 <div class="card-content">
-                    <span class="card-icon">👤</span>
-                    <div class="card-title">About Shona Sparrow</div>
-                    <div class="card-description">Learn about our founder and mission</div>
+                    <span class="card-icon">ℹ️</span>
+                    <div class="card-title">About Us</div>
+                    <div class="card-description">Learn about our mission and vision</div>
                 </div>
             </div>
 
-            <!-- 3. Moon Tide Reconciliation -->
-            <div class="menu-card" onclick="navigateTo('/moon-tide')">
-                <div class="card-content">
-                    <span class="card-icon">🌊</span>
-                    <div class="card-title">Moon Tide Reconciliation</div>
-                    <div class="card-description">Our workshops and vision</div>
-                </div>
-            </div>
-
-            <!-- 4. Workshops -->
-            <div class="menu-card" onclick="navigateTo('/workshops')">
-                <div class="card-content">
-                    <span class="card-icon">🎯</span>
-                    <div class="card-title">Workshops</div>
-                    <div class="card-description">Browse all available workshops</div>
-                </div>
-            </div>
-
-            <!-- 5. Reconciliation Story -->
-            <div class="menu-card" onclick="navigateTo('/infinite-story')">
-                <div class="card-content">
-                    <span class="card-icon">📖</span>
-                    <div class="card-title">Reconciliation Story</div>
-                    <div class="card-description">Begin an interactive narrative journey</div>
-                </div>
-            </div>
-
-            <!-- 6. Custom Creations -->
-            <div class="menu-card" onclick="navigateTo('/custom-creations')">
-                <div class="card-content">
-                    <span class="card-icon">🎨</span>
-                    <div class="card-title">Custom Creations</div>
-                    <div class="card-description">Explore our custom Salish art and designs</div>
-                </div>
-            </div>
-
-            <!-- 7. Reconciliation -->
-            <div class="menu-card" onclick="navigateTo('/reconciliation')">
-                <div class="card-content">
-                    <span class="card-icon">🕊️</span>
-                    <div class="card-title">Reconciliation</div>
-                    <div class="card-description">Explore resources, stories, and pathways toward truth and healing</div>
-                </div>
-            </div>
-
-            <!-- 8. Podcasts -->
-            <div class="menu-card" onclick="navigateTo('/podcasts')">
-                <div class="card-content">
-                    <span class="card-icon">🎙️</span>
-                    <div class="card-title">Podcasts</div>
-                    <div class="card-description">Listen to voices sharing wisdom, stories, and cultural teachings</div>
-                </div>
-            </div>
-
-            <!-- 9. Downloads -->
-            <div class="menu-card" onclick="navigateTo('/downloads')">
-                <div class="card-content">
-                    <span class="card-icon">📥</span>
-                    <div class="card-title">Downloads</div>
-                    <div class="card-description">Access educational materials, guides, and resources</div>
-                </div>
-            </div>
-
-            <!-- 10. Book a Workshop -->
-            <div class="menu-card" onclick="navigateTo('/workshop-list')">
-                <div class="card-content">
-                    <span class="card-icon">📅</span>
-                    <div class="card-title">Book a Workshop</div>
-                    <div class="card-description">Schedule a transformative workshop</div>
-                </div>
-            </div>
-
-            <!-- 11. Contact -->
-            <div class="menu-card" onclick="navigateTo('/contact')">
+            <!-- 3. Contact -->
+            <div class="menu-card" onclick="navigateTo('/contact-desk.html')">
                 <div class="card-content">
                     <span class="card-icon">📬</span>
                     <div class="card-title">Contact</div>
@@ -374,8 +302,8 @@
                 </div>
             </div>
 
-            <!-- 12. Contact Developer -->
-            <div class="menu-card" onclick="navigateTo('/developer')">
+            <!-- 4. Contact Developer -->
+            <div class="menu-card" onclick="navigateTo('/developer-desk.html')">
                 <div class="card-content">
                     <span class="card-icon">👨‍💻</span>
                     <div class="card-title">Contact Developer</div>
@@ -383,12 +311,12 @@
                 </div>
             </div>
 
-            <!-- 13. Delete Data -->
-            <div class="menu-card" onclick="navigateTo('/delete-data')">
+            <!-- 5. Cart -->
+            <div class="menu-card" onclick="navigateTo('/cart-desk.html')">
                 <div class="card-content">
-                    <span class="card-icon">🗑️</span>
-                    <div class="card-title">Delete Data</div>
-                    <div class="card-description">Request your data to be deleted</div>
+                    <span class="card-icon">🛒</span>
+                    <div class="card-title">Cart</div>
+                    <div class="card-description">View your shopping cart</div>
                 </div>
             </div>
         </div>
@@ -409,7 +337,7 @@
         }
 
         function navigateBack() {
-            window.location.href = '/chat';
+            window.location.href = '/desktop.html';
         }
 
         document.addEventListener('keydown', (e) => {

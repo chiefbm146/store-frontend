@@ -1,7 +1,7 @@
 // public/js/jarvis-ui-manager.js
 // Manages Jarvis UI module lifecycle and rendering
 
-import servicesConfig from './config/services-config.js';
+// import servicesConfig from './config/services-config.js';
 import moduleManager from './module-manager.js';
 
 class JarvisUIManager {

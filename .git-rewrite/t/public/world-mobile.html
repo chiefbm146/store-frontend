@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Moon Tide World - Mobile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Three.js for water animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --moon-blue: #0A84FF;
+            --deep-blue: #005EB8;
+            --musqueam-red: #C41E3A;
+            --musqueam-black: #1a1a1a;
+            --musqueam-white: #F5F1E8;
+            --ocean-teal: #2A9D8F;
+            --deep-ocean: #264653;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: transparent;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* Water background container */
+        #water-background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            padding: 20px 15px;
+            padding-bottom: 40px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero h1 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--moon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .hero .tagline {
+            font-size: 1.1em;
+            color: var(--musqueam-white);
+            margin-bottom: 20px;
+            font-weight: 300;
+            line-height: 1.4;
+        }
+
+        .hero .quote {
+            font-size: 0.95em;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 20px auto;
+            padding: 15px;
+            border-left: 3px solid var(--moon-blue);
+            background: rgba(30, 144, 255, 0.1);
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+
+        /* Section Headers */
+        .section {
+            margin-bottom: 30px;
+        }
+
+        /* Workshops and Custom Creations Section - Pure Glassmorphism */
+        .workshops-section, .custom-creations-section {
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.15) 0%,
+                rgba(255, 255, 255, 0.08) 100%);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 30px 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                0 2px 8px rgba(255, 255, 255, 0.1) inset;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .section-header {
+            font-size: 1.6em;
+            margin-bottom: 25px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        /* Headers on blue background */
+        .workshops-section .section-header,
+        .custom-creations-section .section-header {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Default headers on dark background */
+        .section .section-header {
+            color: white;
+        }
+
+        .section-header i {
+            color: var(--moon-blue);
+            font-size: 0.9em;
+        }
+
+        .workshops-section .section-header i,
+        .custom-creations-section .section-header i {
+            color: rgba(255, 255, 255, 0.95);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Feature Cards (Main categories) */
+        .feature-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.4) 100%);
+            border-radius: 16px;
+            padding: 25px 20px;
+            border: 2px solid rgba(30, 144, 255, 0.4);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(30, 144, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .feature-card:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .feature-card:active {
+            transform: scale(0.98);
+            box-shadow: 0 8px 30px rgba(30, 144, 255, 0.6);
+        }
+
+        .feature-card .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: var(--moon-blue);
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95em;
+            line-height: 1.4;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Feature cards in Custom Creations section - Liquid Glass */
+        .custom-creations-section .feature-card {
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.25) 0%,
+                rgba(255, 255, 255, 0.15) 100%);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.15),
+                0 2px 8px rgba(255, 255, 255, 0.2) inset,
+                0 -1px 1px rgba(255, 255, 255, 0.4) inset;
+        }
+
+        .custom-creations-section .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 50%,
+                rgba(10, 132, 255, 0.05) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .custom-creations-section .feature-card:active {
+            transform: scale(0.98) translateY(2px);
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.2),
+                0 4px 12px rgba(255, 255, 255, 0.3) inset,
+                0 -2px 2px rgba(255, 255, 255, 0.5) inset;
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .custom-creations-section .feature-card h3 {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-creations-section .feature-card p {
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-creations-section .feature-card .icon {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        /* Workshop Cards - Image-Based Mobile Design */
+        .card-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .workshop-card {
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.25) 0%,
+                rgba(255, 255, 255, 0.15) 100%);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 1.25rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.15),
+                0 2px 8px rgba(255, 255, 255, 0.2) inset,
+                0 -1px 1px rgba(255, 255, 255, 0.4) inset;
+            display: flex;
+            flex-direction: column;
+            min-height: 340px;
+        }
+
+        .workshop-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 50%,
+                rgba(10, 132, 255, 0.05) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .workshop-card:active {
+            transform: scale(0.98) translateY(2px);
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.2),
+                0 4px 12px rgba(255, 255, 255, 0.3) inset,
+                0 -2px 2px rgba(255, 255, 255, 0.5) inset;
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .workshop-card-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: #F5F7FA;
+        }
+
+        .workshop-card-content {
+            padding: 1.5rem 1.25rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(to bottom,
+                rgba(255, 255, 255, 0.5) 0%,
+                rgba(255, 255, 255, 0.4) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .workshop-card .icon {
+            font-size: 1.75rem;
+            color: var(--moon-blue);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .workshop-card h3 {
+            font-size: 1.2rem;
+            line-height: 1.3;
+            color: #1A1A1A;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-top: 0.5rem;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .workshop-card .badge {
+            display: inline-block;
+            padding: 0.3rem 0.75rem;
+            background: linear-gradient(135deg,
+                rgba(10, 132, 255, 0.9) 0%,
+                rgba(0, 94, 184, 0.9) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: auto;
+            align-self: flex-start;
+            transition: all 0.3s ease;
+            box-shadow:
+                0 2px 8px rgba(10, 132, 255, 0.3),
+                0 1px 2px rgba(255, 255, 255, 0.2) inset;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .workshop-card:active .badge {
+            background: linear-gradient(135deg,
+                rgba(0, 94, 184, 1) 0%,
+                rgba(10, 132, 255, 1) 100%);
+            box-shadow:
+                0 4px 12px rgba(10, 132, 255, 0.5),
+                0 2px 4px rgba(255, 255, 255, 0.3) inset;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Scroll animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .workshop-card, .feature-card {
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .workshop-card:nth-child(1) { animation-delay: 0.1s; }
+        .workshop-card:nth-child(2) { animation-delay: 0.15s; }
+        .workshop-card:nth-child(3) { animation-delay: 0.2s; }
+        .workshop-card:nth-child(4) { animation-delay: 0.25s; }
+        .workshop-card:nth-child(5) { animation-delay: 0.3s; }
+        .workshop-card:nth-child(6) { animation-delay: 0.35s; }
+        .workshop-card:nth-child(7) { animation-delay: 0.4s; }
+        .workshop-card:nth-child(8) { animation-delay: 0.45s; }
+        .workshop-card:nth-child(9) { animation-delay: 0.5s; }
+        .workshop-card:nth-child(10) { animation-delay: 0.55s; }
+        .workshop-card:nth-child(11) { animation-delay: 0.6s; }
+        .workshop-card:nth-child(12) { animation-delay: 0.65s; }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Back to Chat Button - Top Left */
+        .back-to-chat {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            color: white;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-to-chat:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+            border-color: var(--moon-blue);
+        }
+    </style>
+</head>
+<body>
+    <!-- Water Background Container -->
+    <div id="water-background-container"></div>
+
+    <!-- Back to Chat Button -->
+    <a href="https://moontidereconciliation.com/mobile.html" class="back-to-chat">
+        <i class="fas fa-comments"></i>
+        Back to Chat
+    </a>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>🌊 Moon Tide World 🌊</h1>
+            <p class="tagline">Journey Through Reconciliation, Culture, and Connection</p>
+            <div class="quote">
+                "We are all treaty people. Through understanding our shared history and honoring Indigenous wisdom,
+                we weave the threads of reconciliation into the fabric of our future."
+            </div>
+        </div>
+
+        <!-- Main Feature Sections -->
+        <div class="feature-grid">
+            <div class="feature-card" onclick="window.location.href='./reconciliation-mobile.html'">
+                <div class="icon"><i class="fas fa-hands-helping"></i></div>
+                <h3>Reconciliation</h3>
+                <p>Explore resources, stories, and pathways toward truth and healing</p>
+            </div>
+
+            <div class="feature-card" onclick="window.location.href='./podcasts-mobile.html'">
+                <div class="icon"><i class="fas fa-podcast"></i></div>
+                <h3>Podcasts</h3>
+                <p>Listen to voices sharing wisdom, stories, and cultural teachings</p>
+            </div>
+
+            <div class="feature-card" onclick="window.location.href='./downloads-mobile.html'">
+                <div class="icon"><i class="fas fa-download"></i></div>
+                <h3>Downloads</h3>
+                <p>Access educational materials, guides, and resources</p>
+            </div>
+        </div>
+
+        <!-- Workshops Section -->
+        <div class="workshops-section">
+            <h2 class="section-header">
+                <i class="fas fa-leaf"></i>
+                Our Transformative Workshops
+            </h2>
+
+            <div class="card-grid">
+                <!-- Kairos Blanket Exercise -->
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=kairos-blanket-inperson'">
+                    <img src="/images/services/kairos in person.jpg" alt="Kairos Blanket Exercise In-Person" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-users"></i></div>
+                        <h3>Kairos Blanket Exercise</h3>
+                        <span class="badge">In-Person</span>
+                    </div>
+                </div>
+
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=kairos-blanket-virtual'">
+                    <img src="/images/services/kairos virtual.png" alt="Kairos Blanket Exercise Virtual" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-video"></i></div>
+                        <h3>Kairos Blanket Exercise</h3>
+                        <span class="badge">Virtual</span>
+                    </div>
+                </div>
+
+                <!-- Cedar Crafts -->
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=cedar-bracelet'">
+                    <img src="/images/services/cedar bracelets.jpg" alt="Cedar Woven Bracelet" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-ring"></i></div>
+                        <h3>Cedar Woven Bracelet</h3>
+                        <span class="badge">Hands-On</span>
+                    </div>
+                </div>
+
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=cedar-rope-bracelet'">
+                    <img src="/images/services/cedar rope bracelet.jpg" alt="Cedar Rope Bracelet with Beads" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-gem"></i></div>
+                        <h3>Cedar Rope Bracelet with Beads</h3>
+                        <span class="badge">Hands-On</span>
+                    </div>
+                </div>
+
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=cedar-heart'">
+                    <img src="/images/services/cedar hearts.jpg" alt="Weaving a Cedar Heart" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-heart"></i></div>
+                        <h3>Weaving a Cedar Heart</h3>
+                        <span class="badge">Hands-On</span>
+                    </div>
+                </div>
+
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=cedar-coasters'">
+                    <img src="/images/services/cedar coasters.png" alt="Cedar Woven Coasters" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-mug-hot"></i></div>
+                        <h3>Cedar Woven Coasters</h3>
+                        <span class="badge">Hands-On</span>
+                    </div>
+                </div>
+
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=cedar-basket'">
+                    <img src="/images/services/Cedar Baskets.jpg" alt="Cedar Basket Weaving" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-shopping-basket"></i></div>
+                        <h3>Cedar Basket Weaving</h3>
+                        <span class="badge">Hands-On</span>
+                    </div>
+                </div>
+
+                <!-- Healing & Awareness -->
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=medicine-pouch'">
+                    <img src="/images/services/medicines pouches.jpg" alt="Healing Through Medicine Pouch Making" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-hand-holding-heart"></i></div>
+                        <h3>Healing Through Medicine Pouch Making</h3>
+                        <span class="badge">Healing</span>
+                    </div>
+                </div>
+
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=orange-shirt-day-inperson'">
+                    <img src="/images/services/orange shirt.png" alt="Orange Shirt Day Awareness Beading In-Person" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-tshirt"></i></div>
+                        <h3>Orange Shirt Day Awareness Beading</h3>
+                        <span class="badge">In-Person</span>
+                    </div>
+                </div>
+
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=orange-shirt-day-virtual'">
+                    <img src="/images/services/orange shirt.png" alt="Orange Shirt Day Awareness Beading Virtual" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-tshirt"></i></div>
+                        <h3>Orange Shirt Day Awareness Beading</h3>
+                        <span class="badge">Virtual</span>
+                    </div>
+                </div>
+
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=mmiwg2s-inperson'">
+                    <img src="/images/services/mmiwg2s.png" alt="MMIWG2S Awareness & Remembrance Beading In-Person" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-ribbon"></i></div>
+                        <h3>MMIWG2S Awareness & Remembrance Beading</h3>
+                        <span class="badge">In-Person</span>
+                    </div>
+                </div>
+
+                <div class="workshop-card" onclick="window.location.href='./workshop-detail-mobile.html?id=mmiwg2s-virtual'">
+                    <img src="/images/services/mmiwg2s.png" alt="MMIWG2S Awareness & Remembrance Beading Virtual" class="workshop-card-image">
+                    <div class="workshop-card-content">
+                        <div class="icon"><i class="fas fa-ribbon"></i></div>
+                        <h3>MMIWG2S Awareness & Remembrance Beading</h3>
+                        <span class="badge">Virtual</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Services Section -->
+        <div class="custom-creations-section">
+            <h2 class="section-header">
+                <i class="fas fa-palette"></i>
+                Custom Creations
+            </h2>
+
+            <div class="feature-grid">
+                <div class="feature-card" onclick="window.location.href='./custom-creations-mobile.html'">
+                    <div class="icon"><i class="fas fa-paint-brush"></i></div>
+                    <h3>Custom Logos, Designs & Carvings</h3>
+                    <p>Unique Indigenous-inspired artwork tailored to your vision</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Water animation script -->
+    <script type="module">
+        import WaterBackground from './js/water.js';
+
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const waterContainer = document.getElementById('water-background-container');
+            if (waterContainer && typeof THREE !== 'undefined') {
+                console.log('[World-Mobile] Initializing water background...');
+                WaterBackground.init(waterContainer);
+            } else {
+                console.error('[World-Mobile] Water container or THREE.js not found');
+            }
+        });
+    </script>
+
+    <!-- Browser Back Button Handler -->
+    <script>
+        // Add state to history to capture back button
+        if (window.history && window.history.pushState) {
+            // Push a state when the page loads
+            window.history.pushState({ page: 'world-mobile' }, '', window.location.href);
+
+            // Listen for back button press
+            window.addEventListener('popstate', function(event) {
+                console.log('[World-Mobile] Back button pressed, redirecting to main app...');
+                // Navigate to main mobile app
+                window.location.href = 'https://moontidereconciliation.com/mobile.html';
+            });
+        }
+    </script>
+</body>
+</html>

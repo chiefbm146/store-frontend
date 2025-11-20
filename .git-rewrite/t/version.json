@@ -1,0 +1,19 @@
+{
+  "version": "11.0.12",
+  "lastUpdated": "2025-11-03T08:18:10.524Z",
+  "buildNumber": 94,
+  "description": "Moon Tide AI Reconciliation Portal - Desktop & Mobile",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2025-10-26",
+      "changes": [
+        "Initial release with versioning system",
+        "Added Open Graph meta tags for social media sharing",
+        "Implemented cache busting for Facebook/Twitter",
+        "Mobile payment form fix for Stripe scrolling",
+        "Audio context unlock for TTS playback"
+      ]
+    }
+  ]
+}

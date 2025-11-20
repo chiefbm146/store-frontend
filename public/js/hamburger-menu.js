@@ -55,12 +55,11 @@ const hamburgerMenu = {
     },
 
     /**
-     * Navigate to the menu page
-     * Firebase rewrites will serve the appropriate version (desktop/mobile)
+     * Navigate to the menu page (direct to desktop version)
      */
     navigateToMenu() {
-        console.log('[HamburgerMenu] Navigating to menu page...');
-        window.location.href = '/menu';
+        console.log('[HamburgerMenu] Navigating to menu-desk.html...');
+        window.location.href = '/menu-desk.html';
     }
 };
 
