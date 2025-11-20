@@ -112,4 +112,32 @@ export function getFeaturedProducts() {
     return Object.values(products).filter(p => p.featured);
 }
 
+export function getProductsByType(type) {
+    return Object.values(products).filter(p => p.type === type);
+}
+
+export function getProductsByCategory(category) {
+    return Object.values(products).filter(p =>
+        p.categories && p.categories.includes(category)
+    );
+}
+
+export function getProductsOnSale() {
+    return Object.values(products).filter(p => p.onSale === true);
+}
+
+export function searchProducts(query) {
+    const lowerQuery = query.toLowerCase();
+    return Object.values(products).filter(p =>
+        p.name.toLowerCase().includes(lowerQuery) ||
+        p.description.toLowerCase().includes(lowerQuery) ||
+        (p.tags && p.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
+    );
+}
+
+export function isInStock(productId) {
+    const product = products[productId];
+    return product && product.inStock && product.available;
+}
+
 export default products;
