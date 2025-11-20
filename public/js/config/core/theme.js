@@ -17,15 +17,15 @@
 export const theme = {
     // ===== COLOR PALETTE =====
     colors: {
-        // Primary brand colors (Blue - Moon Tide theme)
-        primary: '#1E90FF',          // Dodger Blue - Main brand color
-        primaryDark: '#0047AB',      // Cobalt Blue - Dark variant
-        primaryLight: '#87CEEB',     // Sky Blue - Light variant
+        // Primary brand colors (Professional platform theme)
+        primary: '#6366F1',          // Indigo - Modern SaaS color
+        primaryDark: '#4F46E5',      // Dark indigo - Dark variant
+        primaryLight: '#818CF8',     // Light indigo - Light variant
 
         // Accent colors
-        accent: '#FFD700',           // Gold - Accent/CTA color
-        accentHover: '#FFC700',      // Darker gold - Hover state
-        accentDark: '#B8860B',       // Dark goldenrod
+        accent: '#10B981',           // Emerald green - Success/CTA color
+        accentHover: '#059669',      // Darker emerald - Hover state
+        accentDark: '#047857',       // Dark emerald
 
         // Secondary colors
         secondary: '#50C878',        // Emerald green - Success/positive
