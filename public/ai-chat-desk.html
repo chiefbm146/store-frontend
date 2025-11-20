@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat - Premium Goods Co.</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AI Chat Assistant">
+    <meta property="og:description" content="Chat with our AI assistant">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🤖</text></svg>">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/ai-chat.css">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="chat-header-left">
+                <a href="/demo-desk.html" class="back-arrow" title="Back to Store">←</a>
+                <div>
+                    <h1 class="chat-title">🤖 AI Chat Assistant</h1>
+                    <p class="chat-subtitle">Ask me anything about our store!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages Area -->
+        <div class="messages-container" id="messagesContainer">
+            <div id="welcomeMessage" class="welcome-message">
+                <div class="welcome-icon">🤖</div>
+                <h2 class="welcome-title">Hi! I'm Your AI Assistant</h2>
+                <p class="welcome-description">I'm here to help you with any questions about our products, services, or store. What would you like to know?</p>
+                <div class="welcome-suggestions">
+                    <button class="suggestion-button" onclick="sendSuggestion('Tell me about your products')">
+                        Tell me about your products
+                    </button>
+                    <button class="suggestion-button" onclick="sendSuggestion('What services do you offer?')">
+                        What services do you offer?
+                    </button>
+                    <button class="suggestion-button" onclick="sendSuggestion('How do I place an order?')">
+                        How do I place an order?
+                    </button>
+                    <button class="suggestion-button" onclick="sendSuggestion('What are your hours?')">
+                        What are your hours?
+                    </button>
+                </div>
+            </div>
+
+            <div class="messages" id="messages"></div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-text">AI is typing...</span>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <div class="input-wrapper">
+                <input
+                    type="text"
+                    id="userInput"
+                    placeholder="Type your message here..."
+                    autocomplete="off"
+                    maxlength="4000"
+                />
+                <button id="sendButton" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Config System -->
+    <script type="module">
+        import { injectTheme } from './js/theme-injector.js';
+
+        // Inject theme
+        injectTheme();
+        console.log('[AI Chat] Theme injected');
+    </script>
+
+    <!-- Chat Functionality -->
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const messagesContainer = document.getElementById('messagesContainer');
+
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideWelcome() {
+            if (welcomeMessage.style.display !== 'none') {
+                welcomeMessage.style.display = 'none';
+            }
+        }
+
+        function addMessage(text, isUser) {
+            hideWelcome();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ' + (isUser ? 'user-message' : 'ai-message');
+            messageDiv.textContent = text;
+            messagesDiv.appendChild(messageDiv);
+
+            scrollToBottom();
+        }
+
+        function showTyping() {
+            typingIndicator.classList.add('visible');
+            scrollToBottom();
+        }
+
+        function hideTyping() {
+            typingIndicator.classList.remove('visible');
+        }
+
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, true);
+            userInput.value = '';
+
+            // Show typing indicator
+            showTyping();
+
+            // Simulate AI response
+            setTimeout(function() {
+                hideTyping();
+                const responses = [
+                    "Thanks for your question! In a live environment, I would provide detailed information about our products and services.",
+                    "I'm here to help! Our AI assistant is configured to answer questions about our store, products, pricing, and policies.",
+                    "Great question! In the full version, I would have access to our complete product catalog and can help you find exactly what you need.",
+                    "I appreciate you asking! Our AI assistant is designed to provide instant answers to customer questions 24/7.",
+                    "That's a wonderful question! In production, I would give you specific details about our offerings and help you place orders."
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage(randomResponse, false);
+            }, 1000 + Math.random() * 1000);
+        }
+
+        function sendSuggestion(text) {
+            userInput.value = text;
+            sendMessage();
+        }
+
+        // Enter key to send
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Escape to go back
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                window.location.href = '/demo-desk.html';
+            }
+        });
+
+        // Focus input on load
+        document.addEventListener('DOMContentLoaded', function() {
+            userInput.focus();
+        });
+    </script>
+</body>
+</html>
