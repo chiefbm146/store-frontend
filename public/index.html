@@ -30,7 +30,7 @@
             display: none;
         }
 
-        /* Elegant Edge Loading Animation - Only shows on first visit or uncached */
+        /* Elegant Edge Loading Animation - Sweeping border gradient */
         #edge-loader {
             position: fixed;
             top: 0;
@@ -50,56 +50,37 @@
         #edge-loader::before {
             content: '';
             position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: conic-gradient(from 0deg,
+                #6366f1 0deg,
+                #6366f1 45deg,
+                transparent 90deg,
+                transparent 360deg
+            );
+            animation: edgeSweep 2s linear infinite;
+            border-radius: 0;
+        }
+
+        #edge-loader::after {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            border: 3px solid transparent;
-            border-image: linear-gradient(90deg,
-                rgba(99, 102, 241, 0) 0%,
-                rgba(99, 102, 241, 0.8) 50%,
-                rgba(99, 102, 241, 0) 100%
-            ) 1;
-            animation: edgeSweep 2s ease-in-out infinite;
+            background: white;
+            pointer-events: none;
         }
 
         @keyframes edgeSweep {
             0% {
-                border-image: linear-gradient(90deg,
-                    rgba(99, 102, 241, 0.8) 0%,
-                    rgba(99, 102, 241, 0) 25%,
-                    rgba(99, 102, 241, 0) 100%
-                ) 1;
-            }
-            25% {
-                border-image: linear-gradient(90deg,
-                    rgba(99, 102, 241, 0) 0%,
-                    rgba(99, 102, 241, 0) 25%,
-                    rgba(99, 102, 241, 0.8) 50%,
-                    rgba(99, 102, 241, 0) 100%
-                ) 1;
-            }
-            50% {
-                border-image: linear-gradient(90deg,
-                    rgba(99, 102, 241, 0) 0%,
-                    rgba(99, 102, 241, 0) 50%,
-                    rgba(99, 102, 241, 0.8) 75%,
-                    rgba(99, 102, 241, 0) 100%
-                ) 1;
-            }
-            75% {
-                border-image: linear-gradient(90deg,
-                    rgba(99, 102, 241, 0) 0%,
-                    rgba(99, 102, 241, 0) 75%,
-                    rgba(99, 102, 241, 0.8) 100%
-                ) 1;
+                transform: rotate(0deg);
             }
             100% {
-                border-image: linear-gradient(90deg,
-                    rgba(99, 102, 241, 0.8) 0%,
-                    rgba(99, 102, 241, 0) 25%,
-                    rgba(99, 102, 241, 0) 100%
-                ) 1;
+                transform: rotate(360deg);
             }
         }
 
