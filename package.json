@@ -1,0 +1,12 @@
+{
+  "name": "store-frontend",
+  "version": "1.0.0",
+  "description": "Your Store - AI-powered storefront platform",
+  "scripts": {
+    "deploy": "rm -f .firebase/hosting*.cache && firebase deploy --only hosting",
+    "deploy:full": "rm -rf .firebase && firebase deploy --only hosting"
+  },
+  "keywords": ["store", "firebase", "ai"],
+  "author": "",
+  "license": "ISC"
+}
