@@ -30,86 +30,76 @@
             display: none;
         }
 
-        /* Loading Container */
-        #loading-container {
+        /* Elegant Edge Loading Animation - Only shows on first visit or uncached */
+        #edge-loader {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh;
-            background: transparent;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 24px;
-            z-index: 9999;
-            opacity: 1;
-            transition: opacity 0.5s ease-out;
-        }
-
-        body:not(.is-loading) #loading-container {
-            opacity: 0;
+            height: 100%;
             pointer-events: none;
+            z-index: 99999;
+            opacity: 0;
+            transition: opacity 0.6s ease-out;
         }
 
-        /* Loading Spinner */
-        .spinner {
-            position: relative;
-            width: 60px;
-            height: 60px;
+        body.is-loading #edge-loader {
+            opacity: 1;
         }
 
-        .spinner::before {
+        #edge-loader::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            border: 3px solid rgba(99, 102, 241, 0.1);
-            border-radius: 50%;
-        }
-
-        .spinner::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0;
             border: 3px solid transparent;
-            border-top-color: #6366f1;
-            border-right-color: #6366f1;
-            border-radius: 50%;
-            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            border-image: linear-gradient(90deg,
+                rgba(99, 102, 241, 0) 0%,
+                rgba(99, 102, 241, 0.8) 50%,
+                rgba(99, 102, 241, 0) 100%
+            ) 1;
+            animation: edgeSweep 2s ease-in-out infinite;
         }
 
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
+        @keyframes edgeSweep {
+            0% {
+                border-image: linear-gradient(90deg,
+                    rgba(99, 102, 241, 0.8) 0%,
+                    rgba(99, 102, 241, 0) 25%,
+                    rgba(99, 102, 241, 0) 100%
+                ) 1;
             }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Loading Text */
-        .loading-text {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            font-size: 16px;
-            font-weight: 500;
-            color: #6b7280;
-            letter-spacing: 0.025em;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
+            25% {
+                border-image: linear-gradient(90deg,
+                    rgba(99, 102, 241, 0) 0%,
+                    rgba(99, 102, 241, 0) 25%,
+                    rgba(99, 102, 241, 0.8) 50%,
+                    rgba(99, 102, 241, 0) 100%
+                ) 1;
             }
             50% {
-                opacity: 0.5;
+                border-image: linear-gradient(90deg,
+                    rgba(99, 102, 241, 0) 0%,
+                    rgba(99, 102, 241, 0) 50%,
+                    rgba(99, 102, 241, 0.8) 75%,
+                    rgba(99, 102, 241, 0) 100%
+                ) 1;
+            }
+            75% {
+                border-image: linear-gradient(90deg,
+                    rgba(99, 102, 241, 0) 0%,
+                    rgba(99, 102, 241, 0) 75%,
+                    rgba(99, 102, 241, 0.8) 100%
+                ) 1;
+            }
+            100% {
+                border-image: linear-gradient(90deg,
+                    rgba(99, 102, 241, 0.8) 0%,
+                    rgba(99, 102, 241, 0) 25%,
+                    rgba(99, 102, 241, 0) 100%
+                ) 1;
             }
         }
 
@@ -141,12 +131,9 @@
     <link rel="stylesheet" href="./libs/flatpickr/flatpickr.min.css">
     <script src="./libs/flatpickr/flatpickr.min.js"></script>
 </head>
-<body class="is-loading">
-    <!-- Loading Animation -->
-    <div id="loading-container">
-        <div class="spinner"></div>
-        <div class="loading-text">Loading your store...</div>
-    </div>
+<body>
+    <!-- Edge Loading Animation - Only shows on first visit or uncached -->
+    <div id="edge-loader"></div>
 
     <!-- Hero Section -->
     <section class="hero-section">
@@ -182,11 +169,14 @@
 
             <div class="chat-container">
                 <div class="chat-header">
+                    <span class="chat-icon">🤖</span>
                     <h3 class="chat-title">AI Chat Assistant</h3>
                 </div>
 
                 <div class="messages-container" id="messagesContainer">
-                    <div class="messages" id="messages"></div>
+                    <div class="messages" id="messages">
+                        <!-- Starter message will be injected by JS -->
+                    </div>
                     <div class="typing-indicator" id="typingIndicator">
                         <span class="typing-dot"></span>
                         <span class="typing-dot"></span>
@@ -256,6 +246,14 @@
         // Inject theme IMMEDIATELY (synchronous)
         injectTheme();
 
+        // Check if this is first visit or content is uncached
+        // Only show loading animation on first visit per session
+        const isFirstVisit = !sessionStorage.getItem('page-loaded');
+        if (isFirstVisit) {
+            document.body.classList.add('is-loading');
+            sessionStorage.setItem('page-loaded', 'true');
+        }
+
         // Populate landing page content
         document.addEventListener('DOMContentLoaded', () => {
             // Hero Section
@@ -285,6 +283,20 @@
             document.getElementById('chat-subtitle').textContent = desktopPage.chat.subtitle;
             document.getElementById('userInput').placeholder = desktopPage.chat.placeholder;
 
+            // Add AI starter message
+            const messagesDiv = document.getElementById('messages');
+            const starterMessage = document.createElement('div');
+            starterMessage.className = 'message ai-message';
+            starterMessage.innerHTML = `
+                <div class="message-content">
+                    <span class="message-icon">🤖</span>
+                    <div class="message-text">
+                        <p>Hi! 👋 I'm your AI assistant. I can help you learn about creating your store, features, pricing, or answer any questions about our platform. What would you like to know?</p>
+                    </div>
+                </div>
+            `;
+            messagesDiv.appendChild(starterMessage);
+
             // About Section
             document.getElementById('about-title').textContent = desktopPage.about.title;
             document.getElementById('about-subtitle').textContent = desktopPage.about.subtitle;
@@ -311,18 +323,20 @@
             console.log('[Index] Platform landing page loaded from config');
 
             // Remove loading state - trigger fade-out and content reveal
-            // Use requestAnimationFrame to ensure DOM updates are complete
-            requestAnimationFrame(() => {
-                document.body.classList.remove('is-loading');
+            // Only if loading was shown (first visit)
+            if (isFirstVisit) {
+                requestAnimationFrame(() => {
+                    document.body.classList.remove('is-loading');
 
-                // Remove loading container from DOM after fade-out completes
-                setTimeout(() => {
-                    const loadingContainer = document.getElementById('loading-container');
-                    if (loadingContainer) {
-                        loadingContainer.remove();
-                    }
-                }, 500); // Match CSS transition duration
-            });
+                    // Remove edge loader from DOM after fade-out completes
+                    setTimeout(() => {
+                        const edgeLoader = document.getElementById('edge-loader');
+                        if (edgeLoader) {
+                            edgeLoader.remove();
+                        }
+                    }, 600); // Match CSS transition duration
+                });
+            }
         });
     </script>
 
