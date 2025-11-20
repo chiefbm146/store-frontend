@@ -113,6 +113,11 @@ body {
     cursor: pointer;
     border: none;
     display: inline-block;
+    opacity: 0;
+}
+
+.btn[data-loaded="true"] {
+    opacity: 1;
 }
 
 .btn-primary {

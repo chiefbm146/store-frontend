@@ -138,6 +138,7 @@
             document.getElementById('hero-description').textContent = desktopPage.hero.description;
             document.getElementById('hero-cta-primary').textContent = desktopPage.hero.ctaPrimary.text;
             document.getElementById('hero-cta-primary').href = desktopPage.hero.ctaPrimary.link;
+            document.getElementById('hero-cta-primary').setAttribute('data-loaded', 'true');
 
             // Features Section
             document.getElementById('features-title').textContent = desktopPage.features.title;
