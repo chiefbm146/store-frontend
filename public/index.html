@@ -12,17 +12,6 @@
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
 
-    <!-- CRITICAL: Inline CSS to prevent flash -->
-    <style>
-        body {
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-        body.loaded {
-            opacity: 1;
-        }
-    </style>
-
     <!-- CSS -->
     <link rel="stylesheet" href="./css/desktop.css">
     <link rel="stylesheet" href="./libs/fontawesome/all.min.css">
@@ -153,8 +142,6 @@
                 `<a href="${link.url}">${link.text}</a>`
             ).join('');
 
-            // Show page now that everything is loaded
-            document.body.classList.add('loaded');
             console.log('[Index] Platform landing page loaded from config');
         });
     </script>
