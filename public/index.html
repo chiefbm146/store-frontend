@@ -45,6 +45,39 @@
         </div>
     </section>
 
+    <!-- Chat Section -->
+    <section class="chat-section" id="chat">
+        <div class="chat-wrapper">
+            <div class="section-header">
+                <h2 class="section-title" id="chat-title"></h2>
+                <p class="section-subtitle" id="chat-subtitle"></p>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h3 class="chat-title">AI Chat Assistant</h3>
+                </div>
+
+                <div class="messages-container" id="messagesContainer">
+                    <div class="messages" id="messages"></div>
+                    <div class="typing-indicator" id="typingIndicator">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </div>
+                    <div id="moduleContainer"></div>
+                </div>
+
+                <div class="input-area">
+                    <div class="input-wrapper">
+                        <input type="text" id="userInput" placeholder="Ask about our products, services, or workshops..." autocomplete="off" maxlength="4000">
+                    </div>
+                    <button id="sendButton">Send</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- About Section -->
     <section class="about-section" id="about">
         <div class="about-content">
@@ -118,6 +151,11 @@
                     <p class="feature-description">${feature.description}</p>
                 </div>
             `).join('');
+
+            // Chat Section
+            document.getElementById('chat-title').textContent = desktopPage.chat.title;
+            document.getElementById('chat-subtitle').textContent = desktopPage.chat.subtitle;
+            document.getElementById('userInput').placeholder = desktopPage.chat.placeholder;
 
             // About Section
             document.getElementById('about-title').textContent = desktopPage.about.title;
