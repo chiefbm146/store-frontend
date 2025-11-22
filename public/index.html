@@ -205,6 +205,16 @@
         </div>
     </section>
 
+    <!-- AI Blurb Section (Mobile Only - replaces chat section) -->
+    <section class="ai-blurb-section">
+        <div class="ai-blurb-content">
+            <span class="ai-blurb-icon">🤖</span>
+            <h3 class="ai-blurb-title">Custom AI For Your Business</h3>
+            <p class="ai-blurb-text">Every store we build includes a custom AI chatbot with its own personality - professional, helpful, and trained specifically on your business. Your customers get instant answers about your offerings 24/7, and it's always safe and on-brand.</p>
+            <button class="ai-blurb-cta" onclick="openMobileChat()">Try Our AI Assistant</button>
+        </div>
+    </section>
+
     <!-- About Section -->
     <section class="about-section" id="about">
         <div class="about-content">
@@ -246,6 +256,38 @@
 
     <!-- Hidden audio player for TTS -->
     <audio id="ttsPlayer" style="display: none;"></audio>
+
+    <!-- Mobile Floating Chat Button -->
+    <button class="mobile-chat-fab" onclick="openMobileChat()" title="Chat with AI">
+        🤖
+    </button>
+
+    <!-- Mobile Chat Overlay -->
+    <div class="mobile-chat-overlay" id="mobileChatOverlay" onclick="closeMobileChat()"></div>
+
+    <!-- Mobile Fullscreen Chat Modal -->
+    <div class="mobile-chat-modal" id="mobileChatModal">
+        <div class="mobile-chat-header">
+            <h3 class="mobile-chat-title">🤖 AI Assistant</h3>
+            <button class="mobile-chat-close" onclick="closeMobileChat()">✕</button>
+        </div>
+        <div class="mobile-chat-body">
+            <div class="mobile-chat-messages" id="mobileChatMessages">
+                <div class="mobile-chat-message ai">
+                    Hi! 👋 I'm your AI assistant from AARIE.CA. We build professional online stores in just 24-48 hours. Ask me anything about our services, pricing, or how we can help your business!
+                </div>
+            </div>
+            <div class="mobile-typing-indicator" id="mobileTypingIndicator">
+                <span class="mobile-typing-dot"></span>
+                <span class="mobile-typing-dot"></span>
+                <span class="mobile-typing-dot"></span>
+            </div>
+        </div>
+        <div class="mobile-chat-input-area">
+            <input type="text" class="mobile-chat-input" id="mobileChatInput" placeholder="Ask me anything..." maxlength="4000">
+            <button class="mobile-chat-send" onclick="sendMobileMessage()">Send</button>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="./js/version-manager.js"></script>
@@ -387,6 +429,126 @@
                     }, 600); // Match CSS transition duration
                 });
             }
+        });
+    </script>
+
+    <!-- Mobile Chat Functions -->
+    <script>
+        // ========================================
+        // MOBILE CHAT CONFIGURATION
+        // ========================================
+        const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+        const CHAT_ENDPOINT = '/chat';
+        let MOBILE_CHAT_SESSION_ID = null;
+
+        // Initialize session
+        function initMobileChatSession() {
+            MOBILE_CHAT_SESSION_ID = sessionStorage.getItem('mobile_chat_session_id');
+            if (!MOBILE_CHAT_SESSION_ID) {
+                MOBILE_CHAT_SESSION_ID = 'mobile_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('mobile_chat_session_id', MOBILE_CHAT_SESSION_ID);
+            }
+        }
+
+        function openMobileChat() {
+            document.getElementById('mobileChatModal').classList.add('active');
+            document.getElementById('mobileChatOverlay').classList.add('active');
+            document.getElementById('mobileChatInput').focus();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileChat() {
+            document.getElementById('mobileChatModal').classList.remove('active');
+            document.getElementById('mobileChatOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        async function sendMobileMessage() {
+            const input = document.getElementById('mobileChatInput');
+            const messagesDiv = document.getElementById('mobileChatMessages');
+            const typingIndicator = document.getElementById('mobileTypingIndicator');
+            const userText = input.value.trim();
+
+            if (!userText) return;
+
+            input.disabled = true;
+
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'mobile-chat-message user';
+            userMsg.textContent = userText;
+            messagesDiv.appendChild(userMsg);
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Show typing indicator
+            typingIndicator.classList.add('visible');
+
+            try {
+                const payload = {
+                    session_id: MOBILE_CHAT_SESSION_ID,
+                    prompt: userText,
+                    device_fingerprint: 'mobile-landing-' + navigator.userAgent.substring(0, 50)
+                };
+
+                const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                const aiResponse = data.response || 'Sorry, I could not generate a response.';
+
+                // Hide typing indicator
+                typingIndicator.classList.remove('visible');
+
+                // Add AI message
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'mobile-chat-message ai';
+                aiMsg.textContent = aiResponse;
+                messagesDiv.appendChild(aiMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            } catch (error) {
+                console.error('[Mobile Chat] Error:', error);
+                typingIndicator.classList.remove('visible');
+
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'mobile-chat-message ai';
+                aiMsg.textContent = 'Sorry, I encountered an error. Please try again.';
+                messagesDiv.appendChild(aiMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            } finally {
+                input.disabled = false;
+                input.focus();
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initMobileChatSession();
+
+            const mobileInput = document.getElementById('mobileChatInput');
+            if (mobileInput) {
+                mobileInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !mobileInput.disabled) {
+                        sendMobileMessage();
+                    }
+                });
+            }
+
+            // Close modal with Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeMobileChat();
+            });
         });
     </script>
 
