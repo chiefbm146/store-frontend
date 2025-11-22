@@ -76,12 +76,19 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 async function loadDashboard() {
   try {
+    // Disable all buttons while loading
+    disableAllButtons(true);
+    showLoadingSpinners();
+
     // Update user info
     document.getElementById('userName').textContent = currentUser.displayName || 'User';
     document.getElementById('userEmail').textContent = currentUser.email;
 
     // Load Stripe account status first
     await loadStripeStatus();
+
+    // Enable buttons after loading
+    disableAllButtons(false);
 
     // Load products (optional, if they fail, show empty state)
     try {
@@ -120,6 +127,7 @@ async function loadStripeStatus() {
       document.getElementById('stripeStatusBadge').textContent = '❌ Not Setup';
       document.getElementById('stripeStatusBadge').className = 'status-badge badge-pending';
       document.getElementById('stripeSetupBtn').style.display = 'block';
+      document.getElementById('stripeSetupBtn').innerHTML = '⚡ Setup Stripe Connect';
       document.getElementById('onboardingBtn').style.display = 'none';
       document.getElementById('deleteBtn').style.display = 'none';
       return;
@@ -137,6 +145,7 @@ async function loadStripeStatus() {
       document.getElementById('stripeSetupBtn').style.display = 'none';
       document.getElementById('onboardingBtn').style.display = 'none';
       document.getElementById('deleteBtn').style.display = 'block';
+      document.getElementById('deleteBtn').innerHTML = '🗑️ Delete Account (Reset)';
       document.getElementById('onboardingMessage').innerHTML = '✅ Your Stripe account is fully verified and ready to receive payments!';
       document.getElementById('onboardingMessage').style.display = 'block';
     } else {
@@ -144,7 +153,9 @@ async function loadStripeStatus() {
       document.getElementById('stripeStatusBadge').className = 'status-badge badge-pending';
       document.getElementById('stripeSetupBtn').style.display = 'none';
       document.getElementById('onboardingBtn').style.display = 'block';
+      document.getElementById('onboardingBtn').innerHTML = '📋 Complete Verification';
       document.getElementById('deleteBtn').style.display = 'block';
+      document.getElementById('deleteBtn').innerHTML = '🗑️ Delete Account (Reset)';
       document.getElementById('onboardingMessage').innerHTML = 'Complete your Stripe verification to accept payments.';
       document.getElementById('onboardingMessage').style.display = 'block';
     }
@@ -267,5 +278,35 @@ async function handleLogout() {
     window.location.href = '/client-portal.html';
   } catch (error) {
     console.error('❌ Logout error:', error);
+  }
+}
+
+/**
+ * Disable/enable all action buttons
+ */
+function disableAllButtons(disabled) {
+  const buttons = ['stripeSetupBtn', 'onboardingBtn', 'deleteBtn'];
+  buttons.forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.disabled = disabled;
+      btn.style.opacity = disabled ? '0.6' : '1';
+      btn.style.cursor = disabled ? 'not-allowed' : 'pointer';
+    }
+  });
+}
+
+/**
+ * Show loading spinners on buttons
+ */
+function showLoadingSpinners() {
+  const setupBtn = document.getElementById('stripeSetupBtn');
+  const onboardingBtn = document.getElementById('onboardingBtn');
+
+  if (setupBtn && setupBtn.style.display !== 'none') {
+    setupBtn.innerHTML = '⏳ Loading...';
+  }
+  if (onboardingBtn && onboardingBtn.style.display !== 'none') {
+    onboardingBtn.innerHTML = '⏳ Loading...';
   }
 }
