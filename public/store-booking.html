@@ -1372,13 +1372,47 @@
                 }
             });
 
-            // Book buttons placeholder
-            document.getElementById('depositButton').addEventListener('click', () => {
-                alert('Stripe checkout coming soon! Contact us to get started.');
-            });
-            document.getElementById('heroBookButton').addEventListener('click', () => {
-                alert('Stripe checkout coming soon! Contact us to get started.');
-            });
+            // Book buttons - redirect to Stripe checkout
+            async function handleCheckout() {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.disabled = true;
+                button.textContent = 'Processing...';
+
+                try {
+                    const response = await fetch(BACKEND_URL + '/api/client/checkout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            productId: 'custom-store'
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.url) {
+                        // Redirect to Stripe Checkout
+                        window.location.href = data.url;
+                    } else {
+                        throw new Error('No checkout URL returned');
+                    }
+                } catch (error) {
+                    console.error('[Checkout] Error:', error);
+                    alert('Unable to start checkout. Please try again.');
+                    button.disabled = false;
+                    button.textContent = originalText;
+                }
+            }
+
+            document.getElementById('depositButton').addEventListener('click', handleCheckout);
+            document.getElementById('heroBookButton').addEventListener('click', handleCheckout);
         });
     </script>
 </body>
