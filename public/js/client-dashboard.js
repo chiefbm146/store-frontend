@@ -25,9 +25,12 @@ async function apiCall(endpoint, options = {}) {
       const token = await currentUser.getIdToken();
       options.headers = {
         ...options.headers,
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${token}`
       };
+      // Only set Content-Type for requests with a body (POST, PUT, PATCH)
+      if (options.method && ['POST', 'PUT', 'PATCH'].includes(options.method.toUpperCase())) {
+        options.headers['Content-Type'] = 'application/json';
+      }
     }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, options);

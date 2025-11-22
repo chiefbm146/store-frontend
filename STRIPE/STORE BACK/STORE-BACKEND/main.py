@@ -1371,9 +1371,10 @@ def apply_protection():
         logger.debug(f"OPTIONS preflight request to {request.path} - bypassing rate limit check")
         return  # Proceed without rate limiting
 
-    # Exempt endpoints from rate limiting (admin/status/signing endpoints)
+    # Exempt endpoints from rate limiting (admin/status/signing endpoints + client portal API)
     exempt_endpoints = ['/admin/restore_system', '/system_status', '/wakeup', '/health', '/sign-fingerprint']
-    if request.path in exempt_endpoints:
+    # Client Portal API uses Firebase Auth, not fingerprints - exempt from fingerprint-based rate limiting
+    if request.path in exempt_endpoints or request.path.startswith('/api/client'):
         logger.debug(f"Request to exempt endpoint {request.path} - bypassing rate limit check")
         return  # Proceed without rate limiting
 
@@ -1397,9 +1398,16 @@ def apply_protection():
     if not endpoint_name:
         endpoint_name = "root"
 
-    is_json_request = request.is_json
-    session_id = request.args.get('session_id') or (request.json.get('session_id') if is_json_request else None)
-    device_fingerprint = request.json.get('device_fingerprint') if is_json_request else None
+    # Safely get JSON data (handles empty body with Content-Type: application/json)
+    json_data = None
+    if request.is_json:
+        try:
+            json_data = request.get_json(silent=True) or {}
+        except Exception:
+            json_data = {}
+
+    session_id = request.args.get('session_id') or json_data.get('session_id')
+    device_fingerprint = json_data.get('device_fingerprint')
     user_id = request.headers.get('X-User-ID')  # From authenticated session
 
     # === LAYER 3: Global Circuit Breaker Check ===
@@ -1419,9 +1427,9 @@ def apply_protection():
         fingerprint = get_or_create_session_fingerprint(session_id, request, device_fingerprint)
 
     # === LAYER 6: Signature Validation (HMAC-SHA256) ===
-    if device_fingerprint and is_json_request:
-        signature = request.json.get('fingerprint_signature')
-        timestamp = request.json.get('fingerprint_timestamp')
+    if device_fingerprint and json_data:
+        signature = json_data.get('fingerprint_signature')
+        timestamp = json_data.get('fingerprint_timestamp')
 
         # Only enforce if both provided (fail open if missing)
         if signature and timestamp:
@@ -1435,9 +1443,9 @@ def apply_protection():
                 return jsonify({"error": "Invalid request signature."}), 401
 
     # === LAYER 5: Pattern Detection (Prompt Injection & DoS) ===
-    if fingerprint and is_json_request:
+    if fingerprint and json_data:
         # Check for prompt injection
-        prompt = request.json.get('prompt', '')
+        prompt = json_data.get('prompt', '')
         if prompt and security_monitor.check_prompt_injection_pattern_unauth(fingerprint, prompt):
             return jsonify({"error": "Malicious input detected."}), 403
 
@@ -2806,6 +2814,34 @@ def create_checkout_session():
 if client_api:
     app.register_blueprint(client_api)
     logger.info("✓ Client Portal API blueprint registered")
+
+# =============================================================================
+# GLOBAL JSON ERROR HANDLERS (prevent HTML error pages)
+# =============================================================================
+@app.errorhandler(400)
+def handle_bad_request(e):
+    logger.warning(f"400 Bad Request: {e}")
+    return jsonify({"error": "Bad request", "details": str(e)}), 400
+
+@app.errorhandler(401)
+def handle_unauthorized(e):
+    logger.warning(f"401 Unauthorized: {e}")
+    return jsonify({"error": "Unauthorized"}), 401
+
+@app.errorhandler(404)
+def handle_not_found(e):
+    logger.warning(f"404 Not Found: {request.path}")
+    return jsonify({"error": "Endpoint not found", "path": request.path}), 404
+
+@app.errorhandler(500)
+def handle_internal_error(e):
+    logger.error(f"500 Internal Server Error: {e}", exc_info=True)
+    return jsonify({"error": "Internal server error"}), 500
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    logger.error(f"Unhandled exception: {e}", exc_info=True)
+    return jsonify({"error": "An unexpected error occurred", "details": str(e)}), 500
 
 if __name__ == "__main__":
     # This is for local development only. Cloud Run uses Gunicorn to run the app.
