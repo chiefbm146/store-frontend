@@ -181,12 +181,14 @@ class ClientManager:
                 payment_intent_id = charge.get('payment_intent') or charge_id
 
                 print(f"📝 Processing charge: {charge_id} (payment_intent: {payment_intent_id})")
+                print(f"📊 Transfer amount: {transfer.get('amount')} | Charge amount: {charge.get('amount')}")
+                print(f"📋 Charge keys: {list(charge.keys())[:10]}...")  # First 10 keys to debug
 
                 # Check if already exists
                 existing = db.collection('clients').document(client_uid).collection('transactions').document(payment_intent_id).get()
+                is_new = not existing.exists
                 if existing.exists:
-                    print(f"⏭️ Transaction {payment_intent_id} already exists, skipping")
-                    continue
+                    print(f"📝 Transaction {payment_intent_id} exists, will update with breakdown data")
 
                 # Extract customer details from charge billing_details if available
                 billing_details = charge.get('billing_details', {}) or {}
@@ -196,21 +198,25 @@ class ClientManager:
 
                 # Calculate payment breakdown
                 gross_amount = charge.get('amount', 0)  # Total amount charged to customer
-                platform_fee = charge.get('application_fee_amount', 0)  # Platform fee (AARIE)
-                stripe_fee = charge.get('amount_captured', 0) - transfer.get('amount', 0) if transfer.get('amount') else 0
+                transfer_amount = transfer.get('amount', gross_amount)  # What goes to franchisee
 
-                # Get the actual transfer amount (what goes to the franchisee)
-                transfer_amount = transfer.get('amount', gross_amount)
+                # Try to get application fee from charge first (from payment intent)
+                platform_fee = charge.get('application_fee_amount', 0)
 
-                # If we can't calculate stripe fee from transfer, try to get it from the charge
-                if stripe_fee == 0 and 'balance_transaction' in charge:
-                    # balance_transaction has fee info
-                    balance_txn = charge.get('balance_transaction', {})
-                    if isinstance(balance_txn, dict):
-                        stripe_fee = balance_txn.get('fee', 0)
-                    elif isinstance(balance_txn, str):
-                        # It's just an ID, we'd need another API call
-                        stripe_fee = gross_amount - transfer_amount - platform_fee
+                # If no application fee in charge, try to get from metadata or calculate
+                if platform_fee == 0 and transfer.get('metadata', {}).get('application_fee_amount'):
+                    platform_fee = int(transfer.get('metadata', {}).get('application_fee_amount', 0))
+
+                # Calculate stripe fee: what's lost between customer charged and transfer amount
+                stripe_fee = gross_amount - transfer_amount - platform_fee
+
+                # Safety check: if stripe fee is negative or too large, recalculate
+                if stripe_fee < 0 or stripe_fee > gross_amount:
+                    # Assume ~3.8% Stripe fee
+                    stripe_fee = int(gross_amount * 0.038) + 30  # 3.8% + $0.30 fixed fee
+
+                print(f"💰 Breakdown for {charge_id}:")
+                print(f"   Gross: ${gross_amount/100:.2f} | Transfer: ${transfer_amount/100:.2f} | Platform Fee: ${platform_fee/100:.2f} | Stripe Fee: ${stripe_fee/100:.2f}")
 
                 # Create transaction record with all available details including payment breakdown
                 transaction_data = {
@@ -244,8 +250,14 @@ class ClientManager:
 
                 # Save transaction to Firestore
                 try:
-                    db.collection('clients').document(client_uid).collection('transactions').document(payment_intent_id).set(transaction_data)
-                    print(f"✅ Transaction saved: {payment_intent_id}")
+                    if is_new:
+                        # New transaction - set all fields
+                        db.collection('clients').document(client_uid).collection('transactions').document(payment_intent_id).set(transaction_data)
+                        print(f"✅ Transaction saved (new): {payment_intent_id}")
+                    else:
+                        # Existing transaction - merge to add/update breakdown and other fields
+                        db.collection('clients').document(client_uid).collection('transactions').document(payment_intent_id).set(transaction_data, merge=True)
+                        print(f"✅ Transaction updated (merged): {payment_intent_id}")
                     synced_count += 1
                 except Exception as write_error:
                     print(f"❌ Error writing transaction {payment_intent_id}: {write_error}")
