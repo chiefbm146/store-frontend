@@ -117,8 +117,8 @@
             REQUEST_COUNT = parseInt(sessionStorage.getItem('chat_request_count') || '0');
         }
 
-        function scrollToBottom() {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        function scrollToTop() {
+            messagesContainer.scrollTop = 0;
         }
 
         function hideWelcome() {
@@ -135,12 +135,12 @@
             messageDiv.textContent = text;
             messagesDiv.appendChild(messageDiv);
 
-            scrollToBottom();
+            scrollToTop();
         }
 
         function showTyping() {
             typingIndicator.classList.add('visible');
-            scrollToBottom();
+            scrollToTop();
         }
 
         function hideTyping() {
@@ -154,6 +154,10 @@
             // Disable input while sending
             userInput.disabled = true;
             sendButton.disabled = true;
+
+            // Clear previous messages - only show current exchange
+            messagesDiv.innerHTML = '';
+            hideWelcome();
 
             // Add user message
             addMessage(message, true);
