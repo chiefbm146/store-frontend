@@ -321,13 +321,16 @@
             // Disable input while sending
             input.disabled = true;
 
+            // Clear previous messages - only show current exchange
+            messagesDiv.innerHTML = '';
+
             // Add user message
             const userMsg = document.createElement('div');
             userMsg.className = 'message user-message';
             userMsg.textContent = userText;
             messagesDiv.appendChild(userMsg);
             input.value = '';
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            messagesDiv.scrollTop = 0;
 
             try {
                 const payload = {
@@ -361,7 +364,7 @@
                 aiMsg.className = 'message ai-message';
                 aiMsg.textContent = aiResponse;
                 messagesDiv.appendChild(aiMsg);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                messagesDiv.scrollTop = 0;
 
             } catch (error) {
                 console.error('[Demo Chat] Error:', error);
@@ -370,7 +373,7 @@
                 aiMsg.className = 'message ai-message';
                 aiMsg.textContent = 'Sorry, I encountered an error. Please try again.';
                 messagesDiv.appendChild(aiMsg);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                messagesDiv.scrollTop = 0;
             } finally {
                 // Re-enable input
                 input.disabled = false;
