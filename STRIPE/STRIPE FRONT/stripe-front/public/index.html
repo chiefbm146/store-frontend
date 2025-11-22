@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stripe Connect Franchisee Portal</title>
+
+  <!-- Firebase SDK -->
+  <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+  <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+  <script defer src="/__/firebase/12.4.0/firebase-firestore-compat.js"></script>
+  <script defer src="/__/firebase/12.4.0/firebase-functions-compat.js"></script>
+  <script defer src="/__/firebase/init.js"></script>
+
+  <!-- Stripe SDK -->
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Scripts (loaded after DOM) -->
+  <script defer src="js/firebase-config.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <h1 class="logo">Stripe Connect Portal</h1>
+      <ul class="nav-menu">
+        <li><a href="#" class="nav-link" id="dashboardLink">Dashboard</a></li>
+        <li><a href="#" class="nav-link" id="productsLink">Products</a></li>
+        <li><a href="#" class="nav-link" id="testStoreLink">Test Store</a></li>
+        <li><a href="#" class="nav-link" id="logoutLink">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- Loading State -->
+    <div id="loading" class="loading">
+      <p>Loading...</p>
+    </div>
+
+    <!-- Auth Page -->
+    <section id="authPage" class="page">
+      <div class="auth-container">
+        <h2>Stripe Connect Franchisee Portal</h2>
+        <p class="auth-subtitle">Sign in with your Google account to get started</p>
+        <button class="btn btn-google" id="googleSignInBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" style="display: inline; margin-right: 8px;">
+            <path fill="#1F2937" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Sign in with Google
+        </button>
+        <p class="auth-info">No password to remember. Secure authentication powered by Google.</p>
+      </div>
+    </section>
+
+    <!-- Dashboard Page -->
+    <section id="dashboardPage" class="page hidden">
+      <div class="dashboard-header">
+        <h2>Welcome, <span id="franchiseeName">Franchisee</span></h2>
+        <p>Manage your Stripe Connect account and products</p>
+      </div>
+
+      <!-- Stripe Account Status -->
+      <div class="card">
+        <h3>Stripe Connect Account</h3>
+        <div id="stripeStatus" class="status-box">
+          <p>Loading account status...</p>
+        </div>
+        <button class="btn btn-secondary" id="setupStripeBtn">Setup Stripe Connect Account</button>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <h3>Quick Actions</h3>
+        <div class="action-grid">
+          <button class="btn btn-secondary" id="viewProductsBtn">Manage Products</button>
+          <button class="btn btn-secondary" id="viewTransactionsBtn">View Transactions</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Page -->
+    <section id="productsPage" class="page hidden">
+      <div class="products-header">
+        <h2>Product Management</h2>
+        <button class="btn btn-primary" id="addProductBtn">Add New Product</button>
+      </div>
+
+      <!-- Products List -->
+      <div id="productsList" class="products-grid">
+        <p>Loading products...</p>
+      </div>
+
+      <!-- Add/Edit Product Modal -->
+      <div id="productModal" class="modal hidden">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h3 id="modalTitle">Add Product</h3>
+          <form id="productForm">
+            <input type="hidden" id="productId">
+            <input type="text" id="productName" placeholder="Product Name" required>
+            <textarea id="productDescription" placeholder="Description" rows="4"></textarea>
+            <input type="number" id="productPrice" placeholder="Price ($)" min="0" step="0.01" required>
+            <button type="submit" class="btn btn-primary">Save Product</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Test Store Page -->
+    <section id="testStorePage" class="page hidden">
+      <div class="products-header">
+        <h2>Test Store</h2>
+        <p>Buy your own products with test cards to verify everything works.</p>
+      </div>
+
+      <div id="testStoreProducts" class="products-grid">
+        <p>Loading products...</p>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="card" style="margin-top: 2rem;">
+        <h3>Recent Test Transactions</h3>
+        <div id="testStoreTransactions">
+          <p>Loading recent transactions...</p>
+        </div>
+      </div>
+
+      <!-- Checkout Modal -->
+      <div id="checkoutModal" class="modal hidden">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h3>Complete Purchase</h3>
+          <div id="checkoutInfo">
+            <p><strong id="checkoutProductName"></strong></p>
+            <p>Amount: <span id="checkoutAmount">$0.00</span> CAD</p>
+          </div>
+          <div id="card-element"></div>
+          <button class="btn btn-primary" id="payBtn" style="margin-top: 20px; width: 100%;">Pay Now</button>
+          <div id="paymentStatus" style="margin-top: 10px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stripe Onboarding -->
+    <section id="onboardingPage" class="page hidden">
+      <div class="onboarding-container">
+        <h2>Complete Your Stripe Connect Setup</h2>
+        <p>To start receiving payments, you need to complete your Stripe Connect verification.</p>
+        <a href="#" id="stripeOnboardingLink" class="btn btn-primary">Start Verification</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Error Messages -->
+  <div id="errorMessage" class="error-message hidden"></div>
+</body>
+</html>

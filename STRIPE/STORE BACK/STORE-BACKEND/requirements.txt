@@ -1,0 +1,9 @@
+Flask==2.3.2
+gunicorn==20.1.0
+google-cloud-aiplatform==1.39.0
+Flask-Cors==4.0.0
+google-cloud-firestore==2.13.1
+google-cloud-texttospeech==2.14.1
+stripe==8.10.0
+firebase-admin==6.5.0
+requests==2.31.0

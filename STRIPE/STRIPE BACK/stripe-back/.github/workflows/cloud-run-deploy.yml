@@ -1,0 +1,37 @@
+name: Deploy Backend to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GOOGLE_CLOUD_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Build and Deploy
+        run: |
+          docker build --no-cache -t us-central1-docker.pkg.dev/stripe-connect-1029120000/stripe-connect-backend/backend:live .
+          docker push us-central1-docker.pkg.dev/stripe-connect-1029120000/stripe-connect-backend/backend:live
+          gcloud run deploy stripe-connect-backend \
+            --image us-central1-docker.pkg.dev/stripe-connect-1029120000/stripe-connect-backend/backend:live \
+            --region us-central1 \
+            --memory 1Gi \
+            --allow-unauthenticated \
+            --project stripe-connect-1029120000 \
+            --update-env-vars FIRESTORE_PROJECT_ID=stripe-connect-1029120000 \
+            --remove-env-vars STRIPE_API_KEY,STRIPE_TEST_API_KEY \
+            --set-secrets STRIPE_SECRET_KEY=STRIPE_SECRET_KEY:latest,STRIPE_PUBLISHABLE_KEY=STRIPE_PUBLISHABLE_KEY:latest,STRIPE_WEBHOOK_SECRET=STRIPE_WEBHOOK_SECRET:latest

@@ -1,0 +1,264 @@
+{
+  "workshops": {
+    "cedar-bracelet": {
+      "corporate": "price_1SKnxaRuBpQt4n9NzNy7Egcp",
+      "community": "price_1SKnxbRuBpQt4n9NFZ6vtZGI"
+    },
+    "cedar-rope-bracelet": {
+      "corporate": "price_1SKnxbRuBpQt4n9Nm5PJGvZE",
+      "community": "price_1SKnxcRuBpQt4n9NE57RpyYu"
+    },
+    "cedar-heart": {
+      "corporate": "price_1SKnxcRuBpQt4n9NSo742dYL",
+      "community": "price_1SKnxcRuBpQt4n9NFKLdEWkG"
+    },
+    "medicine-pouch": {
+      "corporate": "price_1SKnxdRuBpQt4n9NVTd8tIdC",
+      "community": "price_1SKnxdRuBpQt4n9N93fh3HR4"
+    },
+    "orange-shirt-day-inperson": {
+      "corporate": "price_1SKnxeRuBpQt4n9N6MBlwgf2",
+      "community": "price_1SKnxeRuBpQt4n9N7fTfQeEr"
+    },
+    "orange-shirt-day-virtual": {
+      "corporate": "price_1SKnxfRuBpQt4n9NajveONOQ",
+      "community": "price_1SKnxfRuBpQt4n9N1Uh2SFZx"
+    },
+    "mmiwg2s-inperson": {
+      "corporate": "price_1SKnxfRuBpQt4n9NNJWHHCgL",
+      "community": "price_1SKnxgRuBpQt4n9NNxzelUWj"
+    },
+    "mmiwg2s-virtual": {
+      "corporate": "price_1SKnxgRuBpQt4n9N7RSpS4Jb",
+      "community": "price_1SKnxgRuBpQt4n9NzfjXAYZ6"
+    },
+    "cedar-coasters": {
+      "corporate": "price_1SKnxhRuBpQt4n9Nnh1PJzCk",
+      "community": "price_1SKnxhRuBpQt4n9NCllIAnHq"
+    },
+    "cedar-basket": {
+      "corporate": "price_1SKnxiRuBpQt4n9NwlJYYOTE",
+      "community": "price_1SKnxiRuBpQt4n9NNIfQhR7n"
+    },
+    "kairos-blanket-inperson": {
+      "corporate": "price_1SL0q7RuBpQt4n9NONMmQqXY",
+      "community": "price_1SL0q7RuBpQt4n9NHlWxj8iZ"
+    },
+    "kairos-blanket-virtual": {
+      "corporate": "price_1SL0q8RuBpQt4n9NKRrAPcCk",
+      "community": "price_1SL0q8RuBpQt4n9NTJCgW5Yy"
+    }
+  },
+  "products": {
+    "shirts-1": {
+      "price_id": "price_1SNZlyRuBpQt4n9NbhinKn6n"
+    },
+    "shirts-2": {
+      "price_id": "price_1SNZlyRuBpQt4n9NSST6rBJJ"
+    },
+    "shirts-3": {
+      "price_id": "price_1SNZlzRuBpQt4n9NBVdZ9hvS"
+    },
+    "shirts-4": {
+      "price_id": "price_1SNZm0RuBpQt4n9N7Rg9Jn5B"
+    },
+    "shirts-5": {
+      "price_id": "price_1SNZm0RuBpQt4n9NVOaQtdjW"
+    },
+    "shirts-6": {
+      "price_id": "price_1SNZm1RuBpQt4n9NDK1DWlPh"
+    },
+    "shirts-7": {
+      "price_id": "price_1SNZm2RuBpQt4n9NdV4FIgM2"
+    },
+    "shirts-8": {
+      "price_id": "price_1SNZm2RuBpQt4n9Nh00LfNw9"
+    },
+    "shirts-9": {
+      "price_id": "price_1SNZm3RuBpQt4n9NZpzhUyaV"
+    },
+    "shirts-10": {
+      "price_id": "price_1SNZm4RuBpQt4n9N3QFiv1tT"
+    },
+    "mugs-1": {
+      "price_id": "price_1SNZm4RuBpQt4n9NUhZ9O3I4"
+    },
+    "mugs-2": {
+      "price_id": "price_1SNZm5RuBpQt4n9N8KyrDIIb"
+    },
+    "mugs-3": {
+      "price_id": "price_1SNZm6RuBpQt4n9Ngs1330U8"
+    },
+    "mugs-4": {
+      "price_id": "price_1SNZm6RuBpQt4n9NIamZcJ5w"
+    },
+    "mugs-5": {
+      "price_id": "price_1SNZm7RuBpQt4n9NU5dgbcy3"
+    },
+    "mugs-6": {
+      "price_id": "price_1SNZm7RuBpQt4n9N1hrrcnQC"
+    },
+    "mugs-7": {
+      "price_id": "price_1SNZm8RuBpQt4n9NxcdEaHxe"
+    },
+    "mugs-8": {
+      "price_id": "price_1SNZm9RuBpQt4n9NB9g4RWPv"
+    },
+    "mugs-9": {
+      "price_id": "price_1SNZm9RuBpQt4n9N3AqTeTHw"
+    },
+    "mugs-10": {
+      "price_id": "price_1SNZmARuBpQt4n9NU34fvMrU"
+    },
+    "pendants-1": {
+      "price_id": "price_1SNZmBRuBpQt4n9NoFCHVW6f"
+    },
+    "pendants-2": {
+      "price_id": "price_1SNZmBRuBpQt4n9NSinRKx2H"
+    },
+    "pendants-3": {
+      "price_id": "price_1SNZmCRuBpQt4n9Ns8hBPCny"
+    },
+    "pendants-4": {
+      "price_id": "price_1SNZmDRuBpQt4n9NyFt3HRth"
+    },
+    "pendants-5": {
+      "price_id": "price_1SNZmDRuBpQt4n9NrFs1gUJl"
+    },
+    "pendants-6": {
+      "price_id": "price_1SNZmERuBpQt4n9NdjM0YGfE"
+    },
+    "pendants-7": {
+      "price_id": "price_1SNZmFRuBpQt4n9NpCRE63ID"
+    },
+    "pendants-8": {
+      "price_id": "price_1SNZmFRuBpQt4n9NFYmQOCX7"
+    },
+    "pendants-9": {
+      "price_id": "price_1SNZmHRuBpQt4n9NzhxB3JN1"
+    },
+    "pendants-10": {
+      "price_id": "price_1SNZmIRuBpQt4n9NbOF1TKs4"
+    },
+    "pins-1": {
+      "price_id": "price_1SNZmIRuBpQt4n9NUErkF7WV"
+    },
+    "pins-2": {
+      "price_id": "price_1SNZmJRuBpQt4n9Nw0wYGyrD"
+    },
+    "pins-3": {
+      "price_id": "price_1SNZmKRuBpQt4n9NP2fFUF87"
+    },
+    "pins-4": {
+      "price_id": "price_1SNZmKRuBpQt4n9NNuxgLnq3"
+    },
+    "pins-5": {
+      "price_id": "price_1SNZmLRuBpQt4n9NcgDLe97A"
+    },
+    "pins-6": {
+      "price_id": "price_1SNZmLRuBpQt4n9NcycJS19P"
+    },
+    "pins-7": {
+      "price_id": "price_1SNZmNRuBpQt4n9Nkk6kDsm2"
+    },
+    "pins-8": {
+      "price_id": "price_1SNZmORuBpQt4n9N8Cpp3bLV"
+    },
+    "pins-9": {
+      "price_id": "price_1SNZmORuBpQt4n9NbU0bl5b1"
+    },
+    "pins-10": {
+      "price_id": "price_1SNZmPRuBpQt4n9NMu34LTqf"
+    },
+    "stickers-1": {
+      "price_id": "price_1SNZmQRuBpQt4n9NraZLuNe9"
+    },
+    "stickers-2": {
+      "price_id": "price_1SNZmQRuBpQt4n9NtbWqMW4H"
+    },
+    "stickers-3": {
+      "price_id": "price_1SNZmRRuBpQt4n9NH95becAo"
+    },
+    "stickers-4": {
+      "price_id": "price_1SNZmSRuBpQt4n9NPELztKQx"
+    },
+    "stickers-5": {
+      "price_id": "price_1SNZmSRuBpQt4n9Nb1K63i4z"
+    },
+    "stickers-6": {
+      "price_id": "price_1SNZmTRuBpQt4n9NsSsHSwXY"
+    },
+    "stickers-7": {
+      "price_id": "price_1SNZmURuBpQt4n9NUsnoV5Vg"
+    },
+    "stickers-8": {
+      "price_id": "price_1SNZmURuBpQt4n9NaeIQ8opI"
+    },
+    "stickers-9": {
+      "price_id": "price_1SNZmVRuBpQt4n9NGUOvcvha"
+    },
+    "stickers-10": {
+      "price_id": "price_1SNZmWRuBpQt4n9NEk3qY28w"
+    },
+    "prints-1": {
+      "price_id": "price_1SNZmXRuBpQt4n9NW75bN3dj"
+    },
+    "prints-2": {
+      "price_id": "price_1SNZmYRuBpQt4n9NiB3ncABj"
+    },
+    "prints-3": {
+      "price_id": "price_1SNZmZRuBpQt4n9NPRSWHn5U"
+    },
+    "prints-4": {
+      "price_id": "price_1SNZmZRuBpQt4n9NMtmHa8Nn"
+    },
+    "prints-5": {
+      "price_id": "price_1SNZmaRuBpQt4n9Nc9BIHRCu"
+    },
+    "prints-6": {
+      "price_id": "price_1SNZmbRuBpQt4n9Na0lnIKFP"
+    },
+    "prints-7": {
+      "price_id": "price_1SNZmbRuBpQt4n9Nr6BbP0fg"
+    },
+    "prints-8": {
+      "price_id": "price_1SNZmcRuBpQt4n9NDL1rCuXz"
+    },
+    "prints-9": {
+      "price_id": "price_1SNZmdRuBpQt4n9NAZ5Rk6Li"
+    },
+    "prints-10": {
+      "price_id": "price_1SNZmeRuBpQt4n9NRT9QGG5V"
+    },
+    "touques-1": {
+      "price_id": "price_1SNZmeRuBpQt4n9NZWR1vWX4"
+    },
+    "touques-2": {
+      "price_id": "price_1SNZmfRuBpQt4n9NKacKWIbB"
+    },
+    "touques-3": {
+      "price_id": "price_1SNZmgRuBpQt4n9NxiWGBTmn"
+    },
+    "touques-4": {
+      "price_id": "price_1SNZmgRuBpQt4n9NFWLLMqvq"
+    },
+    "touques-5": {
+      "price_id": "price_1SNZmhRuBpQt4n9N9ziJtumh"
+    },
+    "touques-6": {
+      "price_id": "price_1SNZmiRuBpQt4n9Nx1xC4aoa"
+    },
+    "touques-7": {
+      "price_id": "price_1SNZmiRuBpQt4n9Ns0OQ58c6"
+    },
+    "touques-8": {
+      "price_id": "price_1SNZmjRuBpQt4n9NciDsq4vk"
+    },
+    "touques-9": {
+      "price_id": "price_1SNZmkRuBpQt4n9NtPswIVff"
+    },
+    "touques-10": {
+      "price_id": "price_1SNZmlRuBpQt4n9NuJ4nGOcr"
+    }
+  }
+}
