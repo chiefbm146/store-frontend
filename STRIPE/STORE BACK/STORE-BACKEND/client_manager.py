@@ -197,6 +197,7 @@ class ClientManager:
                         continue
                     else:
                         print(f"📝 Transaction {payment_intent_id} exists but missing breakdown, will update")
+                        is_new = False  # Ensure is_new is False so we merge
 
                 # Extract customer details from charge billing_details if available
                 billing_details = charge.get('billing_details', {}) or {}
@@ -208,26 +209,27 @@ class ClientManager:
                 gross_amount = charge.get('amount', 0)  # Total amount charged to customer
                 transfer_amount = transfer.get('amount', gross_amount)  # What goes to franchisee
 
-                # Try to get application fee from payment intent (expanded in transfer)
+                # Get application fee from payment intent
                 platform_fee = 0
-                payment_intent_obj = charge.get('payment_intent')
+                payment_intent_id_for_fee = charge.get('payment_intent')
 
-                print(f"🔍 Payment intent type: {type(payment_intent_obj)}")
-                if isinstance(payment_intent_obj, dict):
-                    print(f"✅ Payment intent is expanded dict")
-                    platform_fee = payment_intent_obj.get('application_fee_amount', 0)
-                    print(f"✅ Got platform fee from expanded payment intent: ${platform_fee/100:.2f}")
-                elif isinstance(payment_intent_obj, str):
-                    print(f"📋 Payment intent is string ID, fetching: {payment_intent_obj}")
-                    # It's just an ID string, fetch it
-                    payment_intent = StripeConnector.get_payment_intent(payment_intent_obj)
-                    if payment_intent:
-                        platform_fee = payment_intent.get('application_fee_amount', 0)
-                        print(f"✅ Got platform fee from fetched payment intent: ${platform_fee/100:.2f}")
+                print(f"🔍 Payment intent: {payment_intent_id_for_fee} (type: {type(payment_intent_id_for_fee).__name__})")
+
+                if payment_intent_id_for_fee:
+                    # If it's a dict (expanded), use it directly
+                    if isinstance(payment_intent_id_for_fee, dict):
+                        platform_fee = payment_intent_id_for_fee.get('application_fee_amount', 0)
+                        print(f"✅ Using expanded payment intent, fee: ${platform_fee/100:.2f}")
                     else:
-                        print(f"❌ Failed to fetch payment intent {payment_intent_obj}")
+                        # It's a string ID - fetch the full payment intent
+                        payment_intent = StripeConnector.get_payment_intent(str(payment_intent_id_for_fee))
+                        if payment_intent:
+                            platform_fee = payment_intent.get('application_fee_amount', 0)
+                            print(f"✅ Fetched payment intent, fee: ${platform_fee/100:.2f}")
+                        else:
+                            print(f"⚠️ Could not fetch payment intent {payment_intent_id_for_fee}")
                 else:
-                    print(f"⚠️ Unexpected payment_intent type: {payment_intent_obj}")
+                    print(f"⚠️ No payment_intent found in charge")
 
                 # Calculate stripe fee: what's lost between customer charged and transfer amount
                 stripe_fee = gross_amount - transfer_amount - platform_fee
