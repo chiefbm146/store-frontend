@@ -171,40 +171,60 @@ class ClientManager:
             synced_count = 0
 
             for transfer in stripe_transfers:
-                # Get original charge from transfer
+                # Get original charge from transfer (expanded with source_transaction)
                 charge = transfer.get('source_transaction')
                 if not charge or charge.get('object') != 'charge':
+                    print(f"⚠️ Skipping transfer {transfer.get('id')} - no charge found")
                     continue
 
                 charge_id = charge.get('id')
                 payment_intent_id = charge.get('payment_intent') or charge_id
 
+                print(f"📝 Processing charge: {charge_id} (payment_intent: {payment_intent_id})")
+
                 # Check if already exists
                 existing = db.collection('clients').document(client_uid).collection('transactions').document(payment_intent_id).get()
                 if existing.exists:
+                    print(f"⏭️ Transaction {payment_intent_id} already exists, skipping")
                     continue
 
-                # Create transaction record
+                # Extract customer details from charge billing_details if available
+                billing_details = charge.get('billing_details', {}) or {}
+
+                # Get metadata for additional details
+                metadata = charge.get('metadata', {}) or {}
+
+                # Create transaction record with all available details
                 transaction_data = {
                     'stripePaymentId': payment_intent_id,
                     'chargeId': charge_id,
+                    'transferId': transfer.get('id'),
                     'amount': charge.get('amount', 0),
-                    'currency': charge.get('currency', 'cad'),
+                    'currency': charge.get('currency', 'cad').lower(),
                     'status': charge.get('status', 'succeeded'),
-                    'description': charge.get('description', 'Payment'),
-                    'name': charge.get('billing_details', {}).get('name', 'N/A') if charge.get('billing_details') else 'N/A',
-                    'email': charge.get('billing_details', {}).get('email', 'N/A') if charge.get('billing_details') else 'N/A',
-                    'phone': charge.get('billing_details', {}).get('phone', 'N/A') if charge.get('billing_details') else 'N/A',
+                    'description': charge.get('description') or metadata.get('description') or 'Payment',
+                    'name': billing_details.get('name', 'N/A'),
+                    'email': billing_details.get('email', 'N/A'),
+                    'phone': billing_details.get('phone', 'N/A'),
+                    'receipt_email': charge.get('receipt_email'),
+                    'receipt_url': charge.get('receipt_url'),
+                    'payment_method_types': charge.get('payment_method_types', []),
+                    'metadata': metadata,
+                    'created_timestamp': charge.get('created', 0),
                     'createdAt': datetime.fromtimestamp(charge.get('created', 0)),
                     'updatedAt': datetime.utcnow()
                 }
 
-                # Save transaction
-                ClientManager.record_transaction(client_uid, transaction_data)
-                synced_count += 1
+                # Save transaction to Firestore
+                try:
+                    db.collection('clients').document(client_uid).collection('transactions').document(payment_intent_id).set(transaction_data)
+                    print(f"✅ Transaction saved: {payment_intent_id}")
+                    synced_count += 1
+                except Exception as write_error:
+                    print(f"❌ Error writing transaction {payment_intent_id}: {write_error}")
 
             print(f"✅ Synced {synced_count} transactions for client {client_uid}")
             return synced_count
         except Exception as e:
-            print(f"❌ Error syncing transactions: {e}")
+            print(f"❌ Error syncing transactions: {e}", exc_info=True)
             return 0

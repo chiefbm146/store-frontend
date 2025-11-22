@@ -278,9 +278,12 @@ async function loadTransactions() {
       const dateStr = dateObj.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
-        day: 'numeric'
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
       });
 
+      // Build detailed transaction info
       html += `
         <div class="transaction-item">
           <div class="transaction-header">
@@ -289,21 +292,49 @@ async function loadTransactions() {
           </div>
           <div class="transaction-details">
             <div class="transaction-detail">
-              <span class="detail-label">Payment ID</span>
-              <span class="detail-value">${txn.stripePaymentId || txn.chargeId || 'N/A'}</span>
+              <span class="detail-label">Customer</span>
+              <span class="detail-value">${txn.name || 'Guest'}</span>
+            </div>
+            <div class="transaction-detail">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">${txn.email || txn.receipt_email || 'N/A'}</span>
+            </div>
+            <div class="transaction-detail">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value">${txn.phone || 'N/A'}</span>
             </div>
             <div class="transaction-detail">
               <span class="detail-label">Status</span>
               <span class="detail-value" style="color: ${txn.status === 'succeeded' ? '#27ae60' : '#ff6b6b'};">${txn.status || 'unknown'}</span>
             </div>
             <div class="transaction-detail">
+              <span class="detail-label">Description</span>
+              <span class="detail-value">${txn.description || 'Payment'}</span>
+            </div>
+            <div class="transaction-detail">
               <span class="detail-label">Currency</span>
               <span class="detail-value">${(txn.currency || 'cad').toUpperCase()}</span>
             </div>
             <div class="transaction-detail">
-              <span class="detail-label">Description</span>
-              <span class="detail-value">${txn.description || txn.name || 'Payment'}</span>
+              <span class="detail-label">Payment ID</span>
+              <span class="detail-value" style="font-size: 11px; font-family: monospace;">${txn.stripePaymentId || txn.chargeId || 'N/A'}</span>
             </div>
+            <div class="transaction-detail">
+              <span class="detail-label">Charge ID</span>
+              <span class="detail-value" style="font-size: 11px; font-family: monospace;">${txn.chargeId || 'N/A'}</span>
+            </div>
+            ${txn.transferId ? `
+            <div class="transaction-detail">
+              <span class="detail-label">Transfer ID</span>
+              <span class="detail-value" style="font-size: 11px; font-family: monospace;">${txn.transferId}</span>
+            </div>
+            ` : ''}
+            ${txn.receipt_url ? `
+            <div class="transaction-detail">
+              <span class="detail-label">Receipt</span>
+              <span class="detail-value"><a href="${txn.receipt_url}" target="_blank" style="color: #667eea; text-decoration: none;">View Receipt ↗</a></span>
+            </div>
+            ` : ''}
           </div>
         </div>
       `;
