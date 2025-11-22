@@ -2,11 +2,9 @@
  * Clean URL System - AARIE.CA
  * Maps device-specific URLs to clean, user-friendly URLs
  * Runs on page load to update address bar
- * On mobile, redirects certain pages to appropriate view with modules
  */
 (function() {
   const currentPath = window.location.pathname;
-  const isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent);
 
   // Map of device-specific URLs to clean URLs
   const cleanUrls = {
@@ -55,13 +53,6 @@
 
   const cleanUrl = cleanUrls[currentPath];
   const queryString = window.location.search;
-
-  // Special handling for mobile AI chat redirect
-  if (currentPath === '/ai-chat-desk.html' && isMobile) {
-    console.log('[Clean URL] Mobile detected on AI chat page - redirecting to web-sites-4-u with chat open');
-    window.location.href = '/web-sites-4-u?chat=open';
-    return;
-  }
 
   // Apply clean URL to address bar
   if (cleanUrl && window.history && window.history.replaceState) {
