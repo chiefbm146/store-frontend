@@ -11,7 +11,7 @@ export const desktopPage = {
         subtitle: 'AARIE.CA creates professional online stores with AI-powered chat - you don\'t have to lift a finger',
         description: 'We build your custom store selling workshops, products, or services with intelligent chatbots that help your customers 24/7. Desktop and mobile optimized.',
         ctaPrimary: {
-            text: 'AARIES STORE',
+            text: 'GET A STORE',
             link: '/demo-desk.html'
         },
         ctaSecondary: {
@@ -115,7 +115,7 @@ export const desktopPage = {
         title: 'See What We\'ve Built',
         description: 'Check out Moon Tide Reconciliation - a store we built for a client. See how your customers will shop workshops, products, and services with AI assistance.',
         buttonPrimary: {
-            text: 'AARIES STORE',
+            text: 'GET A STORE',
             link: '/demo-desk.html'
         },
         buttonSecondary: {
@@ -126,9 +126,9 @@ export const desktopPage = {
 
     // Footer
     footer: {
-        tagline: 'AARIES STORE - We Build Your Business Online',
+        tagline: 'GET A STORE - We Build Your Business Online',
         links: [
-            { text: 'AARIES STORE', url: '/demo-desk.html' },
+            { text: 'GET A STORE', url: '/demo-desk.html' },
             { text: 'About', url: '/about-desk.html' },
             { text: 'Contact', url: '/contact-desk.html' }
         ],
