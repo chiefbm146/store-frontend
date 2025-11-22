@@ -62,6 +62,26 @@ body {
     flex-direction: column;
 }
 
+/* Title section wrapper */
+.title-section {
+    order: 1;
+}
+
+/* Email section wrapper */
+.email-section {
+    order: 2;
+}
+
+/* Phone section wrapper */
+.phone-section {
+    order: 3;
+}
+
+/* Email icon - hidden on desktop */
+.email-icon {
+    display: none;
+}
+
 .contact-title {
     font-size: 5rem;
     font-weight: 900;
@@ -194,14 +214,133 @@ body {
 
 @media (max-width: 768px) {
     body {
-        padding: 30px;
+        padding: 20px;
+        padding-top: 100px; /* Space for close button */
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .close-button {
+        top: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+    }
+
+    .contact-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .contact-header {
+        text-align: center;
+    }
+
+    /* MOBILE: Reorder sections - email first, then title */
+    .email-section {
+        order: 1;
+    }
+
+    .title-section {
+        order: 2;
+    }
+
+    .phone-section {
+        order: 3;
+    }
+
+    /* Show email icon on mobile */
+    .email-icon {
+        display: block;
+        font-size: 3.5rem;
+        margin-bottom: 15px;
+        text-align: center;
     }
 
     .contact-title {
-        font-size: 3rem;
+        font-size: 2.2rem;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .contact-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .info-section {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        margin-bottom: 10px;
+    }
+
+    .info-value {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        word-break: break-all;
+    }
+
+    .info-note {
+        font-size: 1rem;
+    }
+
+    .copy-button {
+        padding: 14px 28px;
+        font-size: 1rem;
+        width: 100%;
+        justify-content: center;
     }
 
     .contact-details {
-        padding: 40px;
+        padding: 25px;
+        border-left: none;
+        border-top: 4px solid var(--color-primary, #1E90FF);
+    }
+
+    .detail-block {
+        padding-bottom: 25px;
+        margin-bottom: 25px;
+    }
+
+    .detail-title {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+
+    .detail-content {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+        padding-top: 90px;
+    }
+
+    .close-button {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+
+    .contact-title {
+        font-size: 1.8rem;
+    }
+
+    .info-value {
+        font-size: 1.1rem;
+    }
+
+    .contact-details {
+        padding: 20px;
     }
 }

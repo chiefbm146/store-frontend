@@ -182,7 +182,7 @@ When she's not building the future of e-commerce, Jane enjoys hiking, reading, a
         contactInfo: {
             email: {
                 label: "Email",
-                value: "support@yourstore.com",
+                value: "aaries.luxi.ai@gmail.com",
                 note: "Respond within 24 hours"
             },
             phone: {
