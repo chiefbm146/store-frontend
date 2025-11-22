@@ -194,10 +194,17 @@ def get_dashboard_data():
     try:
         client_uid = request.user_uid
 
-        # Get client data
+        # Get client data - auto-create if not exists (new user)
         client = ClientManager.get_client(client_uid)
         if not client:
-            return jsonify({'error': 'Client not found'}), 404
+            # Create client automatically from Firebase token
+            logger.info(f"📝 Auto-creating client for new user: {request.user_email}")
+            ClientManager.create_or_update_client(client_uid, {
+                'uid': client_uid,
+                'email': request.user_email,
+                'name': request.user_email.split('@')[0]  # Default name from email
+            })
+            client = ClientManager.get_client(client_uid)
 
         # Get Stripe account
         stripe_account = ClientManager.get_stripe_account(client_uid)
