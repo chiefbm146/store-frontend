@@ -4,6 +4,16 @@
  * All colors use CSS variables for easy theming
  */
 
+/* Hide mobile-only elements on desktop (>768px) */
+@media (min-width: 769px) {
+    .ai-blurb-section,
+    .mobile-chat-fab,
+    .mobile-chat-overlay,
+    .mobile-chat-modal {
+        display: none !important;
+    }
+}
+
 * {
     margin: 0;
     padding: 0;
