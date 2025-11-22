@@ -1,13 +1,24 @@
 /**
- * Clean URL - Replaces device-specific URL with clean version
- * Runs after page load to fix address bar
- * Allows users to share clean, working URLs
+ * Clean URL System - AARIE.CA
+ * Maps device-specific URLs to clean, user-friendly URLs
+ * Runs on page load to update address bar
+ * On mobile, redirects certain pages to appropriate view with modules
  */
 (function() {
   const currentPath = window.location.pathname;
+  const isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent);
 
   // Map of device-specific URLs to clean URLs
   const cleanUrls = {
+    // AARIE.CA Main Pages
+    '/index.html': '/',
+    '/demo-desk.html': '/web-sites-4-u',
+    '/store-booking.html': '/booking',
+    '/about-desk.html': '/about',
+    '/contact-desk.html': '/contact',
+    '/ai-chat-desk.html': '/ai-chat',
+
+    // Legacy/Old URLs (keep for backwards compatibility)
     '/desktop.html': '/chat',
     '/mobile.html': '/chat',
     '/infinite-story-desk.html': '/infinite-story',
@@ -34,8 +45,6 @@
     '/shona-mobile.html': '/shona',
     '/moon-tide-desk.html': '/moon-tide',
     '/moon-tide-mobile.html': '/moon-tide',
-    '/contact-desk.html': '/contact',
-    '/contact-mobile.html': '/contact',
     '/delete-data-desk.html': '/delete-data',
     '/delete-data-mobile.html': '/delete-data',
     '/workshop-list-desk.html': '/workshop-list',
@@ -45,10 +54,17 @@
   };
 
   const cleanUrl = cleanUrls[currentPath];
+  const queryString = window.location.search;
 
+  // Special handling for mobile AI chat redirect
+  if (currentPath === '/ai-chat-desk.html' && isMobile) {
+    console.log('[Clean URL] Mobile detected on AI chat page - redirecting to web-sites-4-u with chat open');
+    window.location.href = '/web-sites-4-u?chat=open';
+    return;
+  }
+
+  // Apply clean URL to address bar
   if (cleanUrl && window.history && window.history.replaceState) {
-    // Replace URL in address bar without reloading page, preserving query parameters
-    const queryString = window.location.search;
     const newUrl = cleanUrl + queryString;
     window.history.replaceState(null, '', newUrl);
     console.log(`[Clean URL] Changed ${currentPath}${queryString} → ${newUrl}`);

@@ -10,6 +10,52 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/web-sites-4-u",
+        "destination": "/demo-desk.html"
+      },
+      {
+        "source": "/web-sites-4-u/**",
+        "destination": "/demo-desk.html"
+      },
+      {
+        "source": "/booking",
+        "destination": "/store-booking.html"
+      },
+      {
+        "source": "/booking/**",
+        "destination": "/store-booking.html"
+      },
+      {
+        "source": "/about",
+        "destination": "/about-desk.html"
+      },
+      {
+        "source": "/about/**",
+        "destination": "/about-desk.html"
+      },
+      {
+        "source": "/contact",
+        "destination": "/contact-desk.html"
+      },
+      {
+        "source": "/contact/**",
+        "destination": "/contact-desk.html"
+      },
+      {
+        "source": "/ai-chat",
+        "destination": "/ai-chat-desk.html"
+      },
+      {
+        "source": "/ai-chat/**",
+        "destination": "/ai-chat-desk.html"
+      }
+    ],
     "headers": [
       {
         "source": "**/*.@(js|css|html)",
