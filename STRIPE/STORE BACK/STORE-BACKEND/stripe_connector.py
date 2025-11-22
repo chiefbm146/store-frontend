@@ -87,7 +87,7 @@ class StripeConnector:
             transfers = stripe.Transfer.list(
                 limit=limit,
                 destination=stripe_account_id,
-                expand=['data.source_transaction']
+                expand=['data.source_transaction', 'data.source_transaction.payment_intent']
             )
 
             print(f"✅ Found {len(transfers.data)} transfers to {stripe_account_id}")
@@ -95,6 +95,16 @@ class StripeConnector:
         except stripe.error.StripeError as e:
             print(f"❌ Stripe error listing transfers: {e}")
             return []
+
+    @staticmethod
+    def get_payment_intent(payment_intent_id):
+        """Get payment intent details including application fee"""
+        try:
+            intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+            return intent
+        except stripe.error.StripeError as e:
+            print(f"❌ Stripe error getting payment intent: {e}")
+            return None
 
     @staticmethod
     def create_payment_intent(amount, stripe_account_id, metadata=None):

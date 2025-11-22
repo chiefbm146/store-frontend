@@ -182,7 +182,6 @@ class ClientManager:
 
                 print(f"📝 Processing charge: {charge_id} (payment_intent: {payment_intent_id})")
                 print(f"📊 Transfer amount: {transfer.get('amount')} | Charge amount: {charge.get('amount')}")
-                print(f"📋 Charge keys: {list(charge.keys())[:10]}...")  # First 10 keys to debug
 
                 # Check if already exists
                 existing = db.collection('clients').document(client_uid).collection('transactions').document(payment_intent_id).get()
@@ -200,23 +199,33 @@ class ClientManager:
                 gross_amount = charge.get('amount', 0)  # Total amount charged to customer
                 transfer_amount = transfer.get('amount', gross_amount)  # What goes to franchisee
 
-                # Try to get application fee from charge first (from payment intent)
-                platform_fee = charge.get('application_fee_amount', 0)
+                # Try to get application fee from payment intent (expanded in transfer)
+                platform_fee = 0
+                payment_intent_obj = charge.get('payment_intent')
 
-                # If no application fee in charge, try to get from metadata or calculate
-                if platform_fee == 0 and transfer.get('metadata', {}).get('application_fee_amount'):
-                    platform_fee = int(transfer.get('metadata', {}).get('application_fee_amount', 0))
+                # If payment_intent is an object (expanded), get fee from it
+                if isinstance(payment_intent_obj, dict):
+                    platform_fee = payment_intent_obj.get('application_fee_amount', 0)
+                    print(f"✅ Got platform fee from expanded payment intent: ${platform_fee/100:.2f}")
+                elif payment_intent_obj and isinstance(payment_intent_obj, str):
+                    # It's just an ID string, fetch it
+                    payment_intent = StripeConnector.get_payment_intent(payment_intent_obj)
+                    if payment_intent:
+                        platform_fee = payment_intent.get('application_fee_amount', 0)
+                        print(f"✅ Got platform fee from fetched payment intent: ${platform_fee/100:.2f}")
 
                 # Calculate stripe fee: what's lost between customer charged and transfer amount
                 stripe_fee = gross_amount - transfer_amount - platform_fee
 
-                # Safety check: if stripe fee is negative or too large, recalculate
-                if stripe_fee < 0 or stripe_fee > gross_amount:
-                    # Assume ~3.8% Stripe fee
-                    stripe_fee = int(gross_amount * 0.038) + 30  # 3.8% + $0.30 fixed fee
+                # Safety check: if stripe fee is negative, set to 0
+                if stripe_fee < 0:
+                    stripe_fee = 0
 
                 print(f"💰 Breakdown for {charge_id}:")
-                print(f"   Gross: ${gross_amount/100:.2f} | Transfer: ${transfer_amount/100:.2f} | Platform Fee: ${platform_fee/100:.2f} | Stripe Fee: ${stripe_fee/100:.2f}")
+                print(f"   Customer Charged: ${gross_amount/100:.2f}")
+                print(f"   Transfer to Franchisee: ${transfer_amount/100:.2f}")
+                print(f"   Platform Fee (AARIE): ${platform_fee/100:.2f}")
+                print(f"   Stripe Processing Fee: ${stripe_fee/100:.2f}")
 
                 # Create transaction record with all available details including payment breakdown
                 transaction_data = {
