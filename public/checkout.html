@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - AARIE.CA</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Checkout - AARIE.CA">
+    <meta property="og:description" content="Complete your purchase - Custom Store for $299">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #1a1a1a;
+            background: #F8F9FA;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* === NAVIGATION BAR === */
+        .nav-bar {
+            position: static;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 15px 40px;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: auto;
+            padding-left: 0;
+            margin-left: 80px;
+        }
+
+        .nav-back-button {
+            background: #6366f1;
+            color: #FFFFFF;
+            text-decoration: none;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 2px solid #4f46e5;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            position: absolute;
+            left: 0;
+        }
+
+        .nav-back-button:hover {
+            background: #4f46e5;
+            transform: translateX(-3px);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            color: #6366f1;
+        }
+
+        .nav-logo-icon {
+            font-size: 2rem;
+        }
+
+        /* === CHECKOUT CONTAINER === */
+        .checkout-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 1fr 450px;
+            gap: 40px;
+            min-height: calc(100vh - 100px);
+        }
+
+        /* === ORDER SUMMARY PANEL === */
+        .order-summary {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .summary-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #E9ECEF;
+        }
+
+        .summary-icon {
+            font-size: 2rem;
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 16px;
+            padding: 25px;
+            color: #FFFFFF;
+            margin-bottom: 25px;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .product-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .product-note {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #E9ECEF;
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 0.95rem;
+            color: #4a5568;
+        }
+
+        .feature-text strong {
+            color: #1a1a1a;
+        }
+
+        /* === PAYMENT PANEL === */
+        .payment-panel {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #E9ECEF;
+        }
+
+        .payment-icon {
+            font-size: 1.5rem;
+        }
+
+        .payment-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .secure-badge {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: #28a745;
+            background: #E8F5E9;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        /* === FORM STYLES === */
+        .checkout-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-section-title span {
+            font-size: 1.2rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #FFFFFF;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #98a2b3;
+        }
+
+        /* === STRIPE CARD ELEMENT === */
+        .stripe-card-container {
+            padding: 14px 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            background: #FFFFFF;
+            min-height: 48px;
+            transition: all 0.3s ease;
+        }
+
+        .stripe-card-container.focused {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .stripe-card-container.error {
+            border-color: #dc3545;
+        }
+
+        /* === TERMS CHECKBOX === */
+        .terms-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: #F8F9FA;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .terms-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            flex-shrink: 0;
+            accent-color: #6366f1;
+        }
+
+        .terms-wrapper label {
+            font-size: 0.9rem;
+            color: #4a5568;
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .terms-link {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+
+        /* === SUBMIT BUTTON === */
+        .submit-btn {
+            width: 100%;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .submit-btn .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #FFFFFF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .submit-btn.loading .spinner {
+            display: block;
+        }
+
+        .submit-btn.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* === ERROR MESSAGE === */
+        .error-message {
+            display: none;
+            background: #FFEBEE;
+            border-left: 4px solid #dc3545;
+            border-radius: 8px;
+            padding: 14px 16px;
+            color: #c62828;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .error-message.visible {
+            display: block;
+        }
+
+        /* === SUCCESS MESSAGE === */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-overlay.visible {
+            display: flex;
+        }
+
+        .success-modal {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            max-width: 500px;
+            margin: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .success-btn {
+            display: inline-block;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .success-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        /* === SECURITY FOOTER === */
+        .security-footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 15px;
+            background: #F8F9FA;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .security-footer span {
+            color: #28a745;
+        }
+
+        /* === RESPONSIVE - TABLET === */
+        @media (max-width: 1024px) {
+            .checkout-wrapper {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 30px 20px;
+            }
+
+            .order-summary {
+                order: 1;
+            }
+
+            .payment-panel {
+                order: 2;
+            }
+        }
+
+        /* === RESPONSIVE - MOBILE === */
+        @media (max-width: 768px) {
+            .nav-bar {
+                padding: 10px 15px;
+            }
+
+            .nav-container {
+                position: relative;
+            }
+
+            .nav-left {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .nav-back-button {
+                width: 40px;
+                height: 40px;
+                position: absolute;
+                left: 0;
+            }
+
+            .nav-logo {
+                font-size: 1.2rem;
+                text-align: center;
+            }
+
+            .nav-logo-icon {
+                font-size: 1.5rem;
+            }
+
+            .checkout-wrapper {
+                padding: 20px 15px;
+                gap: 20px;
+            }
+
+            .order-summary,
+            .payment-panel {
+                padding: 20px;
+                border-radius: 12px;
+            }
+
+            .product-card {
+                padding: 20px;
+            }
+
+            .product-name {
+                font-size: 1.1rem;
+            }
+
+            .product-price {
+                font-size: 2rem;
+            }
+
+            .summary-title,
+            .payment-title {
+                font-size: 1.2rem;
+            }
+
+            .submit-btn {
+                font-size: 1.1rem;
+                padding: 16px 20px;
+            }
+
+            .success-modal {
+                padding: 30px 25px;
+            }
+
+            .success-icon {
+                font-size: 4rem;
+            }
+
+            .success-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* === RESPONSIVE - SMALL MOBILE === */
+        @media (max-width: 480px) {
+            .checkout-wrapper {
+                padding: 15px 10px;
+            }
+
+            .form-input {
+                padding: 12px 14px;
+                font-size: 16px; /* Prevents iOS zoom */
+            }
+
+            .secure-badge {
+                display: none;
+            }
+
+            .payment-header {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/index.html" class="nav-logo">
+                    <span class="nav-logo-icon">🏪</span>
+                    <span>AARIE.CA</span>
+                </a>
+                <a href="/store-booking.html" class="nav-back-button" title="Back to Booking">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Checkout Container -->
+    <div class="checkout-wrapper">
+        <!-- Order Summary Panel -->
+        <div class="order-summary">
+            <div class="summary-header">
+                <span class="summary-icon">🛒</span>
+                <h2 class="summary-title">Order Summary</h2>
+            </div>
+
+            <div class="product-card">
+                <div class="product-name">Custom Store - One-Time Payment</div>
+                <p class="product-description">
+                    Pay once, get your complete custom store built in 24-48 hours. Custom design, product setup, AI chatbot, and payment processing - all included.
+                </p>
+                <div class="product-price">$299</div>
+                <div class="product-note">One-time payment - No monthly fees</div>
+            </div>
+
+            <div class="features-list">
+                <div class="feature-item">
+                    <span class="feature-icon">🎨</span>
+                    <span class="feature-text"><strong>Custom Store Design</strong> - Professional, mobile-friendly store tailored to your brand</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📦</span>
+                    <span class="feature-text"><strong>Product Setup</strong> - We add your products, images, prices, and descriptions</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💳</span>
+                    <span class="feature-text"><strong>Payment Processing</strong> - Secure Stripe integration for accepting payments</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🤖</span>
+                    <span class="feature-text"><strong>AI Chatbot</strong> - Custom assistant trained on your business</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <span class="feature-text"><strong>24-48 Hour Delivery</strong> - Your store goes live quickly</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Panel -->
+        <div class="payment-panel">
+            <div class="payment-header">
+                <span class="payment-icon">🔒</span>
+                <h2 class="payment-title">Secure Checkout</h2>
+                <div class="secure-badge">
+                    <span>🛡️</span>
+                    Secured by Stripe
+                </div>
+            </div>
+
+            <form id="checkout-form" class="checkout-form">
+                <!-- Customer Information -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <span>👤</span>
+                        Your Information
+                    </div>
+                    <input type="text" id="customer-name" class="form-input" placeholder="Full Name" required>
+                    <input type="email" id="customer-email" class="form-input" placeholder="Email Address" required>
+                    <input type="tel" id="customer-phone" class="form-input" placeholder="Phone Number" required>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <span>💳</span>
+                        Payment Details
+                    </div>
+                    <div id="stripe-card-element" class="stripe-card-container"></div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="error-message" class="error-message"></div>
+
+                <!-- Terms & Conditions -->
+                <div class="terms-wrapper">
+                    <input type="checkbox" id="accept-terms" required>
+                    <label for="accept-terms">
+                        I agree to share my information for order fulfillment and communications.
+                        I have read and accept the
+                        <a href="/privacy-policy.html" target="_blank" class="terms-link">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submit-btn" class="submit-btn" disabled>
+                    <span class="spinner"></span>
+                    <span class="btn-text">Pay $299</span>
+                </button>
+
+                <!-- Security Footer -->
+                <div class="security-footer">
+                    <span>🔐</span>
+                    Your payment is encrypted and secure. We never store your card details.
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Overlay -->
+    <div id="success-overlay" class="success-overlay">
+        <div class="success-modal">
+            <div class="success-icon">🎉</div>
+            <h2 class="success-title">Payment Successful!</h2>
+            <p class="success-message">
+                Thank you for your purchase! We've received your payment and will start building your custom store immediately.
+                You'll receive a confirmation email shortly with next steps.
+            </p>
+            <a href="/index.html" class="success-btn">Return to Home</a>
+        </div>
+    </div>
+
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script>
+        // ========================================
+        // STRIPE CHECKOUT CONFIGURATION
+        // ========================================
+        const STRIPE_PUBLISHABLE_KEY = 'pk_live_51Rp7gdRuBpQt4n9NyNv9RHiHf3QOmJdETL8Boyu7uC2YUKJUz2OIXXzgAN4h91WC2F21qhXHs7T2QUbDEGCEwMeg00bJbhDvn6';
+        const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+
+        // Product Details
+        const PRODUCT = {
+            id: 'custom-store',
+            name: 'One-Time Payment',
+            price: 29900, // cents
+            description: 'Custom Store - Complete build in 24-48 hours'
+        };
+
+        // ========================================
+        // INITIALIZE STRIPE
+        // ========================================
+        const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+        const elements = stripe.elements();
+
+        // Create card element
+        const cardElement = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#1a1a1a',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                    '::placeholder': {
+                        color: '#98a2b3'
+                    }
+                },
+                invalid: {
+                    color: '#dc3545',
+                    iconColor: '#dc3545'
+                }
+            },
+            hidePostalCode: false
+        });
+
+        cardElement.mount('#stripe-card-element');
+        console.log('[Checkout] Stripe card element mounted');
+
+        // ========================================
+        // FORM STATE
+        // ========================================
+        let cardComplete = false;
+        let clientSecret = null;
+
+        // Card element event listeners
+        const cardContainer = document.getElementById('stripe-card-element');
+
+        cardElement.on('focus', () => {
+            cardContainer.classList.add('focused');
+        });
+
+        cardElement.on('blur', () => {
+            cardContainer.classList.remove('focused');
+        });
+
+        cardElement.on('change', (event) => {
+            cardComplete = event.complete;
+
+            if (event.error) {
+                cardContainer.classList.add('error');
+                showError(event.error.message);
+            } else {
+                cardContainer.classList.remove('error');
+                hideError();
+            }
+
+            updateSubmitButton();
+        });
+
+        // ========================================
+        // FORM VALIDATION
+        // ========================================
+        const nameInput = document.getElementById('customer-name');
+        const emailInput = document.getElementById('customer-email');
+        const phoneInput = document.getElementById('customer-phone');
+        const termsCheckbox = document.getElementById('accept-terms');
+        const submitBtn = document.getElementById('submit-btn');
+
+        [nameInput, emailInput, phoneInput, termsCheckbox].forEach(el => {
+            el.addEventListener('input', updateSubmitButton);
+            el.addEventListener('change', updateSubmitButton);
+        });
+
+        function updateSubmitButton() {
+            const formComplete =
+                nameInput.value.trim() &&
+                emailInput.value.trim() &&
+                phoneInput.value.trim() &&
+                termsCheckbox.checked &&
+                cardComplete;
+
+            submitBtn.disabled = !formComplete;
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('visible');
+        }
+
+        function hideError() {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.classList.remove('visible');
+        }
+
+        function showSuccess() {
+            document.getElementById('success-overlay').classList.add('visible');
+        }
+
+        function setLoading(loading) {
+            if (loading) {
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+            } else {
+                submitBtn.classList.remove('loading');
+                updateSubmitButton();
+            }
+        }
+
+        // ========================================
+        // CREATE PAYMENT INTENT
+        // ========================================
+        async function createPaymentIntent() {
+            try {
+                console.log('[Checkout] Creating payment intent...');
+
+                const response = await fetch(`${BACKEND_URL}/create-payment-intent`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        product_id: PRODUCT.id,
+                        amount: PRODUCT.price,
+                        currency: 'cad',
+                        description: PRODUCT.description
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to create payment intent: ${response.status}`);
+                }
+
+                const data = await response.json();
+                clientSecret = data.clientSecret;
+                console.log('[Checkout] Payment intent created successfully');
+                return clientSecret;
+
+            } catch (error) {
+                console.error('[Checkout] Error creating payment intent:', error);
+                throw error;
+            }
+        }
+
+        // ========================================
+        // HANDLE FORM SUBMISSION
+        // ========================================
+        document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            console.log('[Checkout] Processing payment...');
+            setLoading(true);
+            hideError();
+
+            try {
+                // Create payment intent if not already created
+                if (!clientSecret) {
+                    await createPaymentIntent();
+                }
+
+                // Collect customer details
+                const customerName = nameInput.value.trim();
+                const customerEmail = emailInput.value.trim();
+                const customerPhone = phoneInput.value.trim();
+
+                // Confirm payment with Stripe
+                const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: customerName,
+                            email: customerEmail,
+                            phone: customerPhone
+                        }
+                    }
+                });
+
+                if (error) {
+                    console.error('[Checkout] Payment failed:', error.message);
+                    showError(error.message);
+                    setLoading(false);
+                    return;
+                }
+
+                if (paymentIntent.status === 'succeeded') {
+                    console.log('[Checkout] Payment successful!');
+
+                    // Record the transaction
+                    try {
+                        await recordTransaction({
+                            stripePaymentId: paymentIntent.id,
+                            name: customerName,
+                            email: customerEmail,
+                            phone: customerPhone,
+                            product: PRODUCT
+                        });
+                    } catch (err) {
+                        console.warn('[Checkout] Transaction recording failed (non-blocking):', err);
+                    }
+
+                    // Show success
+                    showSuccess();
+                }
+
+            } catch (error) {
+                console.error('[Checkout] Error:', error);
+                showError(error.message || 'An unexpected error occurred. Please try again.');
+                setLoading(false);
+            }
+        });
+
+        // ========================================
+        // RECORD TRANSACTION
+        // ========================================
+        async function recordTransaction(data) {
+            try {
+                const response = await fetch(`${BACKEND_URL}/record-transaction`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    console.log('[Checkout] Transaction recorded successfully');
+                }
+            } catch (error) {
+                console.error('[Checkout] Error recording transaction:', error);
+            }
+        }
+
+        // ========================================
+        // INITIALIZE ON PAGE LOAD
+        // ========================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('[Checkout] Page loaded');
+
+            // Pre-create payment intent for faster checkout
+            try {
+                await createPaymentIntent();
+            } catch (error) {
+                console.warn('[Checkout] Could not pre-create payment intent:', error);
+                // Will create on submit instead
+            }
+        });
+    </script>
+</body>
+</html>

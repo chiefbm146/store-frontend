@@ -1372,6 +1372,13 @@
                 }
             });
 
+            // Book buttons - Navigate to checkout page
+            document.getElementById('depositButton').addEventListener('click', () => {
+                window.location.href = '/checkout.html';
+            });
+            document.getElementById('heroBookButton').addEventListener('click', () => {
+                window.location.href = '/checkout.html';
+            });
             // Book buttons - redirect to Stripe checkout
             async function handleCheckout() {
                 const button = event.target;
