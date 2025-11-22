@@ -215,10 +215,21 @@ def get_dashboard_data():
         # Get transactions
         transactions = ClientManager.get_transactions(client_uid, limit=20)
 
-        # Get Stripe account status
+        # Get Stripe account status from Stripe API and UPDATE Firestore
         stripe_status = None
         if stripe_account:
             stripe_status = StripeConnector.get_account_status(stripe_account.get('accountId'))
+
+            # Update Firestore with latest status from Stripe
+            if stripe_status:
+                ClientManager.update_stripe_account(client_uid, {
+                    'chargesEnabled': stripe_status.get('charges_enabled', False),
+                    'payoutsEnabled': stripe_status.get('payouts_enabled', False),
+                    'verificationStatus': stripe_status.get('verification_status', 'pending')
+                })
+                # Update local copy with new values
+                stripe_account['chargesEnabled'] = stripe_status.get('charges_enabled', False)
+                stripe_account['payoutsEnabled'] = stripe_status.get('payouts_enabled', False)
 
         return jsonify({
             'success': True,
