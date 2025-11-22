@@ -33,6 +33,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 
 .nav-left {
@@ -40,6 +41,7 @@ body {
     align-items: center;
     gap: 8px;
     margin-right: auto;
+    padding-left: 70px;
 }
 
 .nav-back-button {
@@ -55,6 +57,8 @@ body {
     border: 2px solid var(--color-secondary, #0047AB);
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(30, 144, 255, 0.3);
+    position: absolute;
+    left: 0;
 }
 
 .nav-back-button:hover {
