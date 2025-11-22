@@ -54,6 +54,14 @@
       {
         "source": "/ai-chat/**",
         "destination": "/ai-chat-desk.html"
+      },
+      {
+        "source": "/checkout-success",
+        "destination": "/checkout-success.html"
+      },
+      {
+        "source": "/checkout-success/**",
+        "destination": "/checkout-success.html"
       }
     ],
     "headers": [

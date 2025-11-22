@@ -304,3 +304,66 @@ def record_transaction(client_uid):
     except Exception as e:
         print(f"❌ Record transaction error: {e}")
         return jsonify({'error': str(e)}), 500
+
+# ============== PRODUCT CHECKOUT (Buy custom-store product) ==============
+
+@client_api.route('/checkout', methods=['POST'])
+def create_product_checkout():
+    """Create Stripe Checkout session for purchasing a product (e.g., custom-store)"""
+    try:
+        import stripe
+
+        data = request.get_json()
+        product_id = data.get('productId', 'custom-store')
+
+        # Product configuration
+        PRODUCTS = {
+            'custom-store': {
+                'name': 'Custom Store - One-Time Payment',
+                'description': 'Complete custom store built in 24-48 hours. Includes design, product setup, AI chatbot, and payment processing.',
+                'price': 29900,  # $299.00 in cents
+                'currency': 'cad'
+            }
+        }
+
+        product = PRODUCTS.get(product_id)
+        if not product:
+            return jsonify({'error': 'Invalid product'}), 400
+
+        # Get frontend URL for redirects
+        frontend_url = os.getenv('FRONTEND_URL', 'https://www.aarie.ca')
+
+        # Create Stripe Checkout Session
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': product['currency'],
+                    'product_data': {
+                        'name': product['name'],
+                        'description': product['description'],
+                    },
+                    'unit_amount': product['price'],
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=f"{frontend_url}/checkout-success.html?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{frontend_url}/booking",
+            metadata={
+                'product_id': product_id,
+                'product_name': product['name']
+            }
+        )
+
+        logger.info(f"✅ Checkout session created: {checkout_session.id}")
+
+        return jsonify({
+            'success': True,
+            'sessionId': checkout_session.id,
+            'url': checkout_session.url
+        }), 200
+
+    except Exception as e:
+        logger.error(f"❌ Checkout error: {str(e)}", exc_info=True)
+        return jsonify({'error': str(e)}), 500
