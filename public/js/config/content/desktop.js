@@ -7,34 +7,39 @@ export const desktopPage = {
     // Hero Section
     hero: {
         icon: '🏪',
-        title: 'Build Your Store in Minutes',
-        subtitle: 'Create a professional online store with AI-powered chat - no coding required',
-        description: 'Launch your custom store selling workshops, products, or services with intelligent chatbots that help your customers 24/7.',
+        title: 'Your Store Built in 48 Hours',
+        subtitle: 'AARIE.CA creates professional online stores with AI-powered chat - you don\'t have to lift a finger',
+        description: 'We build your custom store selling workshops, products, or services with intelligent chatbots that help your customers 24/7. Desktop and mobile optimized.',
         ctaPrimary: {
-            text: 'See Demo Store',
+            text: 'AARIES STORE',
             link: '/demo-desk.html'
-        }
+        },
+        ctaSecondary: {
+            text: 'MOON TIDE',
+            link: 'https://moontidereconciliation.com'
+        },
+        clientExploreText: 'Explore a Clients Site'
     },
 
     // Features Section
     features: {
-        title: 'Why Choose Our Platform',
-        subtitle: 'Everything you need to launch your store',
+        title: 'Why Choose AARIE.CA',
+        subtitle: 'Everything you need - we handle it all',
         items: [
             {
                 icon: '🎓',
                 title: 'Sell Workshops',
-                description: 'Create stores that sell educational workshops with booking, scheduling, and payment processing built-in.'
+                description: 'We create stores that sell educational workshops with booking, scheduling, and payment processing built-in.'
             },
             {
                 icon: '📦',
                 title: 'Sell Products',
-                description: 'Launch product catalogs with inventory management, checkout, and order tracking automatically configured.'
+                description: 'We launch product catalogs with inventory management, checkout, and order tracking automatically configured.'
             },
             {
                 icon: '⚙️',
                 title: 'Sell Services',
-                description: 'Offer professional services with consultation booking, service packages, and client management tools.'
+                description: 'We build service pages with consultation booking, service packages, and client management tools.'
             },
             {
                 icon: '🤖',
@@ -46,18 +51,18 @@ export const desktopPage = {
 
     // Chat Section
     chat: {
-        title: 'Try the AI Assistant (Demo)',
-        subtitle: 'Every store gets a custom chatbot trained on your business',
-        placeholder: 'Ask about creating your store, features, pricing...'
+        title: 'Meet Your Custom AI Assistant',
+        subtitle: 'Every store we build includes a chatbot trained specifically on your business',
+        placeholder: 'Ask about how we build your store, features, pricing...'
     },
 
     // About Section
     about: {
-        title: 'The Platform for Modern Businesses',
-        subtitle: 'Build, launch, and grow your online store effortlessly',
+        title: 'AARIE.CA Builds Your Store',
+        subtitle: 'Professional websites delivered in 24-48 hours',
         content: [
-            'We provide the platform that makes it easy for businesses to create their own professional online stores. Whether you\'re selling workshops, physical products, or professional services, our system handles everything - from product catalogs to checkout to customer support.',
-            'Every store comes with a custom AI chatbot trained on your specific business. Your customers get instant answers about your offerings, pricing, and availability 24/7. No coding required, no technical expertise needed - just configure your content and launch.'
+            'AARIE.CA builds professional online stores and custom websites for your business - you don\'t have to do anything. Whether you\'re selling workshops, physical products, or professional services, we handle everything - from design to product catalogs to checkout to customer support. Your store will be live in 24-48 hours.',
+            'Every store we build comes with a custom AI chatbot trained on your specific business. Your customers get instant answers about your offerings, pricing, and availability 24/7. No coding required, no technical expertise needed from you - we build it, you run your business.'
         ],
         image: null, // Can add image path here
         emoji: '🚀'
@@ -65,21 +70,27 @@ export const desktopPage = {
 
     // Final CTA Section
     cta: {
-        title: 'Ready to Launch Your Store?',
-        description: 'See our demo store in action - explore how your customers will shop workshops, products, and services with AI assistance.',
-        buttonText: 'View Demo Store',
-        buttonLink: '/shop-desk.html'
+        title: 'See What We\'ve Built',
+        description: 'Check out Moon Tide Reconciliation - a store we built for a client. See how your customers will shop workshops, products, and services with AI assistance.',
+        buttonPrimary: {
+            text: 'AARIES STORE',
+            link: '/demo-desk.html'
+        },
+        buttonSecondary: {
+            text: 'MOON TIDE',
+            link: 'https://moontidereconciliation.com'
+        }
     },
 
     // Footer
     footer: {
-        tagline: 'Your Store Platform - Launch Your Business Today',
+        tagline: 'AARIES STORE - We Build Your Business Online',
         links: [
-            { text: 'Demo Store', url: '/shop-desk.html' },
+            { text: 'AARIES STORE', url: '/demo-desk.html' },
             { text: 'About', url: '/about-desk.html' },
             { text: 'Contact', url: '/contact-desk.html' }
         ],
-        copyright: '© 2025 Your Store Platform. All rights reserved.'
+        copyright: '© 2025 AARIE.CA. All rights reserved.'
     }
 };
 

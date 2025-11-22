@@ -156,6 +156,12 @@
         font-size: 6rem;
     }
 
+    /* Client Explore Text - Mobile */
+    .client-explore-text {
+        font-size: 0.9rem;
+        margin: 8px 0;
+    }
+
     /* CTA Section - Mobile */
     .cta-section {
         padding: 50px 20px;
@@ -169,6 +175,16 @@
     .cta-content p {
         font-size: clamp(0.9rem, 2vw, 1.1rem) !important;
         margin-bottom: 30px;
+    }
+
+    /* CTA Buttons - Mobile */
+    .cta-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
     }
 
     /* Footer - Mobile */
