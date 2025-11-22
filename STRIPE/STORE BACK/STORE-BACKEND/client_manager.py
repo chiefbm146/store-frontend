@@ -184,10 +184,19 @@ class ClientManager:
                 print(f"📊 Transfer amount: {transfer.get('amount')} | Charge amount: {charge.get('amount')}")
 
                 # Check if already exists
-                existing = db.collection('clients').document(client_uid).collection('transactions').document(payment_intent_id).get()
-                is_new = not existing.exists
-                if existing.exists:
-                    print(f"📝 Transaction {payment_intent_id} exists, will update with breakdown data")
+                existing_doc = db.collection('clients').document(client_uid).collection('transactions').document(payment_intent_id).get()
+                is_new = not existing_doc.exists
+                existing_data = existing_doc.to_dict() if existing_doc.exists else {}
+
+                # Check if it has breakdown data - if not, we need to update it
+                has_breakdown = 'breakdown' in existing_data
+
+                if existing_doc.exists:
+                    if has_breakdown:
+                        print(f"✅ Transaction {payment_intent_id} already has breakdown, skipping")
+                        continue
+                    else:
+                        print(f"📝 Transaction {payment_intent_id} exists but missing breakdown, will update")
 
                 # Extract customer details from charge billing_details if available
                 billing_details = charge.get('billing_details', {}) or {}
