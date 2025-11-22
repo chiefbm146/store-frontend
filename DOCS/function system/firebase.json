@@ -1,16 +1,88 @@
 {
-  "functions": {
-    "source": "functions",
-    "runtime": "nodejs20"
-  },
-  "hosting": {
-    "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "headers": [
+  "hosting": [
+    {
+      "target": "reconciliation-storefront",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/chat",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/infinite-story",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/podcasts",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/world",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/downloads",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/custom-creations",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/workshop-detail",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/reconciliation",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/developer",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/Account",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/menu",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/shona",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/moon-tide",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/contact",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/delete-data",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/workshop-list",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/workshops",
+          "function": "deviceRouter"
+        },
+        {
+          "source": "/**",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
       {
         "source": "**/*.@(js|css|html)",
         "headers": [
@@ -106,7 +178,25 @@
         ]
       }
     ]
-  },
+    }
+  ],
+  "functions": [
+    {
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ],
+      "source": "functions",
+      "runtime": "nodejs20"
+    }
+  ],
   "firestore": {
     "database": "(default)",
     "location": "us-central1",

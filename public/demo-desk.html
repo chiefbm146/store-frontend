@@ -186,6 +186,25 @@
 
     <!-- AI Chat Functions -->
     <script>
+        // ========================================
+        // BACKEND CONFIGURATION
+        // ========================================
+        const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+        const CHAT_ENDPOINT = '/chat';
+
+        // Session management
+        let CHAT_SESSION_ID = null;
+
+        // Initialize session on page load
+        function initializeChatSession() {
+            CHAT_SESSION_ID = sessionStorage.getItem('demo_chat_session_id');
+            if (!CHAT_SESSION_ID) {
+                CHAT_SESSION_ID = 'demo_session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('demo_chat_session_id', CHAT_SESSION_ID);
+                console.log('[Demo Chat] New session:', CHAT_SESSION_ID);
+            }
+        }
+
         function openAIChat() {
             document.getElementById('aiChatModal').classList.add('active');
             document.getElementById('aiChatOverlay').classList.add('active');
@@ -197,35 +216,81 @@
             document.getElementById('aiChatOverlay').classList.remove('active');
         }
 
-        function sendAIMessage() {
+        async function sendAIMessage() {
             const input = document.getElementById('aiChatInput');
             const messagesDiv = document.getElementById('aiMessages');
+            const userText = input.value.trim();
 
-            if (input.value.trim()) {
-                // Add user message
-                const userMsg = document.createElement('div');
-                userMsg.className = 'message user-message';
-                userMsg.textContent = input.value;
-                messagesDiv.appendChild(userMsg);
+            if (!userText) return;
 
-                // Add AI response
-                setTimeout(() => {
-                    const aiMsg = document.createElement('div');
-                    aiMsg.className = 'message ai-message';
-                    aiMsg.textContent = 'Thanks for your message! In a live store, I would answer questions about products, pricing, and help with orders.';
-                    messagesDiv.appendChild(aiMsg);
-                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                }, 500);
+            // Disable input while sending
+            input.disabled = true;
 
-                input.value = '';
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.textContent = userText;
+            messagesDiv.appendChild(userMsg);
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            try {
+                const payload = {
+                    session_id: CHAT_SESSION_ID,
+                    prompt: userText,
+                    device_fingerprint: 'demo-store-' + navigator.userAgent.substring(0, 50)
+                };
+
+                console.log('[Demo Chat] Sending:', userText.substring(0, 50) + '...');
+
+                const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                const aiResponse = data.response || 'Sorry, I could not generate a response.';
+
+                console.log('[Demo Chat] Response:', aiResponse.substring(0, 50) + '...');
+
+                // Add AI message
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai-message';
+                aiMsg.textContent = aiResponse;
+                messagesDiv.appendChild(aiMsg);
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            } catch (error) {
+                console.error('[Demo Chat] Error:', error);
+
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai-message';
+                aiMsg.textContent = 'Sorry, I encountered an error. Please try again.';
+                messagesDiv.appendChild(aiMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            } finally {
+                // Re-enable input
+                input.disabled = false;
+                input.focus();
             }
         }
 
-        // Enter key to send
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
+            initializeChatSession();
+
             document.getElementById('aiChatInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') sendAIMessage();
+                if (e.key === 'Enter' && !document.getElementById('aiChatInput').disabled) {
+                    sendAIMessage();
+                }
             });
 
             // Close modal with Escape

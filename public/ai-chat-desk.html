@@ -86,12 +86,36 @@
 
     <!-- Chat Functionality -->
     <script>
+        // ========================================
+        // CONFIGURATION
+        // ========================================
+        const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+        const CHAT_ENDPOINT = '/chat';
+
+        // Session management
+        let SESSION_ID = null;
+        let REQUEST_COUNT = 0;
+
         const messagesDiv = document.getElementById('messages');
         const userInput = document.getElementById('userInput');
         const sendButton = document.getElementById('sendButton');
         const typingIndicator = document.getElementById('typingIndicator');
         const welcomeMessage = document.getElementById('welcomeMessage');
         const messagesContainer = document.getElementById('messagesContainer');
+
+        // Initialize session on page load
+        function initializeSession() {
+            // Generate or retrieve session ID
+            SESSION_ID = sessionStorage.getItem('chat_session_id');
+            if (!SESSION_ID) {
+                SESSION_ID = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('chat_session_id', SESSION_ID);
+                console.log('[AI Chat] New session created:', SESSION_ID);
+            } else {
+                console.log('[AI Chat] Resuming session:', SESSION_ID);
+            }
+            REQUEST_COUNT = parseInt(sessionStorage.getItem('chat_request_count') || '0');
+        }
 
         function scrollToBottom() {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -123,9 +147,13 @@
             typingIndicator.classList.remove('visible');
         }
 
-        function sendMessage() {
+        async function sendMessage() {
             const message = userInput.value.trim();
             if (!message) return;
+
+            // Disable input while sending
+            userInput.disabled = true;
+            sendButton.disabled = true;
 
             // Add user message
             addMessage(message, true);
@@ -134,19 +162,68 @@
             // Show typing indicator
             showTyping();
 
-            // Simulate AI response
-            setTimeout(function() {
+            try {
+                REQUEST_COUNT++;
+                sessionStorage.setItem('chat_request_count', REQUEST_COUNT.toString());
+
+                const payload = {
+                    session_id: SESSION_ID,
+                    prompt: message,
+                    device_fingerprint: 'store-frontend-' + navigator.userAgent.substring(0, 50)
+                };
+
+                console.log('[AI Chat] Sending request:', { ...payload, prompt: message.substring(0, 50) + '...' });
+
+                const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    hideTyping();
+                    const errorText = await response.text();
+                    console.error('[AI Chat] Backend error:', response.status, errorText);
+
+                    let errorMessage = 'Sorry, I encountered an error connecting to the server.';
+                    if (response.status === 429) {
+                        errorMessage = 'Too many requests. Please wait a moment before trying again.';
+                    } else if (response.status === 503) {
+                        errorMessage = 'The service is temporarily unavailable. Please try again in a moment.';
+                    }
+                    addMessage(errorMessage, false);
+                    return;
+                }
+
+                const data = await response.json();
                 hideTyping();
-                const responses = [
-                    "Thanks for your question! In a live environment, I would provide detailed information about our products and services.",
-                    "I'm here to help! Our AI assistant is configured to answer questions about our store, products, pricing, and policies.",
-                    "Great question! In the full version, I would have access to our complete product catalog and can help you find exactly what you need.",
-                    "I appreciate you asking! Our AI assistant is designed to provide instant answers to customer questions 24/7.",
-                    "That's a wonderful question! In production, I would give you specific details about our offerings and help you place orders."
-                ];
-                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                addMessage(randomResponse, false);
-            }, 1000 + Math.random() * 1000);
+
+                // Extract AI response
+                const aiResponse = data.response || 'I received an empty response from the server.';
+                console.log('[AI Chat] Received response:', aiResponse.substring(0, 100) + '...');
+
+                addMessage(aiResponse, false);
+
+            } catch (error) {
+                hideTyping();
+                console.error('[AI Chat] Fetch error:', error);
+
+                let errorMessage = 'Sorry, I could not connect to the server. ';
+                if (error instanceof TypeError) {
+                    errorMessage += 'Check if the backend is running and CORS is enabled.';
+                } else {
+                    errorMessage += error.message;
+                }
+                addMessage(errorMessage, false);
+            } finally {
+                // Re-enable input
+                userInput.disabled = false;
+                sendButton.disabled = false;
+                userInput.focus();
+            }
         }
 
         function sendSuggestion(text) {
@@ -156,7 +233,7 @@
 
         // Enter key to send
         userInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !userInput.disabled) {
                 sendMessage();
             }
         });
@@ -168,9 +245,11 @@
             }
         });
 
-        // Focus input on load
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
+            initializeSession();
             userInput.focus();
+            console.log('[AI Chat] Page loaded and initialized');
         });
     </script>
 </body>

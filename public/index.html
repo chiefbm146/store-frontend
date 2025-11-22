@@ -227,13 +227,13 @@
         // Inject theme IMMEDIATELY (synchronous)
         injectTheme();
 
-        // Check if this is first visit or content is uncached
-        // Only show loading animation on first visit per session
-        const isFirstVisit = !sessionStorage.getItem('page-loaded');
-        if (isFirstVisit) {
-            document.body.classList.add('is-loading');
-            sessionStorage.setItem('page-loaded', 'true');
-        }
+        // Loading state disabled - no caching
+        // const isFirstVisit = !sessionStorage.getItem('page-loaded');
+        // if (isFirstVisit) {
+        //     document.body.classList.add('is-loading');
+        //     sessionStorage.setItem('page-loaded', 'true');
+        // }
+        const isFirstVisit = false;
 
         // Populate landing page content
         document.addEventListener('DOMContentLoaded', () => {
@@ -321,8 +321,8 @@
         });
     </script>
 
-    <!-- Service Worker for Caching -->
-    <script>
+    <!-- Service Worker for Caching - DISABLED DURING DOMAIN VALIDATION -->
+    <!-- <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
@@ -334,6 +334,6 @@
                     });
             });
         }
-    </script>
+    </script> -->
 </body>
 </html>

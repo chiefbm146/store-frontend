@@ -312,8 +312,9 @@
 
 /* Stripe Elements Containers */
 .stripe-element-container {
-    min-height: 200px;      /* Space for PaymentElement (card only) */
+    min-height: 280px;      /* Increased space for PaymentElement with all card logos + Stripe footer */
     padding: 12px 0;
+    overflow: hidden;       /* Prevent any overflow */
 }
 
 /* Error Message */
