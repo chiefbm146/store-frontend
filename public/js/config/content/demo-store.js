@@ -5,8 +5,8 @@
 
 export const demoStore = {
     // Store Info
-    storeName: 'Premium Goods Co.',
-    storeTagline: 'Quality Products for Modern Living',
+    storeName: 'AARIE.CA',
+    storeTagline: 'We Build Your Store in 24-48 Hours',
     storeIcon: '🏪',
 
     // Navigation
@@ -22,86 +22,86 @@ export const demoStore = {
 
     // Hero Section
     hero: {
-        title: 'Welcome to Premium Goods Co.',
-        subtitle: 'Discover quality products for your lifestyle',
-        description: 'We curate the finest selection of products designed to enhance your everyday life. From home essentials to unique finds, every item is chosen with care.',
-        ctaText: 'Browse Products',
-        ctaLink: '/shop-desk.html',
-        backgroundImage: null, // Can add image path
-        backgroundEmoji: '✨'
+        title: 'Let Us Build Your Store',
+        subtitle: 'Place a deposit today and get your store live in 24-48 hours',
+        description: 'Stop waiting months for a website. We handle everything - design, setup, products, checkout, and a custom AI chatbot. You focus on your business, we build your online presence.',
+        ctaText: 'Get Started Now',
+        ctaLink: '/contact-desk.html',
+        backgroundImage: null,
+        backgroundEmoji: '🏪'
     },
 
     // Featured Products
     featuredProducts: {
-        title: 'Featured Products',
-        subtitle: 'Hand-picked items just for you',
+        title: 'Book Your Store Today',
+        subtitle: 'Start selling online with just a deposit',
         products: [
             {
-                id: 'product-1',
-                name: 'Premium Product 1',
-                description: 'High-quality item perfect for everyday use',
-                price: '$49.99',
+                id: 'deposit-1',
+                name: 'Basic Store Package',
+                description: 'Professional online store with product catalog, checkout, and AI chatbot included.',
+                price: '$99 Deposit',
                 emoji: '📦',
-                link: '/product-detail-desk.html?id=product-1'
+                link: '/contact-desk.html'
             },
             {
-                id: 'product-2',
-                name: 'Premium Product 2',
-                description: 'Expertly crafted with attention to detail',
-                price: '$79.99',
+                id: 'deposit-2',
+                name: 'Workshop Store Package',
+                description: 'Sell workshops and courses with booking, scheduling, and payment processing built-in.',
+                price: '$99 Deposit',
                 emoji: '🎁',
-                link: '/product-detail-desk.html?id=product-1'
+                link: '/contact-desk.html'
             },
             {
-                id: 'product-3',
-                name: 'Premium Product 3',
-                description: 'A customer favorite and bestseller',
-                price: '$59.99',
+                id: 'deposit-3',
+                name: 'Service Store Package',
+                description: 'Service business website with consultation booking and client management tools.',
+                price: '$99 Deposit',
                 emoji: '⭐',
-                link: '/product-detail-desk.html?id=product-1'
+                link: '/contact-desk.html'
             }
         ]
     },
 
     // About Section
     about: {
-        title: 'About Our Store',
-        subtitle: 'Quality you can trust',
+        title: 'Why Choose AARIE.CA',
+        subtitle: 'Your online store, built by professionals',
         content: [
-            'Welcome to Premium Goods Co., where quality meets convenience. We\'ve been serving customers since 2025, providing carefully selected products that enhance everyday living.',
-            'Our mission is simple: offer the best products at fair prices with exceptional customer service. Every item in our catalog has been tested and approved by our team to ensure it meets our high standards.'
+            'AARIE.CA builds professional online stores for your business - you don\'t have to do anything. Whether you\'re selling workshops, physical products, or professional services, we handle everything from design to checkout to customer support.',
+            'Every store we build comes with a custom AI chatbot trained specifically on your business. Your customers get instant answers about your offerings 24/7. No coding required, no technical expertise needed - we build it, you run your business.'
         ],
-        emoji: '🎯'
+        emoji: '💳'
     },
 
     // Features
     features: [
         {
-            icon: '🚚',
-            title: 'Fast Shipping',
-            description: 'Free shipping on orders over $50'
+            icon: '🌍',
+            title: 'Global Reach',
+            description: 'Set up your store to serve customers anywhere in the world.'
         },
         {
             icon: '🔒',
-            title: 'Secure Checkout',
-            description: 'Your payment information is safe with us'
+            title: 'Trusted Payment Gateway',
+            description: 'Leverage industry-leading payment solutions for peace of mind.'
         },
         {
-            icon: '↩️',
-            title: 'Easy Returns',
-            description: '30-day return policy on all items'
+            icon: '🎨',
+            title: 'Customizable Storefronts',
+            description: 'Design a unique shopping experience that reflects your brand.'
         },
         {
             icon: '🤖',
-            title: '24/7 AI Support',
-            description: 'Get instant answers from our AI assistant'
+            title: '24/7 AI Assistant',
+            description: 'Empower your customers with instant information and support around the clock.'
         }
     ],
 
     // Footer
     footer: {
-        tagline: 'Premium Goods Co. - Quality for Modern Living',
-        copyright: '© 2025 Premium Goods Co. All rights reserved.',
+        tagline: 'AARIE.CA - We Build Your Store in 24-48 Hours',
+        copyright: '© 2025 AARIE.CA. All rights reserved.',
         social: {
             facebook: '#',
             instagram: '#',
