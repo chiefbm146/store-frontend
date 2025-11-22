@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <script src="./js/clean-url.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Store Platform - Build Your Store in Minutes</title>
+    <title>AARIE.CA - Your Store Built in 48 Hours</title>
 
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Your Store Platform - Build Your Store in Minutes">
-    <meta property="og:description" content="Create a professional online store with AI-powered chat - no coding required">
+    <meta property="og:title" content="AARIE.CA - Your Store Built in 48 Hours">
+    <meta property="og:description" content="We build professional online stores with AI-powered chat in 24-48 hours - you don't have to lift a finger">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
 
@@ -125,6 +125,8 @@
             <p class="hero-description" id="hero-description"></p>
             <div class="hero-buttons">
                 <a href="/demo-desk.html" class="btn btn-primary" id="hero-cta-primary"></a>
+                <p class="client-explore-text" id="client-explore-text"></p>
+                <a href="https://moontidereconciliation.com" class="btn btn-secondary" id="hero-cta-secondary" target="_blank" rel="noopener"></a>
             </div>
         </div>
     </section>
@@ -197,7 +199,10 @@
         <div class="cta-content">
             <h2 id="cta-title"></h2>
             <p id="cta-description"></p>
-            <a href="/shop-desk.html" class="btn btn-primary" id="cta-button"></a>
+            <div class="cta-buttons">
+                <a href="/demo-desk.html" class="btn btn-primary" id="cta-button-primary"></a>
+                <a href="https://moontidereconciliation.com" class="btn btn-secondary" id="cta-button-secondary" target="_blank" rel="noopener"></a>
+            </div>
         </div>
     </section>
 
@@ -246,6 +251,11 @@
             document.getElementById('hero-cta-primary').href = desktopPage.hero.ctaPrimary.link;
             document.getElementById('hero-cta-primary').setAttribute('data-loaded', 'true');
 
+            // Hero secondary button and client explore text
+            document.getElementById('client-explore-text').textContent = desktopPage.hero.clientExploreText;
+            document.getElementById('hero-cta-secondary').textContent = desktopPage.hero.ctaSecondary.text;
+            document.getElementById('hero-cta-secondary').href = desktopPage.hero.ctaSecondary.link;
+
             // Features Section
             document.getElementById('features-title').textContent = desktopPage.features.title;
             document.getElementById('features-subtitle').textContent = desktopPage.features.subtitle;
@@ -272,7 +282,7 @@
                 <div class="message-content">
                     <span class="message-icon">🤖</span>
                     <div class="message-text">
-                        <p>Hi! 👋 I'm your AI assistant. I can help you learn about creating your store, features, pricing, or answer any questions about our platform. What would you like to know?</p>
+                        <p>Hi! 👋 I'm your AI assistant from AARIE.CA. We build professional online stores in just 24-48 hours - you don't have to do anything! I can tell you about our store building services, features, pricing, or answer any questions. Ready to get your store online?</p>
                     </div>
                 </div>
             `;
@@ -289,8 +299,10 @@
             // CTA Section
             document.getElementById('cta-title').textContent = desktopPage.cta.title;
             document.getElementById('cta-description').textContent = desktopPage.cta.description;
-            document.getElementById('cta-button').textContent = desktopPage.cta.buttonText;
-            document.getElementById('cta-button').href = desktopPage.cta.buttonLink;
+            document.getElementById('cta-button-primary').textContent = desktopPage.cta.buttonPrimary.text;
+            document.getElementById('cta-button-primary').href = desktopPage.cta.buttonPrimary.link;
+            document.getElementById('cta-button-secondary').textContent = desktopPage.cta.buttonSecondary.text;
+            document.getElementById('cta-button-secondary').href = desktopPage.cta.buttonSecondary.link;
 
             // Footer
             document.getElementById('footer-tagline').textContent = desktopPage.footer.tagline;
