@@ -21,6 +21,48 @@ export const desktopPage = {
         clientExploreText: 'Explore a Clients Site'
     },
 
+    // Who Is This For Section
+    whoIsThisFor: {
+        title: 'This Is For You',
+        subtitle: 'Anyone can start selling online - no business degree required',
+        highlight: 'Accept payments through Stripe under your own name, sole proprietorship, or registered business. You don\'t need a corporation to start making money.',
+        businessTypes: [
+            {
+                icon: '👤',
+                title: 'Individuals',
+                description: 'Sell under your own name - artists, freelancers, creators, hobbyists turning passion into profit'
+            },
+            {
+                icon: '📋',
+                title: 'Sole Proprietors',
+                description: 'Small business owners ready to take their services online and reach more customers'
+            },
+            {
+                icon: '🏢',
+                title: 'Registered Businesses',
+                description: 'Established companies looking for a professional online presence with AI support'
+            }
+        ],
+        examples: {
+            title: 'What Can You Sell?',
+            items: [
+                { icon: '🎨', text: 'Art & Handmade Crafts' },
+                { icon: '📚', text: 'Online Courses & Workshops' },
+                { icon: '💆', text: 'Wellness & Healing Services' },
+                { icon: '🔧', text: 'Consulting & Professional Services' },
+                { icon: '📦', text: 'Physical Products & Merchandise' },
+                { icon: '🎵', text: 'Music, Books & Digital Downloads' },
+                { icon: '🏋️', text: 'Fitness & Coaching Programs' },
+                { icon: '🍰', text: 'Food, Baking & Catering' }
+            ]
+        },
+        advantage: {
+            icon: '⚡',
+            title: 'Start Making Money Right Away',
+            description: 'Your store goes live in 24-48 hours. While others spend months building websites, you\'ll already be accepting orders and growing your customer base.'
+        }
+    },
+
     // Features Section
     features: {
         title: 'Why Choose AARIE.CA',
