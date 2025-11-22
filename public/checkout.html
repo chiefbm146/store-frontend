@@ -715,6 +715,7 @@
                         Payment Details
                     </div>
                     <div id="stripe-card-element" class="stripe-card-container"></div>
+                    <input type="text" id="postal-code" class="form-input" placeholder="Postal Code" required style="margin-top: 16px;">
                 </div>
 
                 <!-- Error Message -->
@@ -765,7 +766,7 @@
         // ========================================
         // STRIPE CHECKOUT CONFIGURATION
         // ========================================
-        const STRIPE_PUBLISHABLE_KEY = 'pk_live_51Rp7gdRuBpQt4n9NyNv9RHiHf3QOmJdETL8Boyu7uC2YUKJUz2OIXXzgAN4h91WC2F21qhXHs7T2QUbDEGCEwMeg00bJbhDvn6';
+        const STRIPE_PUBLISHABLE_KEY = 'pk_test_51SPQ3W2ONyiEh5kxUpJxBGUhHXaUPpAKJeC9nSJLul8ctzUqPZgMYkeJ8glWndaIgDhMVaVlc142aZCRdXH1NwlK00mzd5iMG8';
         const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
 
         // Product Details
@@ -798,7 +799,7 @@
                     iconColor: '#dc3545'
                 }
             },
-            hidePostalCode: false
+            hidePostalCode: true
         });
 
         cardElement.mount('#stripe-card-element');
@@ -841,10 +842,11 @@
         const nameInput = document.getElementById('customer-name');
         const emailInput = document.getElementById('customer-email');
         const phoneInput = document.getElementById('customer-phone');
+        const postalCodeInput = document.getElementById('postal-code');
         const termsCheckbox = document.getElementById('accept-terms');
         const submitBtn = document.getElementById('submit-btn');
 
-        [nameInput, emailInput, phoneInput, termsCheckbox].forEach(el => {
+        [nameInput, emailInput, phoneInput, postalCodeInput, termsCheckbox].forEach(el => {
             el.addEventListener('input', updateSubmitButton);
             el.addEventListener('change', updateSubmitButton);
         });
@@ -854,6 +856,7 @@
                 nameInput.value.trim() &&
                 emailInput.value.trim() &&
                 phoneInput.value.trim() &&
+                postalCodeInput.value.trim() &&
                 termsCheckbox.checked &&
                 cardComplete;
 
@@ -963,18 +966,19 @@
                 if (paymentIntent.status === 'succeeded') {
                     console.log('[Checkout] Payment successful!');
 
-                    // Record the transaction
-                    try {
-                        await recordTransaction({
-                            stripePaymentId: paymentIntent.id,
-                            name: customerName,
-                            email: customerEmail,
-                            phone: customerPhone,
-                            product: PRODUCT
-                        });
-                    } catch (err) {
-                        console.warn('[Checkout] Transaction recording failed (non-blocking):', err);
-                    }
+                    // NOTE: Transaction recording is now handled via on-demand sync in client portal
+                    // The sync endpoint fetches all transactions from Stripe when the client logs in
+                    // try {
+                    //     await recordTransaction({
+                    //         stripePaymentId: paymentIntent.id,
+                    //         name: customerName,
+                    //         email: customerEmail,
+                    //         phone: customerPhone,
+                    //         product: PRODUCT
+                    //     });
+                    // } catch (err) {
+                    //     console.warn('[Checkout] Transaction recording failed (non-blocking):', err);
+                    // }
 
                     // Show success
                     showSuccess();

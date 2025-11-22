@@ -62,6 +62,14 @@
       {
         "source": "/checkout-success/**",
         "destination": "/checkout-success.html"
+      },
+      {
+        "source": "/checkout",
+        "destination": "/checkout.html"
+      },
+      {
+        "source": "/checkout/**",
+        "destination": "/checkout.html"
       }
     ],
     "headers": [

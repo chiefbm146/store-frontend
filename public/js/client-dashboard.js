@@ -101,12 +101,41 @@ async function loadDashboard() {
     // Load transactions (optional, if they fail, show empty state)
     try {
       await loadTransactions();
+      // After loading transactions, update stats
+      await updateDashboardStats();
     } catch (error) {
       console.log('Transactions not available yet');
       document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">💤</div><p>No transactions yet</p></div>';
     }
   } catch (error) {
     console.error('❌ Dashboard load error:', error);
+  }
+}
+
+/**
+ * Update dashboard stats after loading data
+ */
+async function updateDashboardStats() {
+  try {
+    const response = await apiCall('/api/client/dashboard-data', {
+      method: 'GET'
+    });
+
+    const transactions = response.transactions || [];
+    const products = response.products || [];
+
+    // Calculate total revenue
+    const totalRevenue = transactions.reduce((sum, txn) => sum + (txn.amount || 0), 0);
+    const totalRevenueFormatted = (totalRevenue / 100).toFixed(2);
+
+    // Update stats
+    document.getElementById('totalRevenue').textContent = `$${totalRevenueFormatted}`;
+    document.getElementById('totalTransactions').textContent = transactions.length.toString();
+    document.getElementById('activeProducts').textContent = products.length.toString();
+
+    console.log('✅ Dashboard stats updated');
+  } catch (error) {
+    console.error('❌ Error updating stats:', error);
   }
 }
 
@@ -170,21 +199,124 @@ async function loadStripeStatus() {
 }
 
 /**
- * Load products from backend API (via loadStripeStatus)
+ * Load products from backend API - Display only
  */
 async function loadProducts() {
-  // Products are loaded from /api/client/dashboard-data via loadStripeStatus
-  // This is a placeholder - products display will be implemented when needed
-  console.log('✅ Products loaded from API');
+  try {
+    const token = await currentUser.getIdToken();
+    const response = await fetch('https://stores-backend-phhl2xgwwa-uc.a.run.app/api/client/dashboard-data', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) throw new Error(`Failed to load products: ${response.status}`);
+
+    const data = await response.json();
+    const products = data.products || [];
+
+    if (!products || products.length === 0) {
+      document.getElementById('productsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No products yet</p></div>';
+      return;
+    }
+
+    // Display products
+    let html = '';
+    products.forEach(product => {
+      const priceInDollars = (product.price / 100).toFixed(2);
+      html += `
+        <div class="product-item" style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <h3 style="margin-bottom: 8px; font-size: 18px; font-weight: 600;">💼 ${product.name}</h3>
+          <p style="color: #666; margin-bottom: 12px; font-size: 14px;">${product.description}</p>
+          <div style="font-size: 24px; font-weight: 700; color: #27ae60;">$${priceInDollars}</div>
+        </div>
+      `;
+    });
+
+    document.getElementById('productsContainer').innerHTML = html;
+    console.log('✅ Products loaded:', products);
+  } catch (error) {
+    console.error('❌ Error loading products:', error);
+    document.getElementById('productsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No products available</p></div>';
+  }
 }
 
 /**
- * Load transactions from backend API (via loadStripeStatus)
+ * Load transactions from backend API - Sync from Stripe on-demand
  */
 async function loadTransactions() {
-  // Transactions are loaded from /api/client/dashboard-data via loadStripeStatus
-  // This is a placeholder - transactions display will be implemented when needed
-  console.log('✅ Transactions loaded from API');
+  try {
+    console.log('🔄 Syncing transactions from Stripe...');
+
+    // Call the sync endpoint to fetch latest transactions from Stripe
+    const response = await apiCall('/api/client/sync-transactions', {
+      method: 'POST'
+    });
+
+    console.log('✅ Transactions synced:', response);
+
+    // Now fetch the updated transactions from dashboard-data
+    const dashboardResponse = await apiCall('/api/client/dashboard-data', {
+      method: 'GET'
+    });
+
+    const transactions = dashboardResponse.transactions || [];
+
+    if (!transactions || transactions.length === 0) {
+      document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">💤</div><p>No transactions yet</p></div>';
+      return;
+    }
+
+    // Display transactions
+    let html = '<div class="transactions-list">';
+
+    transactions.forEach(txn => {
+      const amountInDollars = (txn.amount / 100).toFixed(2);
+      const dateObj = txn.createdAt instanceof Date ? txn.createdAt : new Date(txn.createdAt?.seconds * 1000 || Date.now());
+      const dateStr = dateObj.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+
+      html += `
+        <div class="transaction-item">
+          <div class="transaction-header">
+            <div class="transaction-date">${dateStr}</div>
+            <div class="transaction-amount">+$${amountInDollars}</div>
+          </div>
+          <div class="transaction-details">
+            <div class="transaction-detail">
+              <span class="detail-label">Payment ID</span>
+              <span class="detail-value">${txn.stripePaymentId || txn.chargeId || 'N/A'}</span>
+            </div>
+            <div class="transaction-detail">
+              <span class="detail-label">Status</span>
+              <span class="detail-value" style="color: ${txn.status === 'succeeded' ? '#27ae60' : '#ff6b6b'};">${txn.status || 'unknown'}</span>
+            </div>
+            <div class="transaction-detail">
+              <span class="detail-label">Currency</span>
+              <span class="detail-value">${(txn.currency || 'cad').toUpperCase()}</span>
+            </div>
+            <div class="transaction-detail">
+              <span class="detail-label">Description</span>
+              <span class="detail-value">${txn.description || txn.name || 'Payment'}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += '</div>';
+    document.getElementById('transactionsContainer').innerHTML = html;
+
+    console.log('✅ Transactions displayed:', transactions.length);
+  } catch (error) {
+    console.error('❌ Error loading transactions:', error);
+    document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">⚠️</div><p>Could not load transactions - try refreshing the page</p></div>';
+  }
 }
 
 /**
