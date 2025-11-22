@@ -433,14 +433,15 @@
         });
     </script>
 
-    <!-- Mobile Chat Functions -->
+    <!-- Chat Configuration (Desktop & Mobile) -->
     <script>
         // ========================================
-        // MOBILE CHAT CONFIGURATION
+        // SHARED CHAT CONFIGURATION
         // ========================================
         const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
         const CHAT_ENDPOINT = '/chat';
         let MOBILE_CHAT_SESSION_ID = null;
+        let DESKTOP_CHAT_SESSION_ID = null;
 
         // Initialize session
         function initMobileChatSession() {
@@ -555,7 +556,125 @@
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') closeMobileChat();
             });
+
+            // ========================================
+            // DESKTOP CHAT INITIALIZATION
+            // ========================================
+            initDesktopChatSession();
+
+            const desktopInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+
+            if (desktopInput && sendButton) {
+                desktopInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !desktopInput.disabled) {
+                        sendDesktopMessage();
+                    }
+                });
+
+                sendButton.addEventListener('click', sendDesktopMessage);
+            }
         });
+
+        // ========================================
+        // DESKTOP CHAT FUNCTIONS
+        // ========================================
+        function initDesktopChatSession() {
+            DESKTOP_CHAT_SESSION_ID = sessionStorage.getItem('desktop_chat_session_id');
+            if (!DESKTOP_CHAT_SESSION_ID) {
+                DESKTOP_CHAT_SESSION_ID = 'desktop_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('desktop_chat_session_id', DESKTOP_CHAT_SESSION_ID);
+            }
+        }
+
+        async function sendDesktopMessage() {
+            const input = document.getElementById('userInput');
+            const messagesDiv = document.getElementById('messages');
+            const typingIndicator = document.getElementById('typingIndicator');
+            const userText = input.value.trim();
+
+            if (!userText) return;
+
+            input.disabled = true;
+
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.innerHTML = `
+                <div class="message-content">
+                    <div class="message-text">
+                        <p>${userText}</p>
+                    </div>
+                </div>
+            `;
+            messagesDiv.appendChild(userMsg);
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Show typing indicator
+            typingIndicator.style.display = 'flex';
+
+            try {
+                const payload = {
+                    session_id: DESKTOP_CHAT_SESSION_ID,
+                    prompt: userText,
+                    device_fingerprint: 'desktop-landing-' + navigator.userAgent.substring(0, 50)
+                };
+
+                const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                const aiResponse = data.response || 'Sorry, I could not generate a response.';
+
+                // Hide typing indicator
+                typingIndicator.style.display = 'none';
+
+                // Add AI message
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai-message';
+                aiMsg.innerHTML = `
+                    <div class="message-content">
+                        <span class="message-icon">🤖</span>
+                        <div class="message-text">
+                            <p>${aiResponse}</p>
+                        </div>
+                    </div>
+                `;
+                messagesDiv.appendChild(aiMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            } catch (error) {
+                console.error('[Desktop Chat] Error:', error);
+                typingIndicator.style.display = 'none';
+
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai-message';
+                aiMsg.innerHTML = `
+                    <div class="message-content">
+                        <span class="message-icon">🤖</span>
+                        <div class="message-text">
+                            <p>Sorry, I encountered an error. Please try again.</p>
+                        </div>
+                    </div>
+                `;
+                messagesDiv.appendChild(aiMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            } finally {
+                input.disabled = false;
+                input.focus();
+            }
+        }
     </script>
 
     <!-- Service Worker for Caching - DISABLED DURING DOMAIN VALIDATION -->
