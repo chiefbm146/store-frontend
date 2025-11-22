@@ -6,13 +6,6 @@
 
 /* === MOBILE ADJUSTMENTS === */
 @media (max-width: 768px) {
-    /* Show mobile elements on mobile devices */
-    .ai-blurb-section,
-    .mobile-chat-fab,
-    .mobile-chat-overlay,
-    .mobile-chat-modal {
-        display: initial !important;
-    }
     /* Prevent horizontal scroll */
     html, body {
         overflow-x: hidden;

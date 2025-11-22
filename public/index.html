@@ -12,16 +12,8 @@
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
 
-    <!-- Critical CSS - Loading Animation & Device Detection (Inlined for Performance) -->
+    <!-- Critical CSS - Loading Animation (Inlined for Performance) -->
     <style>
-        /* Hide mobile elements by default - shown only on mobile devices */
-        .ai-blurb-section,
-        .mobile-chat-fab,
-        .mobile-chat-overlay,
-        .mobile-chat-modal {
-            display: none;
-        }
-
         /* App Shell Loading State */
         body.is-loading {
             margin: 0;
@@ -114,7 +106,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="./css/desktop.css">
-    <!-- Mobile CSS - loaded dynamically based on device detection -->
+    <link rel="stylesheet" href="./css/mobile-index.css">
     <link rel="stylesheet" href="./libs/fontawesome/all.min.css">
 
     <!-- Flatpickr -->
@@ -301,28 +293,6 @@
     <!-- Scripts -->
     <script src="./js/version-manager.js"></script>
     <script src="./js/device-detector.js"></script>
-
-    <!-- Device Detection & Mobile CSS Loading -->
-    <script>
-        (async () => {
-            const detector = new DeviceDetector({ debug: false });
-            const deviceInfo = await detector.init();
-
-            // Load mobile CSS only on mobile devices
-            if (deviceInfo.formFactor === 'mobile') {
-                const mobileCSS = document.createElement('link');
-                mobileCSS.rel = 'stylesheet';
-                mobileCSS.href = './css/mobile-index.css';
-                document.head.appendChild(mobileCSS);
-                document.documentElement.setAttribute('data-device', 'mobile');
-            } else {
-                document.documentElement.setAttribute('data-device', 'desktop');
-                // Hide mobile-only elements on desktop
-                const mobileElements = document.querySelectorAll('.ai-blurb-section, .mobile-chat-fab, .mobile-chat-overlay, .mobile-chat-modal');
-                mobileElements.forEach(el => el.style.display = 'none');
-            }
-        })();
-    </script>
 
     <!-- Config System: Theme & Content -->
     <script type="module">
