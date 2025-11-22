@@ -13,6 +13,7 @@
     '/demo-desk.html': '/web-sites-4-u',
     '/store-booking.html': '/booking',
     '/checkout.html': '/checkout',
+    '/checkout-success.html': '/checkout-success',
     '/about-desk.html': '/about',
     '/contact-desk.html': '/contact',
     '/ai-chat-desk.html': '/ai-chat',
