@@ -454,8 +454,8 @@
         function openMobileChat() {
             document.getElementById('mobileChatModal').classList.add('active');
             document.getElementById('mobileChatOverlay').classList.add('active');
-            document.getElementById('mobileChatInput').focus();
             document.body.style.overflow = 'hidden';
+            // Don't auto-focus - let user see chat and choose to type
         }
 
         function closeMobileChat() {
@@ -529,7 +529,9 @@
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
             } finally {
                 input.disabled = false;
-                input.focus();
+                // Close keyboard after sending
+                input.blur();
+                messagesDiv.focus();
             }
         }
 

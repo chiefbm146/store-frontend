@@ -497,6 +497,17 @@
 
     .mobile-chat-input:focus {
         border-color: var(--color-primary, #6366f1);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    /* Prevent keyboard resize issues */
+    .mobile-chat-modal {
+        position: fixed !important;
+        height: 100dvh; /* Use dynamic viewport height to account for keyboard */
+    }
+
+    .mobile-chat-body {
+        max-height: calc(100dvh - 160px); /* Header + input area */
     }
 
     .mobile-chat-send {
