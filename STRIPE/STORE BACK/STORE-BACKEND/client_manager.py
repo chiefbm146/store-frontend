@@ -212,16 +212,22 @@ class ClientManager:
                 platform_fee = 0
                 payment_intent_obj = charge.get('payment_intent')
 
-                # If payment_intent is an object (expanded), get fee from it
+                print(f"🔍 Payment intent type: {type(payment_intent_obj)}")
                 if isinstance(payment_intent_obj, dict):
+                    print(f"✅ Payment intent is expanded dict")
                     platform_fee = payment_intent_obj.get('application_fee_amount', 0)
                     print(f"✅ Got platform fee from expanded payment intent: ${platform_fee/100:.2f}")
-                elif payment_intent_obj and isinstance(payment_intent_obj, str):
+                elif isinstance(payment_intent_obj, str):
+                    print(f"📋 Payment intent is string ID, fetching: {payment_intent_obj}")
                     # It's just an ID string, fetch it
                     payment_intent = StripeConnector.get_payment_intent(payment_intent_obj)
                     if payment_intent:
                         platform_fee = payment_intent.get('application_fee_amount', 0)
                         print(f"✅ Got platform fee from fetched payment intent: ${platform_fee/100:.2f}")
+                    else:
+                        print(f"❌ Failed to fetch payment intent {payment_intent_obj}")
+                else:
+                    print(f"⚠️ Unexpected payment_intent type: {payment_intent_obj}")
 
                 # Calculate stripe fee: what's lost between customer charged and transfer amount
                 stripe_fee = gross_amount - transfer_amount - platform_fee
@@ -268,6 +274,7 @@ class ClientManager:
 
                 # Save transaction to Firestore
                 try:
+                    print(f"💾 Saving breakdown to Firestore: {transaction_data.get('breakdown')}")
                     if is_new:
                         # New transaction - set all fields
                         db.collection('clients').document(client_uid).collection('transactions').document(payment_intent_id).set(transaction_data)
@@ -278,7 +285,7 @@ class ClientManager:
                         print(f"✅ Transaction updated (merged): {payment_intent_id}")
                     synced_count += 1
                 except Exception as write_error:
-                    print(f"❌ Error writing transaction {payment_intent_id}: {write_error}")
+                    print(f"❌ Error writing transaction {payment_intent_id}: {write_error}", exc_info=True)
 
             print(f"✅ Synced {synced_count} transactions for client {client_uid}")
             return synced_count
