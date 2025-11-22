@@ -283,6 +283,13 @@ async function loadTransactions() {
         minute: '2-digit'
       });
 
+      // Calculate breakdown amounts if available
+      const breakdown = txn.breakdown || {};
+      const customerCharged = breakdown.customer_charged ? (breakdown.customer_charged / 100).toFixed(2) : amountInDollars;
+      const platformFee = breakdown.platform_fee ? (breakdown.platform_fee / 100).toFixed(2) : '0.00';
+      const stripeFee = breakdown.stripe_fee ? (breakdown.stripe_fee / 100).toFixed(2) : '0.00';
+      const franchiseeNet = breakdown.franchisee_net ? (breakdown.franchisee_net / 100).toFixed(2) : amountInDollars;
+
       // Build detailed transaction info
       html += `
         <div class="transaction-item">
@@ -291,6 +298,7 @@ async function loadTransactions() {
             <div class="transaction-amount">+$${amountInDollars}</div>
           </div>
           <div class="transaction-details">
+            <!-- Customer Info Section -->
             <div class="transaction-detail">
               <span class="detail-label">Customer</span>
               <span class="detail-value">${txn.name || 'Guest'}</span>
@@ -307,34 +315,62 @@ async function loadTransactions() {
               <span class="detail-label">Status</span>
               <span class="detail-value" style="color: ${txn.status === 'succeeded' ? '#27ae60' : '#ff6b6b'};">${txn.status || 'unknown'}</span>
             </div>
-            <div class="transaction-detail">
-              <span class="detail-label">Description</span>
-              <span class="detail-value">${txn.description || 'Payment'}</span>
-            </div>
-            <div class="transaction-detail">
-              <span class="detail-label">Currency</span>
-              <span class="detail-value">${(txn.currency || 'cad').toUpperCase()}</span>
-            </div>
-            <div class="transaction-detail">
-              <span class="detail-label">Payment ID</span>
-              <span class="detail-value" style="font-size: 11px; font-family: monospace;">${txn.stripePaymentId || txn.chargeId || 'N/A'}</span>
-            </div>
-            <div class="transaction-detail">
-              <span class="detail-label">Charge ID</span>
-              <span class="detail-value" style="font-size: 11px; font-family: monospace;">${txn.chargeId || 'N/A'}</span>
-            </div>
-            ${txn.transferId ? `
-            <div class="transaction-detail">
-              <span class="detail-label">Transfer ID</span>
-              <span class="detail-value" style="font-size: 11px; font-family: monospace;">${txn.transferId}</span>
-            </div>
-            ` : ''}
-            ${txn.receipt_url ? `
-            <div class="transaction-detail">
-              <span class="detail-label">Receipt</span>
-              <span class="detail-value"><a href="${txn.receipt_url}" target="_blank" style="color: #667eea; text-decoration: none;">View Receipt ↗</a></span>
+
+            <!-- Payment Breakdown Section -->
+            ${breakdown && breakdown.customer_charged ? `
+            <div style="grid-column: 1 / -1; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e0e0e0;">
+              <span class="detail-label" style="display: block; margin-bottom: 8px; font-weight: 600;">Payment Breakdown</span>
+              <div class="transaction-detail" style="margin-bottom: 6px;">
+                <span class="detail-label">Customer Charged</span>
+                <span class="detail-value" style="color: #1a1a1a; font-weight: 600;">$${customerCharged}</span>
+              </div>
+              <div class="transaction-detail" style="margin-bottom: 6px; color: #ff6b6b;">
+                <span class="detail-label">Stripe Processing Fee</span>
+                <span class="detail-value">-$${stripeFee}</span>
+              </div>
+              <div class="transaction-detail" style="margin-bottom: 6px; color: #667eea;">
+                <span class="detail-label">Platform Fee (AARIE)</span>
+                <span class="detail-value">-$${platformFee}</span>
+              </div>
+              <div class="transaction-detail" style="padding-top: 6px; border-top: 1px solid #e0e0e0;">
+                <span class="detail-label" style="font-weight: 600;">You Receive (Net)</span>
+                <span class="detail-value" style="color: #27ae60; font-weight: 700; font-size: 16px;">$${franchiseeNet}</span>
+              </div>
             </div>
             ` : ''}
+
+            <!-- Additional Details Section -->
+            <div style="grid-column: 1 / -1; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e0e0e0;">
+              <span class="detail-label" style="display: block; margin-bottom: 8px; font-weight: 600;">Details</span>
+              <div class="transaction-detail">
+                <span class="detail-label">Description</span>
+                <span class="detail-value">${txn.description || 'Payment'}</span>
+              </div>
+              <div class="transaction-detail">
+                <span class="detail-label">Currency</span>
+                <span class="detail-value">${(txn.currency || 'cad').toUpperCase()}</span>
+              </div>
+              <div class="transaction-detail">
+                <span class="detail-label">Payment ID</span>
+                <span class="detail-value" style="font-size: 11px; font-family: monospace;">${txn.stripePaymentId || txn.chargeId || 'N/A'}</span>
+              </div>
+              <div class="transaction-detail">
+                <span class="detail-label">Charge ID</span>
+                <span class="detail-value" style="font-size: 11px; font-family: monospace;">${txn.chargeId || 'N/A'}</span>
+              </div>
+              ${txn.transferId ? `
+              <div class="transaction-detail">
+                <span class="detail-label">Transfer ID</span>
+                <span class="detail-value" style="font-size: 11px; font-family: monospace;">${txn.transferId}</span>
+              </div>
+              ` : ''}
+              ${txn.receipt_url ? `
+              <div class="transaction-detail">
+                <span class="detail-label">Receipt</span>
+                <span class="detail-value"><a href="${txn.receipt_url}" target="_blank" style="color: #667eea; text-decoration: none;">View Stripe Receipt ↗</a></span>
+              </div>
+              ` : ''}
+            </div>
           </div>
         </div>
       `;

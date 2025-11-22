@@ -194,14 +194,41 @@ class ClientManager:
                 # Get metadata for additional details
                 metadata = charge.get('metadata', {}) or {}
 
-                # Create transaction record with all available details
+                # Calculate payment breakdown
+                gross_amount = charge.get('amount', 0)  # Total amount charged to customer
+                platform_fee = charge.get('application_fee_amount', 0)  # Platform fee (AARIE)
+                stripe_fee = charge.get('amount_captured', 0) - transfer.get('amount', 0) if transfer.get('amount') else 0
+
+                # Get the actual transfer amount (what goes to the franchisee)
+                transfer_amount = transfer.get('amount', gross_amount)
+
+                # If we can't calculate stripe fee from transfer, try to get it from the charge
+                if stripe_fee == 0 and 'balance_transaction' in charge:
+                    # balance_transaction has fee info
+                    balance_txn = charge.get('balance_transaction', {})
+                    if isinstance(balance_txn, dict):
+                        stripe_fee = balance_txn.get('fee', 0)
+                    elif isinstance(balance_txn, str):
+                        # It's just an ID, we'd need another API call
+                        stripe_fee = gross_amount - transfer_amount - platform_fee
+
+                # Create transaction record with all available details including payment breakdown
                 transaction_data = {
                     'stripePaymentId': payment_intent_id,
                     'chargeId': charge_id,
                     'transferId': transfer.get('id'),
-                    'amount': charge.get('amount', 0),
+                    # Payment amounts
+                    'amount': gross_amount,
                     'currency': charge.get('currency', 'cad').lower(),
                     'status': charge.get('status', 'succeeded'),
+                    # Payment breakdown
+                    'breakdown': {
+                        'customer_charged': gross_amount,  # What customer paid
+                        'platform_fee': platform_fee,      # What AARIE takes (2.5%)
+                        'stripe_fee': stripe_fee,          # What Stripe takes
+                        'franchisee_net': transfer_amount, # What franchisee receives
+                    },
+                    # Customer details
                     'description': charge.get('description') or metadata.get('description') or 'Payment',
                     'name': billing_details.get('name', 'N/A'),
                     'email': billing_details.get('email', 'N/A'),
