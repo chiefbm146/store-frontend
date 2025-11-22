@@ -131,6 +131,33 @@
         </div>
     </section>
 
+    <!-- Who Is This For Section -->
+    <section class="who-section">
+        <div class="who-content">
+            <div class="section-header">
+                <h2 class="section-title" id="who-title"></h2>
+                <p class="section-subtitle" id="who-subtitle"></p>
+            </div>
+
+            <div class="who-highlight" id="who-highlight"></div>
+
+            <div class="business-types-grid" id="business-types-grid">
+                <!-- Populated by JS -->
+            </div>
+
+            <div class="examples-section">
+                <h3 class="examples-title" id="examples-title"></h3>
+                <div class="examples-grid" id="examples-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div class="advantage-box" id="advantage-box">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
     <!-- Features Section -->
     <section class="features-section">
         <div class="section-header">
@@ -255,6 +282,36 @@
             document.getElementById('client-explore-text').textContent = desktopPage.hero.clientExploreText;
             document.getElementById('hero-cta-secondary').textContent = desktopPage.hero.ctaSecondary.text;
             document.getElementById('hero-cta-secondary').href = desktopPage.hero.ctaSecondary.link;
+
+            // Who Is This For Section
+            document.getElementById('who-title').textContent = desktopPage.whoIsThisFor.title;
+            document.getElementById('who-subtitle').textContent = desktopPage.whoIsThisFor.subtitle;
+            document.getElementById('who-highlight').textContent = desktopPage.whoIsThisFor.highlight;
+
+            const businessTypesGrid = document.getElementById('business-types-grid');
+            businessTypesGrid.innerHTML = desktopPage.whoIsThisFor.businessTypes.map(type => `
+                <div class="business-type-card">
+                    <span class="business-type-icon">${type.icon}</span>
+                    <h3 class="business-type-title">${type.title}</h3>
+                    <p class="business-type-description">${type.description}</p>
+                </div>
+            `).join('');
+
+            document.getElementById('examples-title').textContent = desktopPage.whoIsThisFor.examples.title;
+            const examplesGrid = document.getElementById('examples-grid');
+            examplesGrid.innerHTML = desktopPage.whoIsThisFor.examples.items.map(item => `
+                <div class="example-item">
+                    <span class="example-icon">${item.icon}</span>
+                    <span class="example-text">${item.text}</span>
+                </div>
+            `).join('');
+
+            const advantageBox = document.getElementById('advantage-box');
+            advantageBox.innerHTML = `
+                <span class="advantage-icon">${desktopPage.whoIsThisFor.advantage.icon}</span>
+                <h3 class="advantage-title">${desktopPage.whoIsThisFor.advantage.title}</h3>
+                <p class="advantage-description">${desktopPage.whoIsThisFor.advantage.description}</p>
+            `;
 
             // Features Section
             document.getElementById('features-title').textContent = desktopPage.features.title;

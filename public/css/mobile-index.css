@@ -162,6 +162,89 @@
         margin: 8px 0;
     }
 
+    /* Who Is This For Section - Mobile */
+    .who-section {
+        padding: 60px 20px;
+    }
+
+    .who-highlight {
+        padding: 25px 20px;
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+    }
+
+    .business-types-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+
+    .business-type-card {
+        padding: 30px 25px;
+        border-radius: 16px;
+    }
+
+    .business-type-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+
+    .business-type-title {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+
+    .business-type-description {
+        font-size: 0.95rem;
+    }
+
+    .examples-section {
+        padding: 30px 20px;
+        margin-bottom: 30px;
+    }
+
+    .examples-title {
+        font-size: 1.4rem;
+        margin-bottom: 25px;
+    }
+
+    .examples-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .example-item {
+        padding: 14px 16px;
+        gap: 10px;
+    }
+
+    .example-icon {
+        font-size: 1.5rem;
+    }
+
+    .example-text {
+        font-size: 0.9rem;
+    }
+
+    .advantage-box {
+        padding: 35px 25px;
+        border-radius: 16px;
+    }
+
+    .advantage-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+
+    .advantage-title {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+
+    .advantage-description {
+        font-size: 1rem;
+    }
+
     /* CTA Section - Mobile */
     .cta-section {
         padding: 50px 20px;
@@ -243,6 +326,48 @@
     .btn {
         padding: 12px 25px;
         font-size: 0.9rem;
+    }
+
+    .who-section {
+        padding: 40px 15px;
+    }
+
+    .who-highlight {
+        padding: 20px 15px;
+        font-size: 1rem;
+    }
+
+    .business-type-card {
+        padding: 25px 20px;
+    }
+
+    .business-type-icon {
+        font-size: 2.5rem;
+    }
+
+    .examples-section {
+        padding: 25px 15px;
+    }
+
+    .examples-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .example-item {
+        padding: 12px 14px;
+    }
+
+    .advantage-box {
+        padding: 30px 20px;
+    }
+
+    .advantage-icon {
+        font-size: 2.5rem;
+    }
+
+    .advantage-title {
+        font-size: 1.3rem;
     }
 
     .features-section {
