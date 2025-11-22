@@ -474,13 +474,16 @@
 
             input.disabled = true;
 
+            // Clear previous messages - only show current exchange
+            messagesDiv.innerHTML = '';
+
             // Add user message
             const userMsg = document.createElement('div');
             userMsg.className = 'mobile-chat-message user';
             userMsg.textContent = userText;
             messagesDiv.appendChild(userMsg);
             input.value = '';
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            messagesDiv.scrollTop = 0;
 
             // Show typing indicator
             typingIndicator.classList.add('visible');
@@ -516,7 +519,7 @@
                 aiMsg.className = 'mobile-chat-message ai';
                 aiMsg.textContent = aiResponse;
                 messagesDiv.appendChild(aiMsg);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                messagesDiv.scrollTop = 0;
 
             } catch (error) {
                 console.error('[Mobile Chat] Error:', error);
@@ -526,7 +529,7 @@
                 aiMsg.className = 'mobile-chat-message ai';
                 aiMsg.textContent = 'Sorry, I encountered an error. Please try again.';
                 messagesDiv.appendChild(aiMsg);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                messagesDiv.scrollTop = 0;
             } finally {
                 input.disabled = false;
                 // Close keyboard after sending
