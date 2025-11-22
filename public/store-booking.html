@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Your Store - AARIE.CA</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Get Your Store - AARIE.CA">
+    <meta property="og:description" content="Start selling online today with a custom-built store. $99 deposit gets you started.">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #1a1a1a;
+            background: #FFFFFF;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* === NAVIGATION BAR === */
+        .nav-bar {
+            position: static;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 15px 40px;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: auto;
+        }
+
+        .nav-back-button {
+            background: #6366f1;
+            color: #FFFFFF;
+            text-decoration: none;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 2px solid #4f46e5;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-back-button:hover {
+            background: #4f46e5;
+            transform: translateX(-3px);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            color: #6366f1;
+        }
+
+        .nav-logo-icon {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #1a1a1a;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link span {
+            font-size: 1.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        /* === HAMBURGER MENU === */
+        .mobile-hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border: 2px solid #6366f1;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .hamburger-line {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: #6366f1;
+            border-radius: 2px;
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 9998;
+        }
+
+        .mobile-menu-overlay.active {
+            display: block;
+        }
+
+        .mobile-menu-drawer {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 85%;
+            max-width: 350px;
+            height: 100%;
+            background: #FFFFFF;
+            z-index: 9999;
+            flex-direction: column;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+            transition: right 0.3s ease;
+        }
+
+        .mobile-menu-drawer.active {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 25px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #FFFFFF;
+        }
+
+        .mobile-menu-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .mobile-menu-close {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .mobile-menu-nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .mobile-menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 25px;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-bottom: 1px solid #E8ECF0;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-link:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .mobile-menu-icon {
+            font-size: 1.5rem;
+        }
+
+        /* === HERO SECTION === */
+        .hero-section {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            padding: 80px 40px;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image:
+                radial-gradient(circle at 25% 25%, #FFFFFF 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, #FFFFFF 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-emoji {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.95);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* === MAIN CONTENT === */
+        .content-section {
+            padding: 80px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* === WHO CAN SELL === */
+        .who-can-sell {
+            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+            padding: 60px 40px;
+        }
+
+        .who-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .who-card {
+            background: #FFFFFF;
+            padding: 30px 25px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .who-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .who-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .who-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .who-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* === WHAT WE DO === */
+        .what-we-do {
+            padding: 80px 40px;
+        }
+
+        .features-list {
+            display: grid;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 25px;
+            background: #F8F9FA;
+            border-radius: 16px;
+            border-left: 4px solid #6366f1;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .feature-content p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* === PRICING SECTION === */
+        .pricing-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 80px 40px;
+            color: #FFFFFF;
+        }
+
+        .pricing-section .section-title {
+            color: #FFFFFF;
+        }
+
+        .pricing-section .section-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .pricing-timeline {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto 50px;
+        }
+
+        .pricing-step {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px 25px;
+            border-radius: 16px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            max-width: 280px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .pricing-step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #6366f1;
+            color: #FFFFFF;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .pricing-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #6366f1;
+            margin-bottom: 10px;
+        }
+
+        .pricing-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .pricing-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .fee-info {
+            background: rgba(99, 102, 241, 0.2);
+            border: 2px solid rgba(99, 102, 241, 0.4);
+            padding: 25px;
+            border-radius: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .fee-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .fee-rate {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #6366f1;
+            margin-bottom: 10px;
+        }
+
+        .fee-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        /* === STRIPE INFO === */
+        .stripe-section {
+            padding: 60px 40px;
+            background: #F8F9FA;
+        }
+
+        .stripe-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stripe-card {
+            background: #FFFFFF;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .stripe-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stripe-card p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* === CTA SECTION === */
+        .cta-section {
+            padding: 100px 40px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image:
+                radial-gradient(circle at 25% 25%, #FFFFFF 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, #FFFFFF 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 15px;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+        }
+
+        .deposit-amount {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .deposit-button {
+            display: inline-block;
+            padding: 22px 60px;
+            background: #FFFFFF;
+            color: #6366f1;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .deposit-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .deposit-note {
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        /* === FOOTER === */
+        .footer {
+            background: #1a1a1a;
+            color: #FFFFFF;
+            padding: 40px 40px;
+            text-align: center;
+        }
+
+        .footer-tagline {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .footer-copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* === MOBILE CHAT === */
+        .mobile-chat-fab {
+            display: none;
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 9997;
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+            border: none;
+            animation: fabPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes fabPulse {
+            0%, 100% { box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5); }
+            50% { box-shadow: 0 8px 35px rgba(99, 102, 241, 0.7); }
+        }
+
+        .mobile-chat-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+        }
+
+        .mobile-chat-overlay.active {
+            display: block;
+        }
+
+        .mobile-chat-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100dvh;
+            background: #FFFFFF;
+            z-index: 10000;
+            flex-direction: column;
+        }
+
+        .mobile-chat-modal.active {
+            display: flex;
+        }
+
+        .mobile-chat-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 20px;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .mobile-chat-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .mobile-chat-close {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .mobile-chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #F8F9FA;
+            max-height: calc(100dvh - 160px);
+        }
+
+        .mobile-chat-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mobile-chat-message {
+            padding: 14px 18px;
+            border-radius: 16px;
+            max-width: 85%;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .mobile-chat-message.ai {
+            background: #FFFFFF;
+            align-self: flex-start;
+            border: 1px solid #E0E0E0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .mobile-chat-message.user {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #FFFFFF;
+            align-self: flex-end;
+        }
+
+        .mobile-chat-input-area {
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            background: #FFFFFF;
+            border-top: 1px solid #E0E0E0;
+            flex-shrink: 0;
+        }
+
+        .mobile-chat-input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #E0E0E0;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .mobile-chat-input:focus {
+            border-color: #6366f1;
+        }
+
+        .mobile-chat-send {
+            padding: 14px 22px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .mobile-typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            padding: 14px 18px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            align-self: flex-start;
+            border: 1px solid #E0E0E0;
+        }
+
+        .mobile-typing-indicator.visible {
+            display: flex;
+        }
+
+        .mobile-typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6366f1;
+            animation: mobileBounce 1.4s ease-in-out infinite;
+        }
+
+        .mobile-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .mobile-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes mobileBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-hamburger {
+                display: flex;
+            }
+
+            .mobile-menu-drawer {
+                display: flex;
+            }
+
+            .mobile-chat-fab {
+                display: flex;
+            }
+
+            .nav-bar {
+                padding: 10px 15px;
+            }
+
+            .nav-back-button {
+                width: 40px;
+                height: 40px;
+            }
+
+            .nav-logo {
+                font-size: 1.2rem;
+            }
+
+            .nav-logo-icon {
+                font-size: 1.5rem;
+            }
+
+            .hero-section {
+                padding: 60px 20px;
+                min-height: auto;
+            }
+
+            .hero-emoji {
+                font-size: 3.5rem;
+            }
+
+            .who-can-sell {
+                padding: 50px 20px;
+            }
+
+            .who-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .what-we-do {
+                padding: 50px 20px;
+            }
+
+            .feature-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .pricing-section {
+                padding: 50px 20px;
+            }
+
+            .pricing-timeline {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pricing-step {
+                max-width: 100%;
+            }
+
+            .stripe-section {
+                padding: 50px 20px;
+            }
+
+            .stripe-info {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section {
+                padding: 60px 20px;
+            }
+
+            .deposit-amount {
+                font-size: 3rem;
+            }
+
+            .deposit-button {
+                padding: 18px 40px;
+                font-size: 1.2rem;
+            }
+
+            .footer {
+                padding: 30px 20px;
+                padding-bottom: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-chat-fab {
+                width: 55px;
+                height: 55px;
+                font-size: 1.7rem;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .hero-emoji {
+                font-size: 3rem;
+            }
+
+            .deposit-amount {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/demo-desk.html" class="nav-back-button" title="Back">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <a href="/index.html" class="nav-logo">
+                    <span class="nav-logo-icon">🏪</span>
+                    <span>AARIE.CA</span>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="/store-booking.html" class="nav-link"><span>🏪</span> Get a Store</a>
+                <a href="/about-desk.html" class="nav-link"><span>ℹ️</span> About</a>
+                <a href="/contact-desk.html" class="nav-link"><span>📬</span> Contact</a>
+                <a href="javascript:void(0)" class="nav-link" onclick="openMobileChat()"><span>🤖</span> A.I. Chat</a>
+            </div>
+            <button class="mobile-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+    <!-- Mobile Menu Drawer -->
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+        <div class="mobile-menu-header">
+            <span class="mobile-menu-logo">🏪 AARIE.CA</span>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+        </div>
+        <nav class="mobile-menu-nav">
+            <a href="/store-booking.html" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">🏪</span>
+                <span>Get a Store</span>
+            </a>
+            <a href="/about-desk.html" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">ℹ️</span>
+                <span>About</span>
+            </a>
+            <a href="/contact-desk.html" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">📬</span>
+                <span>Contact</span>
+            </a>
+            <a href="javascript:void(0)" class="mobile-menu-link" onclick="closeMobileMenu(); openMobileChat();">
+                <span class="mobile-menu-icon">🤖</span>
+                <span>A.I. Chat</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <span class="hero-emoji">🏪</span>
+            <h1 class="hero-title">Get Your Custom Store Built</h1>
+            <p class="hero-subtitle">We handle everything. You focus on your business. Your store goes live in 24-48 hours.</p>
+        </div>
+    </section>
+
+    <!-- Who Can Sell Section -->
+    <section class="who-can-sell">
+        <h2 class="section-title">Anyone Can Start Selling Online</h2>
+        <p class="section-subtitle">You don't need a registered business to start. Sell under your own name, sole proprietorship, or established company.</p>
+
+        <div class="who-grid">
+            <div class="who-card">
+                <span class="who-icon">👤</span>
+                <h3 class="who-title">Individuals</h3>
+                <p class="who-description">Sell under your own name - artists, freelancers, creators, hobbyists turning passion into profit.</p>
+            </div>
+            <div class="who-card">
+                <span class="who-icon">📋</span>
+                <h3 class="who-title">Sole Proprietors</h3>
+                <p class="who-description">Small business owners ready to take their services online and reach more customers.</p>
+            </div>
+            <div class="who-card">
+                <span class="who-icon">🏢</span>
+                <h3 class="who-title">Registered Businesses</h3>
+                <p class="who-description">Established companies looking for a professional online presence with AI support.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What We Do Section -->
+    <section class="what-we-do">
+        <h2 class="section-title">What We Build For You</h2>
+        <p class="section-subtitle">A complete, professional online store - you don't have to lift a finger.</p>
+
+        <div class="features-list">
+            <div class="feature-item">
+                <span class="feature-icon">🎨</span>
+                <div class="feature-content">
+                    <h3>Custom Store Design</h3>
+                    <p>We design and build your entire store from scratch. Professional, mobile-friendly, and tailored to your brand. Desktop and mobile optimized.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">📦</span>
+                <div class="feature-content">
+                    <h3>Products, Images & Details</h3>
+                    <p>We fill your store with your products, images, prices, and descriptions. Send us your content and we handle the rest.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">💳</span>
+                <div class="feature-content">
+                    <h3>Secure Payment Processing</h3>
+                    <p>Accept payments through Stripe. Customers pay, money goes directly to your bank account. Simple and secure.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">🤖</span>
+                <div class="feature-content">
+                    <h3>Custom AI Chatbot</h3>
+                    <p>Every store includes a custom AI assistant trained specifically on your business. Your customers get instant answers 24/7 - professional, helpful, and always on-brand.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">📊</span>
+                <div class="feature-content">
+                    <h3>Your Own Business Portal</h3>
+                    <p>Access both your Stripe dashboard and a custom portal to manage your business. Track orders, customers, and revenue all in one place.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section">
+        <h2 class="section-title">Simple, Transparent Pricing</h2>
+        <p class="section-subtitle">No hidden fees. No monthly subscriptions. Just three simple payments.</p>
+
+        <div class="pricing-timeline">
+            <div class="pricing-step">
+                <span class="pricing-step-number">1</span>
+                <div class="pricing-amount">$99</div>
+                <div class="pricing-label">Deposit</div>
+                <p class="pricing-description">Get started today. We begin building your store immediately.</p>
+            </div>
+            <div class="pricing-step">
+                <span class="pricing-step-number">2</span>
+                <div class="pricing-amount">$250</div>
+                <div class="pricing-label">First Proof</div>
+                <p class="pricing-description">When your store is built and functional. Review and request changes.</p>
+            </div>
+            <div class="pricing-step">
+                <span class="pricing-step-number">3</span>
+                <div class="pricing-amount">$250</div>
+                <div class="pricing-label">Final Delivery</div>
+                <p class="pricing-description">When your store is complete and you're ready to go live.</p>
+            </div>
+        </div>
+
+        <div class="fee-info">
+            <div class="fee-title">Transaction Fee</div>
+            <div class="fee-rate">2.9%</div>
+            <p class="fee-description">We collect a small fee on purchases made through your store. That's it - no other ongoing costs. Payments go directly to your bank account.</p>
+        </div>
+    </section>
+
+    <!-- Stripe Section -->
+    <section class="stripe-section">
+        <h2 class="section-title">Powered by Stripe</h2>
+        <p class="section-subtitle">Industry-leading payment processing. Your money, your control.</p>
+
+        <div class="stripe-info">
+            <div class="stripe-card">
+                <h3>💳 Stripe Express Account</h3>
+                <p>You sign up with Stripe under our Connect platform. Fast, secure setup. Accept credit cards, Apple Pay, Google Pay, and more.</p>
+            </div>
+            <div class="stripe-card">
+                <h3>🏦 Direct to Your Bank</h3>
+                <p>Customer payments go directly to your bank account. No waiting, no middleman. You're always in control of your money.</p>
+            </div>
+            <div class="stripe-card">
+                <h3>📊 Your Own Dashboard</h3>
+                <p>Access your Stripe dashboard anytime. Track payments, view transactions, download reports. Full transparency.</p>
+            </div>
+            <div class="stripe-card">
+                <h3>🛠️ Custom Business Portal</h3>
+                <p>In addition to Stripe, get access to a custom portal built for your business. Manage products, view orders, and grow your store.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <span class="cta-emoji">🚀</span>
+            <h2 class="cta-title">Start Your Store Today</h2>
+            <p class="cta-subtitle">Your online store, live in 24-48 hours. We build it, you run your business.</p>
+
+            <div class="deposit-amount">$99</div>
+            <button class="deposit-button" id="depositButton">DEPOSIT NOW</button>
+            <p class="deposit-note">Secure your spot. We'll start building your store immediately.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-tagline">AARIE.CA - We Build Your Store in 24-48 Hours</p>
+        <p class="footer-copyright">© 2025 AARIE.CA. All rights reserved.</p>
+    </footer>
+
+    <!-- Mobile Floating Chat Button -->
+    <button class="mobile-chat-fab" onclick="openMobileChat()" title="Chat with AI">
+        🤖
+    </button>
+
+    <!-- Mobile Chat Overlay -->
+    <div class="mobile-chat-overlay" id="mobileChatOverlay" onclick="closeMobileChat()"></div>
+
+    <!-- Mobile Fullscreen Chat Modal -->
+    <div class="mobile-chat-modal" id="mobileChatModal">
+        <div class="mobile-chat-header">
+            <h3 class="mobile-chat-title">🤖 AI Assistant</h3>
+            <button class="mobile-chat-close" onclick="closeMobileChat()">✕</button>
+        </div>
+        <div class="mobile-chat-body">
+            <div class="mobile-chat-messages" id="mobileChatMessages">
+                <div class="mobile-chat-message ai">
+                    Hi! 👋 I'm the AI assistant from AARIE.CA. We build professional online stores in just 24-48 hours. Ask me anything about our services, pricing, or how we can help your business!
+                </div>
+            </div>
+            <div class="mobile-typing-indicator" id="mobileTypingIndicator">
+                <span class="mobile-typing-dot"></span>
+                <span class="mobile-typing-dot"></span>
+                <span class="mobile-typing-dot"></span>
+            </div>
+        </div>
+        <div class="mobile-chat-input-area">
+            <input type="text" class="mobile-chat-input" id="mobileChatInput" placeholder="Ask me anything..." maxlength="4000">
+            <button class="mobile-chat-send" onclick="sendMobileMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            const drawer = document.getElementById('mobileMenuDrawer');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            drawer.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = drawer.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            const drawer = document.getElementById('mobileMenuDrawer');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            drawer.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Mobile Chat Functions
+        const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+        const CHAT_ENDPOINT = '/chat';
+        let MOBILE_CHAT_SESSION_ID = null;
+
+        function initMobileChatSession() {
+            MOBILE_CHAT_SESSION_ID = sessionStorage.getItem('mobile_chat_session_id');
+            if (!MOBILE_CHAT_SESSION_ID) {
+                MOBILE_CHAT_SESSION_ID = 'mobile_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('mobile_chat_session_id', MOBILE_CHAT_SESSION_ID);
+            }
+        }
+
+        function openMobileChat() {
+            document.getElementById('mobileChatModal').classList.add('active');
+            document.getElementById('mobileChatOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileChat() {
+            document.getElementById('mobileChatModal').classList.remove('active');
+            document.getElementById('mobileChatOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        async function sendMobileMessage() {
+            const input = document.getElementById('mobileChatInput');
+            const messagesDiv = document.getElementById('mobileChatMessages');
+            const typingIndicator = document.getElementById('mobileTypingIndicator');
+            const userText = input.value.trim();
+
+            if (!userText) return;
+
+            input.disabled = true;
+            messagesDiv.innerHTML = '';
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'mobile-chat-message user';
+            userMsg.textContent = userText;
+            messagesDiv.appendChild(userMsg);
+            input.value = '';
+            messagesDiv.scrollTop = 0;
+
+            typingIndicator.classList.add('visible');
+
+            try {
+                const payload = {
+                    session_id: MOBILE_CHAT_SESSION_ID,
+                    prompt: userText,
+                    device_fingerprint: 'booking-page-' + navigator.userAgent.substring(0, 50)
+                };
+
+                const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const data = await response.json();
+                const aiResponse = data.response || 'Sorry, I could not generate a response.';
+
+                typingIndicator.classList.remove('visible');
+
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'mobile-chat-message ai';
+                aiMsg.textContent = aiResponse;
+                messagesDiv.appendChild(aiMsg);
+                messagesDiv.scrollTop = 0;
+
+            } catch (error) {
+                console.error('[Mobile Chat] Error:', error);
+                typingIndicator.classList.remove('visible');
+
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'mobile-chat-message ai';
+                aiMsg.textContent = 'Sorry, I encountered an error. Please try again.';
+                messagesDiv.appendChild(aiMsg);
+                messagesDiv.scrollTop = 0;
+            } finally {
+                input.disabled = false;
+                input.blur();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initMobileChatSession();
+
+            const mobileInput = document.getElementById('mobileChatInput');
+            if (mobileInput) {
+                mobileInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !mobileInput.disabled) {
+                        sendMobileMessage();
+                    }
+                });
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeMobileChat();
+                    closeMobileMenu();
+                }
+            });
+
+            // Deposit button placeholder
+            document.getElementById('depositButton').addEventListener('click', () => {
+                alert('Stripe checkout coming soon! Contact us to get started.');
+            });
+        });
+    </script>
+</body>
+</html>

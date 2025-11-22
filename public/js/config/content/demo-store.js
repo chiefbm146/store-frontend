@@ -12,11 +12,10 @@ export const demoStore = {
     // Navigation
     navigation: {
         links: [
-            { text: 'Store', url: '/shop-desk.html', icon: '🛍️' },
+            { text: 'Get a Store', url: '/store-booking.html', icon: '🏪' },
             { text: 'About', url: '#about', icon: 'ℹ️' },
             { text: 'Contact', url: '/contact-desk.html', icon: '📬' },
-            { text: 'A.I. Chat', url: '#chat', icon: '🤖' },
-            { text: 'Cart', url: '/cart-desk.html', icon: '🛒' }
+            { text: 'A.I. Chat', url: '#chat', icon: '🤖' }
         ]
     },
 
@@ -26,7 +25,7 @@ export const demoStore = {
         subtitle: 'Place a deposit today and get your store live in 24-48 hours',
         description: 'Stop waiting months for a website. We handle everything - design, setup, products, checkout, and a custom AI chatbot. You focus on your business, we build your online presence.',
         ctaText: 'Get Started Now',
-        ctaLink: '/contact-desk.html',
+        ctaLink: '/store-booking.html',
         backgroundImage: null,
         backgroundEmoji: '🏪'
     },
@@ -42,7 +41,7 @@ export const demoStore = {
                 description: 'Professional online store with product catalog, checkout, and AI chatbot included.',
                 price: '$99 Deposit',
                 emoji: '📦',
-                link: '/contact-desk.html'
+                link: '/store-booking.html'
             },
             {
                 id: 'deposit-2',
@@ -50,7 +49,7 @@ export const demoStore = {
                 description: 'Sell workshops and courses with booking, scheduling, and payment processing built-in.',
                 price: '$99 Deposit',
                 emoji: '🎁',
-                link: '/contact-desk.html'
+                link: '/store-booking.html'
             },
             {
                 id: 'deposit-3',
@@ -58,7 +57,7 @@ export const demoStore = {
                 description: 'Service business website with consultation booking and client management tools.',
                 price: '$99 Deposit',
                 emoji: '⭐',
-                link: '/contact-desk.html'
+                link: '/store-booking.html'
             }
         ]
     },
