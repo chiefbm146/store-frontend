@@ -597,6 +597,9 @@
 
             input.disabled = true;
 
+            // Clear previous messages - only show current exchange
+            messagesDiv.innerHTML = '';
+
             // Add user message
             const userMsg = document.createElement('div');
             userMsg.className = 'message user-message';
@@ -609,7 +612,7 @@
             `;
             messagesDiv.appendChild(userMsg);
             input.value = '';
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            messagesDiv.scrollTop = 0;
 
             // Show typing indicator
             typingIndicator.style.display = 'flex';
@@ -652,7 +655,7 @@
                     </div>
                 `;
                 messagesDiv.appendChild(aiMsg);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                messagesDiv.scrollTop = 0;
 
             } catch (error) {
                 console.error('[Desktop Chat] Error:', error);
@@ -669,7 +672,7 @@
                     </div>
                 `;
                 messagesDiv.appendChild(aiMsg);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                messagesDiv.scrollTop = 0;
             } finally {
                 input.disabled = false;
                 input.focus();
