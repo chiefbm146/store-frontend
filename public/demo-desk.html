@@ -327,6 +327,20 @@
 
                         const sourceNode = sourceTextNodes[currentNodeIndex];
                         const targetNode = targetTextNodes[currentNodeIndex];
+
+                        // Safety check - if targetNode doesn't exist, skip to next or finish
+                        if (!targetNode) {
+                            currentNodeIndex++;
+                            if (currentNodeIndex < sourceTextNodes.length) {
+                                currentCharIndex = 0;
+                                typeNextCharacter();
+                            } else {
+                                if (onComplete) onComplete();
+                                resolve();
+                            }
+                            return;
+                        }
+
                         const fullText = sourceNode.textContent;
 
                         if (currentCharIndex < fullText.length) {
