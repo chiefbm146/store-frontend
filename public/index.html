@@ -23,6 +23,18 @@
     <!-- Device Detector (CRITICAL: Required for rate-limiting security system) -->
     <script src="./js/device-detector.js?v=11.0.12"></script>
 
+    <!-- Three.js Libraries for 3D rendering and Water Background -->
+    <script src="./libs/three/three.min.js?v=11.0.12"></script>
+    <script>
+        // Fallback for Three.js
+        !window.THREE && document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" integrity="sha512-334dJpNOeaP5Eu6y+dE2e5vP5eK2w2oN2sA9i+l4prGOi/eQ/e1V5mksgr2iBf1GfCq3sT/iG2UvVb9bI/A64A==" crossorigin="anonymous"><\/script>');
+    </script>
+    <script src="./libs/three/GLTFLoader.js?v=11.0.12"></script>
+    <script>
+        // Fallback for GLTFLoader
+        !window.THREE || !window.THREE.GLTFLoader && document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.134/examples/js/loaders/GLTFLoader.js" integrity="sha256-gM3k2e/CWwjs72W22fP0vs6h3gSOx65j8s3Q229KBFo=" crossorigin="anonymous"><\/script>');
+    </script>
+
     <!-- Audio System Modules (Production-Ready from mobile.html) -->
     <script src="./js/audioStateManager.js?v=11.0.12" type="module"></script>
     <script src="./js/audioPermissionUI.js?v=11.0.12" type="module"></script>
@@ -404,6 +416,27 @@
             height: 600px;
             display: flex;
             flex-direction: column;
+            position: relative;
+        }
+
+        /* Desktop Water Background */
+        #water-background-container-desktop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            background: #0a0f14;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        #water-background-container-desktop canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
         }
 
         .chat-header {
@@ -413,6 +446,8 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            position: relative;
+            z-index: 1;
         }
 
         .chat-icon {
@@ -429,7 +464,9 @@
             flex: 1;
             overflow-y: auto;
             padding: 30px;
-            background: #FAFAFA;
+            background: transparent;
+            position: relative;
+            z-index: 1;
         }
 
         .messages {
@@ -504,8 +541,10 @@
             display: flex;
             gap: 15px;
             padding: 20px;
-            background: #FFFFFF;
-            border-top: 2px solid #E0E0E0;
+            background: rgba(255, 255, 255, 0.95);
+            border-top: 2px solid rgba(224, 224, 224, 0.8);
+            position: relative;
+            z-index: 1;
         }
 
         .input-wrapper {
@@ -1797,6 +1836,9 @@
             </div>
 
             <div class="chat-container ai-portal">
+                <!-- Water Background Container for Desktop Chat -->
+                <div id="water-background-container-desktop"></div>
+
                 <div class="chat-header portal-header">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <span class="chat-icon">🤖</span>
@@ -1951,6 +1993,129 @@
 
     <!-- Portal Controller (main chat orchestrator) -->
     <script type="module" src="./js/portal-controller.js?v=11.0.12"></script>
+
+    <!-- Water Background for Desktop Chat -->
+    <script type="module">
+        import WaterBackground from './js/water.js?v=11.0.12';
+
+        // Initialize water background when DOM is ready
+        function initWaterBackground() {
+            const container = document.getElementById('water-background-container-desktop');
+            if (container && typeof THREE !== 'undefined') {
+                console.log('[index.html] Initializing water background for desktop chat...');
+
+                // Create a custom water background instance for desktop
+                const DesktopWater = Object.assign({}, WaterBackground);
+                DesktopWater.isRendering = false;
+                DesktopWater.container = null;
+                DesktopWater.renderer = null;
+                DesktopWater.scene = null;
+                DesktopWater.camera = null;
+                DesktopWater.material = null;
+                DesktopWater.clock = new THREE.Clock();
+                DesktopWater.timeUniform = null;
+                DesktopWater.rafId = -1;
+
+                // Override _injectCSS to not use fixed positioning
+                DesktopWater._injectCSS = function() {
+                    // Skip CSS injection - we use our own CSS in the style section
+                    console.log('[DesktopWater] Using custom CSS from index.html');
+                };
+
+                // Override init to use container dimensions instead of window
+                DesktopWater.init = function(parentContainer) {
+                    if (typeof THREE === 'undefined') {
+                        console.error('[DesktopWater] THREE.js is not loaded.');
+                        return;
+                    }
+                    if (this.isRendering) {
+                        console.warn('[DesktopWater] Already rendering.');
+                        return;
+                    }
+
+                    console.log('[DesktopWater] Initializing...');
+                    this.container = parentContainer;
+                    this._injectCSS();
+                    WaterBackground._injectShaders.call(this);
+
+                    const width = parentContainer.offsetWidth || 900;
+                    const height = parentContainer.offsetHeight || 600;
+
+                    this.scene = new THREE.Scene();
+                    this.camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 10000);
+                    this.camera.position.set(0, 0, 0);
+                    this.camera.lookAt(0, 0, -1);
+                    this.scene.add(this.camera);
+
+                    this.timeUniform = {
+                        iGlobalTime: { type: 'f', value: 0.1 },
+                        iResolution: { type: 'v2', value: new THREE.Vector2(width, height) }
+                    };
+
+                    const vertexShaderEl = document.getElementById('water-vertex-shader');
+                    const fragmentShaderEl = document.getElementById('water-fragment-shader');
+
+                    if (!vertexShaderEl || !fragmentShaderEl) {
+                        console.error('[DesktopWater] Shader elements not found!');
+                        return;
+                    }
+
+                    this.material = new THREE.ShaderMaterial({
+                        uniforms: this.timeUniform,
+                        vertexShader: vertexShaderEl.textContent,
+                        fragmentShader: fragmentShaderEl.textContent
+                    });
+
+                    const planeGeometry = new THREE.PlaneBufferGeometry(width, height, 40, 40);
+                    const mesh = new THREE.Mesh(planeGeometry, this.material);
+                    mesh.position.set(0, 0, -100);
+                    this.scene.add(mesh);
+
+                    const canvas = document.createElement('canvas');
+                    canvas.id = 'water-background-canvas-desktop';
+                    this.container.appendChild(canvas);
+
+                    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+                    this.renderer.setSize(width, height);
+                    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                    this.renderer.setClearColor(0x0a0f14, 1);
+
+                    // Resize observer for container size changes
+                    this._resizeObserver = new ResizeObserver(() => {
+                        const w = this.container.offsetWidth;
+                        const h = this.container.offsetHeight;
+                        if (w > 0 && h > 0) {
+                            this.camera.aspect = w / h;
+                            this.camera.updateProjectionMatrix();
+                            this.renderer.setSize(w, h);
+                            this.timeUniform.iResolution.value.set(w, h);
+                        }
+                    });
+                    this._resizeObserver.observe(this.container);
+
+                    this.isRendering = true;
+                    this._renderLoop();
+                    console.log('[DesktopWater] Initialized successfully.');
+                };
+
+                // Use same render loop
+                DesktopWater._renderLoop = WaterBackground._renderLoop.bind(DesktopWater);
+
+                // Initialize
+                DesktopWater.init(container);
+                window.desktopWater = DesktopWater;
+            } else {
+                console.warn('[index.html] Water background container not found or THREE not loaded');
+            }
+        }
+
+        // Wait for DOM and THREE.js
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => setTimeout(initWaterBackground, 100));
+        } else {
+            setTimeout(initWaterBackground, 100);
+        }
+    </script>
 
     <!-- Mobile Chat Modal Handler (bridges mobile FAB to portal controller) -->
     <script>
