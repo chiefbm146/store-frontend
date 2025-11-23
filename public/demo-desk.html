@@ -12,6 +12,9 @@
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
 
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- CSS -->
     <link rel="stylesheet" href="./css/demo-store.css">
 </head>
@@ -140,7 +143,12 @@
     <div class="ai-chat-modal" id="aiChatModal">
         <div class="chat-modal-header">
             <h3 class="chat-modal-title">🤖 AI Assistant</h3>
-            <button class="chat-modal-close" onclick="closeAIChat()">✕</button>
+            <div class="chat-header-controls">
+                <button class="master-speaker-btn" id="desktopSpeakerBtn" title="Enable Voice">
+                    <i class="fa-solid fa-volume-xmark"></i>
+                </button>
+                <button class="chat-modal-close" onclick="closeAIChat()">✕</button>
+            </div>
         </div>
         <div class="chat-modal-body">
             <div class="messages" id="aiMessages">
@@ -155,6 +163,22 @@
         </div>
     </div>
 
+    <!-- Audio Permission Modal -->
+    <div class="audio-permission-overlay" id="audioPermissionOverlay">
+        <div class="audio-permission-modal">
+            <div class="audio-permission-icon">🔊</div>
+            <h2 class="audio-permission-title">Enable Voice</h2>
+            <p class="audio-permission-text">Enable audio to hear AI responses read aloud. This creates a more engaging experience!</p>
+            <div class="audio-permission-buttons">
+                <button class="audio-permission-enable" id="audioEnableBtn">Enable Voice</button>
+                <button class="audio-permission-skip" id="audioSkipBtn">Maybe Later</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Audio Element for TTS -->
+    <audio id="ttsAudio"></audio>
+
     <!-- Mobile Floating Chat Button -->
     <button class="mobile-chat-fab" onclick="openMobileChat()" title="Chat with AI">
         🤖
@@ -167,7 +191,12 @@
     <div class="mobile-chat-modal" id="mobileChatModal">
         <div class="mobile-chat-header">
             <h3 class="mobile-chat-title">🤖 AI Assistant</h3>
-            <button class="mobile-chat-close" onclick="closeMobileChat()">✕</button>
+            <div class="mobile-header-controls">
+                <button class="mobile-speaker-btn" id="mobileSpeakerBtn" title="Enable Voice">
+                    <i class="fa-solid fa-volume-xmark"></i>
+                </button>
+                <button class="mobile-chat-close" onclick="closeMobileChat()">✕</button>
+            </div>
         </div>
         <div class="mobile-chat-body">
             <div class="mobile-chat-messages" id="mobileChatMessages">
@@ -269,30 +298,36 @@
         }
     </script>
 
-    <!-- AI Chat Functions with Typing Animation -->
+    <!-- AI Chat Functions with TTS & Special Tags -->
     <script>
         // ========================================
         // BACKEND CONFIGURATION
         // ========================================
         const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
         const CHAT_ENDPOINT = '/chat';
+        const TTS_ENDPOINT = '/tts';
 
         // Session management - Fresh session per page load
         let CHAT_SESSION_ID = null;
         let MOBILE_CHAT_SESSION_ID = null;
         let deviceFingerprint = null;
 
+        // TTS State
+        let ttsUnlocked = false;
+        let isPlaying = false;
+        let currentAudio = null;
+        let audioCache = new Map();
+        const ttsAudio = document.getElementById('ttsAudio');
+
         // ========================================
         // INITIALIZATION
         // ========================================
         function initializeChatSession() {
-            // Always create fresh session on page load (no sessionStorage persistence)
             CHAT_SESSION_ID = 'demo_' + crypto.randomUUID();
             console.log('[Demo Chat] New session:', CHAT_SESSION_ID);
         }
 
         function initMobileChatSession() {
-            // Always create fresh session on page load
             MOBILE_CHAT_SESSION_ID = 'mobile_' + crypto.randomUUID();
         }
 
@@ -303,6 +338,237 @@
             const pixelDensity = (window.devicePixelRatio || 1).toFixed(1);
             deviceFingerprint = `${formFactor}_${screenWidth}x${screenHeight}_${pixelDensity}`;
             console.log('[Demo Chat] Device fingerprint:', deviceFingerprint);
+        }
+
+        // ========================================
+        // TTS SYSTEM
+        // ========================================
+        function showAudioModal() {
+            document.getElementById('audioPermissionOverlay').classList.add('active');
+        }
+
+        function hideAudioModal() {
+            document.getElementById('audioPermissionOverlay').classList.remove('active');
+        }
+
+        async function attemptTTSUnlock() {
+            if (ttsUnlocked) return true;
+
+            return new Promise((resolve) => {
+                showAudioModal();
+
+                document.getElementById('audioEnableBtn').onclick = async () => {
+                    try {
+                        // Play silent audio to unlock
+                        const testAudio = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7v////////////////////////////////');
+                        testAudio.volume = 0.01;
+                        await testAudio.play();
+
+                        ttsUnlocked = true;
+                        console.log('[TTS] ✅ Audio unlocked');
+
+                        // Update speaker buttons
+                        updateSpeakerButtons();
+                        hideAudioModal();
+                        resolve(true);
+                    } catch (error) {
+                        console.error('[TTS] ❌ Unlock failed:', error);
+                        hideAudioModal();
+                        resolve(false);
+                    }
+                };
+
+                document.getElementById('audioSkipBtn').onclick = () => {
+                    hideAudioModal();
+                    resolve(false);
+                };
+            });
+        }
+
+        function updateSpeakerButtons() {
+            const desktopBtn = document.getElementById('desktopSpeakerBtn');
+            const mobileBtn = document.getElementById('mobileSpeakerBtn');
+
+            if (ttsUnlocked) {
+                if (desktopBtn) {
+                    desktopBtn.classList.add('unlocked');
+                    desktopBtn.querySelector('i').className = 'fa-solid fa-volume-high';
+                }
+                if (mobileBtn) {
+                    mobileBtn.classList.add('unlocked');
+                    mobileBtn.querySelector('i').className = 'fa-solid fa-volume-high';
+                }
+            }
+
+            // Update all play buttons
+            document.querySelectorAll('.message-play-btn').forEach(btn => {
+                const icon = btn.querySelector('i');
+                if (ttsUnlocked) {
+                    icon.className = 'fa-solid fa-play';
+                } else {
+                    icon.className = 'fa-solid fa-volume-xmark';
+                }
+            });
+        }
+
+        async function getTTSAudio(text) {
+            const cacheKey = text.substring(0, 100);
+            if (audioCache.has(cacheKey)) {
+                return audioCache.get(cacheKey);
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}${TTS_ENDPOINT}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const audioData = data.audio || data.audio_base64;
+                    if (audioData) {
+                        audioCache.set(cacheKey, audioData);
+                        return audioData;
+                    }
+                }
+            } catch (error) {
+                console.error('[TTS] Failed to fetch audio:', error);
+            }
+            return null;
+        }
+
+        async function playTTSAudio(base64Audio) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+
+            ttsAudio.src = `data:audio/mp3;base64,${base64Audio}`;
+            ttsAudio.volume = 1.0;
+            isPlaying = true;
+            currentAudio = ttsAudio;
+
+            ttsAudio.onended = () => {
+                isPlaying = false;
+                updatePlayButtonStates();
+            };
+
+            try {
+                await ttsAudio.play();
+                console.log('[TTS] ✅ Playing audio');
+            } catch (err) {
+                console.error('[TTS] ❌ Playback failed:', err);
+                isPlaying = false;
+            }
+        }
+
+        function stopTTSAudio() {
+            if (ttsAudio) {
+                ttsAudio.pause();
+                ttsAudio.currentTime = 0;
+            }
+            isPlaying = false;
+            updatePlayButtonStates();
+        }
+
+        function updatePlayButtonStates(playingText = null) {
+            document.querySelectorAll('.message-play-btn').forEach(btn => {
+                const msgText = btn.dataset.text;
+                const icon = btn.querySelector('i');
+
+                if (!ttsUnlocked) {
+                    icon.className = 'fa-solid fa-volume-xmark';
+                } else if (msgText === playingText && isPlaying) {
+                    icon.className = 'fa-solid fa-stop';
+                } else {
+                    icon.className = 'fa-solid fa-play';
+                }
+            });
+        }
+
+        async function handlePlayClick(text, button) {
+            const icon = button.querySelector('i');
+
+            // If not unlocked, unlock first
+            if (!ttsUnlocked) {
+                const unlocked = await attemptTTSUnlock();
+                if (!unlocked) return;
+                updatePlayButtonStates();
+                return;
+            }
+
+            // If playing this message, stop it
+            if (icon.classList.contains('fa-stop')) {
+                stopTTSAudio();
+                return;
+            }
+
+            // Play the audio
+            icon.className = 'fa-solid fa-spinner fa-spin';
+            button.disabled = true;
+
+            try {
+                const audioData = await getTTSAudio(text);
+                if (audioData) {
+                    await playTTSAudio(audioData);
+                    updatePlayButtonStates(text);
+                }
+            } catch (error) {
+                console.error('[TTS] Error:', error);
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // ========================================
+        // SPECIAL TAG HANDLING
+        // ========================================
+        function attachSpecialTagListeners(container, inputElement, sendFunction) {
+            container.querySelectorAll('special').forEach(el => {
+                el.style.cursor = 'pointer';
+                el.onclick = (e) => {
+                    e.stopPropagation();
+                    const text = el.textContent;
+                    console.log('[Chat] Clicked special tag:', text);
+                    inputElement.value = text;
+                    sendFunction();
+                };
+            });
+        }
+
+        function createAIMessage(text, isMobile = false) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `message-wrapper ai`;
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = isMobile ? 'mobile-chat-message ai' : 'message ai-message';
+            msgDiv.innerHTML = text; // Use innerHTML to render special/price tags
+            wrapper.appendChild(msgDiv);
+
+            // Add play button
+            const playBtn = document.createElement('button');
+            playBtn.className = 'message-play-btn';
+            playBtn.dataset.text = text.replace(/<[^>]*>/g, ''); // Strip HTML for TTS
+            playBtn.innerHTML = ttsUnlocked
+                ? '<i class="fa-solid fa-play"></i>'
+                : '<i class="fa-solid fa-volume-xmark"></i>';
+            playBtn.onclick = () => handlePlayClick(playBtn.dataset.text, playBtn);
+            wrapper.appendChild(playBtn);
+
+            return wrapper;
+        }
+
+        function createUserMessage(text, isMobile = false) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `message-wrapper user`;
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = isMobile ? 'mobile-chat-message user' : 'message user-message';
+            msgDiv.textContent = text;
+            wrapper.appendChild(msgDiv);
+
+            return wrapper;
         }
 
         // ========================================
@@ -326,21 +592,18 @@
 
             if (!userText) return;
 
-            // Disable input while sending
-            input.disabled = true;
+            // Stop any playing TTS
+            stopTTSAudio();
 
-            // Clear previous messages - only show current exchange
+            input.disabled = true;
             messagesDiv.innerHTML = '';
 
             // Add user message
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user-message';
-            userMsg.textContent = userText;
-            messagesDiv.appendChild(userMsg);
+            messagesDiv.appendChild(createUserMessage(userText, false));
             input.value = '';
             messagesDiv.scrollTop = 0;
 
-            // Add typing indicator for desktop
+            // Add typing indicator
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message ai-message typing-msg';
             typingDiv.innerHTML = '<span class="typing-dots">...</span>';
@@ -365,36 +628,32 @@
                     body: JSON.stringify(payload)
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 const data = await response.json();
                 const aiResponse = data.response || 'Sorry, I could not generate a response.';
 
                 console.log('[Demo Chat] Response:', aiResponse.substring(0, 50) + '...');
 
-                // Remove typing indicator
                 typingDiv.remove();
 
-                // Add AI message
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'message ai-message';
-                aiMsg.textContent = aiResponse;
-                messagesDiv.appendChild(aiMsg);
+                // Add AI message with special tags and TTS button
+                const aiMsgWrapper = createAIMessage(aiResponse, false);
+                messagesDiv.appendChild(aiMsgWrapper);
+
+                // Attach special tag click handlers
+                attachSpecialTagListeners(aiMsgWrapper, input, sendAIMessage);
+
                 messagesDiv.scrollTop = 0;
 
             } catch (error) {
                 console.error('[Demo Chat] Error:', error);
                 typingDiv.remove();
 
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'message ai-message';
-                aiMsg.textContent = 'Sorry, I encountered an error. Please try again.';
-                messagesDiv.appendChild(aiMsg);
+                const errorWrapper = createAIMessage('Sorry, I encountered an error. Please try again.', false);
+                messagesDiv.appendChild(errorWrapper);
                 messagesDiv.scrollTop = 0;
             } finally {
-                // Re-enable input
                 input.disabled = false;
                 input.focus();
             }
@@ -423,20 +682,17 @@
 
             if (!userText) return;
 
-            input.disabled = true;
+            // Stop any playing TTS
+            stopTTSAudio();
 
-            // Clear previous messages - only show current exchange
+            input.disabled = true;
             messagesDiv.innerHTML = '';
 
             // Add user message
-            const userMsg = document.createElement('div');
-            userMsg.className = 'mobile-chat-message user';
-            userMsg.textContent = userText;
-            messagesDiv.appendChild(userMsg);
+            messagesDiv.appendChild(createUserMessage(userText, true));
             input.value = '';
             messagesDiv.scrollTop = 0;
 
-            // Show typing indicator
             typingIndicator.classList.add('visible');
 
             try {
@@ -455,35 +711,31 @@
                     body: JSON.stringify(payload)
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 const data = await response.json();
                 const aiResponse = data.response || 'Sorry, I could not generate a response.';
 
-                // Hide typing indicator
                 typingIndicator.classList.remove('visible');
 
-                // Add AI message
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'mobile-chat-message ai';
-                aiMsg.textContent = aiResponse;
-                messagesDiv.appendChild(aiMsg);
+                // Add AI message with special tags and TTS button
+                const aiMsgWrapper = createAIMessage(aiResponse, true);
+                messagesDiv.appendChild(aiMsgWrapper);
+
+                // Attach special tag click handlers
+                attachSpecialTagListeners(aiMsgWrapper, input, sendMobileMessage);
+
                 messagesDiv.scrollTop = 0;
 
             } catch (error) {
                 console.error('[Mobile Chat] Error:', error);
                 typingIndicator.classList.remove('visible');
 
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'mobile-chat-message ai';
-                aiMsg.textContent = 'Sorry, I encountered an error. Please try again.';
-                messagesDiv.appendChild(aiMsg);
+                const errorWrapper = createAIMessage('Sorry, I encountered an error. Please try again.', true);
+                messagesDiv.appendChild(errorWrapper);
                 messagesDiv.scrollTop = 0;
             } finally {
                 input.disabled = false;
-                // Close keyboard after sending
                 input.blur();
                 messagesDiv.focus();
             }
@@ -514,16 +766,30 @@
                 });
             }
 
+            // Speaker button handlers
+            document.getElementById('desktopSpeakerBtn').addEventListener('click', async () => {
+                if (!ttsUnlocked) {
+                    await attemptTTSUnlock();
+                }
+            });
+
+            document.getElementById('mobileSpeakerBtn').addEventListener('click', async () => {
+                if (!ttsUnlocked) {
+                    await attemptTTSUnlock();
+                }
+            });
+
             // Close modals with Escape
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     closeAIChat();
                     closeMobileChat();
                     closeMobileMenu();
+                    hideAudioModal();
                 }
             });
 
-            console.log('[Demo Chat] Initialized with typing animation');
+            console.log('[Demo Chat] Initialized with TTS & Special Tags');
         });
     </script>
 </body>

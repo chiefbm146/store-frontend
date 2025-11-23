@@ -1078,3 +1078,230 @@ body {
         font-size: 6rem;
     }
 }
+
+/* === TTS & AUDIO SYSTEM === */
+
+/* Header controls layout */
+.chat-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mobile-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Master Speaker Button */
+.master-speaker-btn,
+.mobile-speaker-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: #FFFFFF;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.master-speaker-btn:hover,
+.mobile-speaker-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.master-speaker-btn.unlocked,
+.mobile-speaker-btn.unlocked {
+    background: #10B981;
+    border-color: #10B981;
+}
+
+/* Audio Permission Modal */
+.audio-permission-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+}
+
+.audio-permission-overlay.active {
+    display: flex;
+}
+
+.audio-permission-modal {
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.audio-permission-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.audio-permission-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #1a1a1a;
+}
+
+.audio-permission-text {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.audio-permission-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.audio-permission-enable {
+    padding: 12px 28px;
+    background: linear-gradient(135deg, var(--color-primary, #1E90FF), var(--color-secondary, #0047AB));
+    color: #FFFFFF;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.audio-permission-enable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(30, 144, 255, 0.4);
+}
+
+.audio-permission-skip {
+    padding: 12px 28px;
+    background: transparent;
+    color: #666;
+    border: 2px solid #E0E0E0;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.audio-permission-skip:hover {
+    background: #F5F5F5;
+}
+
+/* Message wrapper for TTS button */
+.message-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 80%;
+}
+
+.message-wrapper.user {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+.message-wrapper.ai {
+    align-self: flex-start;
+    align-items: flex-start;
+}
+
+/* TTS Play Button on messages */
+.message-play-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary, #1E90FF), var(--color-secondary, #0047AB));
+    border: none;
+    color: #FFFFFF;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(30, 144, 255, 0.3);
+}
+
+.message-play-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(30, 144, 255, 0.5);
+}
+
+.message-play-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Special tag styling - clickable keywords */
+.ai-message special,
+.mobile-chat-message.ai special {
+    font-weight: 700;
+    color: var(--color-primary, #1E90FF);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 1px 4px;
+    border-radius: 3px;
+}
+
+.ai-message special:hover,
+.mobile-chat-message.ai special:hover {
+    background-color: rgba(30, 144, 255, 0.1);
+    text-decoration: underline;
+}
+
+/* Price tag styling */
+.ai-message price,
+.mobile-chat-message.ai price {
+    font-weight: 700;
+    color: #c82333;
+}
+
+/* Hidden audio element */
+#ttsAudio {
+    display: none;
+}
+
+/* Mobile-specific TTS adjustments */
+@media (max-width: 768px) {
+    .audio-permission-modal {
+        margin: 20px;
+        padding: 30px 20px;
+    }
+
+    .audio-permission-buttons {
+        flex-direction: column;
+    }
+
+    .message-play-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+}
