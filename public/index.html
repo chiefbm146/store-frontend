@@ -1887,10 +1887,19 @@
             return null;
         }
 
+        // Track current blob URL for cleanup
+        let currentBlobUrl = null;
+
         async function playTTSAudio(base64Audio) {
             if (currentAudio) {
                 currentAudio.pause();
                 currentAudio.currentTime = 0;
+            }
+
+            // Clean up previous blob URL to prevent memory leaks
+            if (currentBlobUrl) {
+                URL.revokeObjectURL(currentBlobUrl);
+                currentBlobUrl = null;
             }
 
             // Detect MIME type from base64 header
@@ -1903,9 +1912,16 @@
             }
             // Default is audio/mpeg which handles //OE, //u, SUQ and other MP3 variants
 
-            return new Promise((resolve, reject) => {
-                const dataUrl = `data:${mimeType};base64,${base64Audio}`;
+            // Convert base64 to Blob URL (more secure than data URLs)
+            const binaryString = atob(base64Audio);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            const blob = new Blob([bytes], { type: mimeType });
+            currentBlobUrl = URL.createObjectURL(blob);
 
+            return new Promise((resolve, reject) => {
                 // Set up event handlers BEFORE setting src
                 ttsAudio.oncanplaythrough = () => {
                     ttsAudio.oncanplaythrough = null;
@@ -1939,9 +1955,9 @@
                     updatePlayButtonStates();
                 };
 
-                ttsAudio.src = dataUrl;
+                ttsAudio.src = currentBlobUrl;
                 ttsAudio.volume = 1.0;
-                ttsAudio.load(); // Explicitly load the audio
+                ttsAudio.load();
             });
         }
 
