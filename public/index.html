@@ -1893,7 +1893,17 @@
                 currentAudio.currentTime = 0;
             }
 
-            ttsAudio.src = `data:audio/mp3;base64,${base64Audio}`;
+            // Detect MIME type from base64 header
+            let mimeType = 'audio/mpeg';
+            if (base64Audio.startsWith('T2d')) {
+                mimeType = 'audio/ogg';
+            } else if (base64Audio.startsWith('Ukl')) {
+                mimeType = 'audio/wav';
+            } else if (base64Audio.startsWith('//u') || base64Audio.startsWith('SUQ')) {
+                mimeType = 'audio/mpeg';
+            }
+
+            ttsAudio.src = `data:${mimeType};base64,${base64Audio}`;
             ttsAudio.volume = 1.0;
             isPlaying = true;
             currentAudio = ttsAudio;
