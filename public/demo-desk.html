@@ -269,7 +269,7 @@
         }
     </script>
 
-    <!-- AI Chat Functions -->
+    <!-- AI Chat Functions with Typing Animation -->
     <script>
         // ========================================
         // BACKEND CONFIGURATION
@@ -277,29 +277,136 @@
         const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
         const CHAT_ENDPOINT = '/chat';
 
-        // Session management
+        // Session management - Fresh session per page load
         let CHAT_SESSION_ID = null;
         let MOBILE_CHAT_SESSION_ID = null;
+        let deviceFingerprint = null;
 
-        // Initialize session on page load
-        function initializeChatSession() {
-            CHAT_SESSION_ID = sessionStorage.getItem('demo_chat_session_id');
-            if (!CHAT_SESSION_ID) {
-                CHAT_SESSION_ID = 'demo_session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                sessionStorage.setItem('demo_chat_session_id', CHAT_SESSION_ID);
-                console.log('[Demo Chat] New session:', CHAT_SESSION_ID);
+        // ========================================
+        // TEXT ANIMATOR - Character-by-character typing effect
+        // ========================================
+        class TextAnimator {
+            static animateTyping(targetElement, text, options = {}) {
+                const { speed = 20, onComplete } = options;
+
+                return new Promise(resolve => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = text;
+
+                    targetElement.innerHTML = '';
+
+                    // Clone structure without text content
+                    const clonedStructure = this._cloneStructureEmpty(tempDiv);
+                    targetElement.appendChild(clonedStructure);
+
+                    // Get all text nodes to animate
+                    const sourceTextNodes = this._getAllTextNodes(tempDiv);
+                    const targetTextNodes = this._getAllTextNodes(targetElement);
+
+                    if (sourceTextNodes.length === 0) {
+                        targetElement.innerHTML = text;
+                        if (onComplete) onComplete();
+                        resolve();
+                        return;
+                    }
+
+                    // Calculate total characters
+                    let totalChars = 0;
+                    sourceTextNodes.forEach(node => totalChars += node.textContent.length);
+
+                    let currentNodeIndex = 0;
+                    let currentCharIndex = 0;
+                    let charsTypedSoFar = 0;
+
+                    const typeNextCharacter = () => {
+                        if (currentNodeIndex >= sourceTextNodes.length) {
+                            if (onComplete) onComplete();
+                            resolve();
+                            return;
+                        }
+
+                        const sourceNode = sourceTextNodes[currentNodeIndex];
+                        const targetNode = targetTextNodes[currentNodeIndex];
+                        const fullText = sourceNode.textContent;
+
+                        if (currentCharIndex < fullText.length) {
+                            targetNode.textContent += fullText[currentCharIndex];
+                            currentCharIndex++;
+                            charsTypedSoFar++;
+
+                            // Accelerate speed near end (starts at full speed, ends at 10%)
+                            const progress = charsTypedSoFar / totalChars;
+                            const speedMultiplier = 1.0 - (progress * 0.9);
+                            const currentSpeed = speed * speedMultiplier;
+
+                            setTimeout(typeNextCharacter, currentSpeed);
+                        } else {
+                            currentNodeIndex++;
+                            currentCharIndex = 0;
+                            typeNextCharacter();
+                        }
+                    };
+
+                    typeNextCharacter();
+                });
             }
+
+            static _cloneStructureEmpty(sourceNode) {
+                if (sourceNode.nodeType === Node.TEXT_NODE) {
+                    return document.createTextNode('');
+                }
+                if (sourceNode.nodeType === Node.ELEMENT_NODE) {
+                    const clonedElement = document.createElement(sourceNode.nodeName);
+                    for (const attr of sourceNode.attributes) {
+                        clonedElement.setAttribute(attr.name, attr.value);
+                    }
+                    for (const child of sourceNode.childNodes) {
+                        clonedElement.appendChild(this._cloneStructureEmpty(child));
+                    }
+                    return clonedElement;
+                }
+                return document.createTextNode('');
+            }
+
+            static _getAllTextNodes(element) {
+                const textNodes = [];
+                const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+                let node;
+                while (node = walker.nextNode()) {
+                    if (node.textContent.trim().length > 0 || node.textContent.length > 0) {
+                        textNodes.push(node);
+                    }
+                }
+                return textNodes;
+            }
+        }
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        function initializeChatSession() {
+            // Always create fresh session on page load (no sessionStorage persistence)
+            CHAT_SESSION_ID = 'demo_' + crypto.randomUUID();
+            console.log('[Demo Chat] New session:', CHAT_SESSION_ID);
         }
 
         function initMobileChatSession() {
-            MOBILE_CHAT_SESSION_ID = sessionStorage.getItem('mobile_chat_session_id');
-            if (!MOBILE_CHAT_SESSION_ID) {
-                MOBILE_CHAT_SESSION_ID = 'mobile_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                sessionStorage.setItem('mobile_chat_session_id', MOBILE_CHAT_SESSION_ID);
-            }
+            // Always create fresh session on page load
+            MOBILE_CHAT_SESSION_ID = 'mobile_' + crypto.randomUUID();
         }
 
-        // Desktop Chat Functions
+        function initializeDeviceFingerprint() {
+            const formFactor = window.innerWidth < 768 ? 'mobile' : 'desktop';
+            const screenWidth = window.screen.width;
+            const screenHeight = window.screen.height;
+            const pixelDensity = (window.devicePixelRatio || 1).toFixed(1);
+            deviceFingerprint = `${formFactor}_${screenWidth}x${screenHeight}_${pixelDensity}`;
+            console.log('[Demo Chat] Device fingerprint:', deviceFingerprint);
+        }
+
+        // ========================================
+        // DESKTOP CHAT FUNCTIONS
+        // ========================================
         function openAIChat() {
             document.getElementById('aiChatModal').classList.add('active');
             document.getElementById('aiChatOverlay').classList.add('active');
@@ -332,11 +439,18 @@
             input.value = '';
             messagesDiv.scrollTop = 0;
 
+            // Add typing indicator for desktop
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai-message typing-msg';
+            typingDiv.innerHTML = '<span class="typing-dots">...</span>';
+            typingDiv.style.opacity = '0.6';
+            messagesDiv.appendChild(typingDiv);
+
             try {
                 const payload = {
                     session_id: CHAT_SESSION_ID,
                     prompt: userText,
-                    device_fingerprint: 'demo-store-' + navigator.userAgent.substring(0, 50)
+                    device_fingerprint: deviceFingerprint
                 };
 
                 console.log('[Demo Chat] Sending:', userText.substring(0, 50) + '...');
@@ -359,15 +473,20 @@
 
                 console.log('[Demo Chat] Response:', aiResponse.substring(0, 50) + '...');
 
-                // Add AI message
+                // Remove typing indicator
+                typingDiv.remove();
+
+                // Add AI message with typing animation
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message ai-message';
-                aiMsg.textContent = aiResponse;
                 messagesDiv.appendChild(aiMsg);
+
+                await TextAnimator.animateTyping(aiMsg, aiResponse, { speed: 15 });
                 messagesDiv.scrollTop = 0;
 
             } catch (error) {
                 console.error('[Demo Chat] Error:', error);
+                typingDiv.remove();
 
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message ai-message';
@@ -381,12 +500,13 @@
             }
         }
 
-        // Mobile Chat Functions
+        // ========================================
+        // MOBILE CHAT FUNCTIONS
+        // ========================================
         function openMobileChat() {
             document.getElementById('mobileChatModal').classList.add('active');
             document.getElementById('mobileChatOverlay').classList.add('active');
             document.body.style.overflow = 'hidden';
-            // Don't auto-focus - let user see chat and choose to type
         }
 
         function closeMobileChat() {
@@ -423,7 +543,7 @@
                 const payload = {
                     session_id: MOBILE_CHAT_SESSION_ID,
                     prompt: userText,
-                    device_fingerprint: 'mobile-demo-' + navigator.userAgent.substring(0, 50)
+                    device_fingerprint: deviceFingerprint
                 };
 
                 const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
@@ -445,11 +565,12 @@
                 // Hide typing indicator
                 typingIndicator.classList.remove('visible');
 
-                // Add AI message
+                // Add AI message with typing animation
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'mobile-chat-message ai';
-                aiMsg.textContent = aiResponse;
                 messagesDiv.appendChild(aiMsg);
+
+                await TextAnimator.animateTyping(aiMsg, aiResponse, { speed: 15 });
                 messagesDiv.scrollTop = 0;
 
             } catch (error) {
@@ -469,10 +590,13 @@
             }
         }
 
-        // Initialize on page load
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
         document.addEventListener('DOMContentLoaded', () => {
             initializeChatSession();
             initMobileChatSession();
+            initializeDeviceFingerprint();
 
             // Desktop chat input
             document.getElementById('aiChatInput').addEventListener('keypress', (e) => {
@@ -499,6 +623,8 @@
                     closeMobileMenu();
                 }
             });
+
+            console.log('[Demo Chat] Initialized with typing animation');
         });
     </script>
 </body>

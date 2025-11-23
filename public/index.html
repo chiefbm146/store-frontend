@@ -1516,7 +1516,7 @@
         </div>
     </div>
 
-    <!-- Chat Configuration (Desktop & Mobile) -->
+    <!-- Chat Configuration with Typing Animation (Desktop & Mobile) -->
     <script>
         // ========================================
         // SHARED CHAT CONFIGURATION
@@ -1525,16 +1525,122 @@
         const CHAT_ENDPOINT = '/chat';
         let MOBILE_CHAT_SESSION_ID = null;
         let DESKTOP_CHAT_SESSION_ID = null;
+        let deviceFingerprint = null;
 
-        // Initialize session
-        function initMobileChatSession() {
-            MOBILE_CHAT_SESSION_ID = sessionStorage.getItem('mobile_chat_session_id');
-            if (!MOBILE_CHAT_SESSION_ID) {
-                MOBILE_CHAT_SESSION_ID = 'mobile_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                sessionStorage.setItem('mobile_chat_session_id', MOBILE_CHAT_SESSION_ID);
+        // ========================================
+        // TEXT ANIMATOR - Character-by-character typing effect
+        // ========================================
+        class TextAnimator {
+            static animateTyping(targetElement, text, options = {}) {
+                const { speed = 20, onComplete } = options;
+
+                return new Promise(resolve => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = text;
+
+                    targetElement.innerHTML = '';
+                    const clonedStructure = this._cloneStructureEmpty(tempDiv);
+                    targetElement.appendChild(clonedStructure);
+
+                    const sourceTextNodes = this._getAllTextNodes(tempDiv);
+                    const targetTextNodes = this._getAllTextNodes(targetElement);
+
+                    if (sourceTextNodes.length === 0) {
+                        targetElement.innerHTML = text;
+                        if (onComplete) onComplete();
+                        resolve();
+                        return;
+                    }
+
+                    let totalChars = 0;
+                    sourceTextNodes.forEach(node => totalChars += node.textContent.length);
+
+                    let currentNodeIndex = 0;
+                    let currentCharIndex = 0;
+                    let charsTypedSoFar = 0;
+
+                    const typeNextCharacter = () => {
+                        if (currentNodeIndex >= sourceTextNodes.length) {
+                            if (onComplete) onComplete();
+                            resolve();
+                            return;
+                        }
+
+                        const sourceNode = sourceTextNodes[currentNodeIndex];
+                        const targetNode = targetTextNodes[currentNodeIndex];
+                        const fullText = sourceNode.textContent;
+
+                        if (currentCharIndex < fullText.length) {
+                            targetNode.textContent += fullText[currentCharIndex];
+                            currentCharIndex++;
+                            charsTypedSoFar++;
+
+                            const progress = charsTypedSoFar / totalChars;
+                            const speedMultiplier = 1.0 - (progress * 0.9);
+                            const currentSpeed = speed * speedMultiplier;
+
+                            setTimeout(typeNextCharacter, currentSpeed);
+                        } else {
+                            currentNodeIndex++;
+                            currentCharIndex = 0;
+                            typeNextCharacter();
+                        }
+                    };
+
+                    typeNextCharacter();
+                });
+            }
+
+            static _cloneStructureEmpty(sourceNode) {
+                if (sourceNode.nodeType === Node.TEXT_NODE) return document.createTextNode('');
+                if (sourceNode.nodeType === Node.ELEMENT_NODE) {
+                    const clonedElement = document.createElement(sourceNode.nodeName);
+                    for (const attr of sourceNode.attributes) {
+                        clonedElement.setAttribute(attr.name, attr.value);
+                    }
+                    for (const child of sourceNode.childNodes) {
+                        clonedElement.appendChild(this._cloneStructureEmpty(child));
+                    }
+                    return clonedElement;
+                }
+                return document.createTextNode('');
+            }
+
+            static _getAllTextNodes(element) {
+                const textNodes = [];
+                const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+                let node;
+                while (node = walker.nextNode()) {
+                    if (node.textContent.trim().length > 0 || node.textContent.length > 0) {
+                        textNodes.push(node);
+                    }
+                }
+                return textNodes;
             }
         }
 
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        function initMobileChatSession() {
+            MOBILE_CHAT_SESSION_ID = 'mobile_' + crypto.randomUUID();
+        }
+
+        function initDesktopChatSession() {
+            DESKTOP_CHAT_SESSION_ID = 'desktop_' + crypto.randomUUID();
+        }
+
+        function initializeDeviceFingerprint() {
+            const formFactor = window.innerWidth < 768 ? 'mobile' : 'desktop';
+            const screenWidth = window.screen.width;
+            const screenHeight = window.screen.height;
+            const pixelDensity = (window.devicePixelRatio || 1).toFixed(1);
+            deviceFingerprint = `${formFactor}_${screenWidth}x${screenHeight}_${pixelDensity}`;
+        }
+
+        // ========================================
+        // MOBILE CHAT FUNCTIONS
+        // ========================================
         function openMobileChat() {
             document.getElementById('mobileChatModal').classList.add('active');
             document.getElementById('mobileChatOverlay').classList.add('active');
@@ -1556,11 +1662,8 @@
             if (!userText) return;
 
             input.disabled = true;
-
-            // Clear previous messages - only show current exchange
             messagesDiv.innerHTML = '';
 
-            // Add user message
             const userMsg = document.createElement('div');
             userMsg.className = 'mobile-chat-message user';
             userMsg.textContent = userText;
@@ -1568,40 +1671,33 @@
             input.value = '';
             messagesDiv.scrollTop = 0;
 
-            // Show typing indicator
             typingIndicator.classList.add('visible');
 
             try {
                 const payload = {
                     session_id: MOBILE_CHAT_SESSION_ID,
                     prompt: userText,
-                    device_fingerprint: 'mobile-landing-' + navigator.userAgent.substring(0, 50)
+                    device_fingerprint: deviceFingerprint
                 };
 
                 const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 const data = await response.json();
                 const aiResponse = data.response || 'Sorry, I could not generate a response.';
 
-                // Hide typing indicator
                 typingIndicator.classList.remove('visible');
 
-                // Add AI message
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'mobile-chat-message ai';
-                aiMsg.textContent = aiResponse;
                 messagesDiv.appendChild(aiMsg);
+
+                await TextAnimator.animateTyping(aiMsg, aiResponse, { speed: 15 });
                 messagesDiv.scrollTop = 0;
 
             } catch (error) {
@@ -1615,60 +1711,14 @@
                 messagesDiv.scrollTop = 0;
             } finally {
                 input.disabled = false;
-                // Close keyboard after sending
                 input.blur();
                 messagesDiv.focus();
             }
         }
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            initMobileChatSession();
-
-            const mobileInput = document.getElementById('mobileChatInput');
-            if (mobileInput) {
-                mobileInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !mobileInput.disabled) {
-                        sendMobileMessage();
-                    }
-                });
-            }
-
-            // Close modal with Escape
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeMobileChat();
-            });
-
-            // ========================================
-            // DESKTOP CHAT INITIALIZATION
-            // ========================================
-            initDesktopChatSession();
-
-            const desktopInput = document.getElementById('userInput');
-            const sendButton = document.getElementById('sendButton');
-
-            if (desktopInput && sendButton) {
-                desktopInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !desktopInput.disabled) {
-                        sendDesktopMessage();
-                    }
-                });
-
-                sendButton.addEventListener('click', sendDesktopMessage);
-            }
-        });
-
         // ========================================
         // DESKTOP CHAT FUNCTIONS
         // ========================================
-        function initDesktopChatSession() {
-            DESKTOP_CHAT_SESSION_ID = sessionStorage.getItem('desktop_chat_session_id');
-            if (!DESKTOP_CHAT_SESSION_ID) {
-                DESKTOP_CHAT_SESSION_ID = 'desktop_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                sessionStorage.setItem('desktop_chat_session_id', DESKTOP_CHAT_SESSION_ID);
-            }
-        }
-
         async function sendDesktopMessage() {
             const input = document.getElementById('userInput');
             const messagesDiv = document.getElementById('messages');
@@ -1678,65 +1728,47 @@
             if (!userText) return;
 
             input.disabled = true;
-
-            // Clear previous messages - only show current exchange
             messagesDiv.innerHTML = '';
 
-            // Add user message
             const userMsg = document.createElement('div');
             userMsg.className = 'message user-message';
-            userMsg.innerHTML = `
-                <div class="message-content">
-                    <div class="message-text">
-                        <p>${userText}</p>
-                    </div>
-                </div>
-            `;
+            userMsg.innerHTML = `<div class="message-content"><div class="message-text"><p>${userText}</p></div></div>`;
             messagesDiv.appendChild(userMsg);
             input.value = '';
             messagesDiv.scrollTop = 0;
 
-            // Show typing indicator
             typingIndicator.style.display = 'flex';
 
             try {
                 const payload = {
                     session_id: DESKTOP_CHAT_SESSION_ID,
                     prompt: userText,
-                    device_fingerprint: 'desktop-landing-' + navigator.userAgent.substring(0, 50)
+                    device_fingerprint: deviceFingerprint
                 };
 
                 const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 const data = await response.json();
                 const aiResponse = data.response || 'Sorry, I could not generate a response.';
 
-                // Hide typing indicator
                 typingIndicator.style.display = 'none';
 
-                // Add AI message
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message ai-message';
-                aiMsg.innerHTML = `
-                    <div class="message-content">
-                        <span class="message-icon">🤖</span>
-                        <div class="message-text">
-                            <p>${aiResponse}</p>
-                        </div>
-                    </div>
-                `;
+                const msgContent = document.createElement('div');
+                msgContent.className = 'message-content';
+                msgContent.innerHTML = '<span class="message-icon">🤖</span><div class="message-text"></div>';
+                aiMsg.appendChild(msgContent);
                 messagesDiv.appendChild(aiMsg);
+
+                const textDiv = msgContent.querySelector('.message-text');
+                await TextAnimator.animateTyping(textDiv, aiResponse, { speed: 15 });
                 messagesDiv.scrollTop = 0;
 
             } catch (error) {
@@ -1745,14 +1777,7 @@
 
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message ai-message';
-                aiMsg.innerHTML = `
-                    <div class="message-content">
-                        <span class="message-icon">🤖</span>
-                        <div class="message-text">
-                            <p>Sorry, I encountered an error. Please try again.</p>
-                        </div>
-                    </div>
-                `;
+                aiMsg.innerHTML = `<div class="message-content"><span class="message-icon">🤖</span><div class="message-text"><p>Sorry, I encountered an error. Please try again.</p></div></div>`;
                 messagesDiv.appendChild(aiMsg);
                 messagesDiv.scrollTop = 0;
             } finally {
@@ -1760,6 +1785,38 @@
                 input.focus();
             }
         }
+
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            initMobileChatSession();
+            initDesktopChatSession();
+            initializeDeviceFingerprint();
+
+            const mobileInput = document.getElementById('mobileChatInput');
+            if (mobileInput) {
+                mobileInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !mobileInput.disabled) sendMobileMessage();
+                });
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeMobileChat();
+            });
+
+            const desktopInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+
+            if (desktopInput && sendButton) {
+                desktopInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !desktopInput.disabled) sendDesktopMessage();
+                });
+                sendButton.addEventListener('click', sendDesktopMessage);
+            }
+
+            console.log('[Index Chat] Initialized with typing animation');
+        });
     </script>
 </body>
 </html>
