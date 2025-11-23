@@ -1893,6 +1893,12 @@
                 currentAudio.currentTime = 0;
             }
 
+            // DEBUG: Log the raw base64 data
+            console.log('[TTS DEBUG] base64Audio type:', typeof base64Audio);
+            console.log('[TTS DEBUG] base64Audio length:', base64Audio.length);
+            console.log('[TTS DEBUG] first 100 chars:', base64Audio.substring(0, 100));
+            console.log('[TTS DEBUG] last 50 chars:', base64Audio.substring(base64Audio.length - 50));
+
             // Detect MIME type from base64 header
             let mimeType = 'audio/mpeg';
             if (base64Audio.startsWith('T2d')) {
@@ -1902,8 +1908,13 @@
             } else if (base64Audio.startsWith('//u') || base64Audio.startsWith('SUQ')) {
                 mimeType = 'audio/mpeg';
             }
+            console.log('[TTS DEBUG] Using MIME:', mimeType);
 
-            ttsAudio.src = `data:${mimeType};base64,${base64Audio}`;
+            const dataUrl = `data:${mimeType};base64,${base64Audio}`;
+            console.log('[TTS DEBUG] dataUrl length:', dataUrl.length);
+            console.log('[TTS DEBUG] dataUrl first 150:', dataUrl.substring(0, 150));
+
+            ttsAudio.src = dataUrl;
             ttsAudio.volume = 1.0;
             isPlaying = true;
             currentAudio = ttsAudio;
@@ -1918,6 +1929,8 @@
                 console.log('[TTS] ✅ Playing audio');
             } catch (err) {
                 console.error('[TTS] ❌ Playback failed:', err);
+                console.error('[TTS DEBUG] ttsAudio.error:', ttsAudio.error);
+                console.error('[TTS DEBUG] ttsAudio.src length:', ttsAudio.src.length);
                 isPlaying = false;
             }
         }
@@ -1949,6 +1962,7 @@
         async function handlePlayClick(text, button) {
             const icon = button.querySelector('i');
 
+            // If not unlocked, unlock first
             if (!ttsUnlocked) {
                 const unlocked = await attemptTTSUnlock();
                 if (!unlocked) return;
@@ -1956,11 +1970,13 @@
                 return;
             }
 
+            // If playing this message, stop it
             if (icon.classList.contains('fa-stop')) {
                 stopTTSAudio();
                 return;
             }
 
+            // Play the audio
             icon.className = 'fa-solid fa-spinner fa-spin';
             button.disabled = true;
 
