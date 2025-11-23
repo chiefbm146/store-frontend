@@ -19,44 +19,13 @@
     margin: 0 0 8px 0;  /* REDUCED from 10px */
 }
 
-/* Image boxes wrapper - positions boxes on left and right sides with absolute positioning */
+/* Image boxes wrapper - DISABLED (floating images not needed) */
 .booking-image-boxes-wrapper {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
+    display: none !important;
 }
 
 .booking-image-box {
-    width: 280px;
-    height: 280px;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    background: transparent;
-    position: absolute;
-    pointer-events: auto;
-}
-
-.booking-image-box:first-child {
-    left: 3%;  /* Position left image at 3% from left edge for balanced spacing */
-}
-
-.booking-image-box:last-child {
-    right: 3%;  /* Position right image at 3% from right edge for balanced spacing */
-}
-
-.booking-image-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    display: none !important;
 }
 
 /* Complete concierge UI container */

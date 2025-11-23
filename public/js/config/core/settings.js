@@ -23,14 +23,14 @@ export const settings = {
 
     // ===== BACKEND SERVICES =====
     backend: {
-        // AI Chat backend (Cloud Run)
-        aiChatUrl: "https://reconciliation-backend-934410532991.us-central1.run.app",
+        // AI Chat backend (Cloud Run) - AARIE.CA stores backend
+        aiChatUrl: "https://stores-backend-52450564461.us-central1.run.app",
 
         // Portal backend (for future client dashboard - NOT YET IMPLEMENTED)
         portalUrl: "https://your-portal-backend.run.app",
 
         // Stripe webhook URL (handled by backend)
-        stripeWebhookUrl: "https://reconciliation-backend-934410532991.us-central1.run.app/stripe-webhook",
+        stripeWebhookUrl: "https://stores-backend-52450564461.us-central1.run.app/stripe-webhook",
 
         // Other endpoints
         endpoints: {
@@ -47,7 +47,7 @@ export const settings = {
         // Core features
         enableAI: true,              // AI chat assistant
         enableTTS: true,             // Text-to-speech for AI messages
-        enable3DLogos: true,         // 3D rotating logos in chat bubbles
+        enable3DLogos: false,        // 3D rotating logos in chat bubbles (DISABLED - causes CSP blob: URL errors)
         enableCart: true,            // Shopping cart system
         enableCheckout: true,        // Checkout flow
 

@@ -14,7 +14,8 @@ import audioStateManager from './audioStateManager.js';
 import hamburgerMenu from './hamburger-menu.js';
 
 // NEW: Import the preloader and config system
-import assetPreloader from './asset-preloader.js';
+// Asset preloader disabled - not needed for this site
+// import assetPreloader from './asset-preloader.js';
 import { settings, brand, getPreloadImages } from './config/index.js';
 import WaterBackground from './water.js';
 // TextAnimator import removed - animation disabled for testing
@@ -262,7 +263,10 @@ class PortalController {
         // Initialize audio state (it might have been initialized by the loader, this is safe)
         audioStateManager.init();
 
-        await initializeShared3DAssets();
+        // Only load 3D assets if feature is enabled
+        if (settings.features.enable3DLogos) {
+            await initializeShared3DAssets();
+        }
         cacheDOMElements();
 
         soundManager.init();
@@ -297,8 +301,8 @@ class PortalController {
             this.wakeupPingSent = true;
         }
 
-        // Initialize asset preloader with images from config system
-        assetPreloader.init(getPreloadImages());
+        // Asset preloader disabled - not needed for this site
+        // assetPreloader.init(getPreloadImages());
 
         // The intro loader sequence is now complete (handled by index.html).
         // The app UI is already visible, so we can proceed directly to rendering the first message.
@@ -833,27 +837,10 @@ async function render() {
         }
     }
 
-    // --- NEW CENTRALIZED IMAGE RENDERING LOGIC ---
-    // Clean up any old image wrappers before rendering new ones
+    // --- FLOATING IMAGES DISABLED ---
+    // Clean up any existing image wrappers (floating images not needed for this site)
     document.querySelectorAll('.booking-image-boxes-wrapper').forEach(el => el.remove());
-    // This block decides which floating images to show, if any.
-    if (!hasActiveModule) {
-        // A full-screen module is NOT active, so we might show images.
-        if (isInBookingFlow) {
-            // STATE: Booking flow is active. Show the booking-specific images.
-            const bookingImages = await smartMessageRenderer.createImageBoxes(conversationIntelligence.state.booking);
-            if (bookingImages) {
-                UI.messagesContainer.appendChild(bookingImages);
-            }
-        } else {
-            // STATE: Normal chat. Show the new default images.
-            const defaultImages = await smartMessageRenderer.createDefaultChatImages();
-            if (defaultImages) {
-                UI.messagesContainer.appendChild(defaultImages);
-            }
-        }
-    }
-    // STATE: If hasActiveModule is true (e.g., Stripe checkout), no images will be rendered.
+    // Floating images feature disabled - no booking images or default chat images
 
     // --- FINAL UI STATE UPDATES ---
     UI.sendButton.disabled = isTyping;
@@ -1005,16 +992,18 @@ async function createMessageElement(text, sender, isWelcome = false) {
         console.log('📝 Creating AI message element');
         el.style.position = 'relative';
 
-        // === RE-ENABLED: 3D logo creation with HIGH-PERFORMANCE CLONING ===
+        // === 3D logo creation with HIGH-PERFORMANCE CLONING ===
         // Now using shared3D model cloning instead of loading per message
-        // No resource exhaustion on mobile, instant creation (microseconds)
-        try {
-            console.log('🎬 Calling create3dLogoForMessage()...');
-            const logoContainer = create3dLogoForMessage();
-            el.appendChild(logoContainer);
-            console.log('✓ Logo container appended to message');
-        } catch (err) {
-            console.error('Failed to create 3D logo:', err);
+        // Controlled by settings.features.enable3DLogos flag
+        if (settings.features.enable3DLogos) {
+            try {
+                console.log('🎬 Calling create3dLogoForMessage()...');
+                const logoContainer = create3dLogoForMessage();
+                el.appendChild(logoContainer);
+                console.log('✓ Logo container appended to message');
+            } catch (err) {
+                console.error('Failed to create 3D logo:', err);
+            }
         }
 
         const lastUserMessage = portalStore.state.lastUserMessage || '';
