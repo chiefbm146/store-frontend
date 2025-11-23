@@ -105,7 +105,10 @@ const ttsManager = {
     },
 
     play(audioBase64) {
-        if (!this.ttsPlayer || !audioBase64) return;
+        if (!this.ttsPlayer || !audioBase64) {
+            console.warn('[TTS Manager] Cannot play: missing player or audio data');
+            return;
+        }
 
         // If not unlocked, explicitly prevent play here as a safeguard
         if (!this.ttsUnlockedForSession) {
@@ -115,13 +118,25 @@ const ttsManager = {
 
         // Convert base64 to Blob URL to bypass CSP data: URL restrictions
         try {
+            // Detect MIME type from base64 header (same logic as demo-desk.html)
+            let mimeType = 'audio/mpeg';
+            if (audioBase64.startsWith('T2d')) {
+                mimeType = 'audio/ogg';
+            } else if (audioBase64.startsWith('Ukl')) {
+                mimeType = 'audio/wav';
+            } else if (audioBase64.startsWith('//u') || audioBase64.startsWith('SUQ')) {
+                mimeType = 'audio/mpeg';
+            }
+            console.log('[TTS Manager] Detected MIME type:', mimeType, 'Base64 prefix:', audioBase64.substring(0, 10));
+
             const binaryString = atob(audioBase64);
             const bytes = new Uint8Array(binaryString.length);
             for (let i = 0; i < binaryString.length; i++) {
                 bytes[i] = binaryString.charCodeAt(i);
             }
-            const blob = new Blob([bytes], { type: 'audio/mpeg' });
+            const blob = new Blob([bytes], { type: mimeType });
             const blobUrl = URL.createObjectURL(blob);
+            console.log('[TTS Manager] Created blob URL:', blobUrl, 'Blob size:', blob.size);
 
             // Revoke previous blob URL to prevent memory leak
             if (this.ttsPlayer.src && this.ttsPlayer.src.startsWith('blob:')) {
