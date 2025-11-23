@@ -175,7 +175,7 @@ async function loadStripeStatus() {
       document.getElementById('onboardingBtn').style.display = 'none';
       document.getElementById('deleteBtn').style.display = 'block';
       document.getElementById('deleteBtn').innerHTML = '🗑️ Delete Account (Reset)';
-      document.getElementById('onboardingMessage').innerHTML = '✅ Your Stripe account is fully verified and ready to receive payments!';
+      document.getElementById('onboardingMessage').innerHTML = '✅ Your Stripe account is fully verified and ready to receive payments! <br><br><button onclick="openStripeDashboard()" style="background: #635bff; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">Open Stripe Dashboard →</button>';
       document.getElementById('onboardingMessage').style.display = 'block';
     } else {
       document.getElementById('stripeStatusBadge').textContent = '⏳ Pending Verification';
@@ -284,11 +284,9 @@ async function loadTransactions() {
       });
 
       // Calculate breakdown amounts if available
-      const breakdown = txn.breakdown || {};
-      const customerCharged = breakdown.customer_charged ? (breakdown.customer_charged / 100).toFixed(2) : amountInDollars;
-      const platformFee = breakdown.platform_fee ? (breakdown.platform_fee / 100).toFixed(2) : '0.00';
-      const stripeFee = breakdown.stripe_fee ? (breakdown.stripe_fee / 100).toFixed(2) : '0.00';
-      const franchiseeNet = breakdown.franchisee_net ? (breakdown.franchisee_net / 100).toFixed(2) : amountInDollars;
+      const customerCharged = txn.amount_total ? (txn.amount_total / 100).toFixed(2) : amountInDollars;
+      const platformFee = txn.amount_platform_fee ? (txn.amount_platform_fee / 100).toFixed(2) : '0.00';
+      const hasBreakdown = txn.amount_total && txn.amount_platform_fee;
 
       // Build detailed transaction info
       html += `
@@ -317,24 +315,19 @@ async function loadTransactions() {
             </div>
 
             <!-- Payment Breakdown Section -->
-            ${breakdown && breakdown.customer_charged ? `
+            ${hasBreakdown ? `
             <div style="grid-column: 1 / -1; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e0e0e0;">
-              <span class="detail-label" style="display: block; margin-bottom: 8px; font-weight: 600;">Payment Breakdown</span>
+              <span class="detail-label" style="display: block; margin-bottom: 8px; font-weight: 600;">Payment Info</span>
               <div class="transaction-detail" style="margin-bottom: 6px;">
-                <span class="detail-label">Customer Charged</span>
+                <span class="detail-label">Customer Paid</span>
                 <span class="detail-value" style="color: #1a1a1a; font-weight: 600;">$${customerCharged}</span>
-              </div>
-              <div class="transaction-detail" style="margin-bottom: 6px; color: #ff6b6b;">
-                <span class="detail-label">Stripe Processing Fee</span>
-                <span class="detail-value">-$${stripeFee}</span>
               </div>
               <div class="transaction-detail" style="margin-bottom: 6px; color: #667eea;">
                 <span class="detail-label">Platform Fee (AARIE)</span>
                 <span class="detail-value">-$${platformFee}</span>
               </div>
-              <div class="transaction-detail" style="padding-top: 6px; border-top: 1px solid #e0e0e0;">
-                <span class="detail-label" style="font-weight: 600;">You Receive (Net)</span>
-                <span class="detail-value" style="color: #27ae60; font-weight: 700; font-size: 16px;">$${franchiseeNet}</span>
+              <div class="transaction-detail" style="margin-bottom: 8px; padding: 8px; background: #f5f5f5; border-radius: 4px;">
+                <span class="detail-label" style="font-size: 11px; color: #666;">Stripe processing fees also apply. View exact amounts in your Stripe Dashboard.</span>
               </div>
             </div>
             ` : ''}
@@ -477,6 +470,23 @@ async function handleLogout() {
     window.location.href = '/client-portal.html';
   } catch (error) {
     console.error('❌ Logout error:', error);
+  }
+}
+
+/**
+ * Open Stripe Express Dashboard
+ */
+async function openStripeDashboard() {
+  try {
+    const response = await apiCall('/api/client/stripe-dashboard-link');
+    if (response.url) {
+      window.open(response.url, '_blank');
+    } else {
+      alert('Unable to open Stripe Dashboard. Please try again.');
+    }
+  } catch (error) {
+    console.error('❌ Stripe dashboard error:', error);
+    alert('Error opening Stripe Dashboard: ' + error.message);
   }
 }
 

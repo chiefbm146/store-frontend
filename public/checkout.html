@@ -766,16 +766,26 @@
         // ========================================
         // STRIPE CHECKOUT CONFIGURATION
         // ========================================
-        const STRIPE_PUBLISHABLE_KEY = 'pk_test_51SPQ3W2ONyiEh5kxUpJxBGUhHXaUPpAKJeC9nSJLul8ctzUqPZgMYkeJ8glWndaIgDhMVaVlc142aZCRdXH1NwlK00mzd5iMG8';
+        const STRIPE_PUBLISHABLE_KEY = 'pk_live_51Rp7gdRuBpQt4n9NyNv9RHiHf3QOmJdETL8Boyu7uC2YUKJUz2OIXXzgAN4h91WC2F21qhXHs7T2QUbDEGCEwMeg00bJbhDvn6';
         const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
 
-        // Product Details
+        // Product Details - check URL params for test product
+        const urlParams = new URLSearchParams(window.location.search);
         const PRODUCT = {
-            id: 'custom-store',
-            name: 'One-Time Payment',
-            price: 29900, // cents
-            description: 'Custom Store - Complete build in 24-48 hours'
+            id: urlParams.get('product') || 'custom-store',
+            name: urlParams.get('name') || 'One-Time Payment',
+            price: parseInt(urlParams.get('price')) || 49900, // cents - $499
+            description: urlParams.get('desc') || 'Custom Website - Complete build in 24-48 hours'
         };
+
+        // Update displayed price if using URL params
+        const displayPrice = '$' + (PRODUCT.price / 100).toFixed(2).replace('.00', '');
+        document.querySelector('.product-price').textContent = displayPrice;
+        document.querySelector('.btn-text').textContent = 'Pay ' + displayPrice;
+        if (urlParams.get('name')) {
+            document.querySelector('.product-name').textContent = PRODUCT.name;
+            document.querySelector('.product-description').textContent = PRODUCT.description;
+        }
 
         // ========================================
         // INITIALIZE STRIPE
@@ -895,6 +905,9 @@
             try {
                 console.log('[Checkout] Creating payment intent...');
 
+                // SECURITY: Only send product_id - backend looks up price server-side
+                // Also send customer_email for Stripe receipt
+                const customerEmailForReceipt = document.getElementById('customer-email')?.value?.trim() || null;
                 const response = await fetch(`${BACKEND_URL}/create-payment-intent`, {
                     method: 'POST',
                     headers: {
@@ -902,9 +915,7 @@
                     },
                     body: JSON.stringify({
                         product_id: PRODUCT.id,
-                        amount: PRODUCT.price,
-                        currency: 'cad',
-                        description: PRODUCT.description
+                        customer_email: customerEmailForReceipt
                     })
                 });
 
@@ -1017,14 +1028,8 @@
         // ========================================
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('[Checkout] Page loaded');
-
-            // Pre-create payment intent for faster checkout
-            try {
-                await createPaymentIntent();
-            } catch (error) {
-                console.warn('[Checkout] Could not pre-create payment intent:', error);
-                // Will create on submit instead
-            }
+            // Payment intent is now created on form submit (not pre-created)
+            // This ensures customer email is captured for Stripe receipt
         });
     </script>
 </body>
