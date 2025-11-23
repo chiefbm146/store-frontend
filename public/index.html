@@ -12,8 +12,21 @@
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
 
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome (local) -->
+    <link rel="stylesheet" href="./libs/fontawesome/all.min.css?v=11.0.12">
+
+    <!-- Linked CSS for Modals & Smart Messages (from mobile.html architecture) -->
+    <link rel="stylesheet" href="./css/smart-message.css?v=11.0.12">
+    <link rel="stylesheet" href="./css/fullscreen-modals.css?v=11.0.12">
+    <link rel="stylesheet" href="./css/stripe-checkout.css?v=11.0.12">
+
+    <!-- Device Detector (CRITICAL: Required for rate-limiting security system) -->
+    <script src="./js/device-detector.js?v=11.0.12"></script>
+
+    <!-- Audio System Modules (Production-Ready from mobile.html) -->
+    <script src="./js/audioStateManager.js?v=11.0.12" type="module"></script>
+    <script src="./js/audioPermissionUI.js?v=11.0.12" type="module"></script>
+    <script src="./js/soundManager.js?v=11.0.12" type="module"></script>
 
     <style>
         /* === BASE STYLES === */
@@ -1445,18 +1458,192 @@
             color: #c82333;
         }
 
-        #ttsAudio {
+        #ttsPlayer {
             display: none;
         }
 
-        @media (max-width: 768px) {
-            .audio-permission-modal {
-                margin: 20px;
-                padding: 30px 20px;
-            }
+        /* === AI PORTAL ARCHITECTURE STYLES (from mobile.html) === */
+        .ai-portal {
+            position: relative;
+        }
 
-            .audio-permission-buttons {
-                flex-direction: column;
+        .portal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .portal-title {
+            margin: 0;
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10B981;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+
+        .header-left-container,
+        .header-right-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Master Speaker Button (injected by soundManager.js) */
+        .master-speaker-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: #FFFFFF;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .master-speaker-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .master-speaker-btn.unlocked {
+            background: #10B981;
+            border-color: #10B981;
+        }
+
+        .master-speaker-btn.unlocked:hover {
+            background: #059669;
+        }
+
+        /* Send Button Style Updates */
+        #sendButton {
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        #sendButton i {
+            font-size: 1rem;
+        }
+
+        .mobile-chat-send {
+            width: 44px;
+            height: 44px;
+            padding: 0 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50% !important;
+        }
+
+        .mobile-chat-send i {
+            font-size: 1rem;
+        }
+
+        /* Message Play Button Improvements */
+        .message-play-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            color: #FFFFFF;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+            margin-top: 8px;
+        }
+
+        .message-play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.5);
+        }
+
+        .message-play-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Message Wrapper for TTS buttons */
+        .message-wrapper {
+            display: flex;
+            flex-direction: column;
+            max-width: 80%;
+        }
+
+        .message-wrapper.user {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+
+        .message-wrapper.ai {
+            align-self: flex-start;
+            align-items: flex-start;
+        }
+
+        /* Special Tags Styling */
+        .ai-message special,
+        .mobile-chat-message.ai special {
+            font-weight: 700;
+            color: #6366f1;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        .ai-message special:hover,
+        .mobile-chat-message.ai special:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+            text-decoration: underline;
+        }
+
+        .ai-message price,
+        .mobile-chat-message.ai price {
+            font-weight: 700;
+            color: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            .ai-status {
+                display: none;
             }
 
             .message-play-btn {
@@ -1601,7 +1788,7 @@
         </div>
     </section>
 
-    <!-- Chat Section (Desktop Only) -->
+    <!-- Chat Section (Desktop Only) - Using mobile.html architecture -->
     <section class="chat-section" id="chat">
         <div class="chat-wrapper">
             <div class="section-header">
@@ -1609,45 +1796,48 @@
                 <p class="section-subtitle">Every store we build includes a chatbot trained specifically on your business</p>
             </div>
 
-            <div class="chat-container">
-                <div class="chat-header">
-                    <span class="chat-icon">🤖</span>
-                    <h3 class="chat-title">AI Chat Assistant</h3>
-                    <div class="chat-header-controls" style="margin-left: auto;">
-                        <button class="master-speaker-btn" id="desktopSpeakerBtn" title="Enable Voice">
-                            <i class="fa-solid fa-volume-xmark"></i>
-                        </button>
+            <div class="chat-container ai-portal">
+                <div class="chat-header portal-header">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span class="chat-icon">🤖</span>
+                        <h3 class="chat-title portal-title">AI Chat Assistant</h3>
+                    </div>
+                    <div class="header-buttons-group" style="display: flex; align-items: center; gap: 10px; margin-left: auto;">
+                        <!-- Master Speaker Button - ADDED BY JS via soundManager -->
+                        <div class="header-left-container" id="header-left-container"></div>
+                    </div>
+                    <div class="ai-status">
+                        <div class="status-indicator"></div>
+                        <span class="status-text">ONLINE</span>
                     </div>
                 </div>
 
                 <div class="messages-container" id="messagesContainer">
                     <div class="messages" id="messages">
-                        <div class="message ai-message">
-                            <div class="message-content">
-                                <span class="message-icon">🤖</span>
-                                <div class="message-text">
-                                    <p>Hi! 👋 I'm your AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. I can tell you about our services, features, pricing, or answer any questions. Ready to start your project?</p>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Chat messages will appear here -->
                     </div>
                     <div class="typing-indicator" id="typingIndicator">
                         <span class="typing-dot"></span>
                         <span class="typing-dot"></span>
                         <span class="typing-dot"></span>
                     </div>
-                    <div id="moduleContainer"></div>
+                    <div id="moduleContainer">
+                        <!-- Jarvis UI modules will appear here -->
+                    </div>
                 </div>
 
                 <div class="input-area">
-                    <div class="input-wrapper">
+                    <div class="input-wrapper" id="inputWrapper">
                         <input type="text" id="userInput" placeholder="Ask about how we build your store, features, pricing..." autocomplete="off" maxlength="4000">
                     </div>
-                    <button id="sendButton">Send</button>
+                    <button id="sendButton"><i class="fas fa-arrow-up"></i></button>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- TTS Player (from mobile.html architecture) -->
+    <audio id="ttsPlayer" style="display: none;"></audio>
 
     <!-- AI Blurb Section (Mobile Only - replaces chat section) -->
     <section class="ai-blurb-section">
@@ -1655,7 +1845,7 @@
             <span class="ai-blurb-icon">🤖</span>
             <h3 class="ai-blurb-title">Custom AI For Your Business</h3>
             <p class="ai-blurb-text">Every store we build includes a custom AI chatbot with its own personality - professional, helpful, and trained specifically on your business. Your customers get instant answers about your offerings 24/7, and it's always safe and on-brand.</p>
-            <button class="ai-blurb-cta" onclick="openMobileChat()">Try Our AI Assistant</button>
+            <button class="ai-blurb-cta" id="aiBlurbCta">Try Our AI Assistant</button>
         </div>
     </section>
 
@@ -1701,568 +1891,153 @@
         </div>
     </footer>
 
-    <!-- Audio Permission Modal -->
-    <div class="audio-permission-overlay" id="audioPermissionOverlay">
-        <div class="audio-permission-modal">
-            <div class="audio-permission-icon">🔊</div>
-            <h2 class="audio-permission-title">Enable Voice</h2>
-            <p class="audio-permission-text">Enable audio to hear AI responses read aloud. This creates a more engaging experience!</p>
-            <div class="audio-permission-buttons">
-                <button class="audio-permission-enable" id="audioEnableBtn">Enable Voice</button>
-                <button class="audio-permission-skip" id="audioSkipBtn">Maybe Later</button>
-            </div>
-        </div>
+    <!-- Audio Permission UI (managed by audioPermissionUI.js module) -->
+    <div id="audioPermissionContainer">
+        <!-- Audio permission modal will be injected here by audioPermissionUI.js -->
     </div>
 
-    <!-- Hidden audio element for TTS -->
-    <audio id="ttsAudio"></audio>
-
     <!-- Mobile Floating Chat Button -->
-    <button class="mobile-chat-fab" onclick="openMobileChat()" title="Chat with AI">
+    <button class="mobile-chat-fab" id="mobileChatFab" title="Chat with AI">
         🤖
     </button>
 
     <!-- Mobile Chat Overlay -->
-    <div class="mobile-chat-overlay" id="mobileChatOverlay" onclick="closeMobileChat()"></div>
+    <div class="mobile-chat-overlay" id="mobileChatOverlay"></div>
 
-    <!-- Mobile Fullscreen Chat Modal -->
+    <!-- Mobile Fullscreen Chat Modal - Using mobile.html architecture -->
     <div class="mobile-chat-modal" id="mobileChatModal">
-        <div class="mobile-chat-header">
-            <h3 class="mobile-chat-title">🤖 AI Assistant</h3>
-            <div class="mobile-header-controls">
-                <button class="mobile-speaker-btn" id="mobileSpeakerBtn" title="Enable Voice">
-                    <i class="fa-solid fa-volume-xmark"></i>
-                </button>
-                <button class="mobile-chat-close" onclick="closeMobileChat()">✕</button>
+        <div class="mobile-chat-header portal-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <h3 class="mobile-chat-title">🤖 AI Assistant</h3>
+            </div>
+            <div class="mobile-header-controls" style="display: flex; align-items: center; gap: 10px;">
+                <!-- Mobile Master Speaker Button - ADDED BY JS via soundManager -->
+                <div class="header-right-container" id="header-right-container"></div>
+                <button class="mobile-chat-close" id="mobileChatClose">✕</button>
             </div>
         </div>
         <div class="mobile-chat-body">
             <div class="mobile-chat-messages" id="mobileChatMessages">
-                <div class="mobile-chat-message ai">
-                    Hi! 👋 I'm your AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. Ask me anything about our services, pricing, or how we can help your business!
-                </div>
+                <!-- Chat messages will appear here -->
             </div>
             <div class="mobile-typing-indicator" id="mobileTypingIndicator">
                 <span class="mobile-typing-dot"></span>
                 <span class="mobile-typing-dot"></span>
                 <span class="mobile-typing-dot"></span>
             </div>
+            <div id="mobileModuleContainer">
+                <!-- Jarvis UI modules will appear here -->
+            </div>
         </div>
         <div class="mobile-chat-input-area">
             <input type="text" class="mobile-chat-input" id="mobileChatInput" placeholder="Ask me anything..." maxlength="4000">
-            <button class="mobile-chat-send" onclick="sendMobileMessage()">Send</button>
+            <button class="mobile-chat-send" id="mobileSendButton"><i class="fas fa-arrow-up"></i></button>
         </div>
     </div>
 
-    <!-- Chat Configuration with TTS & Special Tags (Desktop & Mobile) -->
+    <!-- ============================================
+         CHAT MODULES (from mobile.html architecture)
+         Same production-level JS used by mobile.html
+         ============================================ -->
+
+    <!-- TTS Manager (handles all Text-to-Speech functionality) -->
+    <script type="module" src="./js/tts-manager.js?v=11.0.12"></script>
+
+    <!-- Jarvis UI Manager (handles dynamic UI modules within chat) -->
+    <script type="module" src="./js/jarvis-ui-manager.js?v=11.0.12"></script>
+
+    <!-- Smart Message Renderer (for rich, structured messages) -->
+    <script type="module" src="./js/smart-message-renderer.js?v=11.0.12"></script>
+
+    <!-- Portal Controller (main chat orchestrator) -->
+    <script type="module" src="./js/portal-controller.js?v=11.0.12"></script>
+
+    <!-- Mobile Chat Modal Handler (bridges mobile FAB to portal controller) -->
     <script>
-        // ========================================
-        // SHARED CHAT CONFIGURATION
-        // ========================================
-        const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
-        const CHAT_ENDPOINT = '/chat';
-        const TTS_ENDPOINT = '/tts';
-        let MOBILE_CHAT_SESSION_ID = null;
-        let DESKTOP_CHAT_SESSION_ID = null;
-        let deviceFingerprint = null;
+        // ============================================
+        // MOBILE CHAT MODAL CONTROLLER
+        // Handles opening/closing the mobile chat modal
+        // Works alongside portal-controller.js for the main desktop chat
+        // ============================================
+        (function() {
+            'use strict';
 
-        // TTS State
-        let ttsUnlocked = false;
-        let isPlaying = false;
-        let currentAudio = null;
-        let audioCache = new Map();
-        const ttsAudio = document.getElementById('ttsAudio');
+            const mobileElements = {
+                fab: null,
+                overlay: null,
+                modal: null,
+                closeBtn: null,
+                aiBlurbCta: null
+            };
 
-        // ========================================
-        // INITIALIZATION
-        // ========================================
-        function initMobileChatSession() {
-            MOBILE_CHAT_SESSION_ID = 'mobile_' + crypto.randomUUID();
-        }
-
-        function initDesktopChatSession() {
-            DESKTOP_CHAT_SESSION_ID = 'desktop_' + crypto.randomUUID();
-        }
-
-        function initializeDeviceFingerprint() {
-            const formFactor = window.innerWidth < 768 ? 'mobile' : 'desktop';
-            const screenWidth = window.screen.width;
-            const screenHeight = window.screen.height;
-            const pixelDensity = (window.devicePixelRatio || 1).toFixed(1);
-            deviceFingerprint = `${formFactor}_${screenWidth}x${screenHeight}_${pixelDensity}`;
-        }
-
-        // ========================================
-        // TTS SYSTEM
-        // ========================================
-        function showAudioModal() {
-            document.getElementById('audioPermissionOverlay').classList.add('active');
-        }
-
-        function hideAudioModal() {
-            document.getElementById('audioPermissionOverlay').classList.remove('active');
-        }
-
-        async function attemptTTSUnlock() {
-            if (ttsUnlocked) return true;
-
-            return new Promise((resolve) => {
-                showAudioModal();
-
-                document.getElementById('audioEnableBtn').onclick = async () => {
-                    try {
-                        const testAudio = new Audio('/sounds/unlock.mp3?v=1.0');
-                        testAudio.volume = 0.5;
-                        await testAudio.play();
-
-                        ttsUnlocked = true;
-                        console.log('[TTS] ✅ Audio unlocked');
-
-                        updateSpeakerButtons();
-                        hideAudioModal();
-                        resolve(true);
-                    } catch (error) {
-                        console.error('[TTS] ❌ Unlock failed:', error);
-                        hideAudioModal();
-                        resolve(false);
-                    }
-                };
-
-                document.getElementById('audioSkipBtn').onclick = () => {
-                    hideAudioModal();
-                    resolve(false);
-                };
-            });
-        }
-
-        function updateSpeakerButtons() {
-            const desktopBtn = document.getElementById('desktopSpeakerBtn');
-            const mobileBtn = document.getElementById('mobileSpeakerBtn');
-
-            if (ttsUnlocked) {
-                if (desktopBtn) {
-                    desktopBtn.classList.add('unlocked');
-                    desktopBtn.querySelector('i').className = 'fa-solid fa-volume-high';
-                }
-                if (mobileBtn) {
-                    mobileBtn.classList.add('unlocked');
-                    mobileBtn.querySelector('i').className = 'fa-solid fa-volume-high';
+            function openMobileChat() {
+                if (mobileElements.modal && mobileElements.overlay) {
+                    mobileElements.modal.classList.add('active');
+                    mobileElements.overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    console.log('[Mobile Chat] Modal opened');
                 }
             }
 
-            document.querySelectorAll('.message-play-btn').forEach(btn => {
-                const icon = btn.querySelector('i');
-                if (ttsUnlocked) {
-                    icon.className = 'fa-solid fa-play';
-                } else {
-                    icon.className = 'fa-solid fa-volume-xmark';
-                }
-            });
-        }
+            function closeMobileChat() {
+                if (mobileElements.modal && mobileElements.overlay) {
+                    mobileElements.modal.classList.remove('active');
+                    mobileElements.overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                    console.log('[Mobile Chat] Modal closed');
 
-        async function getTTSAudio(text) {
-            const cacheKey = text.substring(0, 100);
-            if (audioCache.has(cacheKey)) {
-                return audioCache.get(cacheKey);
-            }
-
-            try {
-                const response = await fetch(`${BACKEND_URL}${TTS_ENDPOINT}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: text })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    const audioData = data.audio || data.audio_base64;
-                    if (audioData) {
-                        audioCache.set(cacheKey, audioData);
-                        return audioData;
+                    // Stop any playing TTS when closing
+                    if (window.ttsManager && window.ttsManager.stop) {
+                        window.ttsManager.stop();
                     }
                 }
-            } catch (error) {
-                console.error('[TTS] Failed to fetch audio:', error);
-            }
-            return null;
-        }
-
-        // Track current blob URL for cleanup
-        let currentBlobUrl = null;
-
-        async function playTTSAudio(base64Audio) {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
             }
 
-            // Clean up previous blob URL to prevent memory leaks
-            if (currentBlobUrl) {
-                URL.revokeObjectURL(currentBlobUrl);
-                currentBlobUrl = null;
-            }
+            function init() {
+                mobileElements.fab = document.getElementById('mobileChatFab');
+                mobileElements.overlay = document.getElementById('mobileChatOverlay');
+                mobileElements.modal = document.getElementById('mobileChatModal');
+                mobileElements.closeBtn = document.getElementById('mobileChatClose');
+                mobileElements.aiBlurbCta = document.getElementById('aiBlurbCta');
 
-            // Detect MIME type from base64 header
-            // //OE, //u = MPEG audio frame headers, SUQ = ID3 tag
-            let mimeType = 'audio/mpeg';
-            if (base64Audio.startsWith('T2d')) {
-                mimeType = 'audio/ogg';
-            } else if (base64Audio.startsWith('Ukl')) {
-                mimeType = 'audio/wav';
-            }
-            // Default is audio/mpeg which handles //OE, //u, SUQ and other MP3 variants
-
-            // Convert base64 to Blob URL (more secure than data URLs)
-            const binaryString = atob(base64Audio);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            const blob = new Blob([bytes], { type: mimeType });
-            currentBlobUrl = URL.createObjectURL(blob);
-
-            return new Promise((resolve, reject) => {
-                // Set up event handlers BEFORE setting src
-                ttsAudio.oncanplaythrough = () => {
-                    ttsAudio.oncanplaythrough = null;
-                    ttsAudio.onerror = null;
-
-                    isPlaying = true;
-                    currentAudio = ttsAudio;
-
-                    ttsAudio.play()
-                        .then(() => {
-                            console.log('[TTS] ✅ Playing audio');
-                            resolve();
-                        })
-                        .catch(err => {
-                            console.error('[TTS] ❌ Playback failed:', err);
-                            isPlaying = false;
-                            reject(err);
-                        });
-                };
-
-                ttsAudio.onerror = (e) => {
-                    ttsAudio.oncanplaythrough = null;
-                    ttsAudio.onerror = null;
-                    console.error('[TTS] ❌ Audio load error:', ttsAudio.error?.message || 'Unknown error');
-                    isPlaying = false;
-                    reject(new Error('Audio failed to load'));
-                };
-
-                ttsAudio.onended = () => {
-                    isPlaying = false;
-                    updatePlayButtonStates();
-                };
-
-                ttsAudio.src = currentBlobUrl;
-                ttsAudio.volume = 1.0;
-                ttsAudio.load();
-            });
-        }
-
-        function stopTTSAudio() {
-            if (ttsAudio) {
-                ttsAudio.pause();
-                ttsAudio.currentTime = 0;
-            }
-            isPlaying = false;
-            updatePlayButtonStates();
-        }
-
-        function updatePlayButtonStates(playingText = null) {
-            document.querySelectorAll('.message-play-btn').forEach(btn => {
-                const msgText = btn.dataset.text;
-                const icon = btn.querySelector('i');
-
-                if (!ttsUnlocked) {
-                    icon.className = 'fa-solid fa-volume-xmark';
-                } else if (msgText === playingText && isPlaying) {
-                    icon.className = 'fa-solid fa-stop';
-                } else {
-                    icon.className = 'fa-solid fa-play';
+                // Attach event listeners
+                if (mobileElements.fab) {
+                    mobileElements.fab.addEventListener('click', openMobileChat);
                 }
-            });
-        }
 
-        async function handlePlayClick(text, button) {
-            const icon = button.querySelector('i');
-
-            // If not unlocked, unlock first
-            if (!ttsUnlocked) {
-                const unlocked = await attemptTTSUnlock();
-                if (!unlocked) return;
-                updatePlayButtonStates();
-                return;
-            }
-
-            // If playing this message, stop it
-            if (icon.classList.contains('fa-stop')) {
-                stopTTSAudio();
-                return;
-            }
-
-            // Play the audio
-            icon.className = 'fa-solid fa-spinner fa-spin';
-            button.disabled = true;
-
-            try {
-                const audioData = await getTTSAudio(text);
-                if (audioData) {
-                    await playTTSAudio(audioData);
-                    updatePlayButtonStates(text);
+                if (mobileElements.overlay) {
+                    mobileElements.overlay.addEventListener('click', closeMobileChat);
                 }
-            } catch (error) {
-                console.error('[TTS] Error:', error);
-            } finally {
-                button.disabled = false;
+
+                if (mobileElements.closeBtn) {
+                    mobileElements.closeBtn.addEventListener('click', closeMobileChat);
+                }
+
+                if (mobileElements.aiBlurbCta) {
+                    mobileElements.aiBlurbCta.addEventListener('click', openMobileChat);
+                }
+
+                // Escape key closes modal
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && mobileElements.modal?.classList.contains('active')) {
+                        closeMobileChat();
+                    }
+                });
+
+                console.log('[Mobile Chat Controller] Initialized');
             }
-        }
 
-        // ========================================
-        // SPECIAL TAG HANDLING
-        // ========================================
-        function attachSpecialTagListeners(container, inputElement, sendFunction) {
-            container.querySelectorAll('special').forEach(el => {
-                el.style.cursor = 'pointer';
-                el.onclick = (e) => {
-                    e.stopPropagation();
-                    const text = el.textContent;
-                    console.log('[Chat] Clicked special tag:', text);
-                    inputElement.value = text;
-                    sendFunction();
-                };
-            });
-        }
+            // Expose globally for any other scripts that need it
+            window.openMobileChat = openMobileChat;
+            window.closeMobileChat = closeMobileChat;
 
-        function createAIMessageWrapper(text, isMobile = false) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'message-wrapper ai';
-
-            const msgDiv = document.createElement('div');
-            msgDiv.className = isMobile ? 'mobile-chat-message ai' : 'message ai-message';
-
-            if (isMobile) {
-                msgDiv.innerHTML = text;
+            // Initialize on DOM ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
             } else {
-                const msgContent = document.createElement('div');
-                msgContent.className = 'message-content';
-                msgContent.innerHTML = `<span class="message-icon">🤖</span><div class="message-text">${text}</div>`;
-                msgDiv.appendChild(msgContent);
+                init();
             }
-            wrapper.appendChild(msgDiv);
-
-            const playBtn = document.createElement('button');
-            playBtn.className = 'message-play-btn';
-            playBtn.dataset.text = text.replace(/<[^>]*>/g, '');
-            playBtn.innerHTML = ttsUnlocked
-                ? '<i class="fa-solid fa-play"></i>'
-                : '<i class="fa-solid fa-volume-xmark"></i>';
-            playBtn.onclick = () => handlePlayClick(playBtn.dataset.text, playBtn);
-            wrapper.appendChild(playBtn);
-
-            return wrapper;
-        }
-
-        function createUserMessageWrapper(text, isMobile = false) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'message-wrapper user';
-
-            const msgDiv = document.createElement('div');
-            msgDiv.className = isMobile ? 'mobile-chat-message user' : 'message user-message';
-
-            if (isMobile) {
-                msgDiv.textContent = text;
-            } else {
-                msgDiv.innerHTML = `<div class="message-content"><div class="message-text"><p>${text}</p></div></div>`;
-            }
-            wrapper.appendChild(msgDiv);
-
-            return wrapper;
-        }
-
-        // ========================================
-        // MOBILE CHAT FUNCTIONS
-        // ========================================
-        function openMobileChat() {
-            document.getElementById('mobileChatModal').classList.add('active');
-            document.getElementById('mobileChatOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMobileChat() {
-            stopTTSAudio();
-            document.getElementById('mobileChatModal').classList.remove('active');
-            document.getElementById('mobileChatOverlay').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        async function sendMobileMessage() {
-            const input = document.getElementById('mobileChatInput');
-            const messagesDiv = document.getElementById('mobileChatMessages');
-            const typingIndicator = document.getElementById('mobileTypingIndicator');
-            const userText = input.value.trim();
-
-            if (!userText) return;
-
-            stopTTSAudio();
-            input.disabled = true;
-            messagesDiv.innerHTML = '';
-
-            messagesDiv.appendChild(createUserMessageWrapper(userText, true));
-            input.value = '';
-            messagesDiv.scrollTop = 0;
-
-            typingIndicator.classList.add('visible');
-
-            try {
-                const payload = {
-                    session_id: MOBILE_CHAT_SESSION_ID,
-                    prompt: userText,
-                    device_fingerprint: deviceFingerprint
-                };
-
-                const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-                const data = await response.json();
-                const aiResponse = data.response || 'Sorry, I could not generate a response.';
-
-                typingIndicator.classList.remove('visible');
-
-                const aiMsgWrapper = createAIMessageWrapper(aiResponse, true);
-                messagesDiv.appendChild(aiMsgWrapper);
-                attachSpecialTagListeners(aiMsgWrapper, input, sendMobileMessage);
-                messagesDiv.scrollTop = 0;
-
-            } catch (error) {
-                console.error('[Mobile Chat] Error:', error);
-                typingIndicator.classList.remove('visible');
-
-                const errorWrapper = createAIMessageWrapper('Sorry, I encountered an error. Please try again.', true);
-                messagesDiv.appendChild(errorWrapper);
-                messagesDiv.scrollTop = 0;
-            } finally {
-                input.disabled = false;
-                input.blur();
-                messagesDiv.focus();
-            }
-        }
-
-        // ========================================
-        // DESKTOP CHAT FUNCTIONS
-        // ========================================
-        async function sendDesktopMessage() {
-            const input = document.getElementById('userInput');
-            const messagesDiv = document.getElementById('messages');
-            const typingIndicator = document.getElementById('typingIndicator');
-            const userText = input.value.trim();
-
-            if (!userText) return;
-
-            stopTTSAudio();
-            input.disabled = true;
-            messagesDiv.innerHTML = '';
-
-            messagesDiv.appendChild(createUserMessageWrapper(userText, false));
-            input.value = '';
-            messagesDiv.scrollTop = 0;
-
-            typingIndicator.style.display = 'flex';
-
-            try {
-                const payload = {
-                    session_id: DESKTOP_CHAT_SESSION_ID,
-                    prompt: userText,
-                    device_fingerprint: deviceFingerprint
-                };
-
-                const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-                const data = await response.json();
-                const aiResponse = data.response || 'Sorry, I could not generate a response.';
-
-                typingIndicator.style.display = 'none';
-
-                const aiMsgWrapper = createAIMessageWrapper(aiResponse, false);
-                messagesDiv.appendChild(aiMsgWrapper);
-                attachSpecialTagListeners(aiMsgWrapper, input, sendDesktopMessage);
-                messagesDiv.scrollTop = 0;
-
-            } catch (error) {
-                console.error('[Desktop Chat] Error:', error);
-                typingIndicator.style.display = 'none';
-
-                const errorWrapper = createAIMessageWrapper('Sorry, I encountered an error. Please try again.', false);
-                messagesDiv.appendChild(errorWrapper);
-                messagesDiv.scrollTop = 0;
-            } finally {
-                input.disabled = false;
-                input.focus();
-            }
-        }
-
-        // ========================================
-        // EVENT LISTENERS
-        // ========================================
-        document.addEventListener('DOMContentLoaded', () => {
-            initMobileChatSession();
-            initDesktopChatSession();
-            initializeDeviceFingerprint();
-
-            const mobileInput = document.getElementById('mobileChatInput');
-            if (mobileInput) {
-                mobileInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !mobileInput.disabled) sendMobileMessage();
-                });
-            }
-
-            // Speaker button handlers
-            const desktopSpeakerBtn = document.getElementById('desktopSpeakerBtn');
-            const mobileSpeakerBtn = document.getElementById('mobileSpeakerBtn');
-
-            if (desktopSpeakerBtn) {
-                desktopSpeakerBtn.addEventListener('click', async () => {
-                    if (!ttsUnlocked) await attemptTTSUnlock();
-                });
-            }
-
-            if (mobileSpeakerBtn) {
-                mobileSpeakerBtn.addEventListener('click', async () => {
-                    if (!ttsUnlocked) await attemptTTSUnlock();
-                });
-            }
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeMobileChat();
-                    hideAudioModal();
-                }
-            });
-
-            const desktopInput = document.getElementById('userInput');
-            const sendButton = document.getElementById('sendButton');
-
-            if (desktopInput && sendButton) {
-                desktopInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !desktopInput.disabled) sendDesktopMessage();
-                });
-                sendButton.addEventListener('click', sendDesktopMessage);
-            }
-
-            console.log('[Index Chat] Initialized with TTS & Special Tags');
-        });
+        })();
     </script>
 </body>
 </html>
