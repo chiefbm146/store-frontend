@@ -6,7 +6,7 @@
 export const demoStore = {
     // Store Info
     storeName: 'AARIE.CA',
-    storeTagline: 'We Build Your Store in 24-48 Hours',
+    storeTagline: 'Your Website Live in 7 Days',
     storeIcon: '🏪',
 
     // Navigation
@@ -21,10 +21,10 @@ export const demoStore = {
 
     // Hero Section
     hero: {
-        title: 'Let Us Build Your Store',
-        subtitle: 'Place a deposit today and get your store live in 24-48 hours',
-        description: 'Stop waiting months for a website. We handle everything - design, setup, products, checkout, and a custom AI chatbot. You focus on your business, we build your online presence.',
-        ctaText: 'Get Started Now',
+        title: 'The 7-Day Launchpad',
+        subtitle: 'See your first design mockup in 72 hours. Go live in 7-10 days.',
+        description: 'Stop waiting months for a website. We handle everything - design, setup, products, checkout, and a custom AI chatbot. You focus on your business, we build your online presence. Only 4 projects per month.',
+        ctaText: 'Start Your Project',
         ctaLink: '/store-booking.html',
         backgroundImage: null,
         backgroundEmoji: '🏪'
@@ -32,20 +32,20 @@ export const demoStore = {
 
     // Featured Products
     featuredProducts: {
-        title: 'Book Your Store Today',
-        subtitle: 'One-time payment, your store built in 24-48 hours',
+        title: 'The 7-Day Launchpad Package',
+        subtitle: 'Design mockup in 72 hours. Live website in 7-10 days.',
         products: [
             {
                 id: 'deposit-1',
-                name: 'Basic Store Package',
-                description: 'Professional online store with product catalog, checkout, and AI chatbot included.',
+                name: 'Basic Website Package',
+                description: 'Professional website with product catalog, checkout, and AI chatbot included. Up to 5 pages.',
                 price: '$499',
                 emoji: '📦',
                 link: '/store-booking.html'
             },
             {
                 id: 'deposit-2',
-                name: 'Workshop Store Package',
+                name: 'Workshop Website Package',
                 description: 'Sell workshops and courses with booking, scheduling, and payment processing built-in.',
                 price: '$499',
                 emoji: '🎁',
@@ -53,7 +53,7 @@ export const demoStore = {
             },
             {
                 id: 'deposit-3',
-                name: 'Service Store Package',
+                name: 'Service Website Package',
                 description: 'Service business website with consultation booking and client management tools.',
                 price: '$499',
                 emoji: '⭐',
@@ -67,8 +67,8 @@ export const demoStore = {
         title: 'Why Choose AARIE.CA',
         subtitle: 'Your online store, built by professionals',
         content: [
-            'AARIE.CA builds professional online stores for your business - you don\'t have to do anything. Whether you\'re selling workshops, physical products, or professional services, we handle everything from design to checkout to customer support.',
-            'Every store we build comes with a custom AI chatbot trained specifically on your business. Your customers get instant answers about your offerings 24/7. No coding required, no technical expertise needed - we build it, you run your business.'
+            'AARIE.CA builds professional websites for your business - you don\'t have to do anything. Whether you\'re selling workshops, physical products, or professional services, we handle everything from design to checkout to customer support.',
+            'Every website we build comes with a custom AI chatbot trained specifically on your business. Your customers get instant answers about your offerings 24/7. No coding required, no technical expertise needed - we build it, you run your business.'
         ],
         emoji: '💳'
     },
@@ -99,7 +99,7 @@ export const demoStore = {
 
     // Footer
     footer: {
-        tagline: 'AARIE.CA - We Build Your Store in 24-48 Hours',
+        tagline: 'AARIE.CA - Your Website Live in 7 Days',
         copyright: '© 2025 AARIE.CA. All rights reserved.',
         social: {
             facebook: '#',
