@@ -1893,46 +1893,56 @@
                 currentAudio.currentTime = 0;
             }
 
-            // DEBUG: Log the raw base64 data
-            console.log('[TTS DEBUG] base64Audio type:', typeof base64Audio);
-            console.log('[TTS DEBUG] base64Audio length:', base64Audio.length);
-            console.log('[TTS DEBUG] first 100 chars:', base64Audio.substring(0, 100));
-            console.log('[TTS DEBUG] last 50 chars:', base64Audio.substring(base64Audio.length - 50));
-
             // Detect MIME type from base64 header
+            // //OE, //u = MPEG audio frame headers, SUQ = ID3 tag
             let mimeType = 'audio/mpeg';
             if (base64Audio.startsWith('T2d')) {
                 mimeType = 'audio/ogg';
             } else if (base64Audio.startsWith('Ukl')) {
                 mimeType = 'audio/wav';
-            } else if (base64Audio.startsWith('//u') || base64Audio.startsWith('SUQ')) {
-                mimeType = 'audio/mpeg';
             }
-            console.log('[TTS DEBUG] Using MIME:', mimeType);
+            // Default is audio/mpeg which handles //OE, //u, SUQ and other MP3 variants
 
-            const dataUrl = `data:${mimeType};base64,${base64Audio}`;
-            console.log('[TTS DEBUG] dataUrl length:', dataUrl.length);
-            console.log('[TTS DEBUG] dataUrl first 150:', dataUrl.substring(0, 150));
+            return new Promise((resolve, reject) => {
+                const dataUrl = `data:${mimeType};base64,${base64Audio}`;
 
-            ttsAudio.src = dataUrl;
-            ttsAudio.volume = 1.0;
-            isPlaying = true;
-            currentAudio = ttsAudio;
+                // Set up event handlers BEFORE setting src
+                ttsAudio.oncanplaythrough = () => {
+                    ttsAudio.oncanplaythrough = null;
+                    ttsAudio.onerror = null;
 
-            ttsAudio.onended = () => {
-                isPlaying = false;
-                updatePlayButtonStates();
-            };
+                    isPlaying = true;
+                    currentAudio = ttsAudio;
 
-            try {
-                await ttsAudio.play();
-                console.log('[TTS] ✅ Playing audio');
-            } catch (err) {
-                console.error('[TTS] ❌ Playback failed:', err);
-                console.error('[TTS DEBUG] ttsAudio.error:', ttsAudio.error);
-                console.error('[TTS DEBUG] ttsAudio.src length:', ttsAudio.src.length);
-                isPlaying = false;
-            }
+                    ttsAudio.play()
+                        .then(() => {
+                            console.log('[TTS] ✅ Playing audio');
+                            resolve();
+                        })
+                        .catch(err => {
+                            console.error('[TTS] ❌ Playback failed:', err);
+                            isPlaying = false;
+                            reject(err);
+                        });
+                };
+
+                ttsAudio.onerror = (e) => {
+                    ttsAudio.oncanplaythrough = null;
+                    ttsAudio.onerror = null;
+                    console.error('[TTS] ❌ Audio load error:', ttsAudio.error?.message || 'Unknown error');
+                    isPlaying = false;
+                    reject(new Error('Audio failed to load'));
+                };
+
+                ttsAudio.onended = () => {
+                    isPlaying = false;
+                    updatePlayButtonStates();
+                };
+
+                ttsAudio.src = dataUrl;
+                ttsAudio.volume = 1.0;
+                ttsAudio.load(); // Explicitly load the audio
+            });
         }
 
         function stopTTSAudio() {
