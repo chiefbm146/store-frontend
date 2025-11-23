@@ -1933,10 +1933,21 @@
         </div>
     </footer>
 
-    <!-- Audio Permission UI (managed by audioPermissionUI.js module) -->
-    <div id="audioPermissionContainer">
-        <!-- Audio permission modal will be injected here by audioPermissionUI.js -->
+    <!-- Audio Permission Modal (for TTS unlock) -->
+    <div class="audio-permission-overlay" id="audioPermissionOverlay">
+        <div class="audio-permission-modal">
+            <div class="audio-permission-icon">🔊</div>
+            <h2 class="audio-permission-title">Enable Voice</h2>
+            <p class="audio-permission-text">Enable audio to hear AI responses read aloud. This creates a more engaging experience!</p>
+            <div class="audio-permission-buttons">
+                <button class="audio-permission-enable" id="audioEnableBtn">Enable Voice</button>
+                <button class="audio-permission-skip" id="audioSkipBtn">Maybe Later</button>
+            </div>
+        </div>
     </div>
+
+    <!-- Hidden Audio Element for TTS -->
+    <audio id="ttsAudio"></audio>
 
     <!-- Mobile Floating Chat Button -->
     <button class="mobile-chat-fab" id="mobileChatFab" title="Chat with AI">
@@ -1948,27 +1959,25 @@
 
     <!-- Mobile Fullscreen Chat Modal - Using mobile.html architecture -->
     <div class="mobile-chat-modal" id="mobileChatModal">
-        <div class="mobile-chat-header portal-header">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <h3 class="mobile-chat-title">🤖 AI Assistant</h3>
-            </div>
-            <div class="mobile-header-controls" style="display: flex; align-items: center; gap: 10px;">
-                <!-- Mobile Master Speaker Button - ADDED BY JS via soundManager -->
-                <div class="header-right-container" id="header-right-container"></div>
+        <div class="mobile-chat-header">
+            <h3 class="mobile-chat-title">🤖 AI Assistant</h3>
+            <div class="mobile-header-controls">
+                <button class="mobile-speaker-btn" id="mobileSpeakerBtn" title="Enable Voice">
+                    <i class="fa-solid fa-volume-xmark"></i>
+                </button>
                 <button class="mobile-chat-close" id="mobileChatClose">✕</button>
             </div>
         </div>
         <div class="mobile-chat-body">
             <div class="mobile-chat-messages" id="mobileChatMessages">
-                <!-- Chat messages will appear here -->
+                <div class="mobile-chat-message ai">
+                    Hi! 👋 I'm the AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. Ask me anything about our services, pricing, or how we can help your business!
+                </div>
             </div>
             <div class="mobile-typing-indicator" id="mobileTypingIndicator">
                 <span class="mobile-typing-dot"></span>
                 <span class="mobile-typing-dot"></span>
                 <span class="mobile-typing-dot"></span>
-            </div>
-            <div id="mobileModuleContainer">
-                <!-- Jarvis UI modules will appear here -->
             </div>
         </div>
         <div class="mobile-chat-input-area">
@@ -2117,92 +2126,443 @@
         }
     </script>
 
-    <!-- Mobile Chat Modal Handler (bridges mobile FAB to portal controller) -->
+    <!-- Mobile AI Chat Functions with TTS & Special Tags -->
     <script>
-        // ============================================
-        // MOBILE CHAT MODAL CONTROLLER
-        // Handles opening/closing the mobile chat modal
-        // Works alongside portal-controller.js for the main desktop chat
-        // ============================================
-        (function() {
-            'use strict';
+        // ========================================
+        // MOBILE CHAT SYSTEM (from demo-desk.html)
+        // Complete inline implementation for mobile
+        // ========================================
 
-            const mobileElements = {
-                fab: null,
-                overlay: null,
-                modal: null,
-                closeBtn: null,
-                aiBlurbCta: null
-            };
+        // BACKEND CONFIGURATION
+        const MOBILE_BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+        const MOBILE_CHAT_ENDPOINT = '/chat';
+        const MOBILE_TTS_ENDPOINT = '/tts';
 
-            function openMobileChat() {
-                if (mobileElements.modal && mobileElements.overlay) {
-                    mobileElements.modal.classList.add('active');
-                    mobileElements.overlay.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                    console.log('[Mobile Chat] Modal opened');
-                }
+        // Session management - Fresh session per page load
+        let MOBILE_CHAT_SESSION_ID = null;
+        let mobileDeviceFingerprint = null;
+
+        // TTS State (mobile specific)
+        let mobileTtsUnlocked = false;
+        let mobileIsPlaying = false;
+        let mobileCurrentAudio = null;
+        let mobileAudioCache = new Map();
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        function initMobileChatSession() {
+            MOBILE_CHAT_SESSION_ID = 'mobile_' + crypto.randomUUID();
+            console.log('[Mobile Chat] New session:', MOBILE_CHAT_SESSION_ID);
+        }
+
+        function initMobileDeviceFingerprint() {
+            const formFactor = 'mobile';
+            const screenWidth = window.screen.width;
+            const screenHeight = window.screen.height;
+            const pixelDensity = (window.devicePixelRatio || 1).toFixed(1);
+            mobileDeviceFingerprint = `${formFactor}_${screenWidth}x${screenHeight}_${pixelDensity}`;
+            console.log('[Mobile Chat] Device fingerprint:', mobileDeviceFingerprint);
+        }
+
+        // ========================================
+        // TTS SYSTEM (MOBILE)
+        // ========================================
+        function showMobileAudioModal() {
+            document.getElementById('audioPermissionOverlay').classList.add('active');
+        }
+
+        function hideMobileAudioModal() {
+            document.getElementById('audioPermissionOverlay').classList.remove('active');
+        }
+
+        async function attemptMobileTTSUnlock() {
+            if (mobileTtsUnlocked) return true;
+
+            return new Promise((resolve) => {
+                showMobileAudioModal();
+
+                document.getElementById('audioEnableBtn').onclick = async () => {
+                    try {
+                        // Play unlock sound to satisfy browser autoplay policy
+                        const testAudio = new Audio('/sounds/unlock.mp3?v=1.0');
+                        testAudio.volume = 0.5;
+                        await testAudio.play();
+
+                        mobileTtsUnlocked = true;
+                        console.log('[Mobile TTS] ✅ Audio unlocked');
+
+                        // Update speaker button
+                        updateMobileSpeakerButton();
+                        hideMobileAudioModal();
+                        resolve(true);
+                    } catch (error) {
+                        console.error('[Mobile TTS] ❌ Unlock failed:', error);
+                        hideMobileAudioModal();
+                        resolve(false);
+                    }
+                };
+
+                document.getElementById('audioSkipBtn').onclick = () => {
+                    hideMobileAudioModal();
+                    resolve(false);
+                };
+            });
+        }
+
+        function updateMobileSpeakerButton() {
+            const mobileBtn = document.getElementById('mobileSpeakerBtn');
+            if (mobileTtsUnlocked && mobileBtn) {
+                mobileBtn.classList.add('unlocked');
+                mobileBtn.querySelector('i').className = 'fa-solid fa-volume-high';
             }
 
-            function closeMobileChat() {
-                if (mobileElements.modal && mobileElements.overlay) {
-                    mobileElements.modal.classList.remove('active');
-                    mobileElements.overlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                    console.log('[Mobile Chat] Modal closed');
-
-                    // Stop any playing TTS when closing
-                    if (window.ttsManager && window.ttsManager.stop) {
-                        window.ttsManager.stop();
-                    }
+            // Update all play buttons
+            document.querySelectorAll('#mobileChatMessages .message-play-btn').forEach(btn => {
+                const icon = btn.querySelector('i');
+                if (mobileTtsUnlocked) {
+                    icon.className = 'fa-solid fa-play';
+                } else {
+                    icon.className = 'fa-solid fa-volume-xmark';
                 }
+            });
+        }
+
+        async function getMobileTTSAudio(text) {
+            const cacheKey = text.substring(0, 100);
+            if (mobileAudioCache.has(cacheKey)) {
+                return mobileAudioCache.get(cacheKey);
             }
 
-            function init() {
-                mobileElements.fab = document.getElementById('mobileChatFab');
-                mobileElements.overlay = document.getElementById('mobileChatOverlay');
-                mobileElements.modal = document.getElementById('mobileChatModal');
-                mobileElements.closeBtn = document.getElementById('mobileChatClose');
-                mobileElements.aiBlurbCta = document.getElementById('aiBlurbCta');
-
-                // Attach event listeners
-                if (mobileElements.fab) {
-                    mobileElements.fab.addEventListener('click', openMobileChat);
-                }
-
-                if (mobileElements.overlay) {
-                    mobileElements.overlay.addEventListener('click', closeMobileChat);
-                }
-
-                if (mobileElements.closeBtn) {
-                    mobileElements.closeBtn.addEventListener('click', closeMobileChat);
-                }
-
-                if (mobileElements.aiBlurbCta) {
-                    mobileElements.aiBlurbCta.addEventListener('click', openMobileChat);
-                }
-
-                // Escape key closes modal
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && mobileElements.modal?.classList.contains('active')) {
-                        closeMobileChat();
-                    }
+            try {
+                const response = await fetch(`${MOBILE_BACKEND_URL}${MOBILE_TTS_ENDPOINT}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text })
                 });
 
-                console.log('[Mobile Chat Controller] Initialized');
+                if (response.ok) {
+                    const data = await response.json();
+                    const audioData = data.audio || data.audio_base64;
+                    if (audioData) {
+                        mobileAudioCache.set(cacheKey, audioData);
+                        return audioData;
+                    }
+                }
+            } catch (error) {
+                console.error('[Mobile TTS] Failed to fetch audio:', error);
+            }
+            return null;
+        }
+
+        async function playMobileTTSAudio(base64Audio) {
+            const ttsAudio = document.getElementById('ttsAudio');
+            if (mobileCurrentAudio) {
+                mobileCurrentAudio.pause();
+                mobileCurrentAudio.currentTime = 0;
             }
 
-            // Expose globally for any other scripts that need it
-            window.openMobileChat = openMobileChat;
-            window.closeMobileChat = closeMobileChat;
-
-            // Initialize on DOM ready
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
-            } else {
-                init();
+            // Detect MIME type from base64 header
+            let mimeType = 'audio/mpeg';
+            if (base64Audio.startsWith('T2d')) {
+                mimeType = 'audio/ogg';
+            } else if (base64Audio.startsWith('Ukl')) {
+                mimeType = 'audio/wav';
+            } else if (base64Audio.startsWith('//u') || base64Audio.startsWith('SUQ')) {
+                mimeType = 'audio/mpeg';
             }
-        })();
+
+            ttsAudio.src = `data:${mimeType};base64,${base64Audio}`;
+            ttsAudio.volume = 1.0;
+            mobileIsPlaying = true;
+            mobileCurrentAudio = ttsAudio;
+
+            ttsAudio.onended = () => {
+                mobileIsPlaying = false;
+                updateMobilePlayButtonStates();
+            };
+
+            try {
+                await ttsAudio.play();
+                console.log('[Mobile TTS] ✅ Playing audio');
+            } catch (err) {
+                console.error('[Mobile TTS] ❌ Playback failed:', err);
+                mobileIsPlaying = false;
+            }
+        }
+
+        function stopMobileTTSAudio() {
+            const ttsAudio = document.getElementById('ttsAudio');
+            if (ttsAudio) {
+                ttsAudio.pause();
+                ttsAudio.currentTime = 0;
+            }
+            mobileIsPlaying = false;
+            updateMobilePlayButtonStates();
+        }
+
+        function updateMobilePlayButtonStates(playingText = null) {
+            document.querySelectorAll('#mobileChatMessages .message-play-btn').forEach(btn => {
+                const msgText = btn.dataset.text;
+                const icon = btn.querySelector('i');
+
+                if (!mobileTtsUnlocked) {
+                    icon.className = 'fa-solid fa-volume-xmark';
+                } else if (msgText === playingText && mobileIsPlaying) {
+                    icon.className = 'fa-solid fa-stop';
+                } else {
+                    icon.className = 'fa-solid fa-play';
+                }
+            });
+        }
+
+        async function handleMobilePlayClick(text, button) {
+            const icon = button.querySelector('i');
+
+            // If not unlocked, unlock first
+            if (!mobileTtsUnlocked) {
+                const unlocked = await attemptMobileTTSUnlock();
+                if (!unlocked) return;
+                updateMobilePlayButtonStates();
+                return;
+            }
+
+            // If playing this message, stop it
+            if (icon.classList.contains('fa-stop')) {
+                stopMobileTTSAudio();
+                return;
+            }
+
+            // Play the audio
+            icon.className = 'fa-solid fa-spinner fa-spin';
+            button.disabled = true;
+
+            try {
+                const audioData = await getMobileTTSAudio(text);
+                if (audioData) {
+                    await playMobileTTSAudio(audioData);
+                    updateMobilePlayButtonStates(text);
+                }
+            } catch (error) {
+                console.error('[Mobile TTS] Error:', error);
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // ========================================
+        // SPECIAL TAG HANDLING
+        // ========================================
+        function attachMobileSpecialTagListeners(container, inputElement, sendFunction) {
+            container.querySelectorAll('special').forEach(el => {
+                el.style.cursor = 'pointer';
+                el.onclick = (e) => {
+                    e.stopPropagation();
+                    const text = el.textContent;
+                    console.log('[Mobile Chat] Clicked special tag:', text);
+                    inputElement.value = text;
+                    sendFunction();
+                };
+            });
+        }
+
+        function createMobileAIMessage(text) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'message-wrapper ai';
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'mobile-chat-message ai';
+            msgDiv.innerHTML = text; // Use innerHTML to render special/price tags
+            wrapper.appendChild(msgDiv);
+
+            // Add play button
+            const playBtn = document.createElement('button');
+            playBtn.className = 'message-play-btn';
+            playBtn.dataset.text = text.replace(/<[^>]*>/g, ''); // Strip HTML for TTS
+            playBtn.innerHTML = mobileTtsUnlocked
+                ? '<i class="fa-solid fa-play"></i>'
+                : '<i class="fa-solid fa-volume-xmark"></i>';
+            playBtn.onclick = () => handleMobilePlayClick(playBtn.dataset.text, playBtn);
+            wrapper.appendChild(playBtn);
+
+            return wrapper;
+        }
+
+        function createMobileUserMessage(text) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'message-wrapper user';
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'mobile-chat-message user';
+            msgDiv.textContent = text;
+            wrapper.appendChild(msgDiv);
+
+            return wrapper;
+        }
+
+        // ========================================
+        // MOBILE CHAT MODAL FUNCTIONS
+        // ========================================
+        function openMobileChat() {
+            document.getElementById('mobileChatModal').classList.add('active');
+            document.getElementById('mobileChatOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            console.log('[Mobile Chat] Modal opened');
+        }
+
+        function closeMobileChat() {
+            stopMobileTTSAudio();
+            document.getElementById('mobileChatModal').classList.remove('active');
+            document.getElementById('mobileChatOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+            console.log('[Mobile Chat] Modal closed');
+        }
+
+        async function sendMobileMessage() {
+            const input = document.getElementById('mobileChatInput');
+            const messagesDiv = document.getElementById('mobileChatMessages');
+            const typingIndicator = document.getElementById('mobileTypingIndicator');
+            const userText = input.value.trim();
+
+            if (!userText) return;
+
+            // Stop any playing TTS
+            stopMobileTTSAudio();
+
+            input.disabled = true;
+            messagesDiv.innerHTML = '';
+
+            // Add user message
+            messagesDiv.appendChild(createMobileUserMessage(userText));
+            input.value = '';
+            messagesDiv.scrollTop = 0;
+
+            typingIndicator.classList.add('visible');
+
+            try {
+                const payload = {
+                    session_id: MOBILE_CHAT_SESSION_ID,
+                    prompt: userText,
+                    device_fingerprint: mobileDeviceFingerprint
+                };
+
+                console.log('[Mobile Chat] Sending:', userText.substring(0, 50) + '...');
+
+                const response = await fetch(MOBILE_BACKEND_URL + MOBILE_CHAT_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const data = await response.json();
+                const aiResponse = data.response || 'Sorry, I could not generate a response.';
+
+                console.log('[Mobile Chat] Response:', aiResponse.substring(0, 50) + '...');
+
+                typingIndicator.classList.remove('visible');
+
+                // Add AI message with special tags and TTS button
+                const aiMsgWrapper = createMobileAIMessage(aiResponse);
+                messagesDiv.appendChild(aiMsgWrapper);
+
+                // Attach special tag click handlers
+                attachMobileSpecialTagListeners(aiMsgWrapper, input, sendMobileMessage);
+
+                messagesDiv.scrollTop = 0;
+
+            } catch (error) {
+                console.error('[Mobile Chat] Error:', error);
+                typingIndicator.classList.remove('visible');
+
+                const errorWrapper = createMobileAIMessage('Sorry, I encountered an error. Please try again.');
+                messagesDiv.appendChild(errorWrapper);
+                messagesDiv.scrollTop = 0;
+            } finally {
+                input.disabled = false;
+                input.blur();
+                messagesDiv.focus();
+            }
+        }
+
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            initMobileChatSession();
+            initMobileDeviceFingerprint();
+
+            // Mobile FAB click
+            const fab = document.getElementById('mobileChatFab');
+            if (fab) {
+                fab.addEventListener('click', openMobileChat);
+            }
+
+            // Mobile overlay click
+            const overlay = document.getElementById('mobileChatOverlay');
+            if (overlay) {
+                overlay.addEventListener('click', closeMobileChat);
+            }
+
+            // Mobile close button
+            const closeBtn = document.getElementById('mobileChatClose');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeMobileChat);
+            }
+
+            // AI Blurb CTA (mobile section)
+            const aiBlurbCta = document.getElementById('aiBlurbCta');
+            if (aiBlurbCta) {
+                aiBlurbCta.addEventListener('click', openMobileChat);
+            }
+
+            // Mobile chat input
+            const mobileInput = document.getElementById('mobileChatInput');
+            if (mobileInput) {
+                mobileInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !mobileInput.disabled) {
+                        sendMobileMessage();
+                    }
+                });
+            }
+
+            // Mobile send button
+            const mobileSendBtn = document.getElementById('mobileSendButton');
+            if (mobileSendBtn) {
+                mobileSendBtn.addEventListener('click', sendMobileMessage);
+            }
+
+            // Mobile speaker button handler
+            const mobileSpeakerBtn = document.getElementById('mobileSpeakerBtn');
+            if (mobileSpeakerBtn) {
+                mobileSpeakerBtn.addEventListener('click', async () => {
+                    if (!mobileTtsUnlocked) {
+                        await attemptMobileTTSUnlock();
+                    }
+                });
+            }
+
+            // Close modals with Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('mobileChatModal');
+                    if (modal && modal.classList.contains('active')) {
+                        closeMobileChat();
+                    }
+                    hideMobileAudioModal();
+                }
+            });
+
+            console.log('[Mobile Chat] Initialized with TTS & Special Tags');
+        });
+
+        // Expose globally
+        window.openMobileChat = openMobileChat;
+        window.closeMobileChat = closeMobileChat;
     </script>
 </body>
 </html>
