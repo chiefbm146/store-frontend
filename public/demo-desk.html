@@ -359,9 +359,9 @@
 
                 document.getElementById('audioEnableBtn').onclick = async () => {
                     try {
-                        // Play silent audio to unlock
-                        const testAudio = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7v////////////////////////////////');
-                        testAudio.volume = 0.01;
+                        // Play unlock sound to satisfy browser autoplay policy
+                        const testAudio = new Audio('/sounds/unlock.mp3?v=1.0');
+                        testAudio.volume = 0.5;
                         await testAudio.play();
 
                         ttsUnlocked = true;
@@ -581,6 +581,7 @@
         }
 
         function closeAIChat() {
+            stopTTSAudio();
             document.getElementById('aiChatModal').classList.remove('active');
             document.getElementById('aiChatOverlay').classList.remove('active');
         }
@@ -669,6 +670,7 @@
         }
 
         function closeMobileChat() {
+            stopTTSAudio();
             document.getElementById('mobileChatModal').classList.remove('active');
             document.getElementById('mobileChatOverlay').classList.remove('active');
             document.body.style.overflow = '';
