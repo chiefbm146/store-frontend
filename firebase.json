@@ -70,6 +70,14 @@
       {
         "source": "/checkout/**",
         "destination": "/checkout.html"
+      },
+      {
+        "source": "/portal",
+        "destination": "/client-portal.html"
+      },
+      {
+        "source": "/portal/**",
+        "destination": "/client-portal.html"
       }
     ],
     "headers": [
