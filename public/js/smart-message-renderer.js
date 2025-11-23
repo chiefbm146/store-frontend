@@ -253,11 +253,9 @@ export class SmartMessageRenderer {
             tellMoreBtn.style.transform = 'translateY(0)';
         });
 
-        // 2. TTS Play button - with FB audio unlock system
-        const ttsButtonContainer = document.createElement('div');
-        ttsButtonContainer.className = 'message-play-button-container';
+        // 2. TTS Play button - positioned at bottom-right of message bubble
         const ttsButton = document.createElement('button');
-        ttsButton.className = 'message-play-button';
+        ttsButton.className = 'message-play-button tts-glow-pulse';
 
         // Use encodeURIComponent before btoa for UTF-8 compatibility
         const uniqueId = btoa(encodeURIComponent(aiText.substring(0, 50))).replace(/=/g, '');
@@ -268,8 +266,6 @@ export class SmartMessageRenderer {
         if (window.ttsManager && window.ttsManager.ttsUnlockedForSession) {
             ttsButton.title = 'Play';
             ttsButton.innerHTML = `<i class="fas fa-play"></i>`;
-            // Add small glow animation for unlocked buttons (not first unlock)
-            ttsButton.classList.add('glow-pulse-small');
         } else {
             ttsButton.title = 'Click to unlock TTS';
             ttsButton.innerHTML = `<i class="fas fa-volume-mute"></i>`;
@@ -281,8 +277,10 @@ export class SmartMessageRenderer {
                 window.handleMessagePlayButtonClick(aiText, ttsButton);
             }
         });
-        ttsButtonContainer.appendChild(ttsButton);
-        buttonDiv.appendChild(ttsButtonContainer);
+
+        // Position TTS button at bottom-right of the container (not in buttonDiv)
+        container.style.position = 'relative';
+        container.appendChild(ttsButton);
 
         tellMoreBtn.addEventListener('click', () => {
             const userInput = document.getElementById('userInput');

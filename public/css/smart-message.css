@@ -5,6 +5,66 @@
     flex-direction: column;
     gap: 20px;
     padding: 0;
+    position: relative;
+}
+
+/* TTS Play Button - Bottom right of message bubble */
+.smart-message-container .message-play-button {
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #87CEEB 0%, #5BB5E0 50%, #4DA6D9 100%);
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(91, 181, 224, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    z-index: 10;
+}
+
+.smart-message-container .message-play-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(91, 181, 224, 0.6);
+}
+
+.smart-message-container .message-play-button:active {
+    transform: scale(0.95);
+}
+
+/* Glowing pulse animation - inviting game-like glow */
+@keyframes tts-glow-pulse {
+    0%, 100% {
+        box-shadow:
+            0 4px 15px rgba(91, 181, 224, 0.4),
+            0 0 20px rgba(135, 206, 235, 0.3),
+            0 0 35px rgba(135, 206, 235, 0.2);
+    }
+    50% {
+        box-shadow:
+            0 4px 20px rgba(91, 181, 224, 0.6),
+            0 0 30px rgba(135, 206, 235, 0.5),
+            0 0 50px rgba(135, 206, 235, 0.3),
+            0 0 70px rgba(135, 206, 235, 0.15);
+    }
+}
+
+.smart-message-container .message-play-button.tts-glow-pulse {
+    animation: tts-glow-pulse 2s ease-in-out infinite;
+}
+
+.smart-message-container .message-play-button.tts-glow-pulse:hover {
+    animation: none;
+    box-shadow:
+        0 6px 25px rgba(91, 181, 224, 0.7),
+        0 0 40px rgba(135, 206, 235, 0.5),
+        0 0 60px rgba(135, 206, 235, 0.3);
 }
 
 /* Plain text message */
