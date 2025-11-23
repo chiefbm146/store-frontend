@@ -17,7 +17,7 @@ import hamburgerMenu from './hamburger-menu.js';
 import assetPreloader from './asset-preloader.js';
 import { settings, brand, getPreloadImages } from './config/index.js';
 import WaterBackground from './water.js';
-import TextAnimator from './text_animator.js';
+// TextAnimator import removed - animation disabled for testing
 
 const UI = {}; // Cache for DOM elements
 let welcomeMessageRendered = false; // Guard to ensure welcome message is only created once
@@ -1024,38 +1024,14 @@ async function createMessageElement(text, sender, isWelcome = false) {
         // Handle new object return format
         const smartContent = result.container || result;
 
-        // === NEW: TYPING ANIMATION FOR AI MESSAGE TEXT ===
-        // Extract the message text container
+        // Display AI message immediately (animation removed for testing)
+        el.appendChild(smartContent);
+
+        // Re-attach event listeners to <special> tags
         const messageTextContainer = smartContent.querySelector('.smart-message-text');
-
-        if (messageTextContainer) {
-            // Save the HTML content that needs to be animated
-            const originalTextHTML = messageTextContainer.innerHTML;
-            // Clear it for animation to start fresh
-            messageTextContainer.innerHTML = '';
-
-            // Append the smart content structure IMMEDIATELY (bubble appears now)
-            el.appendChild(smartContent);
-
-            // START the animation in the background WITHOUT awaiting
-            // This lets the bubble appear instantly while text types inside
-            const animationSpeed = isWelcome ? 40 : 20; // Slower for welcome, faster for regular
-            TextAnimator.animateTyping(messageTextContainer, originalTextHTML, {
-                speed: animationSpeed,
-                onComplete: () => {
-                    // Re-attach event listeners to <special> tags after animation
-                    if (smartMessageRenderer.reattachSmartMessageEventListeners) {
-                        smartMessageRenderer.reattachSmartMessageEventListeners(messageTextContainer);
-                    }
-                    console.log('✓ Text animation complete, event listeners reattached');
-                }
-            }).catch(err => console.error('Animation error:', err));
-        } else {
-            // Fallback if .smart-message-text is not found (no animation)
-            el.appendChild(smartContent);
-            console.log('⚠ .smart-message-text container not found, skipping animation');
+        if (messageTextContainer && smartMessageRenderer.reattachSmartMessageEventListeners) {
+            smartMessageRenderer.reattachSmartMessageEventListeners(messageTextContainer);
         }
-        // === END TYPING ANIMATION ===
 
         // Store pending image boxes on the element so render() can add them at the right level
         if (result.imageBoxes) {

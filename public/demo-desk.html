@@ -283,119 +283,6 @@
         let deviceFingerprint = null;
 
         // ========================================
-        // TEXT ANIMATOR - Character-by-character typing effect
-        // ========================================
-        class TextAnimator {
-            static animateTyping(targetElement, text, options = {}) {
-                const { speed = 20, onComplete } = options;
-
-                return new Promise(resolve => {
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = text;
-
-                    targetElement.innerHTML = '';
-
-                    // Clone structure without text content
-                    const clonedStructure = this._cloneStructureEmpty(tempDiv);
-                    targetElement.appendChild(clonedStructure);
-
-                    // Get all text nodes to animate
-                    const sourceTextNodes = this._getAllTextNodes(tempDiv);
-                    const targetTextNodes = this._getAllTextNodes(targetElement);
-
-                    if (sourceTextNodes.length === 0) {
-                        targetElement.innerHTML = text;
-                        if (onComplete) onComplete();
-                        resolve();
-                        return;
-                    }
-
-                    // Calculate total characters
-                    let totalChars = 0;
-                    sourceTextNodes.forEach(node => totalChars += node.textContent.length);
-
-                    let currentNodeIndex = 0;
-                    let currentCharIndex = 0;
-                    let charsTypedSoFar = 0;
-
-                    const typeNextCharacter = () => {
-                        if (currentNodeIndex >= sourceTextNodes.length) {
-                            if (onComplete) onComplete();
-                            resolve();
-                            return;
-                        }
-
-                        const sourceNode = sourceTextNodes[currentNodeIndex];
-                        const targetNode = targetTextNodes[currentNodeIndex];
-
-                        // Safety check - if targetNode doesn't exist, skip to next or finish
-                        if (!targetNode) {
-                            currentNodeIndex++;
-                            if (currentNodeIndex < sourceTextNodes.length) {
-                                currentCharIndex = 0;
-                                typeNextCharacter();
-                            } else {
-                                if (onComplete) onComplete();
-                                resolve();
-                            }
-                            return;
-                        }
-
-                        const fullText = sourceNode.textContent;
-
-                        if (currentCharIndex < fullText.length) {
-                            targetNode.textContent += fullText[currentCharIndex];
-                            currentCharIndex++;
-                            charsTypedSoFar++;
-
-                            // Accelerate speed near end (starts at full speed, ends at 10%)
-                            const progress = charsTypedSoFar / totalChars;
-                            const speedMultiplier = 1.0 - (progress * 0.9);
-                            const currentSpeed = speed * speedMultiplier;
-
-                            setTimeout(typeNextCharacter, currentSpeed);
-                        } else {
-                            currentNodeIndex++;
-                            currentCharIndex = 0;
-                            typeNextCharacter();
-                        }
-                    };
-
-                    typeNextCharacter();
-                });
-            }
-
-            static _cloneStructureEmpty(sourceNode) {
-                if (sourceNode.nodeType === Node.TEXT_NODE) {
-                    return document.createTextNode('');
-                }
-                if (sourceNode.nodeType === Node.ELEMENT_NODE) {
-                    const clonedElement = document.createElement(sourceNode.nodeName);
-                    for (const attr of sourceNode.attributes) {
-                        clonedElement.setAttribute(attr.name, attr.value);
-                    }
-                    for (const child of sourceNode.childNodes) {
-                        clonedElement.appendChild(this._cloneStructureEmpty(child));
-                    }
-                    return clonedElement;
-                }
-                return document.createTextNode('');
-            }
-
-            static _getAllTextNodes(element) {
-                const textNodes = [];
-                const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
-                let node;
-                while (node = walker.nextNode()) {
-                    if (node.textContent.trim().length > 0 || node.textContent.length > 0) {
-                        textNodes.push(node);
-                    }
-                }
-                return textNodes;
-            }
-        }
-
-        // ========================================
         // INITIALIZATION
         // ========================================
         function initializeChatSession() {
@@ -490,12 +377,11 @@
                 // Remove typing indicator
                 typingDiv.remove();
 
-                // Add AI message with typing animation
+                // Add AI message
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message ai-message';
+                aiMsg.textContent = aiResponse;
                 messagesDiv.appendChild(aiMsg);
-
-                await TextAnimator.animateTyping(aiMsg, aiResponse, { speed: 15 });
                 messagesDiv.scrollTop = 0;
 
             } catch (error) {
@@ -579,12 +465,11 @@
                 // Hide typing indicator
                 typingIndicator.classList.remove('visible');
 
-                // Add AI message with typing animation
+                // Add AI message
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'mobile-chat-message ai';
+                aiMsg.textContent = aiResponse;
                 messagesDiv.appendChild(aiMsg);
-
-                await TextAnimator.animateTyping(aiMsg, aiResponse, { speed: 15 });
                 messagesDiv.scrollTop = 0;
 
             } catch (error) {

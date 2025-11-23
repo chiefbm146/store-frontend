@@ -803,112 +803,6 @@
         }
 
         // ========================================
-        // TYPING ANIMATION (Text Animator)
-        // ========================================
-        class TextAnimator {
-            static animateTyping(targetElement, text, options = {}) {
-                const { speed = 20, onComplete } = options;
-
-                return new Promise(resolve => {
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = text;
-
-                    targetElement.innerHTML = '';
-
-                    // Clone structure without text content
-                    const clonedStructure = this._cloneStructureEmpty(tempDiv);
-                    targetElement.appendChild(clonedStructure);
-
-                    // Get all text nodes to animate
-                    const sourceTextNodes = this._getAllTextNodes(tempDiv);
-                    const targetTextNodes = this._getAllTextNodes(targetElement);
-
-                    if (sourceTextNodes.length === 0) {
-                        targetElement.innerHTML = text;
-                        if (onComplete) onComplete();
-                        resolve();
-                        return;
-                    }
-
-                    // Calculate total characters
-                    let totalChars = 0;
-                    sourceTextNodes.forEach(node => totalChars += node.textContent.length);
-
-                    let currentNodeIndex = 0;
-                    let currentCharIndex = 0;
-                    let charsTypedSoFar = 0;
-
-                    const typeNextCharacter = () => {
-                        if (currentNodeIndex >= sourceTextNodes.length) {
-                            if (onComplete) onComplete();
-                            resolve();
-                            return;
-                        }
-
-                        const sourceNode = sourceTextNodes[currentNodeIndex];
-                        const targetNode = targetTextNodes[currentNodeIndex];
-                        const fullText = sourceNode.textContent;
-
-                        if (currentCharIndex < fullText.length) {
-                            targetNode.textContent += fullText[currentCharIndex];
-                            currentCharIndex++;
-                            charsTypedSoFar++;
-
-                            // Accelerate speed near end
-                            const progress = charsTypedSoFar / totalChars;
-                            const speedMultiplier = 1.0 - (progress * 0.9);
-                            const currentSpeed = speed * speedMultiplier;
-
-                            setTimeout(typeNextCharacter, currentSpeed);
-                        } else {
-                            currentNodeIndex++;
-                            currentCharIndex = 0;
-                            typeNextCharacter();
-                        }
-                    };
-
-                    typeNextCharacter();
-                });
-            }
-
-            static _cloneStructureEmpty(sourceNode) {
-                if (sourceNode.nodeType === Node.TEXT_NODE) {
-                    return document.createTextNode('');
-                }
-
-                if (sourceNode.nodeType === Node.ELEMENT_NODE) {
-                    const clonedElement = document.createElement(sourceNode.nodeName);
-                    for (const attr of sourceNode.attributes) {
-                        clonedElement.setAttribute(attr.name, attr.value);
-                    }
-                    for (const child of sourceNode.childNodes) {
-                        clonedElement.appendChild(this._cloneStructureEmpty(child));
-                    }
-                    return clonedElement;
-                }
-
-                return document.createTextNode('');
-            }
-
-            static _getAllTextNodes(element) {
-                const textNodes = [];
-                const walker = document.createTreeWalker(
-                    element,
-                    NodeFilter.SHOW_TEXT,
-                    null,
-                    false
-                );
-                let node;
-                while (node = walker.nextNode()) {
-                    if (node.textContent.trim().length > 0 || node.textContent.length > 0) {
-                        textNodes.push(node);
-                    }
-                }
-                return textNodes;
-            }
-        }
-
-        // ========================================
         // TTS SYSTEM
         // ========================================
         function showAudioPermissionModal() {
@@ -1176,14 +1070,10 @@
             if (isUser || !animate) {
                 textDiv.textContent = text;
             } else {
-                // Animate AI message with typing effect
-                await TextAnimator.animateTyping(textDiv, text, {
-                    speed: 20,
-                    onComplete: () => {
-                        reattachSpecialTagListeners(textDiv);
-                        updatePlayButtonStates();
-                    }
-                });
+                // Display AI message immediately (animation removed)
+                textDiv.innerHTML = text;
+                reattachSpecialTagListeners(textDiv);
+                updatePlayButtonStates();
             }
 
             scrollToTop();
