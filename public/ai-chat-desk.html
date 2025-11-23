@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <script src="./js/clean-url.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chat - Premium Goods Co.</title>
+    <title>AI Chat - AARIE.CA</title>
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="AI Chat Assistant">
@@ -12,8 +12,610 @@
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🤖</text></svg>">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="./css/ai-chat.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* === BASE STYLES === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #6366f1;
+            --color-secondary: #8b5cf6;
+            --color-accent: #10B981;
+            --color-text: #1a1a1a;
+            --color-text-secondary: #666;
+            --color-background: #F8F9FA;
+            --color-surface: #FFFFFF;
+            --color-border: #E0E0E0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: var(--color-text);
+            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+            line-height: 1.6;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* === CHAT CONTAINER === */
+        .chat-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--color-surface);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-arrow {
+            color: #FFFFFF;
+            text-decoration: none;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--color-accent) 0%, #059669 100%);
+            border: 2px solid #047857;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .back-arrow:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateX(-3px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        }
+
+        .chat-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin: 0;
+        }
+
+        .chat-subtitle {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 5px;
+        }
+
+        /* === HEADER RIGHT - MASTER SPEAKER BUTTON === */
+        .chat-header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .master-speaker-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: #FFFFFF;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .master-speaker-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .master-speaker-button.unlocked {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+
+        /* === MESSAGES AREA === */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px 40px;
+            background: var(--color-background);
+            min-height: 0;
+        }
+
+        .messages {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            padding: 18px 24px;
+            border-radius: 20px;
+            max-width: 75%;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            animation: messageSlide 0.3s ease-out;
+            position: relative;
+        }
+
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ai-message {
+            background: var(--color-surface);
+            align-self: flex-start;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--color-border);
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: #FFFFFF;
+            align-self: flex-end;
+            box-shadow: 0 2px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        /* === MESSAGE CONTENT WITH TTS BUTTON === */
+        .message-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 75%;
+        }
+
+        .message-wrapper.user {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+
+        .message-wrapper.ai {
+            align-self: flex-start;
+            align-items: flex-start;
+        }
+
+        .message-text {
+            flex: 1;
+        }
+
+        .message-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        /* === TTS PLAY BUTTON === */
+        .message-play-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            border: none;
+            color: #FFFFFF;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .message-play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.5);
+        }
+
+        .message-play-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* === GLOW ANIMATIONS FOR TTS UNLOCK === */
+        @keyframes glow-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.9); }
+            50% { transform: scale(1.4); box-shadow: 0 0 30px 15px rgba(99, 102, 241, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        @keyframes glow-pulse-small {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(99, 102, 241, 0.4); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        .message-play-button.glow-pulse {
+            animation: glow-pulse 3.5s ease-out forwards;
+        }
+
+        .message-play-button.glow-pulse-small {
+            animation: glow-pulse-small 1.5s ease-out forwards;
+        }
+
+        /* === SPECIAL TAG STYLING === */
+        .ai-message special {
+            font-weight: 700;
+            color: var(--color-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        .ai-message special:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+        }
+
+        .ai-message price {
+            font-weight: 700;
+            color: #c82333;
+        }
+
+        /* === TYPING INDICATOR === */
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 24px;
+            background: var(--color-surface);
+            border-radius: 20px;
+            align-self: flex-start;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--color-border);
+            max-width: 75%;
+        }
+
+        .typing-indicator.visible {
+            display: flex;
+        }
+
+        .typing-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            animation: bounce 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-12px); }
+        }
+
+        .typing-text {
+            color: var(--color-text-secondary);
+            font-style: italic;
+            margin-left: 5px;
+        }
+
+        /* === INPUT AREA === */
+        .input-area {
+            display: flex;
+            gap: 15px;
+            padding: 25px 40px;
+            background: var(--color-surface);
+            border-top: 2px solid var(--color-border);
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            gap: 15px;
+            width: 100%;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 16px 24px;
+            border: 2px solid var(--color-border);
+            border-radius: 30px;
+            font-size: 1.05rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #userInput:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        #sendButton {
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        #sendButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        #sendButton:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* === WELCOME MESSAGE === */
+        .welcome-message {
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .welcome-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 15px;
+        }
+
+        .welcome-description {
+            font-size: 1.2rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .welcome-suggestions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .suggestion-button {
+            padding: 15px 20px;
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            color: var(--color-text);
+        }
+
+        .suggestion-button:hover {
+            border-color: var(--color-primary);
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
+        }
+
+        /* === AUDIO PERMISSION MODAL === */
+        .audio-permission-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-permission-overlay.active {
+            display: flex;
+        }
+
+        .audio-permission-modal {
+            background: var(--color-surface);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .audio-permission-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .audio-permission-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--color-text);
+        }
+
+        .audio-permission-text {
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .audio-permission-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .audio-permission-enable {
+            padding: 14px 35px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .audio-permission-enable:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .audio-permission-skip {
+            padding: 14px 35px;
+            background: transparent;
+            color: var(--color-text-secondary);
+            border: 2px solid var(--color-border);
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .audio-permission-skip:hover {
+            background: var(--color-background);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .chat-header {
+                padding: 15px 20px;
+            }
+
+            .chat-title {
+                font-size: 1.4rem;
+            }
+
+            .chat-subtitle {
+                display: none;
+            }
+
+            .messages-container {
+                padding: 20px 15px;
+            }
+
+            .message {
+                max-width: 85%;
+                padding: 14px 18px;
+                font-size: 1rem;
+            }
+
+            .message-wrapper {
+                max-width: 85%;
+            }
+
+            .input-area {
+                padding: 15px 20px;
+            }
+
+            #userInput {
+                padding: 14px 20px;
+                font-size: 1rem;
+            }
+
+            #sendButton {
+                padding: 14px 28px;
+                font-size: 1rem;
+            }
+
+            .welcome-icon {
+                font-size: 4rem;
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+            }
+
+            .welcome-description {
+                font-size: 1rem;
+            }
+
+            .welcome-suggestions {
+                grid-template-columns: 1fr;
+            }
+
+            .audio-permission-modal {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+
+            .audio-permission-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* === SCROLLBAR === */
+        .messages-container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: var(--color-background);
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: #D0D0D0;
+            border-radius: 10px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb:hover {
+            background: #B0B0B0;
+        }
+
+        /* === HIDDEN AUDIO === */
+        #ttsAudio {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="chat-container">
@@ -27,8 +629,13 @@
                 </a>
                 <div>
                     <h1 class="chat-title">🤖 AI Chat Assistant</h1>
-                    <p class="chat-subtitle">Ask me anything about our store!</p>
+                    <p class="chat-subtitle">Ask me anything about AARIE.CA!</p>
                 </div>
+            </div>
+            <div class="chat-header-right">
+                <button class="master-speaker-button" id="masterSpeakerButton" title="Enable Voice">
+                    <i class="fas fa-volume-mute" id="masterSpeakerIcon"></i>
+                </button>
             </div>
         </div>
 
@@ -37,19 +644,19 @@
             <div id="welcomeMessage" class="welcome-message">
                 <div class="welcome-icon">🤖</div>
                 <h2 class="welcome-title">Hi! I'm Your AI Assistant</h2>
-                <p class="welcome-description">I'm here to help you with any questions about our products, services, or store. What would you like to know?</p>
+                <p class="welcome-description">I'm here to help you learn about AARIE.CA's 7-Day Launchpad. Ask me about our services, pricing, or how we can help your business!</p>
                 <div class="welcome-suggestions">
-                    <button class="suggestion-button" onclick="sendSuggestion('Tell me about your products')">
-                        Tell me about your products
+                    <button class="suggestion-button" onclick="sendSuggestion('What is the 7-Day Launchpad?')">
+                        What is the 7-Day Launchpad?
                     </button>
-                    <button class="suggestion-button" onclick="sendSuggestion('What services do you offer?')">
-                        What services do you offer?
+                    <button class="suggestion-button" onclick="sendSuggestion('How much does it cost?')">
+                        How much does it cost?
                     </button>
-                    <button class="suggestion-button" onclick="sendSuggestion('How do I place an order?')">
-                        How do I place an order?
+                    <button class="suggestion-button" onclick="sendSuggestion('What do I get with my website?')">
+                        What do I get with my website?
                     </button>
-                    <button class="suggestion-button" onclick="sendSuggestion('What are your hours?')">
-                        What are your hours?
+                    <button class="suggestion-button" onclick="sendSuggestion('How do I get started?')">
+                        How do I get started?
                     </button>
                 </div>
             </div>
@@ -74,53 +681,424 @@
                     autocomplete="off"
                     maxlength="4000"
                 />
-                <button id="sendButton" onclick="sendMessage()">Send</button>
+                <button id="sendButton">Send</button>
             </div>
         </div>
     </div>
 
-    <!-- Config System -->
+    <!-- Audio Permission Modal -->
+    <div class="audio-permission-overlay" id="audioPermissionOverlay">
+        <div class="audio-permission-modal">
+            <div class="audio-permission-icon">🔊</div>
+            <h2 class="audio-permission-title">Unlock the Voice</h2>
+            <p class="audio-permission-text">Enable audio to hear AI responses read aloud. This creates a more engaging experience!</p>
+            <div class="audio-permission-buttons">
+                <button class="audio-permission-enable" id="audioEnableButton">Enable Voice</button>
+                <button class="audio-permission-skip" id="audioSkipButton">Maybe Later</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Audio Element for TTS -->
+    <audio id="ttsAudio"></audio>
+
+    <!-- Chat System with TTS, Typing Animation, Device Fingerprinting -->
     <script type="module">
+        // ========================================
+        // IMPORTS
+        // ========================================
         import { injectTheme } from './js/theme-injector.js';
 
         // Inject theme
         injectTheme();
-        console.log('[AI Chat] Theme injected');
-    </script>
 
-    <!-- Chat Functionality -->
-    <script>
         // ========================================
         // CONFIGURATION
         // ========================================
         const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
         const CHAT_ENDPOINT = '/chat';
+        const TTS_ENDPOINT = '/tts';
+        const SIGN_ENDPOINT = '/sign-fingerprint';
 
-        // Session management
-        let SESSION_ID = null;
-        let REQUEST_COUNT = 0;
+        // ========================================
+        // STATE
+        // ========================================
+        let sessionId = null;
+        let deviceFingerprint = null;
+        let fingerprintSignatureCache = { signature: null, timestamp: null, expiresAt: 0 };
+        let ttsUnlockedForSession = false;
+        let ttsFirstUnlocked = false;
+        let isPlaying = false;
+        let currentAudio = null;
+        let messageAudioCache = new Map();
 
+        // ========================================
+        // DOM ELEMENTS
+        // ========================================
         const messagesDiv = document.getElementById('messages');
         const userInput = document.getElementById('userInput');
         const sendButton = document.getElementById('sendButton');
         const typingIndicator = document.getElementById('typingIndicator');
         const welcomeMessage = document.getElementById('welcomeMessage');
         const messagesContainer = document.getElementById('messagesContainer');
+        const masterSpeakerButton = document.getElementById('masterSpeakerButton');
+        const masterSpeakerIcon = document.getElementById('masterSpeakerIcon');
+        const audioPermissionOverlay = document.getElementById('audioPermissionOverlay');
+        const audioEnableButton = document.getElementById('audioEnableButton');
+        const audioSkipButton = document.getElementById('audioSkipButton');
+        const ttsAudio = document.getElementById('ttsAudio');
 
-        // Initialize session on page load
+        // ========================================
+        // INITIALIZATION
+        // ========================================
         function initializeSession() {
-            // Generate or retrieve session ID
-            SESSION_ID = sessionStorage.getItem('chat_session_id');
-            if (!SESSION_ID) {
-                SESSION_ID = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                sessionStorage.setItem('chat_session_id', SESSION_ID);
-                console.log('[AI Chat] New session created:', SESSION_ID);
-            } else {
-                console.log('[AI Chat] Resuming session:', SESSION_ID);
-            }
-            REQUEST_COUNT = parseInt(sessionStorage.getItem('chat_request_count') || '0');
+            // Always create fresh session on page load
+            sessionId = 'session_' + crypto.randomUUID();
+            sessionStorage.setItem('aarie_chat_session_id', sessionId);
+            console.log(`🚀 New chat session started: ${sessionId}`);
         }
 
+        function initializeDeviceFingerprint() {
+            // Create device signature
+            const formFactor = window.innerWidth < 768 ? 'mobile' : 'desktop';
+            const screenWidth = window.screen.width;
+            const screenHeight = window.screen.height;
+            const pixelDensity = (window.devicePixelRatio || 1).toFixed(1);
+
+            deviceFingerprint = `${formFactor}_${screenWidth}x${screenHeight}_${pixelDensity}`;
+            console.log(`📱 Device fingerprint: ${deviceFingerprint}`);
+        }
+
+        async function getFingerprintSignatureWithCache() {
+            const now = Date.now();
+
+            // Return cached signature if still valid (within 2-minute window)
+            if (fingerprintSignatureCache.signature && now < fingerprintSignatureCache.expiresAt) {
+                return {
+                    signature: fingerprintSignatureCache.signature,
+                    timestamp: fingerprintSignatureCache.timestamp
+                };
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}${SIGN_ENDPOINT}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ device_fingerprint: deviceFingerprint })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Cache for 2 minutes
+                    fingerprintSignatureCache.signature = data.signature;
+                    fingerprintSignatureCache.timestamp = data.timestamp;
+                    fingerprintSignatureCache.expiresAt = now + (2 * 60 * 1000);
+                    return { signature: data.signature, timestamp: data.timestamp };
+                }
+            } catch (error) {
+                console.warn('[Fingerprint] Signature fetch failed:', error);
+            }
+
+            return { signature: null, timestamp: null };
+        }
+
+        // ========================================
+        // TYPING ANIMATION (Text Animator)
+        // ========================================
+        class TextAnimator {
+            static animateTyping(targetElement, text, options = {}) {
+                const { speed = 20, onComplete } = options;
+
+                return new Promise(resolve => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = text;
+
+                    targetElement.innerHTML = '';
+
+                    // Clone structure without text content
+                    const clonedStructure = this._cloneStructureEmpty(tempDiv);
+                    targetElement.appendChild(clonedStructure);
+
+                    // Get all text nodes to animate
+                    const sourceTextNodes = this._getAllTextNodes(tempDiv);
+                    const targetTextNodes = this._getAllTextNodes(targetElement);
+
+                    if (sourceTextNodes.length === 0) {
+                        targetElement.innerHTML = text;
+                        if (onComplete) onComplete();
+                        resolve();
+                        return;
+                    }
+
+                    // Calculate total characters
+                    let totalChars = 0;
+                    sourceTextNodes.forEach(node => totalChars += node.textContent.length);
+
+                    let currentNodeIndex = 0;
+                    let currentCharIndex = 0;
+                    let charsTypedSoFar = 0;
+
+                    const typeNextCharacter = () => {
+                        if (currentNodeIndex >= sourceTextNodes.length) {
+                            if (onComplete) onComplete();
+                            resolve();
+                            return;
+                        }
+
+                        const sourceNode = sourceTextNodes[currentNodeIndex];
+                        const targetNode = targetTextNodes[currentNodeIndex];
+                        const fullText = sourceNode.textContent;
+
+                        if (currentCharIndex < fullText.length) {
+                            targetNode.textContent += fullText[currentCharIndex];
+                            currentCharIndex++;
+                            charsTypedSoFar++;
+
+                            // Accelerate speed near end
+                            const progress = charsTypedSoFar / totalChars;
+                            const speedMultiplier = 1.0 - (progress * 0.9);
+                            const currentSpeed = speed * speedMultiplier;
+
+                            setTimeout(typeNextCharacter, currentSpeed);
+                        } else {
+                            currentNodeIndex++;
+                            currentCharIndex = 0;
+                            typeNextCharacter();
+                        }
+                    };
+
+                    typeNextCharacter();
+                });
+            }
+
+            static _cloneStructureEmpty(sourceNode) {
+                if (sourceNode.nodeType === Node.TEXT_NODE) {
+                    return document.createTextNode('');
+                }
+
+                if (sourceNode.nodeType === Node.ELEMENT_NODE) {
+                    const clonedElement = document.createElement(sourceNode.nodeName);
+                    for (const attr of sourceNode.attributes) {
+                        clonedElement.setAttribute(attr.name, attr.value);
+                    }
+                    for (const child of sourceNode.childNodes) {
+                        clonedElement.appendChild(this._cloneStructureEmpty(child));
+                    }
+                    return clonedElement;
+                }
+
+                return document.createTextNode('');
+            }
+
+            static _getAllTextNodes(element) {
+                const textNodes = [];
+                const walker = document.createTreeWalker(
+                    element,
+                    NodeFilter.SHOW_TEXT,
+                    null,
+                    false
+                );
+                let node;
+                while (node = walker.nextNode()) {
+                    if (node.textContent.trim().length > 0 || node.textContent.length > 0) {
+                        textNodes.push(node);
+                    }
+                }
+                return textNodes;
+            }
+        }
+
+        // ========================================
+        // TTS SYSTEM
+        // ========================================
+        function showAudioPermissionModal() {
+            audioPermissionOverlay.classList.add('active');
+        }
+
+        function hideAudioPermissionModal() {
+            audioPermissionOverlay.classList.remove('active');
+        }
+
+        async function attemptTTSUnlock() {
+            if (ttsUnlockedForSession) return true;
+
+            return new Promise((resolve) => {
+                showAudioPermissionModal();
+
+                const handleEnable = async () => {
+                    try {
+                        // Play unlock sound to satisfy browser autoplay policy
+                        const testAudio = new Audio('/sounds/unlock.mp3?v=1.0');
+                        testAudio.volume = 0.5;
+                        await testAudio.play();
+
+                        console.log('✅ Audio unlocked successfully');
+                        ttsUnlockedForSession = true;
+                        ttsFirstUnlocked = true;
+
+                        // Update master speaker button
+                        masterSpeakerIcon.className = 'fas fa-volume-up';
+                        masterSpeakerButton.classList.add('unlocked');
+
+                        hideAudioPermissionModal();
+                        updatePlayButtonStates();
+                        resolve(true);
+                    } catch (error) {
+                        console.error('❌ Audio unlock failed:', error);
+                        hideAudioPermissionModal();
+                        resolve(false);
+                    }
+                };
+
+                const handleSkip = () => {
+                    hideAudioPermissionModal();
+                    resolve(false);
+                };
+
+                // Remove old listeners and add new ones
+                audioEnableButton.onclick = handleEnable;
+                audioSkipButton.onclick = handleSkip;
+            });
+        }
+
+        async function getTTSAudio(text) {
+            // Check cache first
+            const cacheKey = text.substring(0, 100);
+            if (messageAudioCache.has(cacheKey)) {
+                return messageAudioCache.get(cacheKey);
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}${TTS_ENDPOINT}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.audio_base64) {
+                        messageAudioCache.set(cacheKey, data.audio_base64);
+                        return data.audio_base64;
+                    }
+                }
+            } catch (error) {
+                console.error('[TTS] Failed to fetch audio:', error);
+            }
+            return null;
+        }
+
+        function playTTSAudio(base64Audio) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+
+            ttsAudio.src = `data:audio/mp3;base64,${base64Audio}`;
+            ttsAudio.volume = 1.0;
+            isPlaying = true;
+
+            ttsAudio.play().catch(err => {
+                console.error('[TTS] Playback failed:', err);
+                isPlaying = false;
+            });
+
+            currentAudio = ttsAudio;
+
+            ttsAudio.onended = () => {
+                isPlaying = false;
+                updatePlayButtonStates();
+            };
+        }
+
+        function stopTTSAudio() {
+            if (ttsAudio) {
+                ttsAudio.pause();
+                ttsAudio.currentTime = 0;
+            }
+            isPlaying = false;
+            updatePlayButtonStates();
+        }
+
+        // ========================================
+        // PLAY BUTTON HANDLING
+        // ========================================
+        function updatePlayButtonStates(currentPlayingText = null) {
+            document.querySelectorAll('.message-play-button').forEach(btn => {
+                const msgText = btn.dataset.messageText;
+                const icon = btn.querySelector('i');
+
+                // Remove animation classes
+                btn.classList.remove('glow-pulse', 'glow-pulse-small');
+
+                if (ttsUnlockedForSession) {
+                    if (msgText === currentPlayingText && isPlaying) {
+                        icon.className = 'fas fa-stop';
+                    } else {
+                        icon.className = 'fas fa-play';
+
+                        // Add glow animation
+                        if (ttsFirstUnlocked) {
+                            btn.classList.add('glow-pulse');
+                        } else {
+                            btn.classList.add('glow-pulse-small');
+                        }
+                    }
+                } else {
+                    icon.className = 'fas fa-volume-mute';
+                    btn.title = 'Click to unlock TTS';
+                }
+            });
+
+            // Reset first unlock flag after applying to all buttons
+            if (ttsFirstUnlocked) {
+                setTimeout(() => { ttsFirstUnlocked = false; }, 100);
+            }
+        }
+
+        async function handlePlayButtonClick(messageText, buttonElement) {
+            const icon = buttonElement.querySelector('i');
+            const isLocked = icon.classList.contains('fa-volume-mute');
+
+            // FIRST CLICK: If locked, unlock only - DON'T play yet
+            if (isLocked) {
+                console.log('[TTS] First click - attempting to unlock...');
+                const unlocked = await attemptTTSUnlock();
+                if (!unlocked) return;
+
+                updatePlayButtonStates();
+                return; // STOP HERE - user must click again to play
+            }
+
+            // SECOND CLICK: If showing stop, stop playback
+            if (icon.classList.contains('fa-stop')) {
+                stopTTSAudio();
+                return;
+            }
+
+            // SECOND CLICK: Play the audio
+            icon.className = 'fas fa-spinner fa-spin';
+            buttonElement.disabled = true;
+
+            try {
+                const audioBase64 = await getTTSAudio(messageText);
+                if (audioBase64) {
+                    playTTSAudio(audioBase64);
+                    updatePlayButtonStates(messageText);
+                } else {
+                    icon.className = 'fas fa-play';
+                }
+            } catch (error) {
+                console.error('[TTS] Error:', error);
+                icon.className = 'fas fa-play';
+            } finally {
+                buttonElement.disabled = false;
+            }
+        }
+
+        // ========================================
+        // MESSAGE HANDLING
+        // ========================================
         function scrollToTop() {
             messagesContainer.scrollTop = 0;
         }
@@ -131,17 +1109,6 @@
             }
         }
 
-        function addMessage(text, isUser) {
-            hideWelcome();
-
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message ' + (isUser ? 'user-message' : 'ai-message');
-            messageDiv.textContent = text;
-            messagesDiv.appendChild(messageDiv);
-
-            scrollToTop();
-        }
-
         function showTyping() {
             typingIndicator.classList.add('visible');
             scrollToTop();
@@ -149,6 +1116,77 @@
 
         function hideTyping() {
             typingIndicator.classList.remove('visible');
+        }
+
+        function createMessageElement(text, isUser, withTTS = true) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `message-wrapper ${isUser ? 'user' : 'ai'}`;
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'message-text';
+            messageDiv.appendChild(textDiv);
+
+            wrapper.appendChild(messageDiv);
+
+            // Add TTS button for AI messages
+            if (!isUser && withTTS) {
+                const controls = document.createElement('div');
+                controls.className = 'message-controls';
+
+                const playButton = document.createElement('button');
+                playButton.className = 'message-play-button';
+                playButton.dataset.messageText = text;
+                playButton.title = ttsUnlockedForSession ? 'Play' : 'Click to unlock TTS';
+                playButton.innerHTML = ttsUnlockedForSession
+                    ? '<i class="fas fa-play"></i>'
+                    : '<i class="fas fa-volume-mute"></i>';
+
+                playButton.onclick = () => handlePlayButtonClick(text, playButton);
+
+                controls.appendChild(playButton);
+                wrapper.appendChild(controls);
+            }
+
+            return { wrapper, textDiv, messageDiv };
+        }
+
+        function reattachSpecialTagListeners(container) {
+            container.querySelectorAll('special').forEach(element => {
+                element.style.cursor = 'pointer';
+                element.onclick = (e) => {
+                    e.stopPropagation();
+                    const clickedText = element.textContent;
+                    console.log(`🔵 Clicked special term: "${clickedText}"`);
+                    userInput.value = clickedText;
+                    userInput.focus();
+                    sendMessage();
+                };
+            });
+        }
+
+        async function addMessage(text, isUser, animate = true) {
+            hideWelcome();
+
+            const { wrapper, textDiv, messageDiv } = createMessageElement(text, isUser);
+            messagesDiv.appendChild(wrapper);
+
+            if (isUser || !animate) {
+                textDiv.textContent = text;
+            } else {
+                // Animate AI message with typing effect
+                await TextAnimator.animateTyping(textDiv, text, {
+                    speed: 20,
+                    onComplete: () => {
+                        reattachSpecialTagListeners(textDiv);
+                        updatePlayButtonStates();
+                    }
+                });
+            }
+
+            scrollToTop();
         }
 
         async function sendMessage() {
@@ -163,26 +1201,28 @@
             messagesDiv.innerHTML = '';
             hideWelcome();
 
-            // Add user message
-            addMessage(message, true);
+            // Add user message (no animation)
+            await addMessage(message, true, false);
             userInput.value = '';
 
             // Show typing indicator
             showTyping();
 
             try {
-                REQUEST_COUNT++;
-                sessionStorage.setItem('chat_request_count', REQUEST_COUNT.toString());
+                // Get fingerprint signature
+                const signatureData = await getFingerprintSignatureWithCache();
 
                 const payload = {
-                    session_id: SESSION_ID,
+                    session_id: sessionId,
                     prompt: message,
-                    device_fingerprint: 'store-frontend-' + navigator.userAgent.substring(0, 50)
+                    device_fingerprint: deviceFingerprint,
+                    fingerprint_signature: signatureData.signature,
+                    fingerprint_timestamp: signatureData.timestamp
                 };
 
-                console.log('[AI Chat] Sending request:', { ...payload, prompt: message.substring(0, 50) + '...' });
+                console.log('[Chat] Sending:', message.substring(0, 50) + '...');
 
-                const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
+                const response = await fetch(`${BACKEND_URL}${CHAT_ENDPOINT}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -191,10 +1231,11 @@
                     body: JSON.stringify(payload)
                 });
 
+                hideTyping();
+
                 if (!response.ok) {
-                    hideTyping();
                     const errorText = await response.text();
-                    console.error('[AI Chat] Backend error:', response.status, errorText);
+                    console.error('[Chat] Backend error:', response.status, errorText);
 
                     let errorMessage = 'Sorry, I encountered an error connecting to the server.';
                     if (response.status === 429) {
@@ -202,30 +1243,28 @@
                     } else if (response.status === 503) {
                         errorMessage = 'The service is temporarily unavailable. Please try again in a moment.';
                     }
-                    addMessage(errorMessage, false);
+                    await addMessage(errorMessage, false, true);
                     return;
                 }
 
                 const data = await response.json();
-                hideTyping();
-
-                // Extract AI response
                 const aiResponse = data.response || 'I received an empty response from the server.';
-                console.log('[AI Chat] Received response:', aiResponse.substring(0, 100) + '...');
+                console.log('[Chat] Received:', aiResponse.substring(0, 100) + '...');
 
-                addMessage(aiResponse, false);
+                // Add AI message with typing animation
+                await addMessage(aiResponse, false, true);
 
             } catch (error) {
                 hideTyping();
-                console.error('[AI Chat] Fetch error:', error);
+                console.error('[Chat] Fetch error:', error);
 
                 let errorMessage = 'Sorry, I could not connect to the server. ';
                 if (error instanceof TypeError) {
-                    errorMessage += 'Check if the backend is running and CORS is enabled.';
+                    errorMessage += 'Please check your internet connection.';
                 } else {
                     errorMessage += error.message;
                 }
-                addMessage(errorMessage, false);
+                await addMessage(errorMessage, false, true);
             } finally {
                 // Re-enable input
                 userInput.disabled = false;
@@ -234,11 +1273,15 @@
             }
         }
 
-        function sendSuggestion(text) {
+        // Make sendSuggestion available globally
+        window.sendSuggestion = function(text) {
             userInput.value = text;
             sendMessage();
-        }
+        };
 
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
         // Enter key to send
         userInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter' && !userInput.disabled) {
@@ -246,18 +1289,44 @@
             }
         });
 
-        // Escape to go back
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                window.location.href = '/demo-desk.html';
+        // Send button click
+        sendButton.addEventListener('click', sendMessage);
+
+        // Master speaker button
+        masterSpeakerButton.addEventListener('click', async () => {
+            if (!ttsUnlockedForSession) {
+                await attemptTTSUnlock();
+            } else {
+                // Toggle mute/unmute
+                if (masterSpeakerIcon.classList.contains('fa-volume-up')) {
+                    masterSpeakerIcon.className = 'fas fa-volume-mute';
+                    masterSpeakerButton.classList.remove('unlocked');
+                } else {
+                    masterSpeakerIcon.className = 'fas fa-volume-up';
+                    masterSpeakerButton.classList.add('unlocked');
+                }
             }
         });
 
-        // Initialize on page load
+        // Escape to go back
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (audioPermissionOverlay.classList.contains('active')) {
+                    hideAudioPermissionModal();
+                } else {
+                    window.location.href = '/demo-desk.html';
+                }
+            }
+        });
+
+        // ========================================
+        // INITIALIZE ON PAGE LOAD
+        // ========================================
         document.addEventListener('DOMContentLoaded', function() {
             initializeSession();
+            initializeDeviceFingerprint();
             userInput.focus();
-            console.log('[AI Chat] Page loaded and initialized');
+            console.log('[AI Chat] Page loaded with advanced features');
         });
     </script>
 </body>
