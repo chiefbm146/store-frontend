@@ -39,7 +39,7 @@ export const demoStore = {
                 id: 'deposit-1',
                 name: 'Basic Store Package',
                 description: 'Professional online store with product catalog, checkout, and AI chatbot included.',
-                price: '$299',
+                price: '$499',
                 emoji: '📦',
                 link: '/store-booking.html'
             },
@@ -47,7 +47,7 @@ export const demoStore = {
                 id: 'deposit-2',
                 name: 'Workshop Store Package',
                 description: 'Sell workshops and courses with booking, scheduling, and payment processing built-in.',
-                price: '$299',
+                price: '$499',
                 emoji: '🎁',
                 link: '/store-booking.html'
             },
@@ -55,7 +55,7 @@ export const demoStore = {
                 id: 'deposit-3',
                 name: 'Service Store Package',
                 description: 'Service business website with consultation booking and client management tools.',
-                price: '$299',
+                price: '$499',
                 emoji: '⭐',
                 link: '/store-booking.html'
             }
