@@ -856,18 +856,10 @@ async function render() {
         UI.userInput.focus();
     }
 
-    // ONLY render the schedule button if NO module is active
-    // Module states (Stripe, confirmation, etc) are self-contained
-    if (!hasActiveModule) {
-        // ✅ CORRECTED: Check smartMessageRenderer.bookingState (where the data actually is!)
-        // NOT conversationIntelligence (which is for backend context)
-        const isCurrentlyInBookingFlow = window.smartMessageRenderer?.bookingState?.workshop_id;
-        console.log(`[RENDER] 🔘 Button state - isCurrentlyInBookingFlow: ${isCurrentlyInBookingFlow}, bookingState:`,
-                    window.smartMessageRenderer?.bookingState);
-        smartMessageRenderer.renderScheduleButtonAboveInput(isCurrentlyInBookingFlow);
-    } else {
-        console.log(`[RENDER] SKIPPING renderScheduleButtonAboveInput because module is active: ${currentModule}`);
-    }
+    // Schedule Workshop button DISABLED - not needed for this site
+    // Remove any existing schedule button container
+    const existingScheduleBtn = document.getElementById('schedule-workshop-container');
+    if (existingScheduleBtn) existingScheduleBtn.remove();
 }
 
 function createMessagePlayButton(messageText) {

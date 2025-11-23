@@ -113,7 +113,27 @@ const ttsManager = {
             return;
         }
 
-        this.ttsPlayer.src = `data:audio/mp3;base64,${audioBase64}`;
+        // Convert base64 to Blob URL to bypass CSP data: URL restrictions
+        try {
+            const binaryString = atob(audioBase64);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            const blob = new Blob([bytes], { type: 'audio/mpeg' });
+            const blobUrl = URL.createObjectURL(blob);
+
+            // Revoke previous blob URL to prevent memory leak
+            if (this.ttsPlayer.src && this.ttsPlayer.src.startsWith('blob:')) {
+                URL.revokeObjectURL(this.ttsPlayer.src);
+            }
+
+            this.ttsPlayer.src = blobUrl;
+        } catch (e) {
+            console.error('[TTS Manager] Failed to create blob URL:', e);
+            return;
+        }
+
         this.ttsPlayer.currentTime = 0;
         this.ttsPlayer.play().catch(e => console.error("Playback error", e));
         this.isPlaying = true;
