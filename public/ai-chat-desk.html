@@ -160,6 +160,9 @@
             font-size: 1.05rem;
             animation: messageSlide 0.3s ease-out;
             position: relative;
+            width: fit-content;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         @keyframes messageSlide {
@@ -179,6 +182,9 @@
             color: #FFFFFF;
             align-self: flex-end;
             box-shadow: 0 2px 15px rgba(99, 102, 241, 0.3);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            min-width: fit-content;
         }
 
         /* === MESSAGE CONTENT WITH TTS BUTTON === */
@@ -871,9 +877,14 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    if (data.audio_base64) {
-                        messageAudioCache.set(cacheKey, data.audio_base64);
-                        return data.audio_base64;
+                    // Backend returns 'audio', not 'audio_base64'
+                    const audioData = data.audio || data.audio_base64;
+                    if (audioData) {
+                        console.log('[TTS] Received audio data, length:', audioData.length);
+                        messageAudioCache.set(cacheKey, audioData);
+                        return audioData;
+                    } else {
+                        console.error('[TTS] No audio field in response:', Object.keys(data));
                     }
                 }
             } catch (error) {
@@ -882,27 +893,60 @@
             return null;
         }
 
-        function playTTSAudio(base64Audio) {
+        async function playTTSAudio(base64Audio) {
             if (currentAudio) {
                 currentAudio.pause();
                 currentAudio.currentTime = 0;
             }
 
-            ttsAudio.src = `data:audio/mp3;base64,${base64Audio}`;
+            // Debug: log audio data info
+            console.log('[TTS] Audio base64 length:', base64Audio.length);
+            console.log('[TTS] Audio base64 preview:', base64Audio.substring(0, 50));
+
+            // Try to detect audio format from base64 header
+            // MP3 files start with "//u" or "SUQ" in base64
+            // WAV files start with "Ukl" in base64
+            // OGG files start with "T2d" in base64
+            let mimeType = 'audio/mp3';
+            if (base64Audio.startsWith('T2d')) {
+                mimeType = 'audio/ogg';
+            } else if (base64Audio.startsWith('Ukl')) {
+                mimeType = 'audio/wav';
+            } else if (base64Audio.startsWith('//u') || base64Audio.startsWith('SUQ')) {
+                mimeType = 'audio/mpeg';
+            }
+            console.log('[TTS] Detected MIME type:', mimeType);
+
+            ttsAudio.src = `data:${mimeType};base64,${base64Audio}`;
             ttsAudio.volume = 1.0;
             isPlaying = true;
-
-            ttsAudio.play().catch(err => {
-                console.error('[TTS] Playback failed:', err);
-                isPlaying = false;
-            });
-
             currentAudio = ttsAudio;
 
+            // Set up event handlers before playing
             ttsAudio.onended = () => {
+                console.log('[TTS] Audio playback ended');
                 isPlaying = false;
                 updatePlayButtonStates();
             };
+
+            ttsAudio.onerror = (e) => {
+                console.error('[TTS] Audio error event:', e);
+                console.error('[TTS] Audio error code:', ttsAudio.error?.code);
+                console.error('[TTS] Audio error message:', ttsAudio.error?.message);
+                isPlaying = false;
+                updatePlayButtonStates();
+            };
+
+            try {
+                await ttsAudio.play();
+                console.log('[TTS] ✅ Audio playback started successfully');
+            } catch (err) {
+                console.error('[TTS] ❌ Playback failed:', err);
+                console.error('[TTS] Error name:', err.name);
+                console.error('[TTS] Error message:', err.message);
+                isPlaying = false;
+                updatePlayButtonStates();
+            }
         }
 
         function stopTTSAudio() {
@@ -975,11 +1019,14 @@
             buttonElement.disabled = true;
 
             try {
+                console.log('[TTS] Fetching audio for:', messageText.substring(0, 50) + '...');
                 const audioBase64 = await getTTSAudio(messageText);
                 if (audioBase64) {
-                    playTTSAudio(audioBase64);
+                    console.log('[TTS] Got audio, attempting playback...');
+                    await playTTSAudio(audioBase64);
                     updatePlayButtonStates(messageText);
                 } else {
+                    console.error('[TTS] No audio data received from server');
                     icon.className = 'fas fa-play';
                 }
             } catch (error) {
@@ -1082,6 +1129,9 @@
         async function sendMessage() {
             const message = userInput.value.trim();
             if (!message) return;
+
+            // Stop any currently playing TTS audio
+            stopTTSAudio();
 
             // Disable input while sending
             userInput.disabled = true;
