@@ -7,18 +7,18 @@ export const desktopPage = {
     // Hero Section
     hero: {
         icon: '🏪',
-        title: 'Your Store Built in 48 Hours',
-        subtitle: 'AARIE.CA creates professional online stores with AI-powered chat - you don\'t have to lift a finger',
-        description: 'We build your custom store selling workshops, products, or services with intelligent chatbots that help your customers 24/7. Desktop and mobile optimized.',
+        title: 'Your Website, Live in 7 Days',
+        subtitle: 'AARIE.CA builds professional websites with AI-powered chat. See your first design mockup within 72 hours.',
+        description: 'We create custom websites for workshops, products, or services with intelligent chatbots that help your customers 24/7. Only 4 projects per month to ensure quality.',
         ctaPrimary: {
-            text: 'GET A STORE',
+            text: 'START YOUR PROJECT',
             link: '/demo-desk.html'
         },
         ctaSecondary: {
             text: 'MOON TIDE',
             link: 'https://moontidereconciliation.com'
         },
-        clientExploreText: 'Explore a Clients Site'
+        clientExploreText: 'Explore a Client\'s Site'
     },
 
     // Who Is This For Section
@@ -58,8 +58,8 @@ export const desktopPage = {
         },
         advantage: {
             icon: '⚡',
-            title: 'Start Making Money Right Away',
-            description: 'Your store goes live in 24-48 hours. While others spend months building websites, you\'ll already be accepting orders and growing your customer base.'
+            title: 'Start Making Money Fast',
+            description: 'See your first design mockup in 72 hours. Your complete website goes live in just 7-10 days. While others wait months, you\'ll already be accepting orders.'
         }
     },
 
@@ -100,22 +100,22 @@ export const desktopPage = {
 
     // About Section
     about: {
-        title: 'AARIE.CA Builds Your Store',
-        subtitle: 'Professional websites delivered in 24-48 hours',
+        title: 'The 7-Day Launchpad',
+        subtitle: 'From consultation to live website in just one week',
         content: [
-            'AARIE.CA builds professional online stores and custom websites for your business - you don\'t have to do anything. Whether you\'re selling workshops, physical products, or professional services, we handle everything - from design to product catalogs to checkout to customer support. Your store will be live in 24-48 hours.',
-            'Every store we build comes with a custom AI chatbot trained on your specific business. Your customers get instant answers about your offerings, pricing, and availability 24/7. No coding required, no technical expertise needed from you - we build it, you run your business.'
+            'AARIE.CA builds professional websites for your business - you don\'t have to do anything. Whether you\'re selling workshops, physical products, or professional services, we handle everything. Day 1: kickoff call. Day 3: see your design mockup. Day 7-10: your site goes live.',
+            'Every website we build includes a custom AI chatbot trained on your specific business. Your customers get instant answers about your offerings, pricing, and availability 24/7. No coding required, no technical expertise needed - we build it, you run your business.'
         ],
-        image: null, // Can add image path here
+        image: null,
         emoji: '🚀'
     },
 
     // Final CTA Section
     cta: {
         title: 'See What We\'ve Built',
-        description: 'Check out Moon Tide Reconciliation - a store we built for a client. See how your customers will shop workshops, products, and services with AI assistance.',
+        description: 'Check out Moon Tide Reconciliation - a website we built for a client. See how your customers will shop workshops, products, and services with AI assistance.',
         buttonPrimary: {
-            text: 'GET A STORE',
+            text: 'START YOUR PROJECT',
             link: '/demo-desk.html'
         },
         buttonSecondary: {
@@ -126,7 +126,7 @@ export const desktopPage = {
 
     // Footer
     footer: {
-        tagline: 'GET A STORE - We Build Your Business Online',
+        tagline: 'AARIE.CA - Your Website Live in 7 Days',
         links: [
             { text: 'GET A STORE', url: '/demo-desk.html' },
             { text: 'About', url: '/about-desk.html' },

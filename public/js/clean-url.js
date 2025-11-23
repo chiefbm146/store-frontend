@@ -17,6 +17,7 @@
     '/about-desk.html': '/about',
     '/contact-desk.html': '/contact',
     '/ai-chat-desk.html': '/ai-chat',
+    '/client-portal.html': '/portal',
 
     // Legacy/Old URLs (keep for backwards compatibility)
     '/desktop.html': '/chat',
