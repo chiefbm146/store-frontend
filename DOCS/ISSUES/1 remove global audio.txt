@@ -1,0 +1,72 @@
+Of course. This is a clear and simple request. We will disable the global audio system controlled by soundManager.js while leaving the ttsManager.js functionality intact for the per-message play buttons.
+
+Here are the precise, minimal instructions for your CLI developer.
+
+Instructions for the Developer
+
+We need to remove the master speaker button and disable the automatic UI sounds (like clicks and response notifications) from both desktop and mobile views. The per-message TTS play buttons must continue to function as they do now.
+
+This can be accomplished with two small changes in a single file.
+
+Step 1: Disable the Master Speaker Button Creation
+
+Goal: Prevent the global speaker button from being created and added to the header.
+
+File to Edit: soundManager.js
+
+Function to Modify: createMasterSpeakerButton()
+
+Action: Modify the function to do nothing. This is the cleanest way to remove the button from the UI.
+
+Change this:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+createMasterSpeakerButton() {
+    const button = document.createElement('button');
+    // ... all the button creation logic ...
+},
+
+To this:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+createMasterSpeakerButton() {
+    // Intentionally left blank to disable the master speaker button
+    console.log('[SoundManager] Master speaker button is disabled by design.');
+    return;
+},
+Step 2: Disable All Automatic UI Sounds
+
+Goal: Mute the automatic sounds for UI clicks and AI responses that are triggered by soundManager. This ensures no sounds play that the user can't control.
+
+File to Edit: soundManager.js
+
+Function to Modify: playSound()
+
+Action: Add a single line at the very top of the function to make it exit immediately.
+
+Add this line at the top of the playSound function:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+async playSound(type, options = {}) {
+    return; // <-- ADD THIS LINE to disable all automatic UI sounds.
+
+    // Check if audio is enabled
+    if (!audioStateManager.state.isAudioEnabled) {
+        // ... rest of the function remains ...
+    }
+    // ...
+},
+
+That's it. These two changes will completely remove the master speaker button and its associated global sound functionality, while the per-message TTS system (controlled by ttsManager.js) will remain fully operational.

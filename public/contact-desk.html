@@ -10,6 +10,9 @@
     <meta property="og:title" content="Contact Your Store">
     <meta property="og:description" content="Get in touch with our team">
 
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!-- CSS: Separated and using CSS variables -->
     <link rel="stylesheet" href="./css/contact.css">
 </head>
@@ -27,6 +30,11 @@
                 <button class="copy-button" onclick="copyToClipboard(this)">
                     📋 Copy Email
                 </button>
+                <div style="margin-top: 20px;">
+                    <a href="https://www.facebook.com/profile.php?id=61578712383717" target="_blank" rel="noopener" class="facebook-button" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; background-color: #1877f2; color: white; padding: 16px 32px; font-size: 1.1rem; font-weight: 600; text-decoration: none; border-radius: 0;">
+                        <i class="fa-brands fa-facebook-f"></i> AARIES FB
+                    </a>
+                </div>
             </div>
 
             <!-- Title/Subtitle Section -->
@@ -35,11 +43,7 @@
                 <p class="contact-subtitle" data-content="hero.subtitle">Have questions about your store or need support? We're here to help.</p>
             </div>
 
-            <!-- Phone Section -->
-            <div class="info-section phone-section">
-                <div class="info-label" data-content="contact.phone.label">Phone</div>
-                <div class="info-note" data-content="contact.phone.note">Call us during business hours</div>
-            </div>
+
         </div>
 
         <!-- Right Column - Contact Details -->

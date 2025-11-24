@@ -78,6 +78,18 @@
       {
         "source": "/portal/**",
         "destination": "/client-portal.html"
+      },
+      {
+        "source": "/privacy",
+        "destination": "/privacy-policy.html"
+      },
+      {
+        "source": "/delete",
+        "destination": "/delete-data-desk.html"
+      },
+      {
+        "source": "/terms",
+        "destination": "/terms.html"
       }
     ],
     "headers": [

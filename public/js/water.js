@@ -441,4 +441,4 @@ const WaterBackground = {
     }
 };
 
-export default WaterBackground;
+window.WaterBackground = WaterBackground;

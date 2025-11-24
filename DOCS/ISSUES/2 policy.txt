@@ -1,0 +1,30 @@
+in demo-desk.html it has a desktop and mobile version of css. i want to edit both.
+
+in the footer of desk version add a privacy policy link and a terms and conditions link. 
+
+# change (Contact the Developer) to Contact and link it to 
+/contact 
+
+then in index.html desktop version of css in its footer add the Privacy Policy and Terms and Conditions link there to. 
+
+
+in demo-desk.html mobile version it has a hamburger menu 
+
+after the ai chat button in the hamburger menu add 2 more buttons 
+
+Privacy Policy
+
+Terms and Conditions
+
+and have them link to :
+
+/privacy
+
+/terms 
+
+
+# you need to make a new html called terms.html 
+
+make it work for desktop and mobile via queries css 
+
+add it to the firebase json and clean url js file add the clean url js to it as well. 

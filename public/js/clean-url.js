@@ -18,6 +18,8 @@
     '/contact-desk.html': '/contact',
     '/ai-chat-desk.html': '/ai-chat',
     '/client-portal.html': '/portal',
+    '/privacy-policy.html': '/privacy',
+    '/terms.html': '/terms',
 
     // Legacy/Old URLs (keep for backwards compatibility)
     '/desktop.html': '/chat',
@@ -46,7 +48,7 @@
     '/shona-mobile.html': '/shona',
     '/moon-tide-desk.html': '/moon-tide',
     '/moon-tide-mobile.html': '/moon-tide',
-    '/delete-data-desk.html': '/delete-data',
+    '/delete-data-desk.html': '/delete',
     '/delete-data-mobile.html': '/delete-data',
     '/workshop-list-desk.html': '/workshop-list',
     '/workshop-list-mobile.html': '/workshop-list',

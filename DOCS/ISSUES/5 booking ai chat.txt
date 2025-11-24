@@ -1,0 +1,475 @@
+Of course. This is a great next step, bringing the convenient AI chat functionality to your main product page. The plan will be very similar to the one for demo-desk.html, reusing the same simple and effective patterns.
+
+Here is a clear guide for your developer to add the floating AI chat button and its corresponding modals to store-booking.html.
+
+To the Developer: Guide to Adding AI Chat to store-booking.html
+
+Our goal is to add the floating AI chat button to this page for both desktop and mobile. It should look and function exactly like the one on demo-desk.html. We will add the necessary HTML, CSS, and JavaScript to achieve this.
+
+Phase 1: Add Dependencies and HTML Structure
+
+We need to add the required libraries, HTML for the chat modals, and the trigger buttons.
+
+Step 1: Add Dependencies to <head>
+
+In store-booking.html, inside the <head> section, add the following lines. It's best to place them near the other <link> and <script> tags.
+
+code
+Html
+download
+content_copy
+expand_less
+<!-- Add these inside the <head> tag -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+Step 2: Add All Chat-Related HTML to <body>
+
+Just before the closing </body> tag in store-booking.html, copy and paste the entire block of HTML code below. This block contains everything needed for both the desktop and mobile chat UIs, including the trigger buttons.
+
+code
+Html
+play_circle
+download
+content_copy
+expand_less
+<!-- PASTE THIS ENTIRE BLOCK BEFORE THE CLOSING </body> TAG -->
+
+<!-- AI Chat Icon (Bottom Right) - Desktop -->
+<button class="ai-chat-icon" onclick="openAIChat()" title="Chat with AI Assistant">
+    🤖
+</button>
+
+<!-- AI Chat Modal Overlay - Desktop -->
+<div class="ai-chat-overlay" id="aiChatOverlay" onclick="closeAIChat()"></div>
+
+<!-- AI Chat Modal - Desktop -->
+<div class="ai-chat-modal" id="aiChatModal">
+    <div class="chat-modal-header">
+        <h3 class="chat-modal-title">🤖 AI Assistant</h3>
+        <div class="chat-header-controls">
+            <button class="master-speaker-btn" id="desktopSpeakerBtn" title="Enable Voice">
+                <i class="fa-solid fa-volume-xmark"></i>
+            </button>
+            <button class="chat-modal-close" onclick="closeAIChat()">✕</button>
+        </div>
+    </div>
+    <div class="chat-modal-body">
+        <div class="water-background-container"></div>
+        <div class="messages" id="aiMessages">
+            <div class="message-wrapper ai">
+                <div class="message ai-message">
+                    Hi! 👋 I'm the AI assistant from AARIE.CA. Ask me anything about our 7-Day Launchpad, pricing, or how we can help your business!
+                </div>
+                <button class="message-play-btn" id="desktop-greeting-tts">
+                    <i class="fa-solid fa-volume-xmark"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="chat-modal-input">
+        <input type="text" placeholder="Ask me anything..." id="aiChatInput" />
+        <button onclick="sendAIMessage()">Send</button>
+    </div>
+</div>
+
+<!-- Audio Permission Modal -->
+<div class="audio-permission-overlay" id="audioPermissionOverlay">
+    <div class="audio-permission-modal">
+        <div class="audio-permission-icon">🔊</div>
+        <h2 class="audio-permission-title">Enable Voice</h2>
+        <p class="audio-permission-text">Enable audio to hear AI responses read aloud. This creates a more engaging experience!</p>
+        <div class="audio-permission-buttons">
+            <button class="audio-permission-enable" id="audioEnableBtn">Enable Voice</button>
+            <button class="audio-permission-skip" id="audioSkipBtn">Maybe Later</button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden Audio Element for TTS -->
+<audio id="ttsAudio"></audio>
+
+<!-- Mobile Floating Chat Button -->
+<button class="mobile-chat-fab" onclick="openMobileChat()" title="Chat with AI">
+    🤖
+</button>
+
+<!-- Mobile Chat Overlay (Reused from hamburger menu, but we add it for clarity) -->
+<!-- <div class="mobile-chat-overlay" id="mobileChatOverlay" onclick="closeMobileChat()"></div> -->
+
+<!-- Mobile Fullscreen Chat Modal (Reusing existing one from the page) -->
+<!-- The mobile chat modal is already in the file, we will just enhance it. -->
+
+Important: Your store-booking.html file already has a mobile chat modal. The instructions will modify that existing one rather than adding a duplicate. The code above is for reference.
+
+Phase 2: Add CSS for the New Components
+
+The store-booking.html file uses inline CSS. We will add the necessary styles for the chat components directly into the existing <style> block in the <head>.
+
+Step 1: Add Chat Component Styles
+
+Copy and paste the entire CSS block below into the <style> tag in store-booking.html. This contains all the styles from demo-store.css that are relevant to the chat functionality.
+
+code
+CSS
+download
+content_copy
+expand_less
+/* PASTE THIS ENTIRE BLOCK INTO THE <style> TAG IN store-booking.html */
+
+/* === AI CHAT ICON (BOTTOM RIGHT) === */
+.ai-chat-icon {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    cursor: pointer;
+    z-index: 9998;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    transition: all 0.3s ease;
+    border: none;
+}
+.ai-chat-icon:hover {
+    transform: scale(1.15);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.6);
+}
+
+/* === AI CHAT MODAL (DESKTOP) === */
+.ai-chat-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 900px;
+    height: 85vh;
+    background: #FFFFFF;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    overflow: hidden;
+    flex-direction: column;
+}
+.ai-chat-modal.active {
+    display: flex;
+}
+.ai-chat-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+}
+.ai-chat-overlay.active {
+    display: block;
+}
+.chat-modal-header {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    padding: 25px 30px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.chat-modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+.chat-modal-close {
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    font-size: 2rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+.chat-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+.chat-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+    position: relative;
+    background: #0a0f14;
+}
+.water-background-container {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; overflow: hidden;
+}
+.water-background-container canvas {
+    display: block; width: 100% !important; height: 100% !important;
+}
+.messages {
+    position: relative; z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.message {
+    padding: 15px 20px;
+    border-radius: 18px;
+    max-width: 80%;
+    line-height: 1.6;
+}
+.ai-message {
+    background: #FFFFFF;
+    align-self: flex-start;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+.user-message {
+    background: #6366f1;
+    color: #FFFFFF;
+    align-self: flex-end;
+}
+.chat-modal-input {
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    background: #FFFFFF;
+    border-top: 2px solid #E0E0E0;
+}
+.chat-modal-input input {
+    flex: 1;
+    padding: 15px 20px;
+    border: 2px solid #E0E0E0;
+    border-radius: 25px;
+    font-size: 1rem;
+    outline: none;
+}
+.chat-modal-input input:focus {
+    border-color: #6366f1;
+}
+.chat-modal-input button {
+    padding: 15px 35px;
+    background: #6366f1;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.chat-modal-input button:hover {
+    background: #4f46e5;
+}
+
+/* === TTS & AUDIO SYSTEM STYLES === */
+.chat-header-controls { display: flex; align-items: center; gap: 10px; }
+.mobile-header-controls { display: flex; align-items: center; gap: 10px; }
+.master-speaker-btn, .mobile-speaker-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.5);
+    color: #FFFFFF; font-size: 1.1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;
+}
+.master-speaker-btn:hover, .mobile-speaker-btn:hover { background: rgba(255, 255, 255, 0.3); }
+.master-speaker-btn.unlocked, .mobile-speaker-btn.unlocked { background: #10B981; border-color: #10B981; }
+.audio-permission-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
+    z-index: 100000; align-items: center; justify-content: center;
+}
+.audio-permission-overlay.active { display: flex; }
+.audio-permission-modal {
+    background: #FFFFFF; border-radius: 24px; padding: 40px; max-width: 400px;
+    text-align: center; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+.audio-permission-icon { font-size: 4rem; margin-bottom: 20px; }
+.audio-permission-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 15px; color: #1a1a1a; }
+.audio-permission-text { font-size: 1rem; color: #666; margin-bottom: 25px; line-height: 1.6; }
+.audio-permission-buttons { display: flex; gap: 12px; justify-content: center; }
+.audio-permission-enable {
+    padding: 12px 28px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #FFFFFF;
+    border: none; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer;
+}
+.audio-permission-skip {
+    padding: 12px 28px; background: transparent; color: #666;
+    border: 2px solid #E0E0E0; border-radius: 25px; font-size: 1rem; cursor: pointer;
+}
+.message-wrapper { display: flex; flex-direction: column; gap: 8px; max-width: 80%; }
+.message-wrapper.user { align-self: flex-end; align-items: flex-end; }
+.message-wrapper.ai { align-self: flex-start; align-items: flex-start; }
+.message-play-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; color: #FFFFFF;
+    font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+.message-play-btn:hover { transform: scale(1.1); }
+.ai-message special, .mobile-chat-message.ai special {
+    font-weight: 700; color: #6366f1; cursor: pointer;
+    padding: 1px 4px; border-radius: 3px;
+}
+.ai-message special:hover, .mobile-chat-message.ai special:hover {
+    background-color: rgba(99, 102, 241, 0.1); text-decoration: underline;
+}
+.ai-message price, .mobile-chat-message.ai price { font-weight: 700; color: #c82333; }
+#ttsAudio { display: none; }
+
+/* Hide desktop chat on mobile and vice-versa */
+@media (max-width: 768px) {
+    .ai-chat-icon { display: none; }
+}
+@media (min-width: 769px) {
+    .mobile-chat-fab { display: none !important; }
+}
+Phase 3: Integrate the JavaScript Logic
+
+Finally, we'll add the necessary JavaScript to power the new components.
+
+Step 1: Link water.js
+
+Add a script tag for your water.js file just before the final inline <script> at the end of the <body>.
+
+code
+Html
+download
+content_copy
+expand_less
+<!-- Add this line -->
+    <script src="./js/water.js"></script>
+
+    <!-- Scripts -->
+    <script>
+        // ... your existing inline script ...
+    </script>
+</body>
+
+Step 2: Copy and Paste the Chat Logic
+
+Replace the entire inline <script> in store-booking.html with the complete script block below. This is the full, combined script from demo-desk.html, including the new water background logic.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// REPLACE your entire inline script with this one
+<script>
+    // Mobile Menu Functions (Unchanged)
+    function toggleMobileMenu() { /* ... */ }
+    function closeMobileMenu() { /* ... */ }
+
+    // ========================================
+    // CHAT & TTS SYSTEM (FROM demo-desk.html)
+    // ========================================
+    const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+    const CHAT_ENDPOINT = '/chat';
+    const TTS_ENDPOINT = '/tts';
+
+    let CHAT_SESSION_ID = null;
+    let MOBILE_CHAT_SESSION_ID = null;
+    let deviceFingerprint = null;
+    let ttsUnlocked = false;
+    let isPlaying = false;
+    let currentAudio = null;
+    let audioCache = new Map();
+    const ttsAudio = document.getElementById('ttsAudio');
+    let waterInstance = null; // For water background
+
+    const GREETING_MESSAGE_TEXT = "Hi! 👋 I'm the AI assistant from AARIE.CA. Ask me anything about our 7-Day Launchpad, pricing, or how we can help your business!";
+
+    // --- All chat/TTS functions from demo-desk.html ---
+    // (initializeChatSession, initMobileChatSession, initializeDeviceFingerprint)
+    // (showAudioModal, hideAudioModal, attemptTTSUnlock, updateSpeakerButtons)
+    // (getTTSAudio, playTTSAudio, stopTTSAudio, updatePlayButtonStates, handlePlayClick)
+    // (attachSpecialTagListeners, createAIMessage, createUserMessage)
+    // (sendAIMessage, sendMobileMessage)
+
+    // PASTE ALL THE JAVASCRIPT FUNCTIONS from the inline script of `demo-desk.html` here.
+    // I am omitting them for brevity, but you must copy them all.
+
+    // --- Water background and modal control functions ---
+    function openAIChat() {
+        document.getElementById('aiChatModal').classList.add('active');
+        document.getElementById('aiChatOverlay').classList.add('active');
+        document.getElementById('aiChatInput').focus();
+        const container = document.querySelector('.ai-chat-modal .water-background-container');
+        if (container && window.WaterBackground && !waterInstance) {
+            waterInstance = Object.assign({}, window.WaterBackground);
+            waterInstance.init(container);
+        }
+    }
+
+    function closeAIChat() {
+        stopTTSAudio();
+        document.getElementById('aiChatModal').classList.remove('active');
+        document.getElementById('aiChatOverlay').classList.remove('active');
+        if (waterInstance) {
+            waterInstance.destroy();
+            waterInstance = null;
+        }
+    }
+
+    function openMobileChat() {
+        document.getElementById('mobileChatModal').classList.add('active');
+        document.getElementById('mobileChatOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        const container = document.querySelector('.mobile-chat-modal .water-background-container');
+        if (container && window.WaterBackground && !waterInstance) {
+            waterInstance = Object.assign({}, window.WaterBackground);
+            waterInstance.init(container);
+        }
+    }
+
+    function closeMobileChat() {
+        stopTTSAudio();
+        document.getElementById('mobileChatModal').classList.remove('active');
+        document.getElementById('mobileChatOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+        if (waterInstance) {
+            waterInstance.destroy();
+            waterInstance = null;
+        }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        // ... (all the existing DOMContentLoaded logic from demo-desk.html, including greeting button hooks) ...
+
+        // Also, add the new event listeners for the BUY NOW buttons on this page
+        document.getElementById('heroBookButton').addEventListener('click', () => {
+            window.location.href = '/checkout.html';
+        });
+        document.getElementById('depositButton').addEventListener('click', () => {
+            window.location.href = '/checkout.html';
+        });
+    });
+</script>
+
+Important: I've noted where to paste all the JavaScript functions from demo-desk.html for brevity. You must copy that entire block of logic to ensure the chat works.
+
+Final Result
+
+After completing these steps, store-booking.html will now have:
+
+A floating robot icon (🤖) that works on both desktop and mobile, just like on the demo page.
+
+The desktop version will open a pop-up modal.
+
+The mobile version will open a fullscreen modal.
+
+Both modals will feature the dynamic water background.
+
+The greeting message in both modals will have a functional TTS button connected to the audio unlock system.

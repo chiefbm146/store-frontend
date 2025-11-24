@@ -397,7 +397,7 @@
             line-height: 1.8;
         }
 
-        /* === CHAT SECTION === */
+        /* === DESKTOP CHAT SECTION (Now a placeholder) === */
         .chat-section {
             padding: 80px 20px;
             background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
@@ -406,21 +406,41 @@
         .chat-wrapper {
             max-width: 900px;
             margin: 0 auto;
+            min-height: 600px; /* Ensure space for chat instance */
         }
-
-        .chat-container {
+        
+        /* === MASTER CHAT INSTANCE STYLES (Used by both Desktop and Mobile) === */
+        #master-chat-instance {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
             background: #FFFFFF;
             border-radius: 24px;
             overflow: hidden;
             box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
-            height: 600px;
+        }
+
+        .desktop-view #master-chat-instance {
+            height: 600px; /* Fixed height for desktop */
+        }
+        
+        .mobile-view #master-chat-instance {
+            height: 100%; /* Full height for mobile modal */
+            border-radius: 0;
+            box-shadow: none;
+        }
+        
+        .chat-container {
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             position: relative;
         }
 
-        /* Desktop Water Background */
-        #water-background-container-desktop {
+        /* Water Background Container (For both Desktop and Mobile) */
+        .water-background-container {
             position: absolute;
             top: 0;
             left: 0;
@@ -429,11 +449,11 @@
             z-index: 0;
             pointer-events: none;
             background: #0a0f14;
-            border-radius: 24px;
+            border-radius: inherit;
             overflow: hidden;
         }
 
-        #water-background-container-desktop canvas {
+        .water-background-container canvas {
             width: 100% !important;
             height: 100% !important;
             display: block;
@@ -448,6 +468,7 @@
             gap: 15px;
             position: relative;
             z-index: 1;
+            flex-shrink: 0;
         }
 
         .chat-icon {
@@ -467,6 +488,7 @@
             background: transparent;
             position: relative;
             z-index: 1;
+            min-height: 0; /* Fix for flexbox overflow */
         }
 
         .messages {
@@ -488,22 +510,7 @@
             border: 2px solid #E0E0E0;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
-
-        .message-content {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .message-icon {
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .message-text p {
-            margin: 0;
-        }
-
+        
         .user-message {
             background: #6366f1;
             color: #FFFFFF;
@@ -520,6 +527,7 @@
             align-self: flex-start;
             border: 2px solid #E0E0E0;
         }
+        .typing-indicator.visible { display: flex; }
 
         .typing-dot {
             width: 8px;
@@ -545,6 +553,7 @@
             border-top: 2px solid rgba(224, 224, 224, 0.8);
             position: relative;
             z-index: 1;
+            flex-shrink: 0;
         }
 
         .input-wrapper {
@@ -566,15 +575,19 @@
         }
 
         #sendButton {
-            padding: 15px 35px;
+            padding: 0;
+            width: 50px;
+            height: 50px;
             background: #6366f1;
             color: #FFFFFF;
             border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 50%;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #sendButton:hover {
@@ -720,17 +733,14 @@
             color: rgba(255, 255, 255, 0.6);
             font-size: 0.9rem;
         }
-
-        /* === MOBILE CHAT (Hidden on Desktop) === */
-        .mobile-chat-fab,
-        .mobile-chat-overlay,
-        .mobile-chat-modal {
-            display: none;
-        }
-
+        
         /* === RESPONSIVE - TABLET AND BELOW === */
         @media (max-width: 768px) {
-            /* Hide desktop chat, show mobile elements */
+            /* FIX: Hides the redundant header from the master chat instance in mobile view */
+            .mobile-view #master-chat-instance .chat-header {
+                display: none;
+            }
+            /* Hide desktop chat placeholder, show mobile elements */
             .chat-section {
                 display: none;
             }
@@ -740,46 +750,13 @@
                 padding: 50px 20px;
                 background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
             }
-
             .ai-blurb-content {
-                background: #FFFFFF;
-                padding: 30px 25px;
-                border-radius: 16px;
-                text-align: center;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                background: #FFFFFF; padding: 30px 25px; border-radius: 16px; text-align: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             }
-
-            .ai-blurb-icon {
-                font-size: 3.5rem;
-                display: block;
-                margin-bottom: 15px;
-            }
-
-            .ai-blurb-title {
-                font-size: 1.4rem;
-                font-weight: 700;
-                color: #1a1a1a;
-                margin-bottom: 15px;
-            }
-
-            .ai-blurb-text {
-                font-size: 1rem;
-                color: #666;
-                line-height: 1.7;
-                margin-bottom: 20px;
-            }
-
-            .ai-blurb-cta {
-                display: inline-block;
-                padding: 12px 25px;
-                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-                color: #FFFFFF;
-                border-radius: 25px;
-                font-weight: 600;
-                text-decoration: none;
-                border: none;
-                cursor: pointer;
-            }
+            .ai-blurb-icon { font-size: 3.5rem; display: block; margin-bottom: 15px; }
+            .ai-blurb-title { font-size: 1.4rem; font-weight: 700; color: #1a1a1a; margin-bottom: 15px; }
+            .ai-blurb-text { font-size: 1rem; color: #666; line-height: 1.7; margin-bottom: 20px; }
+            .ai-blurb-cta { display: inline-block; padding: 12px 25px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: #FFFFFF; border-radius: 25px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; }
 
             /* Mobile Chat FAB */
             .mobile-chat-fab {
@@ -817,10 +794,7 @@
                 backdrop-filter: blur(5px);
                 z-index: 9999;
             }
-
-            .mobile-chat-overlay.active {
-                display: block;
-            }
+            .mobile-chat-overlay.active { display: block; }
 
             .mobile-chat-modal {
                 display: none;
@@ -833,11 +807,8 @@
                 z-index: 10000;
                 flex-direction: column;
             }
-
-            .mobile-chat-modal.active {
-                display: flex;
-            }
-
+            .mobile-chat-modal.active { display: flex; }
+            
             .mobile-chat-header {
                 background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
                 padding: 20px;
@@ -847,475 +818,55 @@
                 justify-content: space-between;
                 flex-shrink: 0;
             }
-
-            .mobile-chat-title {
-                font-size: 1.2rem;
-                font-weight: 700;
-                margin: 0;
+            .mobile-chat-title { font-size: 1.2rem; font-weight: 700; margin: 0; }
+            .mobile-header-controls { display: flex; align-items: center; gap: 10px; }
+            .mobile-speaker-btn { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #FFFFFF; cursor: pointer; }
+            .mobile-speaker-btn.unlocked { background: #10B981; border-color: #10B981; }
+            /* FIX: Ensures the Font Awesome icon renders correctly inside the mobile speaker button */
+            .mobile-speaker-btn i {
+                font-family: "Font Awesome 6 Free";
+                font-weight: 900; /* This is required for solid icons */
             }
-
-            .mobile-chat-close {
-                width: 40px;
-                height: 40px;
-                background: rgba(255, 255, 255, 0.2);
-                border: 2px solid rgba(255, 255, 255, 0.5);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.2rem;
-                color: #FFFFFF;
-                cursor: pointer;
-            }
-
+            .mobile-chat-close { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #FFFFFF; cursor: pointer; }
+            
             .mobile-chat-body {
                 flex: 1;
-                overflow-y: auto;
-                padding: 20px;
+                overflow: hidden; /* Important for containing the master instance */
                 background: #F8F9FA;
-                max-height: calc(100dvh - 160px);
+                position: relative;
             }
 
-            .mobile-chat-messages {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-            }
+            /* Styles for Master Chat instance when in mobile view */
+            .mobile-view #master-chat-instance .messages-container { padding: 20px; }
+            .mobile-view #master-chat-instance .message { max-width: 85%; font-size: 0.95rem; }
+            .mobile-view #master-chat-instance .input-area { padding: 15px; }
+            .mobile-view #master-chat-instance #userInput { padding: 14px 18px; font-size: 1rem; }
+            .mobile-view #master-chat-instance #sendButton { width: 44px; height: 44px; font-size: 1rem; }
 
-            .mobile-chat-message {
-                padding: 14px 18px;
-                border-radius: 16px;
-                max-width: 85%;
-                line-height: 1.5;
-                font-size: 0.95rem;
-            }
-
-            .mobile-chat-message.ai {
-                background: #FFFFFF;
-                align-self: flex-start;
-                border: 1px solid #E0E0E0;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            }
-
-            .mobile-chat-message.user {
-                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-                color: #FFFFFF;
-                align-self: flex-end;
-            }
-
-            .mobile-chat-input-area {
-                display: flex;
-                gap: 10px;
-                padding: 15px 20px;
-                background: #FFFFFF;
-                border-top: 1px solid #E0E0E0;
-                flex-shrink: 0;
-            }
-
-            .mobile-chat-input {
-                flex: 1;
-                padding: 14px 18px;
-                border: 2px solid #E0E0E0;
-                border-radius: 25px;
-                font-size: 1rem;
-                outline: none;
-            }
-
-            .mobile-chat-input:focus {
-                border-color: #6366f1;
-            }
-
-            .mobile-chat-send {
-                padding: 14px 22px;
-                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-                color: #FFFFFF;
-                border: none;
-                border-radius: 25px;
-                font-size: 1rem;
-                font-weight: 600;
-                cursor: pointer;
-            }
-
-            .mobile-typing-indicator {
-                display: none;
-                align-items: center;
-                gap: 6px;
-                padding: 14px 18px;
-                background: #FFFFFF;
-                border-radius: 16px;
-                align-self: flex-start;
-                border: 1px solid #E0E0E0;
-            }
-
-            .mobile-typing-indicator.visible {
-                display: flex;
-            }
-
-            .mobile-typing-dot {
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: #6366f1;
-                animation: mobileBounce 1.4s ease-in-out infinite;
-            }
-
-            .mobile-typing-dot:nth-child(2) { animation-delay: 0.2s; }
-            .mobile-typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-            @keyframes mobileBounce {
-                0%, 60%, 100% { transform: translateY(0); }
-                30% { transform: translateY(-8px); }
-            }
-
-            /* Hero Mobile */
-            .hero-section {
-                min-height: auto;
-                padding: 60px 20px;
-            }
-
-            .hero-icon {
-                font-size: 4rem;
-                margin-bottom: 15px;
-            }
-
-            .hero-title {
-                font-size: clamp(1.8rem, 5vw, 2.5rem);
-                margin-bottom: 15px;
-            }
-
-            .hero-subtitle {
-                font-size: clamp(1rem, 2.5vw, 1.3rem);
-                margin-bottom: 12px;
-            }
-
-            .hero-description {
-                font-size: clamp(0.9rem, 2vw, 1rem);
-                margin-bottom: 30px;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .btn {
-                width: 100%;
-                padding: 14px 30px;
-                font-size: 1rem;
-            }
-
-            .client-explore-text {
-                font-size: 0.9rem;
-                margin: 8px 0;
-            }
-
-            /* Who Section Mobile */
-            .who-section {
-                padding: 50px 20px;
-            }
-
-            .who-highlight {
-                padding: 20px;
-                font-size: 1rem;
-                margin-bottom: 30px;
-                border-radius: 12px;
-            }
-
-            .business-types-grid {
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-                margin-bottom: 30px;
-            }
-
-            .business-type-card {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-                padding: 20px;
-                border-radius: 12px;
-                text-align: left;
-            }
-
-            .business-type-icon {
-                font-size: 2.5rem;
-                margin-bottom: 0;
-                flex-shrink: 0;
-            }
-
-            .business-type-title {
-                font-size: 1.1rem;
-                margin-bottom: 5px;
-            }
-
-            .business-type-description {
-                font-size: 0.9rem;
-                line-height: 1.5;
-            }
-
-            .examples-section {
-                padding: 25px 20px;
-                margin-bottom: 25px;
-                border-radius: 12px;
-            }
-
-            .examples-title {
-                font-size: 1.3rem;
-                margin-bottom: 20px;
-            }
-
-            .examples-grid {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .example-item {
-                padding: 16px 20px;
-                border-radius: 10px;
-            }
-
-            .advantage-box {
-                padding: 30px 20px;
-                border-radius: 12px;
-            }
-
-            .advantage-icon {
-                font-size: 2.5rem;
-                margin-bottom: 12px;
-            }
-
-            .advantage-title {
-                font-size: 1.4rem;
-                margin-bottom: 10px;
-            }
-
-            .advantage-description {
-                font-size: 0.95rem;
-            }
-
-            /* Features Mobile */
-            .features-section {
-                padding: 50px 20px;
-            }
-
-            .section-title {
-                font-size: clamp(1.5rem, 4vw, 2rem);
-                margin-bottom: 12px;
-            }
-
-            .section-subtitle {
-                font-size: clamp(0.9rem, 2vw, 1.1rem);
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .feature-card {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-                padding: 20px;
-                border-radius: 12px;
-                text-align: left;
-            }
-
-            .feature-icon {
-                font-size: 2.5rem;
-                margin-bottom: 0;
-                flex-shrink: 0;
-            }
-
-            .feature-title {
-                font-size: 1.1rem;
-                margin-bottom: 5px;
-            }
-
-            .feature-description {
-                font-size: 0.9rem;
-            }
-
-            /* About Mobile */
-            .about-section {
-                padding: 50px 20px;
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .about-text h2 {
-                font-size: clamp(1.5rem, 4vw, 2rem);
-                margin-bottom: 15px;
-            }
-
-            .about-text h3 {
-                font-size: 1.1rem;
-                margin-bottom: 20px;
-            }
-
-            .about-text p {
-                font-size: 0.95rem;
-                margin-bottom: 15px;
-            }
-
-            .about-emoji {
-                font-size: 6rem;
-            }
-
-            /* CTA Mobile */
-            .cta-section {
-                padding: 50px 20px;
-            }
-
-            .cta-content h2 {
-                font-size: clamp(1.5rem, 4vw, 2rem);
-                margin-bottom: 15px;
-            }
-
-            .cta-content p {
-                font-size: clamp(0.9rem, 2vw, 1.1rem);
-                margin-bottom: 30px;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .cta-buttons .btn {
-                width: 100%;
-            }
-
-            /* Footer Mobile */
-            .footer {
-                padding: 30px 20px;
-                padding-bottom: 100px;
-            }
-
-            .footer-tagline {
-                font-size: 1rem;
-                margin-bottom: 15px;
-            }
-
-            .footer-links {
-                gap: 15px;
-                flex-direction: column;
-                margin-bottom: 15px;
-            }
-
-            .footer-links a {
-                font-size: 0.9rem;
-            }
-
-            .footer-copyright {
-                font-size: 0.8rem;
-            }
+            /* General Mobile Layout */
+            .hero-section { min-height: auto; padding: 60px 20px; }
+            .hero-icon { font-size: 4rem; }
+            .hero-buttons { flex-direction: column; gap: 15px; }
+            .btn { width: 100%; }
+            .who-section { padding: 50px 20px; }
+            .business-types-grid, .examples-grid, .features-grid { display: flex; flex-direction: column; gap: 15px; }
+            .business-type-card, .feature-card { flex-direction: row; text-align: left; }
+            .about-section { padding: 50px 20px; }
+            .about-content { grid-template-columns: 1fr; }
+            .cta-section { padding: 50px 20px; }
+            .cta-buttons { flex-direction: column; gap: 15px; }
+            .footer { padding-bottom: 100px; }
         }
 
-        /* === VERY SMALL DEVICES === */
-        @media (max-width: 480px) {
-            body {
-                font-size: 14px;
-            }
-
-            .hero-section {
-                padding: 40px 15px;
-            }
-
-            .hero-icon {
-                font-size: 3rem;
-            }
-
-            .hero-title {
-                font-size: 1.5rem;
-            }
-
-            .btn {
-                padding: 12px 25px;
-                font-size: 0.9rem;
-            }
-
-            .who-section,
-            .features-section {
-                padding: 40px 15px;
-            }
-
-            .who-highlight {
-                padding: 18px 15px;
-                font-size: 0.95rem;
-            }
-
-            .business-type-card,
-            .feature-card {
-                padding: 18px 15px;
-            }
-
-            .business-type-icon,
-            .feature-icon {
-                font-size: 2rem;
-            }
-
-            .business-type-title,
-            .feature-title {
-                font-size: 1rem;
-            }
-
-            .examples-section {
-                padding: 20px 15px;
-            }
-
-            .example-item {
-                padding: 14px 15px;
-            }
-
-            .example-icon {
-                font-size: 1.5rem;
-            }
-
-            .advantage-box {
-                padding: 25px 15px;
-            }
-
-            .advantage-icon {
-                font-size: 2rem;
-            }
-
-            .advantage-title {
-                font-size: 1.2rem;
-            }
-
-            .about-emoji {
-                font-size: 4rem;
-            }
-
-            .footer {
-                padding: 20px 15px;
-                padding-bottom: 90px;
-            }
-
-            .mobile-chat-fab {
-                width: 55px;
-                height: 55px;
-                font-size: 1.7rem;
-                bottom: 20px;
-                right: 20px;
-            }
+        /* Ensure mobile chat elements are hidden on desktop */
+        body.desktop-view .mobile-chat-fab,
+        body.desktop-view .mobile-chat-overlay,
+        body.desktop-view .mobile-chat-modal {
+            display: none !important;
         }
 
         /* === TTS & AUDIO SYSTEM === */
-        .chat-header-controls,
-        .mobile-header-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .master-speaker-btn,
-        .mobile-speaker-btn {
+        .master-speaker-btn {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -1327,370 +878,27 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
         }
+        .master-speaker-btn.unlocked { background: #10B981; border-color: #10B981; }
+        .audio-permission-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 100000; align-items: center; justify-content: center; }
+        .audio-permission-overlay.active { display: flex; }
+        .audio-permission-modal { background: #FFFFFF; border-radius: 24px; padding: 40px; max-width: 400px; text-align: center; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
+        .audio-permission-icon { font-size: 4rem; margin-bottom: 20px; }
+        .audio-permission-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 15px; }
+        .audio-permission-text { font-size: 1rem; color: #666; margin-bottom: 25px; }
+        .audio-permission-buttons { display: flex; gap: 12px; justify-content: center; }
+        .audio-permission-enable { padding: 12px 28px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #FFFFFF; border: none; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .audio-permission-skip { padding: 12px 28px; background: transparent; color: #666; border: 2px solid #E0E0E0; border-radius: 25px; font-size: 1rem; cursor: pointer; }
+        .message-play-btn { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; color: #FFFFFF; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3); }
+        .message-wrapper { display: flex; flex-direction: column; gap: 8px; max-width: 80%; }
+        .message-wrapper.user { align-self: flex-end; align-items: flex-end; }
+        .message-wrapper.ai { align-self: flex-start; align-items: flex-start; }
 
-        .master-speaker-btn:hover,
-        .mobile-speaker-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .master-speaker-btn.unlocked,
-        .mobile-speaker-btn.unlocked {
-            background: #10B981;
-            border-color: #10B981;
-        }
-
-        .audio-permission-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            z-index: 100000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .audio-permission-overlay.active {
-            display: flex;
-        }
-
-        .audio-permission-modal {
-            background: #FFFFFF;
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: modalSlideIn 0.3s ease-out;
-        }
-
-        @keyframes modalSlideIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .audio-permission-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
-
-        .audio-permission-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #1a1a1a;
-        }
-
-        .audio-permission-text {
-            font-size: 1rem;
-            color: #666;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .audio-permission-buttons {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-
-        .audio-permission-enable {
-            padding: 12px 28px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: #FFFFFF;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .audio-permission-enable:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-        }
-
-        .audio-permission-skip {
-            padding: 12px 28px;
-            background: transparent;
-            color: #666;
-            border: 2px solid #E0E0E0;
-            border-radius: 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .audio-permission-skip:hover {
-            background: #F5F5F5;
-        }
-
-        .message-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-width: 80%;
-        }
-
-        .message-wrapper.user {
-            align-self: flex-end;
-            align-items: flex-end;
-        }
-
-        .message-wrapper.ai {
-            align-self: flex-start;
-            align-items: flex-start;
-        }
-
-        .message-play-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border: none;
-            color: #FFFFFF;
-            font-size: 0.8rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-        }
-
-        .message-play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.5);
-        }
-
-        .message-play-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .ai-message special,
-        .mobile-chat-message.ai special {
-            font-weight: 700;
-            color: #6366f1;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            padding: 1px 4px;
-            border-radius: 3px;
-        }
-
-        .ai-message special:hover,
-        .mobile-chat-message.ai special:hover {
-            background-color: rgba(99, 102, 241, 0.1);
-            text-decoration: underline;
-        }
-
-        .ai-message price,
-        .mobile-chat-message.ai price {
-            font-weight: 700;
-            color: #c82333;
-        }
-
-        #ttsPlayer {
-            display: none;
-        }
-
-        /* === AI PORTAL ARCHITECTURE STYLES (from mobile.html) === */
-        .ai-portal {
-            position: relative;
-        }
-
-        .portal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .portal-title {
-            margin: 0;
-        }
-
-        .ai-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.15);
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-        }
-
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #10B981;
-            animation: statusPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes statusPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .status-text {
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 600;
-        }
-
-        .header-left-container,
-        .header-right-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Master Speaker Button (injected by soundManager.js) */
-        .master-speaker-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            color: #FFFFFF;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .master-speaker-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        .master-speaker-btn.unlocked {
-            background: #10B981;
-            border-color: #10B981;
-        }
-
-        .master-speaker-btn.unlocked:hover {
-            background: #059669;
-        }
-
-        /* Send Button Style Updates */
-        #sendButton {
-            width: 44px;
-            height: 44px;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        #sendButton i {
-            font-size: 1rem;
-        }
-
-        .mobile-chat-send {
-            width: 44px;
-            height: 44px;
-            padding: 0 !important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50% !important;
-        }
-
-        .mobile-chat-send i {
-            font-size: 1rem;
-        }
-
-        /* Message Play Button Improvements */
-        .message-play-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border: none;
-            color: #FFFFFF;
-            font-size: 0.8rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-            margin-top: 8px;
-        }
-
-        .message-play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.5);
-        }
-
-        .message-play-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Message Wrapper for TTS buttons */
-        .message-wrapper {
-            display: flex;
-            flex-direction: column;
-            max-width: 80%;
-        }
-
-        .message-wrapper.user {
-            align-self: flex-end;
-            align-items: flex-end;
-        }
-
-        .message-wrapper.ai {
-            align-self: flex-start;
-            align-items: flex-start;
-        }
-
-        /* Special Tags Styling */
-        .ai-message special,
-        .mobile-chat-message.ai special {
-            font-weight: 700;
-            color: #6366f1;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            padding: 1px 4px;
-            border-radius: 3px;
-        }
-
-        .ai-message special:hover,
-        .mobile-chat-message.ai special:hover {
-            background-color: rgba(99, 102, 241, 0.1);
-            text-decoration: underline;
-        }
-
-        .ai-message price,
-        .mobile-chat-message.ai price {
-            font-weight: 700;
-            color: #c82333;
-        }
-
-        @media (max-width: 768px) {
-            .ai-status {
-                display: none;
-            }
-
-            .message-play-btn {
-                width: 28px;
-                height: 28px;
-                font-size: 0.7rem;
-            }
-        }
+        /* === SPECIAL TAGS === */
+        special { font-weight: 700; color: #6366f1; cursor: pointer; padding: 1px 4px; border-radius: 3px; }
+        special:hover { background-color: rgba(99, 102, 241, 0.1); text-decoration: underline; }
+        price { font-weight: 700; color: #c82333; }
+        
     </style>
 </head>
 <body>
@@ -1702,7 +910,7 @@
             <p class="hero-subtitle">AARIE.CA builds professional websites with AI-powered chat. See your first design mockup within 72 hours.</p>
             <p class="hero-description">We create custom websites for workshops, products, or services with intelligent chatbots that help your customers 24/7. Only 4 projects per month to ensure quality.</p>
             <div class="hero-buttons">
-                <a href="/demo-desk.html" class="btn btn-primary">START YOUR PROJECT</a>
+                <a href="/demo-desk.html" class="btn btn-primary">LEARN MORE</a>
                 <p class="client-explore-text">Explore a Client's Site</p>
                 <a href="https://moontidereconciliation.com" class="btn btn-secondary" target="_blank" rel="noopener">MOON TIDE</a>
             </div>
@@ -1716,76 +924,26 @@
                 <h2 class="section-title">This Is For You</h2>
                 <p class="section-subtitle">Anyone can start selling online - no business degree required</p>
             </div>
-
             <div class="who-highlight">Accept payments through Stripe under your own name, sole proprietorship, or registered business. You don't need a corporation to start making money.</div>
-
             <div class="business-types-grid">
-                <div class="business-type-card">
-                    <span class="business-type-icon">👤</span>
-                    <div>
-                        <h3 class="business-type-title">Individuals</h3>
-                        <p class="business-type-description">Sell under your own name - artists, freelancers, creators, hobbyists turning passion into profit</p>
-                    </div>
-                </div>
-                <div class="business-type-card">
-                    <span class="business-type-icon">📋</span>
-                    <div>
-                        <h3 class="business-type-title">Sole Proprietors</h3>
-                        <p class="business-type-description">Small business owners ready to take their services online and reach more customers</p>
-                    </div>
-                </div>
-                <div class="business-type-card">
-                    <span class="business-type-icon">🏢</span>
-                    <div>
-                        <h3 class="business-type-title">Registered Businesses</h3>
-                        <p class="business-type-description">Established companies looking for a professional online presence with AI support</p>
-                    </div>
-                </div>
+                <div class="business-type-card"><span class="business-type-icon">👤</span><div><h3 class="business-type-title">Individuals</h3><p class="business-type-description">Sell under your own name - artists, freelancers, creators, hobbyists turning passion into profit</p></div></div>
+                <div class="business-type-card"><span class="business-type-icon">📋</span><div><h3 class="business-type-title">Sole Proprietors</h3><p class="business-type-description">Small business owners ready to take their services online and reach more customers</p></div></div>
+                <div class="business-type-card"><span class="business-type-icon">🏢</span><div><h3 class="business-type-title">Registered Businesses</h3><p class="business-type-description">Established companies looking for a professional online presence with AI support</p></div></div>
             </div>
-
             <div class="examples-section">
                 <h3 class="examples-title">What Can You Sell?</h3>
                 <div class="examples-grid">
-                    <div class="example-item">
-                        <span class="example-icon">🎨</span>
-                        <span class="example-text">Art & Handmade Crafts</span>
-                    </div>
-                    <div class="example-item">
-                        <span class="example-icon">📚</span>
-                        <span class="example-text">Online Courses & Workshops</span>
-                    </div>
-                    <div class="example-item">
-                        <span class="example-icon">💆</span>
-                        <span class="example-text">Wellness & Healing Services</span>
-                    </div>
-                    <div class="example-item">
-                        <span class="example-icon">🔧</span>
-                        <span class="example-text">Consulting & Professional Services</span>
-                    </div>
-                    <div class="example-item">
-                        <span class="example-icon">📦</span>
-                        <span class="example-text">Physical Products & Merchandise</span>
-                    </div>
-                    <div class="example-item">
-                        <span class="example-icon">🎵</span>
-                        <span class="example-text">Music, Books & Digital Downloads</span>
-                    </div>
-                    <div class="example-item">
-                        <span class="example-icon">🏋️</span>
-                        <span class="example-text">Fitness & Coaching Programs</span>
-                    </div>
-                    <div class="example-item">
-                        <span class="example-icon">🍰</span>
-                        <span class="example-text">Food, Baking & Catering</span>
-                    </div>
+                    <div class="example-item"><span class="example-icon">🎨</span><span class="example-text">Art & Handmade Crafts</span></div>
+                    <div class="example-item"><span class="example-icon">📚</span><span class="example-text">Online Courses & Workshops</span></div>
+                    <div class="example-item"><span class="example-icon">💆</span><span class="example-text">Wellness & Healing Services</span></div>
+                    <div class="example-item"><span class="example-icon">🔧</span><span class="example-text">Consulting & Professional Services</span></div>
+                    <div class="example-item"><span class="example-icon">📦</span><span class="example-text">Physical Products & Merchandise</span></div>
+                    <div class="example-item"><span class="example-icon">🎵</span><span class="example-text">Music, Books & Digital Downloads</span></div>
+                    <div class="example-item"><span class="example-icon">🏋️</span><span class="example-text">Fitness & Coaching Programs</span></div>
+                    <div class="example-item"><span class="example-icon">🍰</span><span class="example-text">Food, Baking & Catering</span></div>
                 </div>
             </div>
-
-            <div class="advantage-box">
-                <span class="advantage-icon">⚡</span>
-                <h3 class="advantage-title">Start Making Money Fast</h3>
-                <p class="advantage-description">See your first design mockup in 72 hours. Your complete website goes live in just 7-10 days. While others wait months, you'll already be accepting orders.</p>
-            </div>
+            <div class="advantage-box"><span class="advantage-icon">⚡</span><h3 class="advantage-title">Start Making Money Fast</h3><p class="advantage-description">See your first design mockup in 72 hours. Your complete website goes live in just 7-10 days. While others wait months, you'll already be accepting orders.</p></div>
         </div>
     </section>
 
@@ -1796,91 +954,24 @@
             <p class="section-subtitle">Everything you need - we handle it all</p>
         </div>
         <div class="features-grid">
-            <div class="feature-card">
-                <span class="feature-icon">🎓</span>
-                <div>
-                    <h3 class="feature-title">Sell Workshops</h3>
-                    <p class="feature-description">We create stores that sell educational workshops with booking, scheduling, and payment processing built-in.</p>
-                </div>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">📦</span>
-                <div>
-                    <h3 class="feature-title">Sell Products</h3>
-                    <p class="feature-description">We launch product catalogs with inventory management, checkout, and order tracking automatically configured.</p>
-                </div>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">⚙️</span>
-                <div>
-                    <h3 class="feature-title">Sell Services</h3>
-                    <p class="feature-description">We build service pages with consultation booking, service packages, and client management tools.</p>
-                </div>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">🤖</span>
-                <div>
-                    <h3 class="feature-title">Custom AI Chatbots</h3>
-                    <p class="feature-description">Each store includes an intelligent AI assistant trained on your business to help customers 24/7.</p>
-                </div>
-            </div>
+            <div class="feature-card"><span class="feature-icon">🎓</span><div><h3 class="feature-title">Sell Workshops</h3><p class="feature-description">We create stores that sell educational workshops with booking, scheduling, and payment processing built-in.</p></div></div>
+            <div class="feature-card"><span class="feature-icon">📦</span><div><h3 class="feature-title">Sell Products</h3><p class="feature-description">We launch product catalogs with inventory management, checkout, and order tracking automatically configured.</p></div></div>
+            <div class="feature-card"><span class="feature-icon">⚙️</span><div><h3 class="feature-title">Sell Services</h3><p class="feature-description">We build service pages with consultation booking, service packages, and client management tools.</p></div></div>
+            <div class="feature-card"><span class="feature-icon">🤖</span><div><h3 class="feature-title">Custom AI Chatbots</h3><p class="feature-description">Each store includes an intelligent AI assistant trained on your business to help customers 24/7.</p></div></div>
         </div>
     </section>
 
-    <!-- Chat Section (Desktop Only) - Using mobile.html architecture -->
+    <!-- Desktop Chat Section (Now just a wrapper) -->
     <section class="chat-section" id="chat">
         <div class="chat-wrapper">
             <div class="section-header">
                 <h2 class="section-title">Meet Your Custom AI Assistant</h2>
                 <p class="section-subtitle">Every store we build includes a chatbot trained specifically on your business</p>
             </div>
-
-            <div class="chat-container ai-portal">
-                <!-- Water Background Container for Desktop Chat -->
-                <div id="water-background-container-desktop"></div>
-
-                <div class="chat-header portal-header">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <span class="chat-icon">🤖</span>
-                        <h3 class="chat-title portal-title">AI Chat Assistant</h3>
-                    </div>
-                    <div class="header-buttons-group" style="display: flex; align-items: center; gap: 10px; margin-left: auto;">
-                        <!-- Master Speaker Button - ADDED BY JS via soundManager -->
-                        <div class="header-left-container" id="header-left-container"></div>
-                    </div>
-                    <div class="ai-status">
-                        <div class="status-indicator"></div>
-                        <span class="status-text">ONLINE</span>
-                    </div>
-                </div>
-
-                <div class="messages-container" id="messagesContainer">
-                    <div class="messages" id="messages">
-                        <!-- Chat messages will appear here -->
-                    </div>
-                    <div class="typing-indicator" id="typingIndicator">
-                        <span class="typing-dot"></span>
-                        <span class="typing-dot"></span>
-                        <span class="typing-dot"></span>
-                    </div>
-                    <div id="moduleContainer">
-                        <!-- Jarvis UI modules will appear here -->
-                    </div>
-                </div>
-
-                <div class="input-area">
-                    <div class="input-wrapper" id="inputWrapper">
-                        <input type="text" id="userInput" placeholder="Ask about how we build your store, features, pricing..." autocomplete="off" maxlength="4000">
-                    </div>
-                    <button id="sendButton"><i class="fas fa-arrow-up"></i></button>
-                </div>
-            </div>
+            <!-- The master chat instance will be moved here by JS on desktop -->
         </div>
     </section>
-
-    <!-- TTS Player (from mobile.html architecture) -->
-    <audio id="ttsPlayer" style="display: none;"></audio>
-
+    
     <!-- AI Blurb Section (Mobile Only - replaces chat section) -->
     <section class="ai-blurb-section">
         <div class="ai-blurb-content">
@@ -1897,14 +988,10 @@
             <div class="about-text">
                 <h2>The 7-Day Launchpad</h2>
                 <h3>From consultation to live website in just one week</h3>
-                <div>
-                    <p>AARIE.CA builds professional websites for your business - you don't have to do anything. Whether you're selling workshops, physical products, or professional services, we handle everything. Day 1: kickoff call. Day 3: see your design mockup. Day 7-10: your site goes live.</p>
-                    <p>Every website we build includes a custom AI chatbot trained on your specific business. Your customers get instant answers about your offerings, pricing, and availability 24/7. No coding required, no technical expertise needed - we build it, you run your business.</p>
-                </div>
+                <p>AARIE.CA builds professional websites for your business - you don't have to do anything. Whether you're selling workshops, physical products, or professional services, we handle everything. Day 1: kickoff call. Day 3: see your design mockup. Day 7-10: your site goes live.</p>
+                <p>Every website we build includes a custom AI chatbot trained on your specific business. Your customers get instant answers about your offerings, pricing, and availability 24/7. No coding required, no technical expertise needed - we build it, you run your business.</p>
             </div>
-            <div class="about-visual">
-                <span class="about-emoji">🚀</span>
-            </div>
+            <div class="about-visual"><span class="about-emoji">🚀</span></div>
         </div>
     </section>
 
@@ -1914,7 +1001,7 @@
             <h2>See What We've Built</h2>
             <p>Check out Moon Tide Reconciliation - a website we built for a client. See how your customers will shop workshops, products, and services with AI assistance.</p>
             <div class="cta-buttons">
-                <a href="/demo-desk.html" class="btn btn-primary">START YOUR PROJECT</a>
+                <a href="/demo-desk.html" class="btn btn-primary">LEARN MORE</a>
                 <a href="https://moontidereconciliation.com" class="btn btn-secondary" target="_blank" rel="noopener">MOON TIDE</a>
             </div>
         </div>
@@ -1928,11 +1015,43 @@
                 <a href="/demo-desk.html">GET A STORE</a>
                 <a href="/about-desk.html">About</a>
                 <a href="/contact-desk.html">Contact</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms and Conditions</a>
             </div>
             <p class="footer-copyright">© 2025 AARIE.CA. All rights reserved.</p>
         </div>
     </footer>
 
+    <!-- =================================================================== -->
+    <!-- MASTER AI CHAT INSTANCE (Used by both Desktop and Mobile) -->
+    <!-- This is kept hidden until moved into position by JavaScript. -->
+    <!-- =================================================================== -->
+    <div id="master-chat-instance" style="display: none;">
+        <div class="chat-container ai-portal">
+            <div class="water-background-container"></div> <!-- Generic water container -->
+            <div class="chat-header portal-header">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="chat-icon">🤖</span>
+                    <h3 class="chat-title portal-title">AI Chat Assistant</h3>
+                </div>
+                <!-- Master Speaker Button will be added here by soundManager.js -->
+            </div>
+            <div class="messages-container" id="messagesContainer">
+                <div class="messages" id="messages"></div>
+                <div class="typing-indicator" id="typingIndicator">
+                    <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+                </div>
+                <div id="moduleContainer"></div>
+            </div>
+            <div class="input-area">
+                <div class="input-wrapper" id="inputWrapper">
+                    <input type="text" id="userInput" placeholder="Ask about stores, features, pricing..." autocomplete="off" maxlength="4000">
+                </div>
+                <button id="sendButton"><i class="fas fa-arrow-up"></i></button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Audio Permission Modal (for TTS unlock) -->
     <div class="audio-permission-overlay" id="audioPermissionOverlay">
         <div class="audio-permission-modal">
@@ -1945,624 +1064,195 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Hidden Audio Element for TTS -->
-    <audio id="ttsAudio"></audio>
+    <audio id="ttsPlayer"></audio>
 
     <!-- Mobile Floating Chat Button -->
-    <button class="mobile-chat-fab" id="mobileChatFab" title="Chat with AI">
-        🤖
-    </button>
+    <button class="mobile-chat-fab" id="mobileChatFab" title="Chat with AI">🤖</button>
 
     <!-- Mobile Chat Overlay -->
     <div class="mobile-chat-overlay" id="mobileChatOverlay"></div>
 
-    <!-- Mobile Fullscreen Chat Modal - Using mobile.html architecture -->
+    <!-- Mobile Fullscreen Chat Modal (Now an empty shell) -->
     <div class="mobile-chat-modal" id="mobileChatModal">
         <div class="mobile-chat-header">
             <h3 class="mobile-chat-title">🤖 AI Assistant</h3>
             <div class="mobile-header-controls">
-                <button class="mobile-speaker-btn" id="mobileSpeakerBtn" title="Enable Voice">
-                    <i class="fa-solid fa-volume-xmark"></i>
-                </button>
+
                 <button class="mobile-chat-close" id="mobileChatClose">✕</button>
             </div>
         </div>
         <div class="mobile-chat-body">
-            <div class="mobile-chat-messages" id="mobileChatMessages">
-                <div class="mobile-chat-message ai">
-                    Hi! 👋 I'm the AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. Ask me anything about our services, pricing, or how we can help your business!
-                </div>
-            </div>
-            <div class="mobile-typing-indicator" id="mobileTypingIndicator">
-                <span class="mobile-typing-dot"></span>
-                <span class="mobile-typing-dot"></span>
-                <span class="mobile-typing-dot"></span>
-            </div>
-        </div>
-        <div class="mobile-chat-input-area">
-            <input type="text" class="mobile-chat-input" id="mobileChatInput" placeholder="Ask me anything..." maxlength="4000">
-            <button class="mobile-chat-send" id="mobileSendButton"><i class="fas fa-arrow-up"></i></button>
+            <!-- The master chat instance will be moved here by JS on mobile -->
         </div>
     </div>
 
-    <!-- ============================================
-         CHAT MODULES (from mobile.html architecture)
-         Same production-level JS used by mobile.html
-         ============================================ -->
-
-    <!-- TTS Manager (handles all Text-to-Speech functionality) -->
+    <!-- CHAT MODULES & CONTROLLERS (Single instance for both views) -->
     <script type="module" src="./js/tts-manager.js?v=11.0.12"></script>
-
-    <!-- Jarvis UI Manager (handles dynamic UI modules within chat) -->
     <script type="module" src="./js/jarvis-ui-manager.js?v=11.0.12"></script>
-
-    <!-- Smart Message Renderer (for rich, structured messages) -->
     <script type="module" src="./js/smart-message-renderer.js?v=11.0.12"></script>
-
-    <!-- Portal Controller (main chat orchestrator) -->
     <script type="module" src="./js/portal-controller.js?v=11.0.12"></script>
-
-    <!-- Water Background for Desktop Chat -->
+    
+    <!-- MASTER SCRIPT for Water Background & View Management -->
     <script type="module">
         import WaterBackground from './js/water.js?v=11.0.12';
 
-        // Initialize water background when DOM is ready
-        function initWaterBackground() {
-            const container = document.getElementById('water-background-container-desktop');
-            if (container && typeof THREE !== 'undefined') {
-                console.log('[index.html] Initializing water background for desktop chat...');
+        let waterInstance = null; // To hold the active water instance
 
-                // Create a custom water background instance for desktop
-                const DesktopWater = Object.assign({}, WaterBackground);
-                DesktopWater.isRendering = false;
-                DesktopWater.container = null;
-                DesktopWater.renderer = null;
-                DesktopWater.scene = null;
-                DesktopWater.camera = null;
-                DesktopWater.material = null;
-                DesktopWater.clock = new THREE.Clock();
-                DesktopWater.timeUniform = null;
-                DesktopWater.rafId = -1;
-
-                // Override _injectCSS to not use fixed positioning
-                DesktopWater._injectCSS = function() {
-                    // Skip CSS injection - we use our own CSS in the style section
-                    console.log('[DesktopWater] Using custom CSS from index.html');
-                };
-
-                // Override init to use container dimensions instead of window
-                DesktopWater.init = function(parentContainer) {
-                    if (typeof THREE === 'undefined') {
-                        console.error('[DesktopWater] THREE.js is not loaded.');
-                        return;
-                    }
-                    if (this.isRendering) {
-                        console.warn('[DesktopWater] Already rendering.');
-                        return;
-                    }
-
-                    console.log('[DesktopWater] Initializing...');
-                    this.container = parentContainer;
-                    this._injectCSS();
-                    WaterBackground._injectShaders.call(this);
-
-                    const width = parentContainer.offsetWidth || 900;
-                    const height = parentContainer.offsetHeight || 600;
-
-                    this.scene = new THREE.Scene();
-                    this.camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 10000);
-                    this.camera.position.set(0, 0, 0);
-                    this.camera.lookAt(0, 0, -1);
-                    this.scene.add(this.camera);
-
-                    this.timeUniform = {
-                        iGlobalTime: { type: 'f', value: 0.1 },
-                        iResolution: { type: 'v2', value: new THREE.Vector2(width, height) }
-                    };
-
-                    const vertexShaderEl = document.getElementById('water-vertex-shader');
-                    const fragmentShaderEl = document.getElementById('water-fragment-shader');
-
-                    if (!vertexShaderEl || !fragmentShaderEl) {
-                        console.error('[DesktopWater] Shader elements not found!');
-                        return;
-                    }
-
-                    this.material = new THREE.ShaderMaterial({
-                        uniforms: this.timeUniform,
-                        vertexShader: vertexShaderEl.textContent,
-                        fragmentShader: fragmentShaderEl.textContent
-                    });
-
-                    const planeGeometry = new THREE.PlaneBufferGeometry(width, height, 40, 40);
-                    const mesh = new THREE.Mesh(planeGeometry, this.material);
-                    mesh.position.set(0, 0, -100);
-                    this.scene.add(mesh);
-
-                    const canvas = document.createElement('canvas');
-                    canvas.id = 'water-background-canvas-desktop';
-                    this.container.appendChild(canvas);
-
-                    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-                    this.renderer.setSize(width, height);
-                    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-                    this.renderer.setClearColor(0x0a0f14, 1);
-
-                    // Resize observer for container size changes
-                    this._resizeObserver = new ResizeObserver(() => {
-                        const w = this.container.offsetWidth;
-                        const h = this.container.offsetHeight;
-                        if (w > 0 && h > 0) {
-                            this.camera.aspect = w / h;
-                            this.camera.updateProjectionMatrix();
-                            this.renderer.setSize(w, h);
-                            this.timeUniform.iResolution.value.set(w, h);
-                        }
-                    });
-                    this._resizeObserver.observe(this.container);
-
-                    this.isRendering = true;
-                    this._renderLoop();
-                    console.log('[DesktopWater] Initialized successfully.');
-                };
-
-                // Use same render loop
-                DesktopWater._renderLoop = WaterBackground._renderLoop.bind(DesktopWater);
-
-                // Initialize
-                DesktopWater.init(container);
-                window.desktopWater = DesktopWater;
-            } else {
-                console.warn('[index.html] Water background container not found or THREE not loaded');
-            }
-        }
-
-        // Wait for DOM and THREE.js
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => setTimeout(initWaterBackground, 100));
-        } else {
-            setTimeout(initWaterBackground, 100);
-        }
-    </script>
-
-    <!-- Mobile AI Chat Functions with TTS & Special Tags -->
-    <script>
-        // ========================================
-        // MOBILE CHAT SYSTEM (from demo-desk.html)
-        // Complete inline implementation for mobile
-        // ========================================
-
-        // BACKEND CONFIGURATION
-        const MOBILE_BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
-        const MOBILE_CHAT_ENDPOINT = '/chat';
-        const MOBILE_TTS_ENDPOINT = '/tts';
-
-        // Session management - Fresh session per page load
-        let MOBILE_CHAT_SESSION_ID = null;
-        let mobileDeviceFingerprint = null;
-
-        // TTS State (mobile specific)
-        let mobileTtsUnlocked = false;
-        let mobileIsPlaying = false;
-        let mobileCurrentAudio = null;
-        let mobileAudioCache = new Map();
-
-        // ========================================
-        // INITIALIZATION
-        // ========================================
-        function initMobileChatSession() {
-            MOBILE_CHAT_SESSION_ID = 'mobile_' + crypto.randomUUID();
-            console.log('[Mobile Chat] New session:', MOBILE_CHAT_SESSION_ID);
-        }
-
-        function initMobileDeviceFingerprint() {
-            const formFactor = 'mobile';
-            const screenWidth = window.screen.width;
-            const screenHeight = window.screen.height;
-            const pixelDensity = (window.devicePixelRatio || 1).toFixed(1);
-            mobileDeviceFingerprint = `${formFactor}_${screenWidth}x${screenHeight}_${pixelDensity}`;
-            console.log('[Mobile Chat] Device fingerprint:', mobileDeviceFingerprint);
-        }
-
-        // ========================================
-        // TTS SYSTEM (MOBILE)
-        // ========================================
-        function showMobileAudioModal() {
-            document.getElementById('audioPermissionOverlay').classList.add('active');
-        }
-
-        function hideMobileAudioModal() {
-            document.getElementById('audioPermissionOverlay').classList.remove('active');
-        }
-
-        async function attemptMobileTTSUnlock() {
-            if (mobileTtsUnlocked) return true;
-
-            return new Promise((resolve) => {
-                showMobileAudioModal();
-
-                document.getElementById('audioEnableBtn').onclick = async () => {
-                    try {
-                        // Play unlock sound to satisfy browser autoplay policy
-                        const testAudio = new Audio('/sounds/unlock.mp3?v=1.0');
-                        testAudio.volume = 0.5;
-                        await testAudio.play();
-
-                        mobileTtsUnlocked = true;
-                        console.log('[Mobile TTS] ✅ Audio unlocked');
-
-                        // Update speaker button
-                        updateMobileSpeakerButton();
-                        hideMobileAudioModal();
-                        resolve(true);
-                    } catch (error) {
-                        console.error('[Mobile TTS] ❌ Unlock failed:', error);
-                        hideMobileAudioModal();
-                        resolve(false);
-                    }
-                };
-
-                document.getElementById('audioSkipBtn').onclick = () => {
-                    hideMobileAudioModal();
-                    resolve(false);
-                };
-            });
-        }
-
-        function updateMobileSpeakerButton() {
-            const mobileBtn = document.getElementById('mobileSpeakerBtn');
-            if (mobileTtsUnlocked && mobileBtn) {
-                mobileBtn.classList.add('unlocked');
-                mobileBtn.querySelector('i').className = 'fa-solid fa-volume-high';
+        // Function to initialize a water background in a specific container
+        function initializeWaterBackground(container) {
+            if (!container || typeof THREE === 'undefined') {
+                console.warn('[ViewManager] Water background container not found or THREE not loaded');
+                return null;
             }
 
-            // Update all play buttons
-            document.querySelectorAll('#mobileChatMessages .message-play-btn').forEach(btn => {
-                const icon = btn.querySelector('i');
-                if (mobileTtsUnlocked) {
-                    icon.className = 'fa-solid fa-play';
-                } else {
-                    icon.className = 'fa-solid fa-volume-xmark';
-                }
-            });
-        }
-
-        async function getMobileTTSAudio(text) {
-            const cacheKey = text.substring(0, 100);
-            if (mobileAudioCache.has(cacheKey)) {
-                return mobileAudioCache.get(cacheKey);
-            }
-
-            try {
-                const response = await fetch(`${MOBILE_BACKEND_URL}${MOBILE_TTS_ENDPOINT}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: text })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    const audioData = data.audio || data.audio_base64;
-                    if (audioData) {
-                        mobileAudioCache.set(cacheKey, audioData);
-                        return audioData;
+            // Create a new, isolated WaterBackground object to avoid state conflicts
+            const scopedWater = { ...WaterBackground, isRendering: false, clock: new THREE.Clock() };
+            
+            // Add a destroy method to clean up resources, crucial for mobile
+            scopedWater.destroy = function() {
+                if (!this.isRendering) return;
+                this.isRendering = false;
+                cancelAnimationFrame(this.rafId);
+                if (this._resizeObserver) this._resizeObserver.disconnect();
+                if (this.renderer) {
+                    this.renderer.dispose();
+                    if (this.renderer.domElement.parentNode) {
+                        this.renderer.domElement.parentNode.removeChild(this.renderer.domElement);
                     }
                 }
-            } catch (error) {
-                console.error('[Mobile TTS] Failed to fetch audio:', error);
-            }
-            return null;
-        }
-
-        async function playMobileTTSAudio(base64Audio) {
-            const ttsAudio = document.getElementById('ttsAudio');
-            if (mobileCurrentAudio) {
-                mobileCurrentAudio.pause();
-                mobileCurrentAudio.currentTime = 0;
-            }
-
-            // Detect MIME type from base64 header
-            let mimeType = 'audio/mpeg';
-            if (base64Audio.startsWith('T2d')) {
-                mimeType = 'audio/ogg';
-            } else if (base64Audio.startsWith('Ukl')) {
-                mimeType = 'audio/wav';
-            } else if (base64Audio.startsWith('//u') || base64Audio.startsWith('SUQ')) {
-                mimeType = 'audio/mpeg';
-            }
-
-            ttsAudio.src = `data:${mimeType};base64,${base64Audio}`;
-            ttsAudio.volume = 1.0;
-            mobileIsPlaying = true;
-            mobileCurrentAudio = ttsAudio;
-
-            ttsAudio.onended = () => {
-                mobileIsPlaying = false;
-                updateMobilePlayButtonStates();
+                console.log('[WaterBackground] Instance destroyed.');
             };
 
-            try {
-                await ttsAudio.play();
-                console.log('[Mobile TTS] ✅ Playing audio');
-            } catch (err) {
-                console.error('[Mobile TTS] ❌ Playback failed:', err);
-                mobileIsPlaying = false;
-            }
-        }
+            // Override _injectCSS to not use fixed positioning
+            scopedWater._injectCSS = function() {};
 
-        function stopMobileTTSAudio() {
-            const ttsAudio = document.getElementById('ttsAudio');
-            if (ttsAudio) {
-                ttsAudio.pause();
-                ttsAudio.currentTime = 0;
-            }
-            mobileIsPlaying = false;
-            updateMobilePlayButtonStates();
-        }
+            // Override init to use container dimensions
+            scopedWater.init = function(parentContainer) {
+                if (this.isRendering) return;
+                this.container = parentContainer;
+                WaterBackground._injectShaders.call(this);
 
-        function updateMobilePlayButtonStates(playingText = null) {
-            document.querySelectorAll('#mobileChatMessages .message-play-btn').forEach(btn => {
-                const msgText = btn.dataset.text;
-                const icon = btn.querySelector('i');
+                const width = parentContainer.offsetWidth;
+                const height = parentContainer.offsetHeight;
 
-                if (!mobileTtsUnlocked) {
-                    icon.className = 'fa-solid fa-volume-xmark';
-                } else if (msgText === playingText && mobileIsPlaying) {
-                    icon.className = 'fa-solid fa-stop';
-                } else {
-                    icon.className = 'fa-solid fa-play';
-                }
-            });
-        }
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 10000);
+                this.camera.position.set(0, 0, 0);
+                this.camera.lookAt(0, 0, -1);
 
-        async function handleMobilePlayClick(text, button) {
-            const icon = button.querySelector('i');
-
-            // If not unlocked, unlock first
-            if (!mobileTtsUnlocked) {
-                const unlocked = await attemptMobileTTSUnlock();
-                if (!unlocked) return;
-                updateMobilePlayButtonStates();
-                return;
-            }
-
-            // If playing this message, stop it
-            if (icon.classList.contains('fa-stop')) {
-                stopMobileTTSAudio();
-                return;
-            }
-
-            // Play the audio
-            icon.className = 'fa-solid fa-spinner fa-spin';
-            button.disabled = true;
-
-            try {
-                const audioData = await getMobileTTSAudio(text);
-                if (audioData) {
-                    await playMobileTTSAudio(audioData);
-                    updateMobilePlayButtonStates(text);
-                }
-            } catch (error) {
-                console.error('[Mobile TTS] Error:', error);
-            } finally {
-                button.disabled = false;
-            }
-        }
-
-        // ========================================
-        // SPECIAL TAG HANDLING
-        // ========================================
-        function attachMobileSpecialTagListeners(container, inputElement, sendFunction) {
-            container.querySelectorAll('special').forEach(el => {
-                el.style.cursor = 'pointer';
-                el.onclick = (e) => {
-                    e.stopPropagation();
-                    const text = el.textContent;
-                    console.log('[Mobile Chat] Clicked special tag:', text);
-                    inputElement.value = text;
-                    sendFunction();
+                this.timeUniform = {
+                    iGlobalTime: { type: 'f', value: 0.1 },
+                    iResolution: { type: 'v2', value: new THREE.Vector2(width, height) }
                 };
-            });
-        }
-
-        function createMobileAIMessage(text) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'message-wrapper ai';
-
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'mobile-chat-message ai';
-            msgDiv.innerHTML = text; // Use innerHTML to render special/price tags
-            wrapper.appendChild(msgDiv);
-
-            // Add play button
-            const playBtn = document.createElement('button');
-            playBtn.className = 'message-play-btn';
-            playBtn.dataset.text = text.replace(/<[^>]*>/g, ''); // Strip HTML for TTS
-            playBtn.innerHTML = mobileTtsUnlocked
-                ? '<i class="fa-solid fa-play"></i>'
-                : '<i class="fa-solid fa-volume-xmark"></i>';
-            playBtn.onclick = () => handleMobilePlayClick(playBtn.dataset.text, playBtn);
-            wrapper.appendChild(playBtn);
-
-            return wrapper;
-        }
-
-        function createMobileUserMessage(text) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'message-wrapper user';
-
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'mobile-chat-message user';
-            msgDiv.textContent = text;
-            wrapper.appendChild(msgDiv);
-
-            return wrapper;
-        }
-
-        // ========================================
-        // MOBILE CHAT MODAL FUNCTIONS
-        // ========================================
-        function openMobileChat() {
-            document.getElementById('mobileChatModal').classList.add('active');
-            document.getElementById('mobileChatOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            console.log('[Mobile Chat] Modal opened');
-        }
-
-        function closeMobileChat() {
-            stopMobileTTSAudio();
-            document.getElementById('mobileChatModal').classList.remove('active');
-            document.getElementById('mobileChatOverlay').classList.remove('active');
-            document.body.style.overflow = '';
-            console.log('[Mobile Chat] Modal closed');
-        }
-
-        async function sendMobileMessage() {
-            const input = document.getElementById('mobileChatInput');
-            const messagesDiv = document.getElementById('mobileChatMessages');
-            const typingIndicator = document.getElementById('mobileTypingIndicator');
-            const userText = input.value.trim();
-
-            if (!userText) return;
-
-            // Stop any playing TTS
-            stopMobileTTSAudio();
-
-            input.disabled = true;
-            messagesDiv.innerHTML = '';
-
-            // Add user message
-            messagesDiv.appendChild(createMobileUserMessage(userText));
-            input.value = '';
-            messagesDiv.scrollTop = 0;
-
-            typingIndicator.classList.add('visible');
-
-            try {
-                const payload = {
-                    session_id: MOBILE_CHAT_SESSION_ID,
-                    prompt: userText,
-                    device_fingerprint: mobileDeviceFingerprint
-                };
-
-                console.log('[Mobile Chat] Sending:', userText.substring(0, 50) + '...');
-
-                const response = await fetch(MOBILE_BACKEND_URL + MOBILE_CHAT_ENDPOINT, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
+                
+                this.material = new THREE.ShaderMaterial({
+                    uniforms: this.timeUniform,
+                    vertexShader: document.getElementById('water-vertex-shader').textContent,
+                    fragmentShader: document.getElementById('water-fragment-shader').textContent
                 });
 
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const planeGeometry = new THREE.PlaneBufferGeometry(width, height, 40, 40);
+                const mesh = new THREE.Mesh(planeGeometry, this.material);
+                mesh.position.set(0, 0, -100);
+                this.scene.add(mesh);
 
-                const data = await response.json();
-                const aiResponse = data.response || 'Sorry, I could not generate a response.';
+                const canvas = document.createElement('canvas');
+                this.container.appendChild(canvas);
+                this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+                this.renderer.setSize(width, height);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.setClearColor(0x0a0f14, 1);
 
-                console.log('[Mobile Chat] Response:', aiResponse.substring(0, 50) + '...');
+                this._resizeObserver = new ResizeObserver(() => {
+                    const w = this.container.offsetWidth;
+                    const h = this.container.offsetHeight;
+                    if (w > 0 && h > 0) {
+                        this.camera.aspect = w / h;
+                        this.camera.updateProjectionMatrix();
+                        this.renderer.setSize(w, h);
+                        this.timeUniform.iResolution.value.set(w, h);
+                    }
+                });
+                this._resizeObserver.observe(this.container);
 
-                typingIndicator.classList.remove('visible');
+                this.isRendering = true;
+                this._renderLoop();
+                console.log('[WaterBackground] Instance initialized.');
+            };
 
-                // Add AI message with special tags and TTS button
-                const aiMsgWrapper = createMobileAIMessage(aiResponse);
-                messagesDiv.appendChild(aiMsgWrapper);
-
-                // Attach special tag click handlers
-                attachMobileSpecialTagListeners(aiMsgWrapper, input, sendMobileMessage);
-
-                messagesDiv.scrollTop = 0;
-
-            } catch (error) {
-                console.error('[Mobile Chat] Error:', error);
-                typingIndicator.classList.remove('visible');
-
-                const errorWrapper = createMobileAIMessage('Sorry, I encountered an error. Please try again.');
-                messagesDiv.appendChild(errorWrapper);
-                messagesDiv.scrollTop = 0;
-            } finally {
-                input.disabled = false;
-                input.blur();
-                messagesDiv.focus();
-            }
+            scopedWater._renderLoop = WaterBackground._renderLoop.bind(scopedWater);
+            scopedWater.init(container);
+            return scopedWater;
         }
-
-        // ========================================
-        // EVENT LISTENERS
-        // ========================================
+        
+        // Main View Manager Logic
         document.addEventListener('DOMContentLoaded', () => {
-            initMobileChatSession();
-            initMobileDeviceFingerprint();
-
-            // Mobile FAB click
-            const fab = document.getElementById('mobileChatFab');
-            if (fab) {
-                fab.addEventListener('click', openMobileChat);
-            }
-
-            // Mobile overlay click
-            const overlay = document.getElementById('mobileChatOverlay');
-            if (overlay) {
-                overlay.addEventListener('click', closeMobileChat);
-            }
-
-            // Mobile close button
-            const closeBtn = document.getElementById('mobileChatClose');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', closeMobileChat);
-            }
-
-            // AI Blurb CTA (mobile section)
-            const aiBlurbCta = document.getElementById('aiBlurbCta');
-            if (aiBlurbCta) {
-                aiBlurbCta.addEventListener('click', openMobileChat);
-            }
-
-            // Mobile chat input
-            const mobileInput = document.getElementById('mobileChatInput');
-            if (mobileInput) {
-                mobileInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !mobileInput.disabled) {
-                        sendMobileMessage();
-                    }
-                });
-            }
-
-            // Mobile send button
-            const mobileSendBtn = document.getElementById('mobileSendButton');
-            if (mobileSendBtn) {
-                mobileSendBtn.addEventListener('click', sendMobileMessage);
-            }
-
-            // Mobile speaker button handler
-            const mobileSpeakerBtn = document.getElementById('mobileSpeakerBtn');
-            if (mobileSpeakerBtn) {
-                mobileSpeakerBtn.addEventListener('click', async () => {
-                    if (!mobileTtsUnlocked) {
-                        await attemptMobileTTSUnlock();
-                    }
-                });
-            }
-
-            // Close modals with Escape
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    const modal = document.getElementById('mobileChatModal');
-                    if (modal && modal.classList.contains('active')) {
-                        closeMobileChat();
-                    }
-                    hideMobileAudioModal();
+            const masterChatInstance = document.getElementById('master-chat-instance');
+            
+            if (window.innerWidth > 768) {
+                // --- DESKTOP VIEW ---
+                console.log('[ViewManager] Desktop mode detected.');
+                document.body.classList.add('desktop-view');
+                const desktopWrapper = document.querySelector('.chat-wrapper');
+                if (desktopWrapper && masterChatInstance) {
+                    desktopWrapper.appendChild(masterChatInstance);
+                    masterChatInstance.style.display = 'flex';
+                    const waterContainer = masterChatInstance.querySelector('.water-background-container');
+                    waterInstance = initializeWaterBackground(waterContainer);
                 }
-            });
+            } else {
+                // --- MOBILE VIEW ---
+                console.log('[ViewManager] Mobile mode detected.');
+                document.body.classList.add('mobile-view');
+                const fab = document.getElementById('mobileChatFab');
+                const blurbCta = document.getElementById('aiBlurbCta');
+                const overlay = document.getElementById('mobileChatOverlay');
+                const modal = document.getElementById('mobileChatModal');
+                const closeBtn = document.getElementById('mobileChatClose');
+                const mobileBody = document.querySelector('.mobile-chat-body');
+                
+                const openMobilePortal = () => {
+                    modal.classList.add('active');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    mobileBody.appendChild(masterChatInstance);
+                    masterChatInstance.style.display = 'flex';
 
-            console.log('[Mobile Chat] Initialized with TTS & Special Tags');
+                    // Initialize water background for mobile
+                    const waterContainer = masterChatInstance.querySelector('.water-background-container');
+                    if (waterContainer) {
+                        // Ensure any previous instance is destroyed before creating a new one
+                        if(waterInstance) waterInstance.destroy();
+                        waterInstance = initializeWaterBackground(waterContainer);
+                    }
+                };
+
+                const closeMobilePortal = () => {
+                    modal.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                    
+                    // Move the instance back to the body and hide it
+                    document.body.appendChild(masterChatInstance);
+                    masterChatInstance.style.display = 'none';
+
+                    // Destroy water background instance to save resources
+                    if (waterInstance) {
+                        waterInstance.destroy();
+                        waterInstance = null;
+                    }
+                };
+                
+                fab.addEventListener('click', openMobilePortal);
+                blurbCta.addEventListener('click', openMobilePortal);
+                closeBtn.addEventListener('click', closeMobilePortal);
+                overlay.addEventListener('click', closeMobilePortal);
+
+
+            }
         });
-
-        // Expose globally
-        window.openMobileChat = openMobileChat;
-        window.closeMobileChat = closeMobileChat;
     </script>
 </body>
 </html>

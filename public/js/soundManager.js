@@ -127,26 +127,9 @@ const soundManager = {
      * Toggle sound on/off
      */
     createMasterSpeakerButton() {
-        const button = document.createElement('button');
-        button.id = 'master-speaker-btn';
-        button.title = 'Toggle Sound';
-        // Note: Inline styles removed - now defined in mobile.css
-
-        button.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggleSound();
-        });
-
-        // Append to the new left container in the header
-        const headerLeft = document.getElementById('header-left-container');
-        if (headerLeft) {
-            headerLeft.appendChild(button);
-        } else {
-            document.body.appendChild(button); // Keep fallback
-        }
-
-        this.masterSpeakerBtn = button;
-        this.updateSpeakerIcon();
+        // Intentionally left blank to disable the master speaker button
+        console.log('[SoundManager] Master speaker button is disabled by design.');
+        return;
     },
 
     /**
@@ -233,6 +216,7 @@ const soundManager = {
      * @param {object} options - { fadeIn: boolean, retries: number }
      */
     async playSound(type, options = {}) {
+        return; // <-- ADD THIS LINE to disable all automatic UI sounds.
         // Check if audio is enabled
         if (!audioStateManager.state.isAudioEnabled) {
             if (this.config.debug) console.log(`⏸️  Skipping ${type} - audio disabled`);

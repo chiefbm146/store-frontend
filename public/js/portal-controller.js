@@ -11,7 +11,8 @@ import cartStore from './cart-store.js';
 import moduleManager from './module-manager.js';
 import soundManager from './soundManager.js';
 import audioStateManager from './audioStateManager.js';
-import hamburgerMenu from './hamburger-menu.js';
+// import hamburgerMenu from './hamburger-menu.js';
+// hamburgerMenu.init();
 
 // NEW: Import the preloader and config system
 // Asset preloader disabled - not needed for this site
@@ -270,7 +271,7 @@ class PortalController {
         cacheDOMElements();
 
         soundManager.init();
-        hamburgerMenu.init();
+        // hamburgerMenu.init();
         setupEventListeners();
         initializeCart();
         initFloatingCartButton();

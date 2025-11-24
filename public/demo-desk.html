@@ -15,6 +15,9 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Add this right after the Font Awesome link -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
     <!-- CSS -->
     <link rel="stylesheet" href="./css/demo-store.css">
 </head>
@@ -37,7 +40,7 @@
                 <a href="/store-booking.html" class="nav-link"><span>🏪</span> Get a Store</a>
                 <a href="/about-desk.html" class="nav-link"><span>ℹ️</span> About</a>
                 <a href="/contact-desk.html" class="nav-link"><span>📬</span> Contact</a>
-                <a href="/ai-chat-desk.html" class="nav-link"><span>🤖</span> A.I. Chat</a>
+                <a href="/ai-chat" class="nav-link"><span>🤖</span> A.I. Chat</a>
             </div>
             <!-- Mobile Hamburger Menu Button -->
             <button class="mobile-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -73,6 +76,14 @@
             <a href="javascript:void(0)" class="mobile-menu-link" onclick="closeMobileMenu(); openMobileChat();">
                 <span class="mobile-menu-icon">🤖</span>
                 <span>A.I. Chat</span>
+            </a>
+            <a href="/privacy" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">📄</span>
+                <span>Privacy Policy</span>
+            </a>
+            <a href="/terms" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">📜</span>
+                <span>Terms and Conditions</span>
             </a>
         </nav>
     </div>
@@ -126,7 +137,9 @@
     <footer class="footer">
         <p class="footer-tagline" id="footer-tagline">AARIE.CA - Your Website Live in 7 Days</p>
         <p class="footer-links">
-            <a href="/developer-desk.html" class="footer-link">Contact the Developer</a>
+            <a href="/contact" class="footer-link">Contact</a> |
+            <a href="/privacy" class="footer-link">Privacy Policy</a> |
+            <a href="/terms" class="footer-link">Terms and Conditions</a>
         </p>
         <p class="footer-copyright" id="footer-copyright">© 2025 AARIE.CA. All rights reserved.</p>
     </footer>
@@ -151,9 +164,15 @@
             </div>
         </div>
         <div class="chat-modal-body">
+            <div class="water-background-container"></div> <!-- ADD THIS LINE -->
             <div class="messages" id="aiMessages">
-                <div class="message ai-message">
-                    Hi! 👋 I'm the AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. Ask me anything about our services, pricing, or how we can help your business!
+                <div class="message-wrapper ai">
+                    <div class="message ai-message">
+                        Hi! 👋 I'm the AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. Ask me anything about our services, pricing, or how we can help your business!
+                    </div>
+                    <button class="message-play-btn" id="desktop-greeting-tts">
+                        <i class="fa-solid fa-volume-xmark"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -199,9 +218,15 @@
             </div>
         </div>
         <div class="mobile-chat-body">
+            <div class="water-background-container"></div> <!-- ADD THIS LINE -->
             <div class="mobile-chat-messages" id="mobileChatMessages">
-                <div class="mobile-chat-message ai">
-                    Hi! 👋 I'm the AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. Ask me anything about our services, pricing, or how we can help your business!
+                <div class="message-wrapper ai">
+                    <div class="mobile-chat-message ai">
+                        Hi! 👋 I'm the AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. Ask me anything about our services, pricing, or how we can help your business!
+                    </div>
+                    <button class="message-play-btn" id="mobile-greeting-tts">
+                        <i class="fa-solid fa-volume-xmark"></i>
+                    </button>
                 </div>
             </div>
             <div class="mobile-typing-indicator" id="mobileTypingIndicator">
@@ -299,7 +324,11 @@
     </script>
 
     <!-- AI Chat Functions with TTS & Special Tags -->
+    <script src="./js/water.js"></script>
     <script>
+        // ... (at the top of your inline script) ...
+        const GREETING_MESSAGE_TEXT = "Hi! I'm the AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. Ask me anything about our services, pricing, or how we can help your business!";
+
         // ========================================
         // BACKEND CONFIGURATION
         // ========================================
@@ -311,6 +340,7 @@
         let CHAT_SESSION_ID = null;
         let MOBILE_CHAT_SESSION_ID = null;
         let deviceFingerprint = null;
+        let waterInstance = null; // ADD THIS NEW VARIABLE
 
         // TTS State
         let ttsUnlocked = false;
@@ -588,12 +618,25 @@
             document.getElementById('aiChatModal').classList.add('active');
             document.getElementById('aiChatOverlay').classList.add('active');
             document.getElementById('aiChatInput').focus();
+
+            // ADD THIS: Initialize water for desktop
+            const container = document.querySelector('.ai-chat-modal .water-background-container');
+            if (container && window.WaterBackground && !waterInstance) {
+                waterInstance = Object.assign({}, window.WaterBackground);
+                waterInstance.init(container);
+            }
         }
 
         function closeAIChat() {
             stopTTSAudio();
             document.getElementById('aiChatModal').classList.remove('active');
             document.getElementById('aiChatOverlay').classList.remove('active');
+
+            // ADD THIS: Destroy water instance
+            if (waterInstance) {
+                waterInstance.destroy();
+                waterInstance = null;
+            }
         }
 
         async function sendAIMessage() {
@@ -677,6 +720,13 @@
             document.getElementById('mobileChatModal').classList.add('active');
             document.getElementById('mobileChatOverlay').classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            // ADD THIS: Initialize water for mobile
+            const container = document.querySelector('.mobile-chat-modal .water-background-container');
+            if (container && window.WaterBackground && !waterInstance) {
+                waterInstance = Object.assign({}, window.WaterBackground);
+                waterInstance.init(container);
+            }
         }
 
         function closeMobileChat() {
@@ -684,6 +734,12 @@
             document.getElementById('mobileChatModal').classList.remove('active');
             document.getElementById('mobileChatOverlay').classList.remove('active');
             document.body.style.overflow = '';
+
+            // ADD THIS: Destroy water instance
+            if (waterInstance) {
+                waterInstance.destroy();
+                waterInstance = null;
+            }
         }
 
         async function sendMobileMessage() {
@@ -760,6 +816,22 @@
             initializeChatSession();
             initMobileChatSession();
             initializeDeviceFingerprint();
+
+            // ADD THIS NEW BLOCK TO HOOK UP THE BUTTONS
+            const desktopTTSBtn = document.getElementById('desktop-greeting-tts');
+            if (desktopTTSBtn) {
+                desktopTTSBtn.addEventListener('click', () => {
+                    handlePlayClick(GREETING_MESSAGE_TEXT, desktopTTSBtn);
+                });
+            }
+
+            const mobileTTSBtn = document.getElementById('mobile-greeting-tts');
+            if (mobileTTSBtn) {
+                mobileTTSBtn.addEventListener('click', () => {
+                    handlePlayClick(GREETING_MESSAGE_TEXT, mobileTTSBtn);
+                });
+            }
+            // END OF NEW BLOCK
 
             // Desktop chat input
             document.getElementById('aiChatInput').addEventListener('keypress', (e) => {
