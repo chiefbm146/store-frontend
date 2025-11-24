@@ -80,6 +80,14 @@
         "destination": "/client-portal.html"
       },
       {
+        "source": "/dashboard",
+        "destination": "/client-dashboard.html"
+      },
+      {
+        "source": "/dashboard/**",
+        "destination": "/client-dashboard.html"
+      },
+      {
         "source": "/privacy",
         "destination": "/privacy-policy.html"
       },

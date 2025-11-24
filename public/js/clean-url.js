@@ -18,6 +18,7 @@
     '/contact-desk.html': '/contact',
     '/ai-chat-desk.html': '/ai-chat',
     '/client-portal.html': '/portal',
+    '/client-dashboard.html': '/dashboard',
     '/privacy-policy.html': '/privacy',
     '/terms.html': '/terms',
 
