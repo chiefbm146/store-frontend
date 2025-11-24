@@ -930,9 +930,193 @@
         #ttsAudio {
             display: none;
         }
+
+        /* ====== DESKTOP 3D CUBE LOADER ====== */
+        #dice-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            opacity: 1;
+            transition: opacity 0.8s ease-out;
+            pointer-events: none;
+        }
+
+        #dice-loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #dice-loader li {
+            list-style-type: none;
+        }
+
+        #dice-loader ol {
+            margin: 0;
+            padding: 0;
+        }
+
+        #ui {
+            position: relative;
+            z-index: 10;
+            perspective: 600px;
+        }
+
+        .dice {
+            transform-style: preserve-3d;
+        }
+
+        .dice:nth-child(1) {
+            animation: rotate1 20000ms linear infinite;
+        }
+
+        .dice:nth-child(2) {
+            animation: rotate2 20000ms linear infinite;
+        }
+
+        .dice:nth-child(3) {
+            animation: rotate3 20000ms linear infinite;
+        }
+
+        .dice_list {
+            transform-style: preserve-3d;
+            transform: translateY(-75px) translateX(-75px);
+        }
+
+        .dice_list_item {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 1px solid rgba(99, 102, 241, 0.6);
+        }
+
+        .dice_list_item:nth-child(1) {
+            background: rgba(99, 102, 241, 0.5);
+            animation: child1 3000ms ease-in-out infinite alternate;
+        }
+
+        .dice_list_item:nth-child(2) {
+            background: rgba(139, 92, 246, 0.5);
+            animation: child2 3000ms ease-in-out infinite alternate;
+        }
+
+        .dice_list_item:nth-child(3) {
+            background: rgba(16, 185, 129, 0.5);
+            animation: child3 3000ms ease-in-out infinite alternate;
+        }
+
+        .dice_list_item:nth-child(4) {
+            background: rgba(99, 102, 241, 0.5);
+            animation: child4 3000ms ease-in-out infinite alternate;
+        }
+
+        .dice_list_item:nth-child(5) {
+            background: rgba(139, 92, 246, 0.5);
+            animation: child5 3000ms ease-in-out infinite alternate;
+        }
+
+        .dice_list_item:nth-child(6) {
+            background: rgba(16, 185, 129, 0.5);
+            animation: child6 3000ms ease-in-out infinite alternate;
+        }
+
+        @keyframes child1 {
+            0% { transform: translateZ(75px); }
+            100% { transform: translateZ(-75px); }
+        }
+
+        @keyframes child2 {
+            0% { transform: translateY(75px) rotateX(270deg); }
+            100% { transform: translateY(-75px) rotateX(270deg); }
+        }
+
+        @keyframes child3 {
+            0% { transform: translateX(75px) rotateY(-270deg); }
+            100% { transform: translateX(-75px) rotateY(-270deg); }
+        }
+
+        @keyframes child4 {
+            0% { transform: translateX(-75px) rotateY(-90deg); }
+            100% { transform: translateX(75px) rotateY(-90deg); }
+        }
+
+        @keyframes child5 {
+            0% { transform: translateY(-75px) rotateX(90deg); }
+            100% { transform: translateY(75px) rotateX(90deg); }
+        }
+
+        @keyframes child6 {
+            0% { transform: translateZ(-75px) rotateY(180deg); }
+            100% { transform: translateZ(75px) rotateY(180deg); }
+        }
+
+        @keyframes rotate1 {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(1080deg); }
+        }
+
+        @keyframes rotate2 {
+            0% { transform: rotateX(0deg) rotateY(0deg) scale3d(0.7, 0.7, 0.7); }
+            100% { transform: rotateX(360deg) rotateY(1080deg) scale3d(0.7, 0.7, 0.7); }
+        }
+
+        @keyframes rotate3 {
+            0% { transform: rotateX(0deg) rotateY(0deg) scale3d(0.4, 0.4, 0.4); }
+            100% { transform: rotateX(360deg) rotateY(1080deg) scale3d(0.4, 0.4, 0.4); }
+        }
+
+        /* Hide loader on mobile - mobile chat has no slow water rendering */
+        @media (max-width: 768px) {
+            #dice-loader {
+                display: none !important;
+            }
+        }
+        /* ====== END: DESKTOP 3D CUBE LOADER ====== */
     </style>
 </head>
 <body>
+    <!-- Desktop 3D Cube Loader - Shows while water background renders -->
+    <div id="dice-loader">
+        <div id="ui">
+            <div class="dice">
+                <ol class="dice_list">
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                </ol>
+            </div>
+            <div class="dice">
+                <ol class="dice_list">
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                </ol>
+            </div>
+            <div class="dice">
+                <ol class="dice_list">
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
     <div class="chat-container">
         <!-- Header -->
         <div class="chat-header">
@@ -1778,11 +1962,61 @@
                     console.log('[WaterBackground] Initializing desktop...');
                     waterInstance = Object.assign({}, window.WaterBackground);
                     waterInstance.init(waterContainer);
+
+                    // Signal that desktop water is ready for loader dismissal
+                    window.desktopWaterReady = true;
+                    console.log('[WaterBackground] Desktop water ready, signaling loader...');
                 } else {
                     console.warn('[WaterBackground] Desktop container not found or script not loaded.');
+                    // Still signal ready so loader doesn't hang if water fails
+                    window.desktopWaterReady = true;
                 }
             }
         });
+    </script>
+
+    <!-- Desktop Dice Loader Management -->
+    <script>
+        (function() {
+            // Only run on desktop (mobile hides loader via CSS)
+            if (window.innerWidth <= 768) return;
+
+            const diceLoader = document.getElementById('dice-loader');
+            if (!diceLoader) return;
+
+            console.log('[DiceLoader] Initialized, waiting for desktop UI to be ready...');
+
+            const checkUIReady = () => {
+                const chatContainer = document.querySelector('.chat-container');
+                const messagesContainer = document.getElementById('messagesContainer');
+
+                // Check if water background is initialized and UI elements exist
+                if (window.desktopWaterReady && chatContainer && messagesContainer) {
+                    console.log('[DiceLoader] Desktop UI and water ready, hiding loader...');
+
+                    // Small delay to ensure smooth transition
+                    setTimeout(() => {
+                        diceLoader.classList.add('hidden');
+
+                        // Remove from DOM after transition
+                        setTimeout(() => {
+                            console.log('[DiceLoader] Removing from DOM');
+                            diceLoader.remove();
+                        }, 800); // Match CSS transition duration
+                    }, 300); // Brief delay for visual polish
+                } else {
+                    // Keep checking every 100ms
+                    setTimeout(checkUIReady, 100);
+                }
+            };
+
+            // Start checking after DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', checkUIReady);
+            } else {
+                checkUIReady();
+            }
+        })();
     </script>
 </body>
 </html>
