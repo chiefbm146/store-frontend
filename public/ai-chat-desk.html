@@ -532,13 +532,14 @@
 
         .audio-permission-buttons {
             display: flex;
-            gap: 15px;
+            flex-direction: column;
+            gap: 12px;
             justify-content: center;
         }
 
         .audio-permission-enable {
             padding: 14px 35px;
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            background: linear-gradient(135deg, #10B981, #8b5cf6);
             color: #FFFFFF;
             border: none;
             border-radius: 30px;
@@ -550,14 +551,14 @@
 
         .audio-permission-enable:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
         }
 
         .audio-permission-skip {
             padding: 14px 35px;
-            background: transparent;
-            color: var(--color-text-secondary);
-            border: 2px solid var(--color-border);
+            background: #FFFFFF;
+            color: #666;
+            border: 2px solid #E0E0E0;
             border-radius: 30px;
             font-size: 1.1rem;
             cursor: pointer;
@@ -565,7 +566,7 @@
         }
 
         .audio-permission-skip:hover {
-            background: var(--color-background);
+            background: #F5F5F5;
         }
 
         /* === RESPONSIVE === */
@@ -636,47 +637,8 @@
             }
         }
 
-        /* === MOBILE CHAT === */
-        .mobile-chat-fab {
-            display: none;
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 65px;
-            height: 65px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            border-radius: 50%;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            cursor: pointer;
-            z-index: 9997;
-            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
-            border: none;
-            animation: fabPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes fabPulse {
-            0%, 100% { box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5); }
-            50% { box-shadow: 0 8px 35px rgba(99, 102, 241, 0.7); }
-        }
-
-        .mobile-chat-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-        }
-
-        .mobile-chat-overlay.active {
-            display: block;
-        }
-
+        /* === MOBILE CHAT STYLES === */
+        /* Mobile chat modal - displays automatically on mobile for this dedicated chat page */
         .mobile-chat-modal {
             display: none;
             position: fixed;
@@ -684,7 +646,7 @@
             left: 0;
             width: 100%;
             height: 100dvh;
-            background: #FFFFFF;
+            background: #0a0f14;
             z-index: 10000;
             flex-direction: column;
         }
@@ -702,7 +664,7 @@
             justify-content: space-between;
             flex-shrink: 0;
         }
-        
+
         .mobile-chat-back-button {
             color: #FFFFFF;
             text-decoration: none;
@@ -713,6 +675,7 @@
             justify-content: center;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
             transition: all 0.3s ease;
         }
 
@@ -756,32 +719,30 @@
             border-color: #10B981;
         }
 
-        .mobile-speaker-btn i {
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-        }
-
-        .mobile-chat-close {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: #FFFFFF;
-            cursor: pointer;
-        }
-
         .mobile-chat-body {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
-            background: transparent;
-            max-height: calc(100dvh - 160px);
+            background: #0a0f14;
             position: relative;
+        }
+
+        /* Water background for mobile chat */
+        .mobile-chat-body .water-background-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .mobile-chat-body .water-background-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
         }
 
         .mobile-chat-messages {
@@ -876,262 +837,73 @@
             0%, 60%, 100% { transform: translateY(0); }
             30% { transform: translateY(-8px); }
         }
-        
-        @media (max-width: 768px) {
-            .chat-container {
-                display: none;
-            }
-            .mobile-chat-fab {
-                display: flex;
-            }
-        }
-        
-        /* === MOBILE CHAT === */
-        .mobile-chat-fab {
-            display: none;
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 65px;
-            height: 65px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            border-radius: 50%;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            cursor: pointer;
-            z-index: 9997;
-            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
-            border: none;
-            animation: fabPulse 2s ease-in-out infinite;
-        }
 
-        @keyframes fabPulse {
-            0%, 100% { box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5); }
-            50% { box-shadow: 0 8px 35px rgba(99, 102, 241, 0.7); }
-        }
-
-        .mobile-chat-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-        }
-
-        .mobile-chat-overlay.active {
-            display: block;
-        }
-
-        .mobile-chat-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100dvh;
-            background: #FFFFFF;
-            z-index: 10000;
-            flex-direction: column;
-        }
-
-        .mobile-chat-modal.active {
-            display: flex;
-        }
-
-        .mobile-chat-header {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            padding: 20px;
-            color: #FFFFFF;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0;
-        }
-        
-        .mobile-chat-back-button {
-            color: #FFFFFF;
-            text-decoration: none;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .mobile-chat-back-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .mobile-chat-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .mobile-header-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .mobile-speaker-btn {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            color: #FFFFFF;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-speaker-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .mobile-speaker-btn.unlocked {
-            background: #10B981;
-            border-color: #10B981;
-        }
-
-        .mobile-speaker-btn i {
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-        }
-
-        .mobile-chat-close {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: #FFFFFF;
-            cursor: pointer;
-        }
-
-        .mobile-chat-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: transparent;
-            max-height: calc(100dvh - 160px);
-            position: relative;
-        }
-
-        .mobile-chat-messages {
+        /* Message wrapper for TTS button alignment */
+        .mobile-chat-messages .message-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .mobile-chat-message {
-            padding: 14px 18px;
-            border-radius: 16px;
+            gap: 8px;
             max-width: 85%;
-            line-height: 1.5;
-            font-size: 0.95rem;
         }
 
-        .mobile-chat-message.ai {
-            background: #FFFFFF;
-            align-self: flex-start;
-            border: 1px solid #E0E0E0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .mobile-chat-message.user {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            color: #FFFFFF;
+        .mobile-chat-messages .message-wrapper.user {
             align-self: flex-end;
+            align-items: flex-end;
         }
 
-        .mobile-chat-input-area {
-            display: flex;
-            gap: 10px;
-            padding: 15px 20px;
-            background: #FFFFFF;
-            border-top: 1px solid #E0E0E0;
-            flex-shrink: 0;
-        }
-
-        .mobile-chat-input {
-            flex: 1;
-            padding: 14px 18px;
-            border: 2px solid #E0E0E0;
-            border-radius: 25px;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .mobile-chat-input:focus {
-            border-color: #6366f1;
-        }
-
-        .mobile-chat-send {
-            padding: 14px 22px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            color: #FFFFFF;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .mobile-typing-indicator {
-            display: none;
-            align-items: center;
-            gap: 6px;
-            padding: 14px 18px;
-            background: #FFFFFF;
-            border-radius: 16px;
+        .mobile-chat-messages .message-wrapper.ai {
             align-self: flex-start;
-            border: 1px solid #E0E0E0;
+            align-items: flex-start;
         }
 
-        .mobile-typing-indicator.visible {
-            display: flex;
-        }
-
-        .mobile-typing-dot {
-            width: 8px;
-            height: 8px;
+        /* TTS Play button styling for mobile */
+        .mobile-chat-messages .message-play-btn {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: #6366f1;
-            animation: mobileBounce 1.4s ease-in-out infinite;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            color: #FFFFFF;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
         }
 
-        .mobile-typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .mobile-typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes mobileBounce {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-8px); }
+        .mobile-chat-messages .message-play-btn:hover {
+            transform: scale(1.1);
         }
-        
+
+        /* Special tag styling for mobile */
+        .mobile-chat-message.ai special {
+            font-weight: 700;
+            color: #6366f1;
+            cursor: pointer;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        .mobile-chat-message.ai special:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+            text-decoration: underline;
+        }
+
+        .mobile-chat-message.ai price {
+            font-weight: 700;
+            color: #c82333;
+        }
+
+        /* MOBILE RESPONSIVE: Hide desktop, show mobile chat automatically */
         @media (max-width: 768px) {
             .chat-container {
-                display: none;
+                display: none !important;
             }
-            .mobile-chat-fab {
+
+            /* On this dedicated AI chat page, mobile chat opens automatically */
+            .mobile-chat-modal {
                 display: flex;
             }
         }
@@ -1165,7 +937,7 @@
         <!-- Header -->
         <div class="chat-header">
             <div class="chat-header-left">
-                <a href="/demo-desk.html" class="back-arrow" title="Back to Store">
+                <a href="/web-sites-4-u" class="back-arrow" title="Back to Store">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -1233,18 +1005,10 @@
         </div>
     </div>
 
-    <!-- Mobile Floating Chat Button -->
-    <button class="mobile-chat-fab" onclick="openMobileChat()" title="Chat with AI">
-        🤖
-    </button>
-
-    <!-- Mobile Chat Overlay -->
-    <div class="mobile-chat-overlay" id="mobileChatOverlay" onclick="closeMobileChat()"></div>
-
-    <!-- Mobile Fullscreen Chat Modal -->
+    <!-- Mobile Fullscreen Chat Modal - Auto-opens on mobile -->
     <div class="mobile-chat-modal" id="mobileChatModal">
         <div class="mobile-chat-header">
-            <a href="/web-sites-4-u" class="mobile-chat-back-button" title="Back">
+            <a href="/web-sites-4-u" class="mobile-chat-back-button" title="Back to Store">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -1254,55 +1018,6 @@
                 <button class="mobile-speaker-btn" id="mobileSpeakerBtn" title="Enable Voice">
                     <i class="fa-solid fa-volume-xmark"></i>
                 </button>
-                <button class="mobile-chat-close" onclick="closeMobileChat()">✕</button>
-            </div>
-        </div>
-        <div class="mobile-chat-body">
-            <div class="water-background-container"></div>
-            <div class="mobile-chat-messages" id="mobileChatMessages">
-                <div class="message-wrapper ai">
-                    <div class="mobile-chat-message ai">
-                        Hi! 👋 I'm the AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. Ask me anything about our services, pricing, or how we can help your business!
-                    </div>
-                    <button class="message-play-btn" id="mobile-greeting-tts">
-                        <i class="fa-solid fa-volume-xmark"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="mobile-typing-indicator" id="mobileTypingIndicator">
-                <span class="mobile-typing-dot"></span>
-                <span class="mobile-typing-dot"></span>
-                <span class="mobile-typing-dot"></span>
-            </div>
-        </div>
-        <div class="mobile-chat-input-area">
-            <input type="text" class="mobile-chat-input" id="mobileChatInput" placeholder="Ask me anything..." maxlength="4000">
-            <button class="mobile-chat-send" onclick="sendMobileMessage()">Send</button>
-        </div>
-    </div>
-
-    <!-- Mobile Floating Chat Button -->
-    <button class="mobile-chat-fab" onclick="openMobileChat()" title="Chat with AI">
-        🤖
-    </button>
-
-    <!-- Mobile Chat Overlay -->
-    <div class="mobile-chat-overlay" id="mobileChatOverlay" onclick="closeMobileChat()"></div>
-
-    <!-- Mobile Fullscreen Chat Modal -->
-    <div class="mobile-chat-modal" id="mobileChatModal">
-        <div class="mobile-chat-header">
-            <a href="/web-sites-4-u" class="mobile-chat-back-button" title="Back">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </a>
-            <h3 class="mobile-chat-title">🤖 AI Assistant</h3>
-            <div class="mobile-header-controls">
-                <button class="mobile-speaker-btn" id="mobileSpeakerBtn" title="Enable Voice">
-                    <i class="fa-solid fa-volume-xmark"></i>
-                </button>
-                <button class="mobile-chat-close" onclick="closeMobileChat()">✕</button>
             </div>
         </div>
         <div class="mobile-chat-body">
@@ -1909,11 +1624,12 @@
         // ========================================
         // MOBILE CHAT FUNCTIONS
         // ========================================
+        // Note: On this dedicated AI chat page, mobile chat auto-opens via CSS
+        // These functions are kept for compatibility but closeMobileChat navigates back
         function openMobileChat() {
-            document.getElementById('mobileChatModal').classList.add('active');
-            document.getElementById('mobileChatOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            const container = document.querySelector('.mobile-chat-modal .water-background-container');
+            // Mobile chat auto-opens on this page via CSS media query
+            // This function is not needed but kept for compatibility
+            const container = document.querySelector('.mobile-chat-body .water-background-container');
             if (container && window.WaterBackground && !mobileWaterInstance) {
                 mobileWaterInstance = Object.assign({}, window.WaterBackground);
                 mobileWaterInstance.init(container);
@@ -1921,11 +1637,9 @@
         }
 
         function closeMobileChat() {
+            // On this dedicated chat page, closing means navigating back
             stopTTSAudio();
-            document.getElementById('mobileChatModal').classList.remove('active');
-            document.getElementById('mobileChatOverlay').classList.remove('active');
-            document.body.style.overflow = '';
-            if (mobileWaterInstance) { mobileWaterInstance.destroy(); mobileWaterInstance = null; }
+            window.location.href = '/web-sites-4-u';
         }
         
         async function sendMobileMessage() {
@@ -2044,18 +1758,31 @@
             });
 
             // --- INITIALIZE THE WATER BACKGROUND ---
-            const waterContainer = document.querySelector('.messages-container .water-background-container');
-            if (waterContainer && window.WaterBackground) {
-                console.log('[WaterBackground] Initializing...');
-                waterInstance = Object.assign({}, window.WaterBackground);
-                waterInstance.init(waterContainer);
+            // Only initialize ONE water background based on device type
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+                // Mobile water background - initialize on page load since it auto-opens on mobile
+                const mobileWaterContainer = document.querySelector('.mobile-chat-body .water-background-container');
+                if (mobileWaterContainer && window.WaterBackground) {
+                    console.log('[WaterBackground] Initializing mobile (auto-open)...');
+                    mobileWaterInstance = Object.assign({}, window.WaterBackground);
+                    mobileWaterInstance.init(mobileWaterContainer);
+                } else {
+                    console.warn('[WaterBackground] Mobile container not found or script not loaded.');
+                }
             } else {
-                console.warn('[WaterBackground] Container not found or script not loaded.');
+                // Desktop water background
+                const waterContainer = document.querySelector('.messages-container .water-background-container');
+                if (waterContainer && window.WaterBackground) {
+                    console.log('[WaterBackground] Initializing desktop...');
+                    waterInstance = Object.assign({}, window.WaterBackground);
+                    waterInstance.init(waterContainer);
+                } else {
+                    console.warn('[WaterBackground] Desktop container not found or script not loaded.');
+                }
             }
         });
     </script>
-</body>
-</html>
-
 </body>
 </html>
