@@ -1584,6 +1584,22 @@
         </div>
     </div>
 
+    <!-- Audio Permission Modal -->
+    <div class="audio-permission-overlay" id="audioPermissionOverlay">
+        <div class="audio-permission-modal">
+            <div class="audio-permission-icon">🔊</div>
+            <h2 class="audio-permission-title">Enable Voice</h2>
+            <p class="audio-permission-text">Enable audio to hear AI responses read aloud. This creates a more engaging experience!</p>
+            <div class="audio-permission-buttons">
+                <button class="audio-permission-enable" id="audioEnableBtn">Enable Voice</button>
+                <button class="audio-permission-skip" id="audioSkipBtn">Maybe Later</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Audio Element for TTS -->
+    <audio id="ttsAudio"></audio>
+
     <!-- Scripts -->
     <script src="./js/water.js"></script>
     <script>
@@ -2039,22 +2055,6 @@
             <button onclick="sendAIMessage()">Send</button>
         </div>
     </div>
-    
-    <!-- Audio Permission Modal -->
-    <div class="audio-permission-overlay" id="audioPermissionOverlay">
-        <div class="audio-permission-modal">
-            <div class="audio-permission-icon">🔊</div>
-            <h2 class="audio-permission-title">Enable Voice</h2>
-            <p class="audio-permission-text">Enable audio to hear AI responses read aloud. This creates a more engaging experience!</p>
-            <div class="audio-permission-buttons">
-                <button class="audio-permission-enable" id="audioEnableBtn">Enable Voice</button>
-                <button class="audio-permission-skip" id="audioSkipBtn">Maybe Later</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Hidden Audio Element for TTS -->
-    <audio id="ttsAudio"></audio>
-    
+
 </body>
 </html>
