@@ -1232,14 +1232,39 @@
         .audio-permission-icon { font-size: 4rem; margin-bottom: 20px; }
         .audio-permission-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 15px; color: #1a1a1a; }
         .audio-permission-text { font-size: 1rem; color: #666; margin-bottom: 25px; line-height: 1.6; }
-        .audio-permission-buttons { display: flex; gap: 12px; justify-content: center; }
+        .audio-permission-buttons {
+            display: flex;
+            flex-direction: column; /* Make buttons vertical */
+            gap: 12px;
+            justify-content: center;
+        }
         .audio-permission-enable {
-            padding: 12px 28px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #FFFFFF;
-            border: none; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #10B981, #8b5cf6); /* Green to purple gradient */
+            color: #FFFFFF;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .audio-permission-enable:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
         }
         .audio-permission-skip {
-            padding: 12px 28px; background: transparent; color: #666;
-            border: 2px solid #E0E0E0; border-radius: 25px; font-size: 1rem; cursor: pointer;
+            padding: 12px 28px;
+            background: #FFFFFF; /* White button */
+            color: #666;
+            border: 2px solid #E0E0E0;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .audio-permission-skip:hover {
+            background: #F5F5F5;
         }
         .message-wrapper { display: flex; flex-direction: column; gap: 8px; max-width: 80%; }
         .message-wrapper.user { align-self: flex-end; align-items: flex-end; }
