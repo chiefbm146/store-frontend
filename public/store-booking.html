@@ -807,14 +807,17 @@
             flex: 1;
             overflow-y: auto;
             padding: 20px;
-            background: #F8F9FA;
+            background: transparent;
             max-height: calc(100dvh - 160px);
+            position: relative;
         }
 
         .mobile-chat-messages {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            position: relative;
+            z-index: 1;
         }
 
         .mobile-chat-message {
