@@ -15,6 +15,9 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Add this line inside the <head> tag -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
     <style>
         /* === BASE STYLES === */
         * {
@@ -142,6 +145,40 @@
             padding: 30px 40px;
             background: var(--color-background);
             min-height: 0;
+        }
+
+        /* ADD THIS CSS to the <style> block in ai-chat-desk.html */
+
+        /* Make the messages container a positioning context */
+        .messages-container {
+            position: relative;
+            background: #0a0f14; /* Dark fallback color */
+        }
+
+        /* Style the new water background container */
+        .water-background-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Places it behind all messages */
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .water-background-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Make all content inside the messages container sit on top of the background */
+        #welcomeMessage,
+        .messages,
+        .typing-indicator {
+            position: relative;
+            z-index: 1; /* Ensures this content is above the water */
         }
 
         .messages {
@@ -647,6 +684,10 @@
 
         <!-- Messages Area -->
         <div class="messages-container" id="messagesContainer">
+
+            <!-- ADD THIS NEW DIV RIGHT HERE -->
+            <div class="water-background-container"></div>
+
             <div id="welcomeMessage" class="welcome-message">
                 <div class="welcome-icon">🤖</div>
                 <h2 class="welcome-title">Hi! I'm Your AI Assistant</h2>
@@ -707,6 +748,9 @@
 
     <!-- Hidden Audio Element for TTS -->
     <audio id="ttsAudio"></audio>
+
+    <!-- Add this line right here -->
+    <script src="./js/water.js"></script>
 
     <!-- Chat System with TTS, Typing Animation, Device Fingerprinting -->
     <script type="module">
@@ -1267,6 +1311,18 @@
             initializeDeviceFingerprint();
             userInput.focus();
             console.log('[AI Chat] Page loaded with advanced features');
+
+            // --- ADD THIS BLOCK TO INITIALIZE THE WATER BACKGROUND ---
+            const waterContainer = document.querySelector('.water-background-container');
+            if (waterContainer && window.WaterBackground) {
+                console.log('[WaterBackground] Initializing...');
+                // We create a new instance to avoid any potential state conflicts
+                const waterInstance = Object.assign({}, window.WaterBackground);
+                waterInstance.init(waterContainer);
+            } else {
+                console.warn('[WaterBackground] Container not found or script not loaded.');
+            }
+            // --- END OF NEW BLOCK ---
         });
     </script>
 </body>
