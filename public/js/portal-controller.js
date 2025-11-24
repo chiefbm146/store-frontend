@@ -18,7 +18,7 @@ import audioStateManager from './audioStateManager.js';
 // Asset preloader disabled - not needed for this site
 // import assetPreloader from './asset-preloader.js';
 import { settings, brand, getPreloadImages } from './config/index.js';
-import WaterBackground from './water.js';
+import WaterBackground from './water-module.js';
 // TextAnimator import removed - animation disabled for testing
 
 const UI = {}; // Cache for DOM elements

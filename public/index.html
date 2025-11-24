@@ -35,6 +35,9 @@
         !window.THREE || !window.THREE.GLTFLoader && document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.134/examples/js/loaders/GLTFLoader.js" integrity="sha256-gM3k2e/CWwjs72W22fP0vs6h3gSOx65j8s3Q229KBFo=" crossorigin="anonymous"><\/script>');
     </script>
 
+    <!-- Water Background (loaded as script so it's available for both script and module contexts) -->
+    <script src="./js/water.js?v=11.0.12"></script>
+
     <!-- Audio System Modules (Production-Ready from mobile.html) -->
     <script src="./js/audioStateManager.js?v=11.0.12" type="module"></script>
     <script src="./js/audioPermissionUI.js?v=11.0.12" type="module"></script>
@@ -1096,7 +1099,7 @@
     
     <!-- MASTER SCRIPT for Water Background & View Management -->
     <script type="module">
-        import WaterBackground from './js/water.js?v=11.0.12';
+        import WaterBackground from './js/water-module.js?v=11.0.12';
 
         let waterInstance = null; // To hold the active water instance
 
