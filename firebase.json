@@ -12,16 +12,31 @@
     ],
     "rewrites": [
       {
+        "source": "/api/**",
+        "run": {
+          "serviceId": "stores-backend",
+          "region": "us-central1"
+        }
+      },
+      {
         "source": "/",
         "destination": "/index.html"
       },
       {
-        "source": "/web-sites-4-u",
-        "destination": "/demo-desk.html"
+        "source": "/js/**",
+        "destination": "/js/**"
       },
       {
-        "source": "/web-sites-4-u/**",
-        "destination": "/demo-desk.html"
+        "source": "/css/**",
+        "destination": "/css/**"
+      },
+      {
+        "source": "/images/**",
+        "destination": "/images/**"
+      },
+      {
+        "source": "/davids store/images/**",
+        "destination": "/davids store/images/**"
       },
       {
         "source": "/booking",
@@ -98,6 +113,130 @@
       {
         "source": "/terms",
         "destination": "/terms.html"
+      },
+      {
+        "source": "/stores",
+        "destination": "/stores.html"
+      },
+      {
+        "source": "/stores/**",
+        "destination": "/stores.html"
+      },
+      {
+        "source": "/home",
+        "destination": "/davids store/davids-main-page.html"
+      },
+      {
+        "source": "/home/**",
+        "destination": "/davids store/davids-main-page.html"
+      },
+      {
+        "source": "/davids-about",
+        "destination": "/davids store/about.html"
+      },
+      {
+        "source": "/davids-about/**",
+        "destination": "/davids store/about.html"
+      },
+      {
+        "source": "/davids-ai",
+        "destination": "/davids store/ai.html"
+      },
+      {
+        "source": "/davids-ai/**",
+        "destination": "/davids store/ai.html"
+      },
+      {
+        "source": "/checkout-sxexet",
+        "destination": "/davids store/checkout-davids.html"
+      },
+      {
+        "source": "/checkout-sxexet/**",
+        "destination": "/davids store/checkout-davids.html"
+      },
+      {
+        "source": "/contact-sxexet",
+        "destination": "/davids store/contact-david.html"
+      },
+      {
+        "source": "/contact-sxexet/**",
+        "destination": "/davids store/contact-david.html"
+      },
+      {
+        "source": "/offerings",
+        "destination": "/davids store/offerings.html"
+      },
+      {
+        "source": "/offerings/**",
+        "destination": "/davids store/offerings.html"
+      },
+      {
+        "source": "/details",
+        "destination": "/davids store/offerings-details.html"
+      },
+      {
+        "source": "/details/**",
+        "destination": "/davids store/offerings-details.html"
+      },
+      {
+        "source": "/cart",
+        "destination": "/davids store/cart.html"
+      },
+      {
+        "source": "/cart/**",
+        "destination": "/davids store/cart.html"
+      },
+      {
+        "source": "/ai-chat-davids.js",
+        "destination": "/davids store/ai-chat-davids.js"
+      },
+      {
+        "source": "/workshop-data.js",
+        "destination": "/davids store/workshop-data.js"
+      },
+      {
+        "source": "/workshop-loader.js",
+        "destination": "/davids store/workshop-loader.js"
+      },
+      {
+        "source": "/aarie-terms",
+        "destination": "/aarie-terms.html"
+      },
+      {
+        "source": "/aarie-terms/**",
+        "destination": "/aarie-terms.html"
+      },
+      {
+        "source": "/affiliate",
+        "destination": "/affiliate.html"
+      },
+      {
+        "source": "/affiliate/**",
+        "destination": "/affiliate.html"
+      },
+      {
+        "source": "/affiliate-aarie",
+        "destination": "/affiliate-aarie.html"
+      },
+      {
+        "source": "/affiliate-aarie/**",
+        "destination": "/affiliate-aarie.html"
+      },
+      {
+        "source": "/affiliate-portal",
+        "destination": "/affiliate-portal.html"
+      },
+      {
+        "source": "/affiliate-portal/**",
+        "destination": "/affiliate-portal.html"
+      },
+      {
+        "source": "/customer-terms",
+        "destination": "/customer-terms.html"
+      },
+      {
+        "source": "/customer-terms/**",
+        "destination": "/customer-terms.html"
       }
     ],
     "headers": [
@@ -191,7 +330,7 @@
           },
           {
             "key": "Content-Security-Policy",
-            "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https:; media-src 'self' blob:; frame-ancestors 'none';"
+            "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https:; media-src 'self' blob: data:; frame-ancestors 'none';"
           }
         ]
       }

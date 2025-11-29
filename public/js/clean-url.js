@@ -4,13 +4,17 @@
  * Runs on page load to update address bar
  */
 (function() {
+  // Do NOT run clean-url for Facebook/Messenger crawlers
+  if (navigator.userAgent.includes('facebookexternalhit') || navigator.userAgent.includes('Facebot')) {
+    return; 
+  }
+
   const currentPath = window.location.pathname;
 
   // Map of device-specific URLs to clean URLs
   const cleanUrls = {
     // AARIE.CA Main Pages
     '/index.html': '/',
-    '/demo-desk.html': '/web-sites-4-u',
     '/store-booking.html': '/booking',
     '/checkout.html': '/checkout',
     '/checkout-success.html': '/checkout-success',
@@ -21,6 +25,25 @@
     '/client-dashboard.html': '/dashboard',
     '/privacy-policy.html': '/privacy',
     '/terms.html': '/terms',
+    '/customer-terms.html': '/customer-terms',
+    '/aarie-terms.html': '/aarie-terms',
+    '/affiliate.html': '/affiliate',
+    '/affiliate-aarie.html': '/affiliate-aarie',
+    '/affiliate-portal.html': '/affiliate-portal',
+    '/stores.html': '/stores',
+    '/chrystals store/CHRYSTAL-1.html': '/chrystal',
+    '/chrystals store/chrystal-about.html': '/chrystal-about',
+    '/chrystals store/chrystal-checkout.html': '/chrystal-checkout',
+
+    // New Subsidiary Website Pages
+    '/davids store/davids-main-page.html': '/home',
+    '/davids store/about.html': '/davids-about',
+    '/davids store/ai.html': '/davids-ai',
+    '/davids store/checkout-davids.html': '/checkout-sxexet',
+    '/davids store/contact-david.html': '/contact-sxexet',
+    '/davids store/offerings.html': '/offerings',
+    '/davids store/offerings-details.html': '/details',
+    '/davids store/cart.html': '/cart',
 
     // Legacy/Old URLs (keep for backwards compatibility)
     '/desktop.html': '/chat',
@@ -64,6 +87,5 @@
   if (cleanUrl && window.history && window.history.replaceState) {
     const newUrl = cleanUrl + queryString;
     window.history.replaceState(null, '', newUrl);
-    console.log(`[Clean URL] Changed ${currentPath}${queryString} → ${newUrl}`);
   }
 })();
