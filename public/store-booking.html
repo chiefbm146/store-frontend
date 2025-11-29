@@ -859,9 +859,9 @@
     <script>
         let currentUser = null;
 
-        // Wait for Firebase to initialize
+        // Wait for Firebase app to be initialized
         function waitForFirebase(callback, attempts = 0) {
-            if (typeof firebase !== 'undefined' && firebase.auth) {
+            if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
                 callback();
             } else if (attempts < 50) {
                 setTimeout(() => waitForFirebase(callback, attempts + 1), 100);
