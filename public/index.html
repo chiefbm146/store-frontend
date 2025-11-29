@@ -55,10 +55,11 @@
         !window.THREE || !window.THREE.GLTFLoader && document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.134/examples/js/loaders/GLTFLoader.js" integrity="sha256-gM3k2e/CWwjs72W22fP0vs6h3gSOx65j8s3Q229KBFo=" crossorigin="anonymous"><\/script>');
     </script>
 
-    <!-- Firebase SDK for Smart Sharing -->
+    <!-- Firebase SDK for Affiliate System -->
     <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
     <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
     <script defer src="/__/firebase/init.js"></script>
+    <script defer src="./js/affiliate-user-menu.js"></script>
 
     <style>
         /* === BASE STYLES === */
@@ -618,6 +619,19 @@
 
 </head>
 <body>
+    <!-- Affiliate User Menu (Top Right) -->
+    <div style="position: fixed; top: 20px; right: 40px; z-index: 9999;">
+        <button id="affiliateSignInBtn" onclick="window.affiliateMenu.signInWithGoogle()" style="padding: 12px 24px; background: #0891b2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; display: none;">🔐 Sign In</button>
+
+        <div id="affiliatePortalContainer" style="display: none; background: white; border: 2px solid #0891b2; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); min-width: 300px;">
+            <div style="padding: 15px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 700; color: #0891b2;">Hi, <span id="affiliateUserName">User</span>!</span>
+                <button onclick="window.affiliateMenu.logout()" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1.2rem;">✕</button>
+            </div>
+            <div id="affiliatePortalContent" style="max-height: 500px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
@@ -730,21 +744,6 @@
         </div>
     </section>
 
-    <!-- Smart Sharing Section -->
-    <section style="background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); padding: 80px 40px; text-align: center;">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <h2 style="color: white; font-size: 2rem; margin-bottom: 20px; font-weight: 800;">Share AARIE.CA</h2>
-            <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.1rem; margin-bottom: 40px;">
-                <span id="shareMessage">Want to get paid to share? <a href="/affiliate" style="color: white; text-decoration: underline; font-weight: 700;">Join our Affiliate Program.</a></span>
-                <span id="affiliateShareMessage" style="display: none;">Affiliate Link Active: Sharing this earns you commission.</span>
-            </p>
-            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                <a id="shareButton_facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #1877f2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">📘 Facebook</a>
-                <a id="shareButton_twitter" href="https://twitter.com/intent/tweet?url=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #000; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">𝕏 Twitter/X</a>
-                <a id="shareButton_linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #0a66c2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">in LinkedIn</a>
-            </div>
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer class="footer">
@@ -780,66 +779,5 @@
     captureAffiliateRef();
     </script>
 
-    <!-- Smart Sharing Logic for Affiliates -->
-    <script>
-        // Check if user is logged in as an affiliate and update share buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                    // User is logged in - check if they're an affiliate
-                    checkAffiliateStatusAndUpdateShareButtons(user);
-                }
-            });
-        });
-
-        async function checkAffiliateStatusAndUpdateShareButtons(user) {
-            try {
-                const idToken = await user.getIdToken(true);
-
-                // Call affiliate-status endpoint
-                const response = await fetch('/api/client/affiliate-status', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${idToken}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-
-                    if (data.isAffiliate && data.affiliateId) {
-                        // User is an affiliate - update share buttons with their affiliate link
-                        updateShareButtonsWithAffiliateLink(data.affiliateId);
-                    }
-                }
-            } catch (error) {
-                console.log('Affiliate check skipped:', error.message);
-            }
-        }
-
-        function updateShareButtonsWithAffiliateLink(affiliateId) {
-            const affiliateUrl = `https://aarie.ca/?ref=${affiliateId}`;
-            const encodedUrl = encodeURIComponent(affiliateUrl);
-            const encodedTitle = encodeURIComponent('AARIE.CA - The 7-Day Launchpad');
-            const encodedDescription = encodeURIComponent('See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.');
-
-            // Update Facebook share button
-            document.getElementById('shareButton_facebook').href =
-                `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
-
-            // Update Twitter/X share button
-            document.getElementById('shareButton_twitter').href =
-                `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedDescription}`;
-
-            // Update LinkedIn share button
-            document.getElementById('shareButton_linkedin').href =
-                `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
-
-            // Update message
-            document.getElementById('shareMessage').style.display = 'none';
-            document.getElementById('affiliateShareMessage').style.display = 'inline';
-        }
-    </script>
 </body>
 </html>
