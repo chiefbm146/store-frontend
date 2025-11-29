@@ -628,35 +628,53 @@ function injectChatCSS() {
 
         .mobile-chat-input-area {
             display: flex;
-            gap: 10px;
-            padding: 15px 20px;
-            background: #FFFFFF;
-            border-top: 1px solid #E0E0E0;
+            gap: 12px;
+            padding: 16px 16px;
+            background: linear-gradient(135deg, rgba(${theme.primaryRgb}, 0.08) 0%, rgba(${theme.secondaryRgb}, 0.08) 100%);
+            border-top: 2px solid rgba(${theme.primaryRgb}, 0.15);
             flex-shrink: 0;
         }
 
         .mobile-chat-input {
             flex: 1;
-            padding: 14px 18px;
-            border: 2px solid #E0E0E0;
-            border-radius: 25px;
-            font-size: 1rem;
+            min-width: 0;
+            padding: 12px 16px;
+            border: 2px solid rgba(${theme.primaryRgb}, 0.15);
+            border-radius: 22px;
+            font-size: 0.95rem;
             outline: none;
+            transition: all 0.3s ease;
+            background: #FFFFFF;
         }
 
         .mobile-chat-input:focus {
             border-color: ${theme.primary};
+            box-shadow: 0 0 0 2px rgba(${theme.primaryRgb}, 0.1);
         }
 
         .mobile-chat-send {
-            padding: 14px 22px;
+            flex-shrink: 0;
+            padding: 12px 20px;
             background: linear-gradient(135deg, ${theme.primary} 0%, ${theme.secondary} 100%);
             color: #FFFFFF;
             border: none;
-            border-radius: 25px;
-            font-size: 1rem;
+            border-radius: 22px;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 12px rgba(${theme.primaryRgb}, 0.25);
+            white-space: nowrap;
+        }
+
+        .mobile-chat-send:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 6px rgba(${theme.primaryRgb}, 0.2);
+        }
+
+        .mobile-chat-send:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .mobile-typing-indicator {
