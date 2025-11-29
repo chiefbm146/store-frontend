@@ -32,8 +32,7 @@
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(8, 145, 178, 0.1);
             padding: 15px 40px;
-            position: sticky;
-            top: 0;
+            position: static;
             z-index: 100;
         }
 
@@ -255,12 +254,82 @@
             background: #f5fbff;
         }
 
+        /* How It Works / Earning Potential Section */
+        .earning-section {
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 16px;
+            margin: 0 auto 60px auto;
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .earning-section h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+
+        .earning-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .earning-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .earning-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .earning-card p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+
+        .earning-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 15px 0;
+            color: #fff;
+        }
+
+        .earning-highlight {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .earning-highlight p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .earning-highlight strong {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
         /* Media Gallery Section */
         .media-section {
             background: white;
             padding: 60px 40px;
             border-radius: 16px;
-            margin-bottom: 60px;
+            margin: 0 auto 60px auto;
+            max-width: 1200px;
         }
 
         .section-header {
@@ -375,10 +444,13 @@
         @media (max-width: 768px) {
             .container {
                 padding: 40px 20px;
+                max-width: 100%;
             }
 
             .referral-section {
                 padding: 30px 20px;
+                margin: 0 auto;
+                max-width: 100%;
             }
 
             .referral-link-container {
@@ -396,6 +468,42 @@
 
             .welcome-title {
                 font-size: 1.8rem;
+            }
+
+            .media-section {
+                padding: 40px 20px;
+                margin: 0 auto 40px auto;
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            .media-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .earning-section {
+                padding: 40px 20px;
+                margin: 0 auto 40px auto;
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            .earning-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .earning-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .earning-card {
+                padding: 20px;
+            }
+
+            .earning-amount {
+                font-size: 2rem;
             }
         }
     </style>
@@ -448,6 +556,44 @@
                         <span>in</span> LinkedIn
                     </a>
                 </div>
+            </div>
+        </section>
+
+        <!-- How It Works & Earning Potential Section -->
+        <section class="earning-section">
+            <h2>How Your Affiliate Link Works 💰</h2>
+
+            <div class="earning-highlight">
+                <p><strong>Your unique affiliate link tracks every customer you send to AARIE.CA</strong></p>
+                <p>When someone clicks your link and makes a purchase, you earn <strong>8% commission</strong> on that sale - automatically!</p>
+            </div>
+
+            <h3 style="font-size: 1.4rem; margin-bottom: 30px; font-weight: 700;">Real Earning Examples</h3>
+            <div class="earning-grid">
+                <div class="earning-card">
+                    <h3>1 Sale</h3>
+                    <p>Our 7-Day Launchpad Service</p>
+                    <div class="earning-amount">$39.92</div>
+                    <p>You earn 8% of $499</p>
+                </div>
+                <div class="earning-card">
+                    <h3>10 Sales/Month</h3>
+                    <p>Average affiliate performance</p>
+                    <div class="earning-amount">$399.20</div>
+                    <p>Monthly passive income</p>
+                </div>
+                <div class="earning-card">
+                    <h3>50 Sales/Month</h3>
+                    <p>Active affiliate growth</p>
+                    <div class="earning-amount">$1,996.00</div>
+                    <p>Real earning potential</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; background: rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 12px;">
+                <p style="font-size: 1rem; opacity: 0.95;"><strong>📊 No minimum threshold</strong> - Every referral counts, no matter how many you send</p>
+                <p style="font-size: 1rem; opacity: 0.95; margin-top: 15px;"><strong>💳 Monthly payouts</strong> - Get paid within 10 business days via your chosen method</p>
+                <p style="font-size: 1rem; opacity: 0.95; margin-top: 15px;"><strong>🔗 Lifetime tracking</strong> - Your link never expires, keep earning as long as you share</p>
             </div>
         </section>
 
