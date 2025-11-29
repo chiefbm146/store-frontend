@@ -621,8 +621,23 @@
 
     <!-- Sign In to Earn / Go to Dashboard Button (Top Right) -->
     <div style="position: fixed; top: 20px; right: 40px; z-index: 9999;">
-        <button id="affiliateBtn" onclick="handleAffiliateClick()" style="padding: 12px 24px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">💵 Sign In to Earn</button>
+        <button id="affiliateBtn" onclick="handleAffiliateClick()" style="padding: 12px 24px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">💵 Sign In to Earn</button>
     </div>
+
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .affiliate-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+    </style>
 
     <script>
         let currentUser = null;
@@ -655,22 +670,62 @@
         });
 
         function handleAffiliateClick() {
+            const btn = document.getElementById('affiliateBtn');
+            const originalText = btn.innerHTML;
+
             if (currentUser) {
-                // Already signed in - go to gateway which will route to portal or form
-                window.location.href = '/affiliate';
+                // Already signed in - check affiliate status with loading spinner
+                showButtonSpinner(btn);
+                checkAndRouteAffiliate(currentUser);
             } else {
-                // Not signed in - sign in first, then go to gateway
+                // Not signed in - sign in first
                 waitForFirebase(() => {
                     const provider = new firebase.auth.GoogleAuthProvider();
                     firebase.auth().signInWithPopup(provider)
-                        .then(() => {
-                            window.location.href = '/affiliate';
+                        .then((result) => {
+                            showButtonSpinner(btn);
+                            checkAndRouteAffiliate(result.user);
                         })
                         .catch(error => {
                             console.error('Sign-in error:', error);
                             alert('Failed to sign in. Please try again.');
                         });
                 });
+            }
+        }
+
+        function showButtonSpinner(btn) {
+            btn.innerHTML = '<div class="affiliate-spinner"></div>Checking...';
+            btn.disabled = true;
+        }
+
+        async function checkAndRouteAffiliate(user) {
+            try {
+                const idToken = await user.getIdToken(true);
+                const response = await fetch('/api/client/affiliate-status', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${idToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to check affiliate status');
+                }
+
+                const data = await response.json();
+
+                // Route based on affiliate status
+                if (data.isAffiliate) {
+                    window.location.href = '/affiliate-portal';
+                } else {
+                    window.location.href = '/affiliate-aarie';
+                }
+            } catch (error) {
+                console.error('Error checking affiliate status:', error);
+                // Fallback to gateway if check fails
+                window.location.href = '/affiliate';
             }
         }
     </script>
