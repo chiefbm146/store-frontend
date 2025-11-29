@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <script src="./js/clean-url.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AI Chat - AARIE.CA</title>
 
     <meta property="og:type" content="website">
@@ -37,15 +37,27 @@
             --color-border: #E0E0E0;
         }
 
-        html { height: 100%; }
+        /* === NUCLEAR SCROLL LOCK FOR PC === */
+        html { 
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Stops the "Curtain Effect" */
+            overscroll-behavior: none; 
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             color: var(--color-text);
-            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
             line-height: 1.6;
-            overflow: hidden;
-            height: 100%;
+            
+            /* Pin the body to the screen */
+            height: 100vh;
             width: 100vw;
+            overflow: hidden;
+            position: relative;
+            
+            display: flex;
+            flex-direction: column;
         }
 
         /* === CHAT CONTAINER === */
@@ -55,6 +67,28 @@
             display: flex;
             flex-direction: column;
             background: #0a0f14;
+            flex: 1;
+            min-height: 0;
+            position: relative; /* Context for absolute water background */
+            z-index: 1;
+        }
+
+        /* === STATIC WATER BACKGROUND === */
+        /* Moved OUT of messages-container so it never scrolls */
+        .water-background-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Behind everything */
+            pointer-events: none;
+        }
+
+        .water-background-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
         }
 
         .chat-header {
@@ -65,6 +99,8 @@
             justify-content: space-between;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             flex-shrink: 0;
+            position: relative;
+            z-index: 10; /* Above water */
         }
 
         .chat-header-left {
@@ -107,7 +143,6 @@
             margin-top: 5px;
         }
 
-        /* === HEADER RIGHT - MASTER SPEAKER BUTTON === */
         .chat-header-right {
             display: flex;
             align-items: center;
@@ -142,44 +177,13 @@
         /* === MESSAGES AREA === */
         .messages-container {
             flex: 1;
-            overflow-y: auto;
+            overflow-y: auto; /* THIS allows scroll */
+            overflow-x: hidden;
             padding: 30px 40px;
-            background: var(--color-background);
+            background: transparent; /* TRANSPARENT so we see water behind */
             min-height: 0;
-        }
-
-        /* ADD THIS CSS to the <style> block in ai-chat-desk.html */
-
-        /* Make the messages container a positioning context */
-        .messages-container {
             position: relative;
-            background: #0a0f14; /* Dark fallback color */
-        }
-
-        /* Style the new water background container */
-        .water-background-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0; /* Places it behind all messages */
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .water-background-container canvas {
-            display: block;
-            width: 100% !important;
-            height: 100% !important;
-        }
-
-        /* Make all content inside the messages container sit on top of the background */
-        #welcomeMessage,
-        .messages,
-        .typing-indicator {
-            position: relative;
-            z-index: 1; /* Ensures this content is above the water */
+            z-index: 5; /* Above water, below header */
         }
 
         .messages {
@@ -225,7 +229,6 @@
             min-width: fit-content;
         }
 
-        /* === MESSAGE CONTENT WITH TTS BUTTON === */
         .message-wrapper {
             display: flex;
             flex-direction: column;
@@ -253,7 +256,6 @@
             margin-top: 8px;
         }
 
-        /* === TTS PLAY BUTTON === */
         .message-play-button {
             width: 36px;
             height: 36px;
@@ -281,7 +283,6 @@
             transform: none;
         }
 
-        /* === GLOW ANIMATIONS FOR TTS UNLOCK === */
         @keyframes glow-pulse {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.9); }
             50% { transform: scale(1.4); box-shadow: 0 0 30px 15px rgba(99, 102, 241, 0.6); }
@@ -302,7 +303,6 @@
             animation: glow-pulse-small 1.5s ease-out forwards;
         }
 
-        /* === SPECIAL TAG STYLING === */
         .ai-message special {
             font-weight: 700;
             color: var(--color-primary);
@@ -321,7 +321,6 @@
             color: #c82333;
         }
 
-        /* === TYPING INDICATOR === */
         .typing-indicator {
             display: none;
             align-items: center;
@@ -370,6 +369,8 @@
             border-top: 2px solid var(--color-border);
             box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.05);
             flex-shrink: 0;
+            position: relative;
+            z-index: 10; /* Above water */
         }
 
         .input-wrapper {
@@ -447,7 +448,6 @@
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
-        /* Description card - styled like suggestion buttons */
         .welcome-description-card {
             display: inline-block;
             padding: 20px 30px;
@@ -660,7 +660,6 @@
         }
 
         /* === MOBILE CHAT STYLES === */
-        /* Mobile chat modal - displays automatically on mobile for this dedicated chat page */
         .mobile-chat-modal {
             display: none;
             position: fixed;
@@ -749,7 +748,6 @@
             position: relative;
         }
 
-        /* Water background for mobile chat */
         .mobile-chat-body .water-background-container {
             position: absolute;
             top: 0;
@@ -860,7 +858,6 @@
             30% { transform: translateY(-8px); }
         }
 
-        /* Message wrapper for TTS button alignment */
         .mobile-chat-messages .message-wrapper {
             display: flex;
             flex-direction: column;
@@ -878,7 +875,6 @@
             align-items: flex-start;
         }
 
-        /* TTS Play button styling for mobile */
         .mobile-chat-messages .message-play-btn {
             width: 32px;
             height: 32px;
@@ -899,7 +895,6 @@
             transform: scale(1.1);
         }
 
-        /* Special tag styling for mobile */
         .mobile-chat-message.ai special {
             font-weight: 700;
             color: #6366f1;
@@ -918,13 +913,10 @@
             color: #c82333;
         }
 
-        /* MOBILE RESPONSIVE: Hide desktop, show mobile chat automatically */
         @media (max-width: 768px) {
             .chat-container {
                 display: none !important;
             }
-
-            /* On this dedicated AI chat page, mobile chat opens automatically */
             .mobile-chat-modal {
                 display: flex;
             }
@@ -936,19 +928,18 @@
         }
 
         .messages-container::-webkit-scrollbar-track {
-            background: var(--color-background);
+            background: transparent;
         }
 
         .messages-container::-webkit-scrollbar-thumb {
-            background: #D0D0D0;
+            background: rgba(255,255,255,0.2);
             border-radius: 10px;
         }
 
         .messages-container::-webkit-scrollbar-thumb:hover {
-            background: #B0B0B0;
+            background: rgba(255,255,255,0.4);
         }
 
-        /* === HIDDEN AUDIO === */
         #ttsAudio {
             display: none;
         }
@@ -1093,57 +1084,43 @@
             100% { transform: rotateX(360deg) rotateY(1080deg) scale3d(0.4, 0.4, 0.4); }
         }
 
-        /* Hide loader on mobile - mobile chat has no slow water rendering */
         @media (max-width: 768px) {
             #dice-loader {
                 display: none !important;
             }
         }
-        /* ====== END: DESKTOP 3D CUBE LOADER ====== */
     </style>
 </head>
 <body>
-    <!-- Desktop 3D Cube Loader - Shows while water background renders -->
+    <!-- Desktop 3D Cube Loader -->
     <div id="dice-loader">
         <div id="ui">
             <div class="dice">
                 <ol class="dice_list">
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li>
                 </ol>
             </div>
             <div class="dice">
                 <ol class="dice_list">
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li>
                 </ol>
             </div>
             <div class="dice">
                 <ol class="dice_list">
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
-                    <li class="dice_list_item"></li>
+                    <li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li><li class="dice_list_item"></li>
                 </ol>
             </div>
         </div>
     </div>
 
     <div class="chat-container">
+        <!-- FIXED WATER BACKGROUND - MOVED OUTSIDE SCROLL AREA -->
+        <div class="water-background-container"></div>
+
         <!-- Header -->
         <div class="chat-header">
             <div class="chat-header-left">
-                <a href="/web-sites-4-u" class="back-arrow" title="Back to Store">
+                <a href="/booking" class="back-arrow" title="Back to Store">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -1162,10 +1139,6 @@
 
         <!-- Messages Area -->
         <div class="messages-container" id="messagesContainer">
-
-            <!-- ADD THIS NEW DIV RIGHT HERE -->
-            <div class="water-background-container"></div>
-
             <div id="welcomeMessage" class="welcome-message">
                 <div class="welcome-icon">🤖</div>
                 <h2 class="welcome-title">Hi! I'm Your AI Assistant</h2>
@@ -1213,10 +1186,10 @@
         </div>
     </div>
 
-    <!-- Mobile Fullscreen Chat Modal - Auto-opens on mobile -->
+    <!-- Mobile Fullscreen Chat Modal -->
     <div class="mobile-chat-modal" id="mobileChatModal">
         <div class="mobile-chat-header">
-            <a href="/web-sites-4-u" class="mobile-chat-back-button" title="Back to Store">
+            <a href="/booking" class="mobile-chat-back-button" title="Back to Store">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -1265,34 +1238,19 @@
         </div>
     </div>
 
-    <!-- Hidden Audio Element for TTS -->
     <audio id="ttsAudio"></audio>
-
-    <!-- Add this line right here -->
     <script src="./js/water.js"></script>
 
-    <!-- Chat System with TTS, Typing Animation, Device Fingerprinting -->
     <script type="module">
-        // ========================================
-        // IMPORTS
-        // ========================================
         import { injectTheme } from './js/theme-injector.js';
-
-        // Inject theme
         injectTheme();
 
-        // ========================================
-        // CONFIGURATION
-        // ========================================
         const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
-        const CHAT_ENDPOINT = '/chat';
-        const TTS_ENDPOINT = '/tts';
-        const SIGN_ENDPOINT = '/sign-fingerprint';
+        const CHAT_ENDPOINT = '/api/v1/aarie-platform/chat';
+        const TTS_ENDPOINT = '/api/v1/aarie-platform/tts';
+        const SIGN_ENDPOINT = '/api/v1/aarie-platform/sign-fingerprint';
         const GREETING_MESSAGE_TEXT = "Hi! 👋 I'm the AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. Ask me anything about our services, pricing, or how we can help your business!";
 
-        // ========================================
-        // STATE
-        // ========================================
         let sessionId = null;
         let deviceFingerprint = null;
         let fingerprintSignatureCache = { signature: null, timestamp: null, expiresAt: 0 };
@@ -1305,9 +1263,6 @@
         let mobileWaterInstance = null;
         let waterInstance = null;
 
-        // ========================================
-        // DOM ELEMENTS
-        // ========================================
         const messagesDiv = document.getElementById('messages');
         const userInput = document.getElementById('userInput');
         const sendButton = document.getElementById('sendButton');
@@ -1321,11 +1276,7 @@
         const audioSkipButton = document.getElementById('audioSkipButton');
         const ttsAudio = document.getElementById('ttsAudio');
 
-        // ========================================
-        // INITIALIZATION
-        // ========================================
         function initializeSession() {
-            // Always create fresh session on page load
             sessionId = 'session_' + crypto.randomUUID();
             sessionStorage.setItem('aarie_chat_session_id', sessionId);
             console.log(`🚀 New chat session started: ${sessionId}`);
@@ -1336,37 +1287,24 @@
         }
 
         function initializeDeviceFingerprint() {
-            // Create device signature
             const formFactor = window.innerWidth < 768 ? 'mobile' : 'desktop';
-            const screenWidth = window.screen.width;
-            const screenHeight = window.screen.height;
-            const pixelDensity = (window.devicePixelRatio || 1).toFixed(1);
-
-            deviceFingerprint = `${formFactor}_${screenWidth}x${screenHeight}_${pixelDensity}`;
+            deviceFingerprint = `${formFactor}_${window.screen.width}x${window.screen.height}_${(window.devicePixelRatio || 1).toFixed(1)}`;
             console.log(`📱 Device fingerprint: ${deviceFingerprint}`);
         }
 
         async function getFingerprintSignatureWithCache() {
             const now = Date.now();
-
-            // Return cached signature if still valid (within 2-minute window)
             if (fingerprintSignatureCache.signature && now < fingerprintSignatureCache.expiresAt) {
-                return {
-                    signature: fingerprintSignatureCache.signature,
-                    timestamp: fingerprintSignatureCache.timestamp
-                };
+                return { signature: fingerprintSignatureCache.signature, timestamp: fingerprintSignatureCache.timestamp };
             }
-
             try {
                 const response = await fetch(`${BACKEND_URL}${SIGN_ENDPOINT}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ device_fingerprint: deviceFingerprint })
                 });
-
                 if (response.ok) {
                     const data = await response.json();
-                    // Cache for 2 minutes
                     fingerprintSignatureCache.signature = data.signature;
                     fingerprintSignatureCache.timestamp = data.timestamp;
                     fingerprintSignatureCache.expiresAt = now + (2 * 60 * 1000);
@@ -1375,13 +1313,9 @@
             } catch (error) {
                 console.warn('[Fingerprint] Signature fetch failed:', error);
             }
-
             return { signature: null, timestamp: null };
         }
 
-        // ========================================
-        // TTS SYSTEM
-        // ========================================
         function showAudioPermissionModal() {
             audioPermissionOverlay.classList.add('active');
         }
@@ -1392,22 +1326,16 @@
 
         async function attemptTTSUnlock() {
             if (ttsUnlockedForSession) return true;
-
             return new Promise((resolve) => {
                 showAudioPermissionModal();
-
                 const handleEnable = async () => {
                     try {
-                        // Play unlock sound to satisfy browser autoplay policy
                         const testAudio = new Audio('/sounds/unlock.mp3?v=1.0');
                         testAudio.volume = 0.5;
                         await testAudio.play();
-
                         console.log('✅ Audio unlocked successfully');
                         ttsUnlockedForSession = true;
                         ttsFirstUnlocked = true;
-
-                        // Update master speaker button
                         masterSpeakerIcon.className = 'fas fa-volume-up';
                         masterSpeakerButton.classList.add('unlocked');
                         const mobileSpeakerBtn = document.getElementById('mobileSpeakerBtn');
@@ -1415,8 +1343,6 @@
                             mobileSpeakerBtn.classList.add('unlocked');
                             mobileSpeakerBtn.querySelector('i').className = 'fa-solid fa-volume-high';
                         }
-
-
                         hideAudioPermissionModal();
                         updatePlayButtonStates();
                         resolve(true);
@@ -1426,42 +1352,30 @@
                         resolve(false);
                     }
                 };
-
                 const handleSkip = () => {
                     hideAudioPermissionModal();
                     resolve(false);
                 };
-
-                // Remove old listeners and add new ones
                 audioEnableButton.onclick = handleEnable;
                 audioSkipButton.onclick = handleSkip;
             });
         }
 
         async function getTTSAudio(text) {
-            // Check cache first
             const cacheKey = text.substring(0, 100);
-            if (messageAudioCache.has(cacheKey)) {
-                return messageAudioCache.get(cacheKey);
-            }
-
+            if (messageAudioCache.has(cacheKey)) return messageAudioCache.get(cacheKey);
             try {
                 const response = await fetch(`${BACKEND_URL}${TTS_ENDPOINT}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text: text })
                 });
-
                 if (response.ok) {
                     const data = await response.json();
-                    // Backend returns 'audio', not 'audio_base64'
                     const audioData = data.audio || data.audio_base64;
                     if (audioData) {
-                        console.log('[TTS] Received audio data, length:', audioData.length);
                         messageAudioCache.set(cacheKey, audioData);
                         return audioData;
-                    } else {
-                        console.error('[TTS] No audio field in response:', Object.keys(data));
                     }
                 }
             } catch (error) {
@@ -1475,52 +1389,26 @@
                 currentAudio.pause();
                 currentAudio.currentTime = 0;
             }
-
-            // Debug: log audio data info
-            console.log('[TTS] Audio base64 length:', base64Audio.length);
-            console.log('[TTS] Audio base64 preview:', base64Audio.substring(0, 50));
-
-            // Try to detect audio format from base64 header
-            // MP3 files start with "//u" or "SUQ" in base64
-            // WAV files start with "Ukl" in base64
-            // OGG files start with "T2d" in base64
             let mimeType = 'audio/mp3';
-            if (base64Audio.startsWith('T2d')) {
-                mimeType = 'audio/ogg';
-            } else if (base64Audio.startsWith('Ukl')) {
-                mimeType = 'audio/wav';
-            } else if (base64Audio.startsWith('//u') || base64Audio.startsWith('SUQ')) {
-                mimeType = 'audio/mpeg';
-            }
-            console.log('[TTS] Detected MIME type:', mimeType);
+            if (base64Audio.startsWith('T2d')) mimeType = 'audio/ogg';
+            else if (base64Audio.startsWith('Ukl')) mimeType = 'audio/wav';
+            else if (base64Audio.startsWith('//u') || base64Audio.startsWith('SUQ')) mimeType = 'audio/mpeg';
 
             ttsAudio.src = `data:${mimeType};base64,${base64Audio}`;
             ttsAudio.volume = 1.0;
             isPlaying = true;
             currentAudio = ttsAudio;
-
-            // Set up event handlers before playing
             ttsAudio.onended = () => {
-                console.log('[TTS] Audio playback ended');
                 isPlaying = false;
                 updatePlayButtonStates();
             };
-
             ttsAudio.onerror = (e) => {
-                console.error('[TTS] Audio error event:', e);
-                console.error('[TTS] Audio error code:', ttsAudio.error?.code);
-                console.error('[TTS] Audio error message:', ttsAudio.error?.message);
                 isPlaying = false;
                 updatePlayButtonStates();
             };
-
             try {
                 await ttsAudio.play();
-                console.log('[TTS] ✅ Audio playback started successfully');
             } catch (err) {
-                console.error('[TTS] ❌ Playback failed:', err);
-                console.error('[TTS] Error name:', err.name);
-                console.error('[TTS] Error message:', err.message);
                 isPlaying = false;
                 updatePlayButtonStates();
             }
@@ -1535,96 +1423,63 @@
             updatePlayButtonStates();
         }
 
-        // ========================================
-        // PLAY BUTTON HANDLING
-        // ========================================
         function updatePlayButtonStates(currentPlayingText = null) {
             document.querySelectorAll('.message-play-button, .message-play-btn').forEach(btn => {
                 const msgText = btn.dataset.messageText || btn.dataset.text;
                 const icon = btn.querySelector('i');
-
-                // Remove animation classes
                 btn.classList.remove('glow-pulse', 'glow-pulse-small');
-
                 if (ttsUnlockedForSession) {
                     if (msgText === currentPlayingText && isPlaying) {
                         icon.className = 'fas fa-stop';
                     } else {
                         icon.className = 'fas fa-play';
-
-                        // Add glow animation
-                        if (ttsFirstUnlocked) {
-                            btn.classList.add('glow-pulse');
-                        } else {
-                            btn.classList.add('glow-pulse-small');
-                        }
+                        if (ttsFirstUnlocked) btn.classList.add('glow-pulse');
+                        else btn.classList.add('glow-pulse-small');
                     }
                 } else {
                     icon.className = 'fas fa-volume-mute';
                     btn.title = 'Click to unlock TTS';
                 }
             });
-
-            // Reset first unlock flag after applying to all buttons
-            if (ttsFirstUnlocked) {
-                setTimeout(() => { ttsFirstUnlocked = false; }, 100);
-            }
+            if (ttsFirstUnlocked) setTimeout(() => { ttsFirstUnlocked = false; }, 100);
         }
 
         async function handlePlayButtonClick(messageText, buttonElement) {
             const icon = buttonElement.querySelector('i');
             const isLocked = icon.classList.contains('fa-volume-mute') || icon.classList.contains('fa-volume-xmark');
-
-            // FIRST CLICK: If locked, unlock only - DON'T play yet
             if (isLocked) {
-                console.log('[TTS] First click - attempting to unlock...');
                 const unlocked = await attemptTTSUnlock();
                 if (!unlocked) return;
-
                 updatePlayButtonStates();
-                return; // STOP HERE - user must click again to play
+                return;
             }
-
-            // SECOND CLICK: If showing stop, stop playback
             if (icon.classList.contains('fa-stop')) {
                 stopTTSAudio();
                 return;
             }
-
-            // SECOND CLICK: Play the audio
             icon.className = 'fas fa-spinner fa-spin';
             buttonElement.disabled = true;
-
             try {
-                console.log('[TTS] Fetching audio for:', messageText.substring(0, 50) + '...');
                 const audioBase64 = await getTTSAudio(messageText);
                 if (audioBase64) {
-                    console.log('[TTS] Got audio, attempting playback...');
                     await playTTSAudio(audioBase64);
                     updatePlayButtonStates(messageText);
                 } else {
-                    console.error('[TTS] No audio data received from server');
                     icon.className = 'fas fa-play';
                 }
             } catch (error) {
-                console.error('[TTS] Error:', error);
                 icon.className = 'fas fa-play';
             } finally {
                 buttonElement.disabled = false;
             }
         }
 
-        // ========================================
-        // MESSAGE HANDLING
-        // ========================================
         function scrollToTop() {
             messagesContainer.scrollTop = 0;
         }
 
         function hideWelcome() {
-            if (welcomeMessage.style.display !== 'none') {
-                welcomeMessage.style.display = 'none';
-            }
+            if (welcomeMessage.style.display !== 'none') welcomeMessage.style.display = 'none';
         }
 
         function showTyping() {
@@ -1639,41 +1494,26 @@
         function createMessageElement(text, isUser, isMobile = false) {
             const wrapper = document.createElement('div');
             wrapper.className = `message-wrapper ${isUser ? 'user' : 'ai'}`;
-
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
-            if (isMobile) {
-                messageDiv.classList.add('mobile-chat-message');
-            }
-
+            if (isMobile) messageDiv.classList.add('mobile-chat-message');
             const textDiv = document.createElement('div');
             textDiv.className = 'message-text';
             messageDiv.appendChild(textDiv);
-
             wrapper.appendChild(messageDiv);
-
-            // Add TTS button for AI messages
             if (!isUser) {
                 const controls = document.createElement('div');
                 controls.className = 'message-controls';
-
                 const playButton = document.createElement('button');
                 playButton.className = 'message-play-button';
-                if(isMobile) {
-                    playButton.classList.add('message-play-btn');
-                }
+                if(isMobile) playButton.classList.add('message-play-btn');
                 playButton.dataset.messageText = text;
                 playButton.title = ttsUnlockedForSession ? 'Play' : 'Click to unlock TTS';
-                playButton.innerHTML = ttsUnlockedForSession
-                    ? '<i class="fas fa-play"></i>'
-                    : '<i class="fas fa-volume-mute"></i>';
-
+                playButton.innerHTML = ttsUnlockedForSession ? '<i class="fas fa-play"></i>' : '<i class="fas fa-volume-mute"></i>';
                 playButton.onclick = () => handlePlayButtonClick(text, playButton);
-
                 controls.appendChild(playButton);
                 wrapper.appendChild(controls);
             }
-
             return { wrapper, textDiv, messageDiv };
         }
         
@@ -1694,7 +1534,6 @@
             msgDiv.className = isMobile ? 'mobile-chat-message ai' : 'message ai-message';
             msgDiv.innerHTML = text;
             wrapper.appendChild(msgDiv);
-
             const playBtn = document.createElement('button');
             playBtn.className = 'message-play-btn';
             playBtn.dataset.text = text.replace(/<[^>]*>/g, '');
@@ -1710,7 +1549,6 @@
                 element.onclick = (e) => {
                     e.stopPropagation();
                     const clickedText = element.textContent;
-                    console.log(`🔵 Clicked special term: "${clickedText}"`);
                     inputElement.value = clickedText;
                     inputElement.focus();
                     sendFunction();
@@ -1720,48 +1558,31 @@
 
         async function addMessage(text, isUser, animate = true) {
             hideWelcome();
-
             const { wrapper, textDiv, messageDiv } = createMessageElement(text, isUser);
             messagesDiv.appendChild(wrapper);
-
             if (isUser || !animate) {
                 textDiv.textContent = text;
             } else {
-                // Display AI message immediately (animation removed)
                 textDiv.innerHTML = text;
                 reattachSpecialTagListeners(textDiv, userInput, sendMessage);
                 updatePlayButtonStates();
             }
-
             scrollToTop();
         }
 
         async function sendMessage() {
             const message = userInput.value.trim();
             if (!message) return;
-
-            // Stop any currently playing TTS audio
             stopTTSAudio();
-
-            // Disable input while sending
             userInput.disabled = true;
             sendButton.disabled = true;
-
-            // Clear previous messages - only show current exchange
             messagesDiv.innerHTML = '';
             hideWelcome();
-
-            // Add user message (no animation)
             await addMessage(message, true, false);
             userInput.value = '';
-
-            // Show typing indicator
             showTyping();
-
             try {
-                // Get fingerprint signature
                 const signatureData = await getFingerprintSignatureWithCache();
-
                 const payload = {
                     session_id: sessionId,
                     prompt: message,
@@ -1769,74 +1590,42 @@
                     fingerprint_signature: signatureData.signature,
                     fingerprint_timestamp: signatureData.timestamp
                 };
-
-                console.log('[Chat] Sending:', message.substring(0, 50) + '...');
-
                 const response = await fetch(`${BACKEND_URL}${CHAT_ENDPOINT}`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
                 hideTyping();
-
                 if (!response.ok) {
                     const errorText = await response.text();
-                    console.error('[Chat] Backend error:', response.status, errorText);
-
                     let errorMessage = 'Sorry, I encountered an error connecting to the server.';
-                    if (response.status === 429) {
-                        errorMessage = 'Too many requests. Please wait a moment before trying again.';
-                    } else if (response.status === 503) {
-                        errorMessage = 'The service is temporarily unavailable. Please try again in a moment.';
-                    }
+                    if (response.status === 429) errorMessage = 'Too many requests. Please wait a moment before trying again.';
+                    else if (response.status === 503) errorMessage = 'The service is temporarily unavailable. Please try again in a moment.';
                     await addMessage(errorMessage, false, true);
                     return;
                 }
-
                 const data = await response.json();
                 const aiResponse = data.response || 'I received an empty response from the server.';
-                console.log('[Chat] Received:', aiResponse.substring(0, 100) + '...');
-
-                // Add AI message with typing animation
                 await addMessage(aiResponse, false, true);
-
             } catch (error) {
                 hideTyping();
-                console.error('[Chat] Fetch error:', error);
-
                 let errorMessage = 'Sorry, I could not connect to the server. ';
-                if (error instanceof TypeError) {
-                    errorMessage += 'Please check your internet connection.';
-                } else {
-                    errorMessage += error.message;
-                }
+                if (error instanceof TypeError) errorMessage += 'Please check your internet connection.';
+                else errorMessage += error.message;
                 await addMessage(errorMessage, false, true);
             } finally {
-                // Re-enable input
                 userInput.disabled = false;
                 sendButton.disabled = false;
                 userInput.focus();
             }
         }
 
-        // Make sendSuggestion available globally
         window.sendSuggestion = function(text) {
             userInput.value = text;
             sendMessage();
         };
 
-        // ========================================
-        // MOBILE CHAT FUNCTIONS
-        // ========================================
-        // Note: On this dedicated AI chat page, mobile chat auto-opens via CSS
-        // These functions are kept for compatibility but closeMobileChat navigates back
         function openMobileChat() {
-            // Mobile chat auto-opens on this page via CSS media query
-            // This function is not needed but kept for compatibility
             const container = document.querySelector('.mobile-chat-body .water-background-container');
             if (container && window.WaterBackground && !mobileWaterInstance) {
                 mobileWaterInstance = Object.assign({}, window.WaterBackground);
@@ -1845,9 +1634,8 @@
         }
 
         function closeMobileChat() {
-            // On this dedicated chat page, closing means navigating back
             stopTTSAudio();
-            window.location.href = '/web-sites-4-u';
+            window.location.href = '/booking';
         }
         
         async function sendMobileMessage() {
@@ -1899,27 +1687,19 @@
         window.closeMobileChat = closeMobileChat;
         window.sendMobileMessage = sendMobileMessage;
         
-        // ========================================
-        // EVENT LISTENERS
-        // ========================================
         document.addEventListener('DOMContentLoaded', function() {
             initializeSession();
             initMobileChatSession();
             initializeDeviceFingerprint();
             userInput.focus();
-            console.log('[AI Chat] Page loaded with advanced features');
 
-            // Desktop Listeners
             userInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && !userInput.disabled) {
-                    sendMessage();
-                }
+                if (e.key === 'Enter' && !userInput.disabled) sendMessage();
             });
             sendButton.addEventListener('click', sendMessage);
             masterSpeakerButton.addEventListener('click', async () => {
-                if (!ttsUnlockedForSession) {
-                    await attemptTTSUnlock();
-                } else {
+                if (!ttsUnlockedForSession) await attemptTTSUnlock();
+                else {
                     if (masterSpeakerIcon.classList.contains('fa-volume-up')) {
                         masterSpeakerIcon.className = 'fas fa-volume-mute';
                         masterSpeakerButton.classList.remove('unlocked');
@@ -1930,7 +1710,6 @@
                 }
             });
 
-            // Mobile Listeners
             const mobileTTSBtn = document.getElementById('mobile-greeting-tts');
             if (mobileTTSBtn) {
                 mobileTTSBtn.addEventListener('click', () => handlePlayButtonClick(GREETING_MESSAGE_TEXT, mobileTTSBtn));
@@ -1940,9 +1719,8 @@
             });
             const mobileSpeakerBtn = document.getElementById('mobileSpeakerBtn');
             if(mobileSpeakerBtn) mobileSpeakerBtn.addEventListener('click', async () => { 
-                if (!ttsUnlockedForSession) {
-                    await attemptTTSUnlock();
-                } else {
+                if (!ttsUnlockedForSession) await attemptTTSUnlock();
+                else {
                     if (mobileSpeakerBtn.classList.contains('unlocked')) {
                         mobileSpeakerBtn.classList.remove('unlocked');
                         mobileSpeakerBtn.querySelector('i').className = 'fa-solid fa-volume-xmark';
@@ -1953,93 +1731,56 @@
                 }
             });
 
-
-            // Global Listeners
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
-                    if (audioPermissionOverlay.classList.contains('active')) {
-                        hideAudioPermissionModal();
-                    } else {
-                        closeMobileChat();
-                    }
+                    if (audioPermissionOverlay.classList.contains('active')) hideAudioPermissionModal();
+                    else closeMobileChat();
                 }
             });
-
-            // --- INITIALIZE THE WATER BACKGROUND ---
-            // Only initialize ONE water background based on device type
+            
+            // UPDATED: Find the water container in its NEW location
             const isMobile = window.innerWidth <= 768;
-
             if (isMobile) {
-                // Mobile water background - initialize on page load since it auto-opens on mobile
                 const mobileWaterContainer = document.querySelector('.mobile-chat-body .water-background-container');
                 if (mobileWaterContainer && window.WaterBackground) {
-                    console.log('[WaterBackground] Initializing mobile (auto-open)...');
                     mobileWaterInstance = Object.assign({}, window.WaterBackground);
                     mobileWaterInstance.init(mobileWaterContainer);
-                } else {
-                    console.warn('[WaterBackground] Mobile container not found or script not loaded.');
                 }
             } else {
-                // Desktop water background
-                const waterContainer = document.querySelector('.messages-container .water-background-container');
+                // Selector changed: .chat-container > .water-background-container
+                const waterContainer = document.querySelector('.chat-container > .water-background-container');
                 if (waterContainer && window.WaterBackground) {
-                    console.log('[WaterBackground] Initializing desktop...');
                     waterInstance = Object.assign({}, window.WaterBackground);
                     waterInstance.init(waterContainer);
-
-                    // Signal that desktop water is ready for loader dismissal
                     window.desktopWaterReady = true;
-                    console.log('[WaterBackground] Desktop water ready, signaling loader...');
                 } else {
-                    console.warn('[WaterBackground] Desktop container not found or script not loaded.');
-                    // Still signal ready so loader doesn't hang if water fails
                     window.desktopWaterReady = true;
                 }
             }
         });
     </script>
-
-    <!-- Desktop Dice Loader Management -->
     <script>
         (function() {
-            // Only run on desktop (mobile hides loader via CSS)
             if (window.innerWidth <= 768) return;
-
             const diceLoader = document.getElementById('dice-loader');
             if (!diceLoader) return;
-
-            console.log('[DiceLoader] Initialized, waiting for desktop UI to be ready...');
-
             const checkUIReady = () => {
                 const chatContainer = document.querySelector('.chat-container');
+                // Updated selector for messages
                 const messagesContainer = document.getElementById('messagesContainer');
-
-                // Check if water background is initialized and UI elements exist
                 if (window.desktopWaterReady && chatContainer && messagesContainer) {
-                    console.log('[DiceLoader] Desktop UI and water ready, hiding loader...');
-
-                    // Small delay to ensure smooth transition
                     setTimeout(() => {
                         diceLoader.classList.add('hidden');
-
-                        // Remove from DOM after transition
                         setTimeout(() => {
-                            console.log('[DiceLoader] Removing from DOM');
                             diceLoader.remove();
-                        }, 800); // Match CSS transition duration
-                    }, 300); // Brief delay for visual polish
+                        }, 800);
+                    }, 300);
                 } else {
-                    // Keep checking every 100ms
                     setTimeout(checkUIReady, 100);
                 }
             };
-
-            // Start checking after DOM is ready
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', checkUIReady);
-            } else {
-                checkUIReady();
-            }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', checkUIReady);
+            else checkUIReady();
         })();
     </script>
 </body>

@@ -74,17 +74,14 @@ export const conversationIntelligence = {
 
                 if (payload.workshop_name) {
                     this.state.booking.workshop_name = payload.workshop_name;
-                    console.log(`[ConversationIntelligence] Updated workshop_name from action: ${payload.workshop_name}`);
                 }
 
                 if (payload.requested_date) {
                     this.state.booking.requested_date = payload.requested_date;
-                    console.log(`[ConversationIntelligence] Updated requested_date from action: ${payload.requested_date}`);
                 }
 
                 if (payload.requested_time) {
                     this.state.booking.requested_time = payload.requested_time;
-                    console.log(`[ConversationIntelligence] Updated requested_time from action: ${payload.requested_time}`);
                 }
             }
 
@@ -117,8 +114,6 @@ export const conversationIntelligence = {
             // Store a clean snapshot of booking context for this message
             context: { ...this.state.booking, ui: { ...this.state.ui } },
         });
-
-        console.log("[ConversationIntelligence] Updated from backend:", this.state);
     },
 
     /**
@@ -133,8 +128,6 @@ export const conversationIntelligence = {
             type: 'user',
             content: message,
         });
-
-        console.log("[ConversationIntelligence] User said:", message);
     },
 
     /**
@@ -252,8 +245,6 @@ export const conversationIntelligence = {
         };
 
         this.state.message_history = [];
-
-        console.log("[ConversationIntelligence] Reset for new booking");
     },
 
     /**

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Contact Bert Peters | Salish Taught Artist</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Contact Bert Peters">
+    <meta property="og:description" content="Get in touch for commissions, inquiries, or collaborations.">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🪶</text></svg>">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/libs/fontawesome/all.min.css?v=11.0.12">
+
+    <!-- Linked CSS -->
+    <link rel="stylesheet" href="/css/smart-message.css?v=11.0.12">
+    <link rel="stylesheet" href="/css/fullscreen-modals.css?v=11.0.12">
+    <link rel="stylesheet" href="/css/stripe-checkout.css?v=11.0.12">
+
+    <!-- Device Detector -->
+    <script src="/js/device-detector.js?v=11.0.12"></script>
+
+    <!-- Three.js (CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+    <!-- Audio System Modules -->
+    <script src="/js/audioStateManager.js?v=11.0.12" type="module"></script>
+    <script src="/js/audioPermissionUI.js?v=11.0.12" type="module"></script>
+    <script src="/js/soundManager.js?v=11.0.12" type="module"></script>
+
+    <style>
+        /* === BASE STYLES === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            /* Dark Gradient Background specific to Contact Page */
+            background: linear-gradient(135deg, #2D4A3E 0%, #1a3a2a 50%, #0d1f17 100%);
+            color: #FFFFFF;
+            line-height: 1.7;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Subtle animated background texture */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.08;
+            background-image: radial-gradient(circle at 25% 25%, #C9A962 2px, transparent 2px), radial-gradient(circle at 75% 75%, #C9A962 1px, transparent 1px);
+            background-size: 60px 60px; pointer-events: none;
+        }
+
+        /* === NAVIGATION BAR (Unified) === */
+        .nav-bar {
+            position: static;
+            background: rgba(45, 74, 62, 0.95); backdrop-filter: blur(12px); z-index: 1000;
+            padding: 12px 30px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #FFFFFF; font-weight: 700; font-size: 1.3rem; }
+        .nav-logo-icon { font-size: 2rem; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)); }
+        .nav-links { display: flex; gap: 12px; align-items: center; }
+        .nav-link {
+            display: flex; align-items: center; gap: 8px; text-decoration: none; color: #FFFFFF; font-weight: 600; font-size: 0.95rem;
+            padding: 10px 20px; border-radius: 50px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease;
+        }
+        .nav-link:hover { background: #C9A962; border-color: #C9A962; color: #1a1a1a; transform: translateY(-2px); }
+        .nav-link.active { background: #C9A962; border-color: #C9A962; color: #1a1a1a; }
+        .nav-link.active:hover { background: #d4b872; border-color: #d4b872; box-shadow: 0 4px 15px rgba(201, 169, 98, 0.4); }
+
+        /* Mobile hamburger */
+        .nav-hamburger {
+            display: none; flex-direction: column; gap: 5px; width: 45px; height: 45px;
+            background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 50%;
+            cursor: pointer; align-items: center; justify-content: center;
+        }
+        .nav-hamburger-line { width: 20px; height: 2px; background: #FFFFFF; border-radius: 2px; }
+
+        /* Mobile Menu */
+        .nav-mobile-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9998; }
+        .nav-mobile-overlay.active { display: block; }
+        .nav-mobile-drawer {
+            position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: #1a3a2a;
+            z-index: 9999; transition: right 0.3s ease; display: flex; flex-direction: column;
+        }
+        .nav-mobile-drawer.active { right: 0; }
+        .nav-mobile-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 2px solid rgba(201, 169, 98, 0.3); }
+        .nav-mobile-logo { color: #C9A962; font-weight: 700; font-size: 1.2rem; }
+        .nav-mobile-close { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 50%; color: #FFFFFF; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .nav-mobile-links { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .nav-mobile-link {
+            display: flex; align-items: center; gap: 15px; padding: 16px 20px; text-decoration: none; color: #FFFFFF; font-size: 1.1rem;
+            border-radius: 12px; transition: background 0.3s ease;
+        }
+        .nav-mobile-link:hover { background: rgba(201, 169, 98, 0.2); }
+        .nav-mobile-link.active { background: rgba(201, 169, 98, 0.3); color: #C9A962; font-weight: 600; }
+
+        /* === CONTACT CONTAINER === */
+        .contact-container {
+            max-width: 900px; width: 100%; margin: 0 auto; padding: 140px 20px 60px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px; position: relative; z-index: 1; flex: 1;
+        }
+
+        /* Left Column - Header */
+        .contact-header { display: flex; flex-direction: column; justify-content: center; }
+        .contact-icon { font-size: 4rem; display: block; margin-bottom: 25px; filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3)); }
+        .contact-title { font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 800; color: #FFFFFF; margin-bottom: 15px; text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .contact-subtitle { font-size: 1.15rem; color: rgba(255, 255, 255, 0.85); line-height: 1.8; margin-bottom: 30px; }
+        .location-badge {
+            display: inline-flex; align-items: center; gap: 10px; background: rgba(201, 169, 98, 0.2);
+            border: 2px solid #C9A962; padding: 12px 20px; border-radius: 50px; color: #C9A962; font-weight: 600;
+        }
+        .location-badge span { font-size: 1.2rem; }
+
+        /* Right Column - Details */
+        .contact-details { display: flex; flex-direction: column; gap: 30px; }
+        .detail-card {
+            background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 35px; transition: all 0.3s ease;
+        }
+        .detail-card:hover { border-color: #C9A962; transform: translateY(-5px); }
+        .detail-icon { font-size: 2.5rem; display: block; margin-bottom: 15px; }
+        .detail-label { font-size: 0.9rem; color: #C9A962; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin-bottom: 10px; }
+        .detail-value { font-size: 1.3rem; color: #FFFFFF; font-weight: 600; margin-bottom: 15px; word-break: break-all; }
+
+        /* Copy Button */
+        .copy-button {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            background: #C9A962; color: #1a1a1a; border: none; padding: 14px 35px; border-radius: 50px;
+            font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; min-width: 220px;
+        }
+        .copy-button:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(201, 169, 98, 0.4); }
+        .copy-button.copied { background: #10B981; color: #FFFFFF; }
+
+        /* Commission CTA */
+        .commission-card {
+            background: linear-gradient(135deg, rgba(201, 169, 98, 0.2) 0%, rgba(201, 169, 98, 0.1) 100%); border-color: #C9A962;
+        }
+        .commission-title { font-size: 1.3rem; color: #FFFFFF; font-weight: 700; margin-bottom: 10px; }
+        .commission-text { color: rgba(255, 255, 255, 0.8); line-height: 1.7; margin-bottom: 20px; }
+        .commission-button {
+            display: inline-block; background: #C9A962; color: #1a1a1a; padding: 14px 35px;
+            border-radius: 50px; font-weight: 700; text-decoration: none; transition: all 0.3s ease; min-width: 220px; text-align: center;
+        }
+        .commission-button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(201, 169, 98, 0.4); }
+
+        /* Response Time */
+        .response-info {
+            display: flex; align-items: center; gap: 10px; padding: 15px 20px; background: rgba(16, 185, 129, 0.15);
+            border: 2px solid rgba(16, 185, 129, 0.3); border-radius: 12px; color: #10B981; font-size: 0.95rem;
+        }
+        .response-info span { font-size: 1.2rem; }
+
+        /* === FOOTER (Unified) === */
+        .footer { background: #1a1a1a; color: #FFFFFF; padding: 40px 20px; text-align: center; margin-top: auto; width: 100%; z-index: 10; position: relative; }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer-tagline { font-size: 1.2rem; margin-bottom: 10px; color: #C9A962; }
+        .footer-subtitle { font-size: 0.95rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 25px; }
+        .footer-links { display: flex; gap: 30px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .footer-links a { color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s ease; }
+        .footer-links a:hover { color: #C9A962; }
+        .footer-copyright { color: rgba(255, 255, 255, 0.5); font-size: 0.9rem; }
+
+        /* Old chat CSS removed */
+
+        @media (max-width: 768px) {
+            .nav-bar { padding: 10px 15px; }
+            .nav-links { display: none; }
+            .nav-hamburger { display: flex; }
+            .contact-container { grid-template-columns: 1fr; gap: 40px; width: 100%; padding-top: 100px; }
+            .contact-header { text-align: center; }
+            .location-badge { justify-content: center; }
+            .copy-button, .commission-button { width: 100%; }
+        }
+    </style>
+
+    <!-- Shaders removed, now handled by water4chat.js -->
+</head>
+<body>
+    <!-- NAVIGATION BAR -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="/home" class="nav-logo">
+                <span class="nav-logo-icon">🌿</span>
+                <span>Sxexet Spath</span>
+            </a>
+            <div class="nav-links">
+                <a href="/home" class="nav-link">
+                    <span class="nav-link-icon">🏠</span> Home
+                </a>
+                <a href="/davids-about" class="nav-link">
+                    <span class="nav-link-icon">ℹ️</span> About
+                </a>
+                <a href="/offerings" class="nav-link">
+                    <span class="nav-link-icon">✨</span> Offerings
+                </a>
+                <a href="/contact-sxexet" class="nav-link">
+                    <span class="nav-link-icon">📬</span> Contact
+                </a>
+                <a href="/davids-ai" class="nav-link">
+                    <span class="nav-link-icon">🤖</span> A.I. Chat
+                </a>
+                <a href="/cart" class="nav-link">
+                    <span class="nav-link-icon">🛒</span> Cart
+                </a>
+            </div>
+            <button class="nav-hamburger" id="navHamburger">
+                <span class="nav-hamburger-line"></span>
+                <span class="nav-hamburger-line"></span>
+                <span class="nav-hamburger-line"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="nav-mobile-overlay" id="navMobileOverlay"></div>
+    <div class="nav-mobile-drawer" id="navMobileDrawer">
+        <div class="nav-mobile-header">
+            <span class="nav-mobile-logo">🌿 Sxexet Spath</span>
+            <button class="nav-mobile-close" id="navMobileClose">&times;</button>
+        </div>
+        <div class="nav-mobile-links">
+            <a href="/home" class="nav-mobile-link">
+                <span class="nav-mobile-link-icon">🏠</span> Home
+            </a>
+            <a href="/davids-about" class="nav-mobile-link">
+                <span class="nav-mobile-link-icon">ℹ️</span> About
+            </a>
+            <a href="/offerings" class="nav-mobile-link">
+                <span class="nav-mobile-link-icon">✨</span> Offerings
+            </a>
+            <a href="/contact-sxexet" class="nav-mobile-link">
+                <span class="nav-mobile-link-icon">📬</span> Contact
+            </a>
+            <a href="/davids-ai" class="nav-mobile-link">
+                <span class="nav-mobile-link-icon">🤖</span> A.I. Chat
+            </a>
+            <a href="/cart" class="nav-mobile-link">
+                <span class="nav-mobile-link-icon">🛒</span> Cart
+            </a>
+            <hr style="margin: 15px 0; border: none; border-top: 1px solid rgba(255, 255, 255, 0.2);">
+            <a href="/privacy" class="nav-mobile-link">
+                <span class="nav-mobile-link-icon">🔒</span> Privacy Policy
+            </a>
+            <a href="/terms" class="nav-mobile-link">
+                <span class="nav-mobile-link-icon">📋</span> Terms
+            </a>
+        </div>
+    </div>
+
+    <div class="contact-container">
+        <!-- Left Column - Header -->
+        <div class="contact-header">
+            <span class="contact-icon">🪶</span>
+            <h1 class="contact-title">Get in Touch</h1>
+            <p class="contact-subtitle">Have questions about commissions, pricing, or want to discuss a project? I'd love to hear from you.</p>
+            <div class="location-badge">
+                <span>📍</span>
+                Seabird Island, BC
+            </div>
+        </div>
+
+        <!-- Right Column - Details -->
+        <div class="contact-details">
+            <!-- Email Card -->
+            <div class="detail-card">
+                <span class="detail-icon">📧</span>
+                <div class="detail-label">Email</div>
+                <div class="detail-value" id="emailValue">David79peters@gmail.com</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">
+                    📋 Copy Email
+                </button>
+            </div>
+
+            <!-- Commission CTA -->
+            <div class="detail-card commission-card">
+                <h3 class="commission-title">Ready to Start a Commission?</h3>
+                <p class="commission-text">Whether it's a wood carving, graphic design, or original artwork - every project begins with a conversation.</p>
+                <a href="/booking" class="commission-button">Start Your Commission</a>
+            </div>
+
+            <!-- Response Info -->
+            <div class="response-info">
+                <span>⚡</span>
+                Typical response time: 1-2 business days
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-tagline">Sxexet Spath (David Peters) | Stó:lō Medicine Maker</p>
+            <p class="footer-subtitle">Lower Mainland, British Columbia</p>
+            <div class="footer-links">
+                <a href="/home">Home</a>
+                <a href="/offerings">Offerings</a>
+                <a href="/contact-sxexet">Contact</a>
+                <a href="/davids-ai">AI Chat</a>
+                <a href="#" style="pointer-events: none; opacity: 0.5;">Privacy Policy</a>
+                <a href="#" style="pointer-events: none; opacity: 0.5;">Terms</a>
+            </div>
+            <p class="footer-copyright">&copy; 2025 Sxexet Spath (David Peters). All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+
+
+    <!-- Water Background for AI Chat -->
+    <script src="/js/water4chat.js"></script>
+
+    <!-- David Peters Dedicated AI Chat Widget -->
+    <script src="/ai-chat-davids.js"></script>
+
+    <script>
+        // Copy Email Function
+        async function copyToClipboard(button) {
+            try {
+                const email = 'David79peters@gmail.com';
+                await navigator.clipboard.writeText(email);
+                const originalText = button.innerHTML;
+                button.innerHTML = '✓ Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = 'David79peters@gmail.com';
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                button.innerHTML = '✓ Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.innerHTML = '📋 Copy Email';
+                    button.classList.remove('copied');
+                }, 2000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Nav Logic
+            const hamburger = document.getElementById('navHamburger');
+            const mobileDrawer = document.getElementById('navMobileDrawer');
+            const mobileOverlay = document.getElementById('navMobileOverlay');
+            const mobileClose = document.getElementById('navMobileClose');
+            const mobileLinks = document.querySelectorAll('.nav-mobile-link');
+
+            function toggleMenu(show) {
+                mobileDrawer.classList.toggle('active', show);
+                mobileOverlay.classList.toggle('active', show);
+                document.body.style.overflow = show ? 'hidden' : '';
+            }
+
+            hamburger.addEventListener('click', () => toggleMenu(true));
+            mobileClose.addEventListener('click', () => toggleMenu(false));
+            mobileOverlay.addEventListener('click', () => toggleMenu(false));
+            mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+
+            // Highlight Current Page
+            function highlightCurrentPage() {
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href');
+                    if (href === currentPath || (currentPath === '/' && href === '/')) {
+                        link.classList.add('active');
+                    }
+                });
+                document.querySelectorAll('.nav-mobile-link').forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href');
+                    if (href === currentPath || (currentPath === '/' && href === '/')) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            // Ensure highlighting happens after clean-url.js
+            setTimeout(() => { highlightCurrentPage(); }, 0);
+        });
+    </script>
+</body>
+</html>

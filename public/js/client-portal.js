@@ -18,17 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up auth state listener
     auth.onAuthStateChanged(user => {
       currentUser = user;
-      if (user) {
-        console.log('✅ User signed in:', user.email);
-      } else {
-        console.log('User logged out');
-      }
     });
 
     // Initialize auth UI
     initAuth();
-  } else {
-    console.error('❌ Firebase SDK not loaded');
   }
 });
 
@@ -57,8 +50,6 @@ function initAuth() {
       const result = await auth.signInWithPopup(provider);
       const user = result.user;
 
-      console.log('✅ Google Sign-In successful:', user.email);
-
       // Check if client document exists
       const clientDoc = await db.collection('clients').doc(user.uid).get();
 
@@ -73,9 +64,6 @@ function initAuth() {
           createdAt: new Date(),
           updatedAt: new Date()
         });
-        console.log('✅ New client created:', user.email);
-      } else {
-        console.log('✅ Existing client logged in:', user.email);
       }
 
       // Redirect to dashboard
@@ -83,7 +71,6 @@ function initAuth() {
         window.location.href = '/client-dashboard.html';
       }, 500);
     } catch (error) {
-      console.error('❌ Google Sign-In error:', error);
       showError(error.message);
     } finally {
       showLoading(false);
@@ -93,7 +80,6 @@ function initAuth() {
   // Check if already signed in
   auth.onAuthStateChanged(user => {
     if (user) {
-      console.log('✅ User already signed in, redirecting...');
       setTimeout(() => {
         window.location.href = '/client-dashboard.html';
       }, 500);

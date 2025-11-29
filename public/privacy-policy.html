@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - AARIE.CA</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
+            line-height: 1.8;
             color: #333;
             max-width: 900px;
             margin: 0 auto;
@@ -21,30 +22,55 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
+
         h1 {
             color: #1e90ff;
             border-bottom: 3px solid #1e90ff;
             padding-bottom: 10px;
         }
+
         h2 {
             color: #0047ab;
             margin-top: 30px;
+            border-left: 4px solid #1e90ff;
+            padding-left: 15px;
         }
+
         .last-updated {
             color: #666;
             font-style: italic;
             margin-bottom: 30px;
         }
-        ul {
+
+        ul, ol {
             margin: 15px 0;
             padding-left: 25px;
         }
+
         li {
-            margin: 8px 0;
+            margin: 10px 0;
         }
+
         .section {
             margin: 25px 0;
         }
+
+        .definition {
+            background: #f0f8ff;
+            padding: 15px;
+            border-left: 4px solid #1e90ff;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .important {
+            background: #fff8e1;
+            padding: 15px;
+            border-left: 4px solid #ff9800;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
         .contact-info {
             background: #f0f8ff;
             padding: 20px;
@@ -52,71 +78,210 @@
             border-radius: 4px;
             margin-top: 30px;
         }
+
+        .data-deletion-portal {
+            background: #eef7ff;
+            padding: 25px;
+            border-radius: 8px;
+            border: 2px solid #1e90ff;
+            margin-top: 35px;
+        }
+
+        .portal-button {
+            display: inline-block;
+            background-color: #1e90ff;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .portal-button:hover {
+            background-color: #0047ab;
+        }
+
+        strong {
+            color: #0047ab;
+        }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h1>🌊 Privacy Policy</h1>
-        <p class="last-updated">Last Updated: November 10, 2025</p>
+        <h1>Privacy Policy</h1>
+        <p class="last-updated">Last Updated: November 28, 2025</p>
 
         <div class="section">
-            <h2>1. Introduction</h2>
-            <p>AARIE.CA ("we," "us," or "our") is a platform that builds and hosts websites for our clients ("Merchants"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our services or make a purchase from a Merchant's website hosted by us.</p>
+            <h2>1. Introduction and Platform Overview</h2>
+            <p>AARIE.CA ("Platform," "we," "us," or "our") is a multi-merchant commerce platform that enables independent merchants to sell products and services directly to customers. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our services.</p>
+
+            <div class="definition">
+                <p><strong>Key Actors on This Platform:</strong></p>
+                <ul>
+                    <li><strong>The Platform (AARIE.CA):</strong> The technology provider that hosts online stores for merchants</li>
+                    <li><strong>Merchants:</strong> Independent businesses using AARIE.CA to build and operate online stores</li>
+                    <li><strong>Customers:</strong> Individuals who purchase products or services from merchants on this platform</li>
+                    <li><strong>Affiliates:</strong> Individuals who promote merchants' products through our affiliate program</li>
+                </ul>
+            </div>
         </div>
 
         <div class="section">
             <h2>2. Information We Collect</h2>
-            <p>As the platform owner, we collect and store the following information on behalf of our Merchants:</p>
+
+            <h3>2.1 Information from Customers</h3>
+            <p>When you purchase from a merchant on our platform, we collect:</p>
             <ul>
-                <li><strong>For Customers of Merchants:</strong> Name, Email, Phone Number, and order details. This information is collected to process orders and for communication between you and the Merchant.</li>
-                <li><strong>For our Merchants:</strong> Business information required to set up your store and your Stripe Connect Express account.</li>
-                <li><strong>Payment Information:</strong> All payments are processed securely through Stripe. We do not see or store your credit card details.</li>
+                <li>Name and email address</li>
+                <li>Shipping and billing address</li>
+                <li>Phone number (if provided)</li>
+                <li>Order details and purchase history</li>
+                <li>Payment information (processed securely through Stripe; we do not store credit card details)</li>
+            </ul>
+
+            <h3>2.2 Information from Merchants</h3>
+            <p>When you sign up as a merchant, we collect:</p>
+            <ul>
+                <li>Business name and contact information</li>
+                <li>Email address and phone number</li>
+                <li>Business details and banking information for payments</li>
+                <li>Stripe Connect account information for transaction processing</li>
+                <li>Website content and product information (you provide)</li>
+            </ul>
+
+            <h3>2.3 Information from Affiliates</h3>
+            <p>When you join our affiliate program, we collect:</p>
+            <ul>
+                <li>Name and email address</li>
+                <li>Website or social media information (if provided)</li>
+                <li>Affiliate application data</li>
+                <li>Referral tracking data (via URL parameters and session storage)</li>
+                <li>Commission and payout information</li>
+            </ul>
+
+            <h3>2.4 Information from All Visitors</h3>
+            <ul>
+                <li>Device information (browser type, device type, operating system)</li>
+                <li>Session data stored locally on your browser</li>
+                <li>Referral information if you arrived via an affiliate link</li>
+                <li>Website usage and interaction data</li>
             </ul>
         </div>
 
         <div class="section">
             <h2>3. How We Use Your Information</h2>
+
+            <h3>3.1 For Customers</h3>
             <ul>
-                <li>To enable order fulfillment and communication between Customers and Merchants.</li>
-                <li>To process payments via Stripe.</li>
-                <li>To provide our website building and hosting services to Merchants.</li>
-                <li>To improve our platform and prevent fraud.</li>
+                <li>Process and fulfill your orders from merchants</li>
+                <li>Send order confirmations and shipping notifications</li>
+                <li>Handle refunds and dispute resolution</li>
+                <li>Improve the platform and user experience</li>
+                <li>Comply with legal and financial obligations</li>
+            </ul>
+
+            <h3>3.2 For Merchants</h3>
+            <ul>
+                <li>Provide platform hosting and commerce functionality</li>
+                <li>Process payments through Stripe Connect</li>
+                <li>Generate sales reports and analytics</li>
+                <li>Send platform updates and support information</li>
+                <li>Prevent fraud and maintain platform security</li>
+            </ul>
+
+            <h3>3.3 For Affiliates</h3>
+            <ul>
+                <li>Verify your application and manage your affiliate account</li>
+                <li>Track your referrals and calculate commissions</li>
+                <li>Send commission statements and payout information</li>
+                <li>Communicate program updates</li>
             </ul>
         </div>
 
         <div class="section">
-            <h2>4. Data Storage & Security</h2>
-            <p>All personal and transactional data is stored in secure, encrypted databases on Google Cloud Firestore. We use industry-standard security measures, including encryption and role-based access controls, to protect your information.</p>
+            <h2>4. Data Sharing and Platform Architecture</h2>
+
+            <h3>4.1 Our Role</h3>
+            <p>AARIE.CA acts as a <strong>Data Processor</strong> for customer transactions on the platform. We process customer data on behalf of merchants to enable transactions and fulfill orders.</p>
+
+            <h3>4.2 Merchant Access to Customer Data</h3>
+            <p>When you purchase from a merchant on our platform, we share your order information (name, email, shipping address, phone number, and order details) with that specific merchant. This is necessary to fulfill your order.</p>
+
+            <h3>4.3 Third-Party Sharing</h3>
+            <p>We may share information with:</p>
+            <ul>
+                <li><strong>Stripe:</strong> Payment processing (PCI-DSS compliant)</li>
+                <li><strong>Service Providers:</strong> Email, analytics, or hosting services necessary to operate the platform</li>
+                <li><strong>Legal Authorities:</strong> When required by law, court order, or government request</li>
+            </ul>
+            <p><strong>We do not sell or rent customer data to third parties.</strong></p>
         </div>
 
         <div class="section">
-            <h2>5. Data Retention & Deletion</h2>
-            <p>We retain data for as long as necessary to provide our services and comply with legal obligations. Both Merchants and their customers have the right to request the deletion of their personal data.</p>
+            <h2>5. Data Security</h2>
+            <p>We implement reasonable security measures to protect your information:</p>
             <ul>
-                <li><strong>Request Deletion:</strong>
-                    <a href="./delete-data-desk.html" style="color: #1e90ff; font-weight: bold; text-decoration: none; border-bottom: 1px solid #1e90ff;">
-                        Use our secure portal to submit a data deletion request
-                    </a>
-                </li>
+                <li>All data transmission is encrypted using HTTPS</li>
+                <li>Payment information is processed securely through Stripe (PCI-DSS compliant)</li>
+                <li>We do not store credit card information</li>
+                <li>Access to personal data is restricted to authorized personnel</li>
+                <li>We maintain firewalls and intrusion detection systems</li>
+                <li>Data is stored in secure, encrypted databases on Google Cloud Firestore</li>
             </ul>
-            <p>We will respond to data deletion requests within 30 days.</p>
+            <p>However, no method of transmission over the internet is 100% secure. You use our services at your own risk.</p>
         </div>
 
         <div class="section">
-            <h2>6. Third-Party Services</h2>
-            <p>We share your information only with:</p>
+            <h2>6. Your Data Rights and Deletion</h2>
+
+            <div class="important">
+                <p><strong>You have the right to request deletion of your personal data.</strong></p>
+                <p>If you would like to request permanent deletion of your information from our platform, please use our secure data deletion portal below. Your request will be reviewed and processed within 30 days.</p>
+            </div>
+
+            <h3>6.1 What Gets Deleted</h3>
             <ul>
-                <li><strong>Stripe:</strong> For payment processing. Our platform uses Stripe Connect, and our Merchants are onboarded with Stripe Express accounts.</li>
-                <li><strong>Legal Requirements:</strong> When required by law.</li>
+                <li>Your personal information (name, email, shipping address, phone)</li>
+                <li>Your account data and shopping preferences</li>
+                <li>Your affiliate profile (if applicable)</li>
             </ul>
+
+            <h3>6.2 What We May Retain</h3>
+            <ul>
+                <li>Transaction amounts and dates (for financial reconciliation and legal compliance)</li>
+                <li>Order IDs and product information (without personal identifiers)</li>
+                <li>Aggregated, non-identifiable data for analytics</li>
+            </ul>
+
+            <h3>6.3 Processing Your Request</h3>
+            <p>Data deletion requests are handled manually to ensure accuracy. Once approved, you will receive a confirmation email. Processing typically takes 5-30 days.</p>
         </div>
-        
+
+        <div class="data-deletion-portal">
+            <h3>Request Data Deletion</h3>
+            <p>Use the secure form below to request permanent deletion of your personal data:</p>
+            <a href="/delete" class="portal-button">Open Data Deletion Portal</a>
+            <p style="margin-top: 20px; font-size: 0.9rem; color: #666;">This action cannot be undone. All personal information will be permanently removed.</p>
+        </div>
+
+        <div class="section">
+            <h2>7. Children's Privacy</h2>
+            <p>Our services are not intended for individuals under 18 years old. We do not knowingly collect information from minors. If we become aware that a minor has provided us with personal information, we will take steps to delete such information promptly.</p>
+        </div>
+
+        <div class="section">
+            <h2>8. Changes to This Policy</h2>
+            <p>We may update this Privacy Policy periodically. Changes will be posted on this page with an updated "Last Updated" date. Your continued use of our services after such updates constitutes your acceptance of the new Privacy Policy.</p>
+        </div>
+
         <div class="contact-info">
-            <h3>📧 Questions About Your Privacy?</h3>
-            <p>If you have questions about this Privacy Policy or your personal data, please contact us:</p>
+            <h3>Contact Us</h3>
+            <p>If you have questions about this Privacy Policy, your data, or to submit a data deletion request, please contact:</p>
             <p>
-                <strong>Email:</strong> aaries.luxi.ai@gmail.com
+                <strong>AARIE.CA</strong><br>
+                Email: <a href="mailto:aaries.luxi.ai@gmail.com">aaries.luxi.ai@gmail.com</a>
             </p>
         </div>
     </div>

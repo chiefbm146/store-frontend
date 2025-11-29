@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
+            line-height: 1.8;
             color: #333;
             max-width: 900px;
             margin: 0 auto;
@@ -22,80 +22,249 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
+
         h1 {
             color: #1e90ff;
             border-bottom: 3px solid #1e90ff;
             padding-bottom: 10px;
         }
+
         h2 {
             color: #0047ab;
             margin-top: 30px;
+            border-left: 4px solid #1e90ff;
+            padding-left: 15px;
         }
+
         .last-updated {
             color: #666;
             font-style: italic;
             margin-bottom: 30px;
         }
-        ul {
+
+        ul, ol {
             margin: 15px 0;
             padding-left: 25px;
         }
+
         li {
-            margin: 8px 0;
+            margin: 10px 0;
         }
+
         .section {
             margin: 25px 0;
+        }
+
+        .definition {
+            background: #f0f8ff;
+            padding: 15px;
+            border-left: 4px solid #1e90ff;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .important {
+            background: #fff8e1;
+            padding: 15px;
+            border-left: 4px solid #ff9800;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        strong {
+            color: #0047ab;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>📜 Terms and Conditions</h1>
-        <p class="last-updated">Last Updated: November 10, 2025</p>
+        <h1>📜 Merchant Terms and Conditions</h1>
+        <p class="last-updated">Last Updated: November 28, 2025</p>
 
-        <div class="section">
-            <h2>1. Our Services</h2>
-            <p>AARIE.CA provides a website development and hosting platform. Our service includes the creation of a custom website for our clients ("Merchants"), AI chatbot integration, and payment processing through Stripe Connect. The one-time fee for this service is $499, which is non-refundable upon commencement of work.</p>
+        <div class="definition">
+            <p><strong>These Terms of Service apply to merchants ("you") who sign up to create an online store on the AARIE.CA platform.</strong></p>
         </div>
 
         <div class="section">
-            <h2>2. Merchant Accounts and Stripe</h2>
-            <p>Our Merchants are onboarded as Stripe Connect Express account holders. This allows them to process payments directly from their customers. All transactions are subject to Stripe's terms of service and privacy policy.</p>
-        </div>
-
-        <div class="section">
-            <h2>3. Fees and Payments</h2>
+            <h2>1. Platform Services</h2>
+            <p>AARIE.CA provides a website development and hosting platform for merchants. Our services include:</p>
             <ul>
-                <li>A non-refundable one-time fee of $499 is required to begin the website development process.</li>
-                <li>We charge a platform fee of 2.5% on every transaction processed through your website.</li>
-                <li>This is in addition to Stripe's standard processing fees.</li>
+                <li>Custom website creation and hosting for your store</li>
+                <li>E-commerce functionality (product listings, shopping cart, checkout)</li>
+                <li>AI chatbot integration for customer support</li>
+                <li>Payment processing through Stripe Connect</li>
+                <li>Basic analytics and reporting tools</li>
+                <li>Platform support and maintenance</li>
             </ul>
         </div>
 
         <div class="section">
-            <h2>4. Merchant Responsibilities</h2>
-            <p>Merchants are responsible for providing all necessary content for their website, including but not limited to:</p>
+            <h2>2. Fees and Payment Terms</h2>
+            <h3>Service Setup Fee</h3>
             <ul>
-                <li>Product images and descriptions</li>
-                <li>Pricing information</li>
-                <li>Business information for the AI chatbot</li>
+                <li>A one-time setup fee of $499 is required to begin website development and hosting</li>
+                <li>This fee is <strong>non-refundable upon commencement of work</strong></li>
+                <li>The fee covers initial setup, configuration, and basic customization</li>
+            </ul>
+
+            <h3>Transaction Fees</h3>
+            <ul>
+                <li>AARIE.CA charges a platform fee of <strong>16% on every transaction</strong> processed through your store</li>
+                <li>This fee is in addition to Stripe's standard payment processing fees</li>
+                <li>Fees are deducted automatically from customer payments before being credited to your Stripe account</li>
+                <li>Fees are charged for successful transactions only, not for failed or cancelled transactions</li>
+            </ul>
+
+            <h3>Payment Processing</h3>
+            <ul>
+                <li>You are responsible for establishing and maintaining a Stripe Connect Express account</li>
+                <li>All customer payments are processed through your Stripe account</li>
+                <li>AARIE.CA does not hold or manage your customer payments</li>
+                <li>Payouts from Stripe are subject to Stripe's processing timelines and policies</li>
             </ul>
         </div>
-        
+
         <div class="section">
-            <h2>5. Account Integrity and Compliance</h2>
-            <p>AARIE.CA reserves the right to monitor account activity. Any suspicious or fraudulent activity will be flagged for manual review. Accounts may be paused, suspended, or terminated at our discretion to ensure the integrity of our platform and to comply with legal and financial regulations.</p>
+            <h2>3. Stripe Connect and Payment Processing</h2>
+            <p>As a merchant on AARIE.CA, you agree to:</p>
+            <ul>
+                <li>Create and maintain a valid Stripe Connect Express account</li>
+                <li>Comply with all of Stripe's terms of service and acceptable use policies</li>
+                <li>Provide accurate business and banking information to Stripe</li>
+                <li>Be responsible for all transactions processed through your account</li>
+                <li>Be solely responsible for customer refunds, disputes, and chargebacks</li>
+            </ul>
+
+            <div class="important">
+                <p><strong>Important:</strong> AARIE.CA is not responsible for Stripe's actions, policies, or account decisions. If Stripe suspends or closes your account, you are responsible for resolving that issue with Stripe directly.</p>
+            </div>
         </div>
 
         <div class="section">
-            <h2>6. Limitation of Liability</h2>
-            <p>In no event shall AARIE.CA, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the service.</p>
+            <h2>4. Merchant Responsibilities and Content</h2>
+            <p>You agree to:</p>
+            <ul>
+                <li>Provide all necessary content for your website (product images, descriptions, pricing)</li>
+                <li>Ensure all product descriptions are accurate and truthful</li>
+                <li>Provide business information for the AI chatbot and customer support</li>
+                <li>Maintain current contact and business information</li>
+                <li>Comply with all applicable laws and regulations in your jurisdiction</li>
+                <li>Take responsibility for all customer service, refunds, and disputes</li>
+                <li>Be the legal entity responsible for all transactions and customer relationships</li>
+                <li>Obtain all necessary licenses and permits for your business</li>
+                <li>Not use AARIE.CA for illegal activities or prohibited products/services</li>
+            </ul>
         </div>
 
         <div class="section">
-            <h2>7. Governing Law</h2>
-            <p>These Terms shall be governed and construed in accordance with the laws of Canada, without regard to its conflict of law provisions.</p>
+            <h2>5. Intellectual Property and Branding</h2>
+            <ul>
+                <li>You retain ownership of your business name, logo, content, and product information</li>
+                <li>You grant AARIE.CA the right to display your store on the platform</li>
+                <li>You agree not to infringe on third-party intellectual property rights</li>
+                <li>AARIE.CA retains ownership of all platform code, technology, and design elements</li>
+                <li>You may not reproduce, modify, or distribute AARIE.CA platform code</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>6. Account Monitoring and Compliance</h2>
+            <p>AARIE.CA reserves the right to:</p>
+            <ul>
+                <li>Monitor account activity for fraud, abuse, and compliance violations</li>
+                <li>Flag suspicious or fraudulent activity for manual review</li>
+                <li>Pause or suspend your account if illegal activity is suspected</li>
+                <li>Terminate your account at any time for violation of these terms</li>
+                <li>Report violations to appropriate authorities if required by law</li>
+            </ul>
+
+            <h3>Grounds for Suspension or Termination</h3>
+            <p>We may suspend or terminate your account for:</p>
+            <ul>
+                <li>Violation of these Terms of Service or our policies</li>
+                <li>Fraudulent or deceptive business practices</li>
+                <li>Selling illegal products or services</li>
+                <li>Repeated customer complaints or disputes</li>
+                <li>Failure to comply with Stripe's policies</li>
+                <li>Harassment, abuse, or violation of customer rights</li>
+                <li>Non-payment of fees or outstanding balances</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>7. Data and Customer Information</h2>
+            <p>You understand and agree that:</p>
+            <ul>
+                <li>AARIE.CA stores customer data (name, email, address, order history) on behalf of your store</li>
+                <li>You are responsible for protecting customer data and complying with privacy laws</li>
+                <li>You agree to our Privacy Policy regarding how customer data is handled</li>
+                <li>You are responsible for obtaining customer consent for any marketing communications</li>
+                <li>Upon account termination, you have the right to request your customer data</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>8. Limitation of Liability</h2>
+            <p>To the maximum extent permitted by law:</p>
+            <ul>
+                <li>AARIE.CA is not liable for any loss of profits, data, revenue, or business opportunities</li>
+                <li>AARIE.CA is not liable for indirect, incidental, special, or consequential damages</li>
+                <li>AARIE.CA is not liable for customer disputes, chargebacks, or payment processing failures</li>
+                <li>AARIE.CA is not liable for Stripe's actions or decisions regarding your account</li>
+                <li>AARIE.CA's total liability is limited to the fees you have paid in the past 12 months</li>
+            </ul>
+
+            <div class="important">
+                <p><strong>Some jurisdictions do not allow limitation of liability. To the extent permitted by law, these limitations apply to you.</strong></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>9. Service Availability and Support</h2>
+            <p>AARIE.CA provides the platform on an "as is" basis.</p>
+            <ul>
+                <li>We do not guarantee uninterrupted or error-free service</li>
+                <li>We reserve the right to perform maintenance and updates with reasonable notice</li>
+                <li>We support standard web browsers and devices; compatibility with all devices is not guaranteed</li>
+                <li>We provide technical support for platform issues, not for your business operations</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>10. Termination of Service</h2>
+            <p>Either party may terminate this agreement:</p>
+            <ul>
+                <li><strong>By You:</strong> You may request account closure at any time by contacting support</li>
+                <li><strong>By AARIE.CA:</strong> We may terminate for violation of terms, legal reasons, or business decisions with reasonable notice</li>
+                <li><strong>Upon Termination:</strong> Your store will be taken offline; you may request your customer data within 30 days</li>
+                <li><strong>No Refunds:</strong> Termination does not entitle you to refunds of fees paid</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>11. Changes to Terms and Pricing</h2>
+            <p>AARIE.CA reserves the right to modify these terms and our pricing:</p>
+            <ul>
+                <li>We will provide at least 30 days written notice of any changes</li>
+                <li>Continued use of the platform after the effective date constitutes acceptance of new terms</li>
+                <li>We may modify the platform fee structure with 30 days notice</li>
+                <li>Existing fees for your account will remain in effect until the effective date of any changes</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>12. Governing Law and Jurisdiction</h2>
+            <p>These Terms of Service are governed by and construed in accordance with the laws of Canada, without regard to its conflict of law provisions. Any legal action or proceeding must be brought in the appropriate courts of Canada.</p>
+        </div>
+
+        <div class="section">
+            <h2>13. Contact Information</h2>
+            <p>For questions about these terms or to report violations:</p>
+            <p>
+                <strong>AARIE.CA</strong><br>
+                Email: <a href="mailto:aaries.luxi.ai@gmail.com">aaries.luxi.ai@gmail.com</a>
+            </p>
         </div>
     </div>
 </body>

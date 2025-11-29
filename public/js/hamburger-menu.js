@@ -15,7 +15,6 @@ const hamburgerMenu = {
      * Called on page load to set up the floating button.
      */
     init() {
-        console.log('[HamburgerMenu] Initializing navigation button...');
         this.createFloatingButton();
         this.attachButtonListener();
     },
@@ -36,8 +35,6 @@ const hamburgerMenu = {
         } else {
             document.body.appendChild(button); // Keep fallback
         }
-
-        console.log('[HamburgerMenu] Hamburger button created');
     },
 
     /**
@@ -50,7 +47,6 @@ const hamburgerMenu = {
                 e.stopPropagation();
                 this.navigateToMenu();
             });
-            console.log('[HamburgerMenu] Button listener attached');
         }
     },
 
@@ -58,7 +54,6 @@ const hamburgerMenu = {
      * Navigate to the menu page (direct to desktop version)
      */
     navigateToMenu() {
-        console.log('[HamburgerMenu] Navigating to menu-desk.html...');
         window.location.href = '/menu-desk.html';
     }
 };

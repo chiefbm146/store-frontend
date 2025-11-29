@@ -10,12 +10,6 @@ let currentUser;
 // Backend API configuration
 const API_BASE_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
 
-// Log which Firebase app is being used
-console.log('🔥 Firebase app info:', {
-  projectId: firebase?.app()?.options?.projectId || 'UNKNOWN',
-  databaseURL: firebase?.app()?.options?.databaseURL || 'UNKNOWN'
-});
-
 /**
  * Helper to make API calls with Firebase token
  */
@@ -42,7 +36,6 @@ async function apiCall(endpoint, options = {}) {
 
     return await response.json();
   } catch (error) {
-    console.error('❌ API call error:', error);
     throw error;
   }
 }
@@ -59,15 +52,11 @@ document.addEventListener('DOMContentLoaded', function() {
     auth.onAuthStateChanged(user => {
       currentUser = user;
       if (user) {
-        console.log('✅ User signed in:', user.email);
         loadDashboard();
       } else {
-        console.log('User not signed in, redirecting to portal...');
         window.location.href = '/client-portal.html';
       }
     });
-  } else {
-    console.error('❌ Firebase SDK not loaded');
   }
 });
 
@@ -87,6 +76,15 @@ async function loadDashboard() {
     // Load Stripe account status first
     await loadStripeStatus();
 
+    // Sync transactions from Stripe (background, non-blocking)
+    try {
+      const syncResponse = await apiCall('/api/client/sync-transactions', {
+        method: 'POST'
+      });
+    } catch (error) {
+      // Silent error handling
+    }
+
     // Enable buttons after loading
     disableAllButtons(false);
 
@@ -94,7 +92,6 @@ async function loadDashboard() {
     try {
       await loadProducts();
     } catch (error) {
-      console.log('Products not available yet');
       document.getElementById('productsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><div class="empty-state-icon">📭</div><p>No products yet - Setup Stripe first</p></div>';
     }
 
@@ -104,11 +101,10 @@ async function loadDashboard() {
       // After loading transactions, update stats
       await updateDashboardStats();
     } catch (error) {
-      console.log('Transactions not available yet');
       document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">💤</div><p>No transactions yet</p></div>';
     }
   } catch (error) {
-    console.error('❌ Dashboard load error:', error);
+    // Silent error handling
   }
 }
 
@@ -132,10 +128,8 @@ async function updateDashboardStats() {
     document.getElementById('totalRevenue').textContent = `$${totalRevenueFormatted}`;
     document.getElementById('totalTransactions').textContent = transactions.length.toString();
     document.getElementById('activeProducts').textContent = products.length.toString();
-
-    console.log('✅ Dashboard stats updated');
   } catch (error) {
-    console.error('❌ Error updating stats:', error);
+    // Silent error handling
   }
 }
 
@@ -145,14 +139,12 @@ async function updateDashboardStats() {
 async function loadStripeStatus() {
   try {
     const url = `${API_BASE_URL}/api/client/dashboard-data`;
-    console.log('📋 Fetching from:', url);
     const response = await apiCall('/api/client/dashboard-data', {
       method: 'GET'
     });
 
     if (!response.stripe_account) {
       // No Stripe account - show setup button
-      console.log('❌ No Stripe account found');
       document.getElementById('stripeStatusBadge').textContent = '❌ Not Setup';
       document.getElementById('stripeStatusBadge').className = 'status-badge badge-pending';
       document.getElementById('stripeSetupBtn').style.display = 'block';
@@ -165,7 +157,6 @@ async function loadStripeStatus() {
     const accountData = response.stripe_account;
     const accountId = accountData.accountId;
 
-    console.log('✅ Found account ID:', accountId);
     document.getElementById('stripeAccountId').textContent = accountId;
 
     if (accountData.chargesEnabled && accountData.payoutsEnabled) {
@@ -189,7 +180,6 @@ async function loadStripeStatus() {
       document.getElementById('onboardingMessage').style.display = 'block';
     }
   } catch (error) {
-    console.error('❌ Error loading Stripe status:', error);
     document.getElementById('stripeStatusBadge').textContent = '❌ Not Setup';
     document.getElementById('stripeStatusBadge').className = 'status-badge badge-pending';
     document.getElementById('stripeSetupBtn').style.display = 'block';
@@ -236,9 +226,7 @@ async function loadProducts() {
     });
 
     document.getElementById('productsContainer').innerHTML = html;
-    console.log('✅ Products loaded:', products);
   } catch (error) {
-    console.error('❌ Error loading products:', error);
     document.getElementById('productsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No products available</p></div>';
   }
 }
@@ -248,14 +236,10 @@ async function loadProducts() {
  */
 async function loadTransactions() {
   try {
-    console.log('🔄 Syncing transactions from Stripe...');
-
     // Call the sync endpoint to fetch latest transactions from Stripe
     const response = await apiCall('/api/client/sync-transactions', {
       method: 'POST'
     });
-
-    console.log('✅ Transactions synced:', response);
 
     // Now fetch the updated transactions from dashboard-data
     const dashboardResponse = await apiCall('/api/client/dashboard-data', {
@@ -371,10 +355,7 @@ async function loadTransactions() {
 
     html += '</div>';
     document.getElementById('transactionsContainer').innerHTML = html;
-
-    console.log('✅ Transactions displayed:', transactions.length);
   } catch (error) {
-    console.error('❌ Error loading transactions:', error);
     document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">⚠️</div><p>Could not load transactions - try refreshing the page</p></div>';
   }
 }
@@ -393,8 +374,6 @@ async function handleStripeSetup() {
     });
 
     if (response.success) {
-      console.log('✅ Stripe account created:', response.accountId);
-
       // Immediately update UI to show onboarding button
       document.getElementById('stripeStatusBadge').textContent = '⏳ Pending Verification';
       document.getElementById('stripeStatusBadge').className = 'status-badge badge-pending';
@@ -409,7 +388,6 @@ async function handleStripeSetup() {
       alert('❌ Error: ' + (response.error || 'Failed to setup Stripe'));
     }
   } catch (error) {
-    console.error('❌ Stripe setup error:', error);
     alert('❌ Error: ' + error.message);
   }
 }
@@ -429,7 +407,6 @@ async function handleOnboarding() {
       alert('❌ Error: ' + (response.error || 'Failed to get onboarding link'));
     }
   } catch (error) {
-    console.error('❌ Onboarding error:', error);
     alert('❌ Error: ' + error.message);
   }
 }
@@ -448,7 +425,6 @@ async function handleDeleteAccount() {
     });
 
     if (response.success) {
-      console.log('✅ Stripe account deleted');
       alert('✅ Stripe account deleted. You can now set up a new one.');
       // Reload dashboard
       setTimeout(() => loadStripeStatus(), 500);
@@ -456,7 +432,6 @@ async function handleDeleteAccount() {
       alert('❌ Error: ' + (response.error || 'Failed to delete account'));
     }
   } catch (error) {
-    console.error('❌ Delete account error:', error);
     alert('❌ Error: ' + error.message);
   }
 }
@@ -469,7 +444,7 @@ async function handleLogout() {
     await auth.signOut();
     window.location.href = '/client-portal.html';
   } catch (error) {
-    console.error('❌ Logout error:', error);
+    // Silent error handling
   }
 }
 
@@ -485,7 +460,6 @@ async function openStripeDashboard() {
       alert('Unable to open Stripe Dashboard. Please try again.');
     }
   } catch (error) {
-    console.error('❌ Stripe dashboard error:', error);
     alert('Error opening Stripe Dashboard: ' + error.message);
   }
 }
@@ -519,3 +493,88 @@ function showLoadingSpinners() {
     onboardingBtn.innerHTML = '⏳ Loading...';
   }
 }
+
+/**
+ * Admin: Manually sync transactions from Stripe to Firestore
+ */
+async function handleAdminSync() {
+  try {
+    const userUid = document.getElementById('adminUserUid').value.trim();
+    const stripeAccount = document.getElementById('adminStripeAccount').value.trim();
+    const fingerprint = document.getElementById('adminSecret').value.trim();
+
+    // Validate inputs
+    if (!userUid) {
+      alert('❌ User UID is required');
+      return;
+    }
+    if (!stripeAccount) {
+      alert('❌ Stripe Account ID is required');
+      return;
+    }
+    if (!fingerprint) {
+      alert('❌ FINGERPRINT_SECRET is required');
+      return;
+    }
+
+    // Update button state
+    const btn = document.getElementById('adminSyncBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '⏳ Syncing...';
+    btn.disabled = true;
+
+    // Make API call with FINGERPRINT_SECRET in header
+    const url = `${API_BASE_URL}/api/client/admin/sync-transactions/${userUid}/${stripeAccount}`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-Fingerprint-Secret': fingerprint,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Handle non-JSON responses
+    let data;
+    try {
+      data = await response.json();
+    } catch (e) {
+      data = { error: `Server error: ${response.status} ${response.statusText}` };
+    }
+
+    // Show result
+    const statusDiv = document.getElementById('adminSyncStatus');
+    const messageDiv = document.getElementById('adminSyncMessage');
+
+    if (response.ok) {
+      messageDiv.innerHTML = `✅ <strong>Success!</strong><br>Synced ${data.synced} transactions from ${stripeAccount} to user ${userUid}`;
+      statusDiv.style.borderLeftColor = '#4caf50';
+      statusDiv.style.display = 'block';
+    } else {
+      messageDiv.innerHTML = `❌ <strong>Error:</strong><br>${data.error || 'Unknown error occurred'}`;
+      statusDiv.style.borderLeftColor = '#ff6b6b';
+      statusDiv.style.display = 'block';
+    }
+
+    // Reset button
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  } catch (error) {
+    const statusDiv = document.getElementById('adminSyncStatus');
+    const messageDiv = document.getElementById('adminSyncMessage');
+
+    let errorMsg = error.message;
+    if (error.message.includes('Failed to fetch')) {
+      errorMsg = 'Failed to reach backend. Check CORS or network connectivity. See console for details.';
+    }
+
+    messageDiv.innerHTML = `❌ <strong>Error:</strong><br>${errorMsg}`;
+    statusDiv.style.borderLeftColor = '#ff6b6b';
+    statusDiv.style.display = 'block';
+
+    const btn = document.getElementById('adminSyncBtn');
+    btn.innerHTML = '🚀 Sync Transactions';
+    btn.disabled = false;
+  }
+}
+

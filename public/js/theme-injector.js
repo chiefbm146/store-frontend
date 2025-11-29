@@ -25,8 +25,6 @@ import { theme } from './config/index.js';
  * Sets all theme values as CSS custom properties on :root
  */
 export function injectTheme() {
-    console.log('[Theme Injector] Loading theme configuration...');
-
     const root = document.documentElement;
     let variablesSet = 0;
 
@@ -159,10 +157,6 @@ export function injectTheme() {
             });
         }
 
-        console.log(`✅ Theme Injector: ${variablesSet} CSS variables injected`);
-        console.log(`   Primary Color: ${theme.colors.primary}`);
-        console.log(`   Font: ${theme.fonts.body}`);
-
         // Emit custom event for theme loaded
         const themeLoadedEvent = new CustomEvent('themeLoaded', {
             detail: { theme, variablesSet }
@@ -175,8 +169,6 @@ export function injectTheme() {
         };
 
     } catch (error) {
-        console.error('❌ Theme Injector: Failed to inject theme', error);
-
         return {
             success: false,
             error: error.message,
@@ -218,8 +210,6 @@ export function updateThemeVariable(category, name, value) {
         // Set the variable
         root.style.setProperty(varName, value);
 
-        console.log(`✅ Theme Injector: Updated ${varName} = ${value}`);
-
         // Emit custom event for theme variable updated
         const varUpdatedEvent = new CustomEvent('themeVariableUpdated', {
             detail: { category, name, value, varName }
@@ -229,7 +219,6 @@ export function updateThemeVariable(category, name, value) {
         return true;
 
     } catch (error) {
-        console.error(`❌ Theme Injector: Failed to update ${category}.${name}`, error);
         return false;
     }
 }
@@ -263,8 +252,6 @@ export function removeTheme() {
         });
     });
 
-    console.log(`✅ Theme Injector: ${removed} CSS variables removed`);
-
     return removed;
 }
 
@@ -272,8 +259,6 @@ export function removeTheme() {
  * Reload theme (useful after config changes)
  */
 export function reloadTheme() {
-    console.log('[Theme Injector] Reloading theme...');
-
     // Remove old theme
     removeTheme();
 
@@ -300,15 +285,11 @@ export function applyDarkMode(enabled = true) {
         root.style.setProperty('--color-background', theme.colors.backgroundDark || '#1a1a1a');
         root.style.setProperty('--color-textPrimary', theme.colors.textLight || '#FFFFFF');
         root.style.setProperty('--color-surface', '#2a2a2a');
-
-        console.log('✅ Dark mode enabled');
     } else {
         // Reset to light mode
         root.style.setProperty('--color-background', theme.colors.background);
         root.style.setProperty('--color-textPrimary', theme.colors.textPrimary);
         root.style.setProperty('--color-surface', theme.colors.surface);
-
-        console.log('✅ Light mode enabled');
     }
 
     // Emit event

@@ -28,8 +28,6 @@ const audioPermissionUI = {
      * Initialize the permission UI system
      */
     init() {
-        console.log('🎨 AudioPermissionUI initializing...');
-
         // Listen for permission request events
         audioStateManager.on('permissionRequested', () => {
             this.show();
@@ -47,7 +45,6 @@ const audioPermissionUI = {
     show() {
         if (this.isVisible) return; // Prevent duplicate modals
 
-        console.log('📺 Showing audio permission modal');
         this.isVisible = true;
 
         // Create backdrop
@@ -258,7 +255,6 @@ const audioPermissionUI = {
     hide() {
         if (!this.isVisible) return;
 
-        console.log('🙈 Hiding audio permission modal');
         this.isVisible = false;
 
         if (this.currentBackdrop) {
@@ -278,8 +274,6 @@ const audioPermissionUI = {
      * Attempts to play test sound and unlock audio
      */
     async handleEnable() {
-        console.log('🎵 User clicked enable audio');
-
         const enableBtn = document.getElementById('audio-permission-enable');
         if (enableBtn) {
             enableBtn.disabled = true;
@@ -294,8 +288,6 @@ const audioPermissionUI = {
 
             await testAudio.play();
 
-            console.log('✅ Test sound played successfully');
-
             // Update state manager
             audioStateManager.grantAudioPermission();
 
@@ -307,8 +299,6 @@ const audioPermissionUI = {
                 delete window.__audioPermissionResolver;
             }
         } catch (error) {
-            console.error('❌ Failed to play test sound:', error);
-
             if (enableBtn) {
                 enableBtn.disabled = false;
                 enableBtn.style.opacity = '1';
@@ -340,8 +330,6 @@ const audioPermissionUI = {
      * User explicitly denies audio
      */
     handleDeny() {
-        console.log('❌ User denied audio permission');
-
         audioStateManager.denyAudioPermission();
         this.hide();
 

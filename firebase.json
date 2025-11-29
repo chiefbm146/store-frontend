@@ -208,11 +208,11 @@
       },
       {
         "source": "/affiliate",
-        "destination": "/affiliate.html"
+        "destination": "/affiliate-aarie.html"
       },
       {
         "source": "/affiliate/**",
-        "destination": "/affiliate.html"
+        "destination": "/affiliate-aarie.html"
       },
       {
         "source": "/affiliate-aarie",

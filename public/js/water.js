@@ -22,15 +22,11 @@ const WaterBackground = {
      */
     init(parentContainer) {
         if (typeof THREE === 'undefined') {
-            console.error('[WaterBackground] THREE.js is not loaded.');
             return;
         }
         if (this.isRendering) {
-            console.warn('[WaterBackground] Already rendering.');
             return;
         }
-
-        console.log('[WaterBackground] Initializing...');
 
         this.container = parentContainer;
 
@@ -65,9 +61,6 @@ const WaterBackground = {
         const fragmentShaderEl = document.getElementById('water-fragment-shader');
 
         if (!vertexShaderEl || !fragmentShaderEl) {
-            console.error('[WaterBackground] Shader elements not found!');
-            console.log('[WaterBackground] Vertex shader:', vertexShaderEl ? '✓ Found' : '✗ Missing');
-            console.log('[WaterBackground] Fragment shader:', fragmentShaderEl ? '✓ Found' : '✗ Missing');
             return;
         }
 
@@ -77,8 +70,6 @@ const WaterBackground = {
             fragmentShader: fragmentShaderEl.textContent
         });
 
-        console.log('[WaterBackground] Shader material created');
-
         // Create plane mesh with the shader material
         // Make plane large enough to fill the camera's view
         const planeGeometry = new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight, 40, 40);
@@ -86,31 +77,21 @@ const WaterBackground = {
         mesh.position.set(0, 0, -100); // Position plane in front of camera
         this.scene.add(mesh);
 
-        console.log('[WaterBackground] Plane mesh added to scene');
-
         // Create renderer
         const canvas = document.createElement('canvas');
         canvas.id = 'water-background-canvas';
         this.container.appendChild(canvas);
-
-        console.log('[WaterBackground] Canvas appended to container');
-        console.log('[WaterBackground] Container:', this.container);
-        console.log('[WaterBackground] Canvas element:', canvas);
 
         this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setClearColor(0x000000, 1); // Opaque black background
 
-        console.log('[WaterBackground] WebGL Renderer created');
-
         // Event listeners
         window.addEventListener('resize', this._onWindowResize.bind(this));
 
         this.isRendering = true;
         this._renderLoop();
-
-        console.log('[WaterBackground] Initialized successfully.');
     },
 
     /**
@@ -119,7 +100,6 @@ const WaterBackground = {
     _injectCSS() {
         const styleId = 'water-background-styles';
         if (document.getElementById(styleId)) {
-            console.log('[WaterBackground] CSS already injected');
             return;
         }
 
@@ -143,7 +123,6 @@ const WaterBackground = {
             }
         `;
         document.head.appendChild(style);
-        console.log('[WaterBackground] CSS injected');
     },
 
     /**
@@ -399,11 +378,6 @@ const WaterBackground = {
         this.timeUniform.iGlobalTime.value += this.clock.getDelta();
         this.renderer.render(this.scene, this.camera);
         this.rafId = requestAnimationFrame(this._renderLoop.bind(this));
-
-        // Log first frame for debugging
-        if (this.timeUniform.iGlobalTime.value < 0.2) {
-            console.log('[WaterBackground] Render loop active. Time:', this.timeUniform.iGlobalTime.value.toFixed(3));
-        }
     },
 
     /**
@@ -412,7 +386,6 @@ const WaterBackground = {
     destroy() {
         if (!this.isRendering) return;
 
-        console.log('[WaterBackground] Destroying...');
         this.isRendering = false;
         cancelAnimationFrame(this.rafId);
 
@@ -436,8 +409,6 @@ const WaterBackground = {
         this.camera = null;
         this.renderer = null;
         this.material = null;
-
-        console.log('[WaterBackground] Destroyed.');
     }
 };
 

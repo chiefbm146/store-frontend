@@ -58,15 +58,11 @@ const audioStateManager = {
      * Runs on page load to restore persisted state
      */
     init() {
-        console.log('🎵 AudioStateManager initializing...');
-
         // Ensure global access is set BEFORE loading persisted state
         // This prevents race conditions where other modules try to access window.audioStateManager
         window.audioStateManager = this;
-        console.log('[AudioStateManager] Made globally available as window.audioStateManager');
 
         this.loadPersistedState();
-        console.log('✓ AudioStateManager initialized', this.state);
     },
 
     /**
@@ -80,9 +76,7 @@ const audioStateManager = {
                 this.state.isAudioEnabled = parsed.isAudioEnabled ?? false;
                 this.state.permissionStatus = parsed.permissionStatus ?? 'unknown';
                 this.state.hasUserInteracted = parsed.hasUserInteracted ?? false;
-                console.log('✓ Restored audio state from localStorage');
             } catch (e) {
-                console.warn('⚠ Failed to parse stored audio state:', e);
             }
         }
     },
@@ -98,7 +92,6 @@ const audioStateManager = {
                 hasUserInteracted: this.state.hasUserInteracted,
             }));
         } catch (e) {
-            console.warn('⚠ Failed to save audio state to localStorage:', e);
         }
     },
 
@@ -109,8 +102,6 @@ const audioStateManager = {
      */
     setAudioEnabled(enabled, reason = 'unknown') {
         if (this.state.isAudioEnabled === enabled) return; // No change needed
-
-        console.log(`🔊 Audio state change: ${this.state.isAudioEnabled} → ${enabled} (reason: ${reason})`);
 
         this.state.isAudioEnabled = enabled;
         this.state.hasUserInteracted = true;
@@ -124,7 +115,6 @@ const audioStateManager = {
     unlockAudio() {
         if (this.state.isAudioUnlocked) return;
 
-        console.log('✅ Audio unlocked - playback is now possible');
         this.state.isAudioUnlocked = true;
         this.state.permissionStatus = 'granted';
         this.state.failureCount = 0;
@@ -139,7 +129,6 @@ const audioStateManager = {
     lockAudio() {
         if (!this.state.isAudioUnlocked) return;
 
-        console.log('🔒 Audio locked - browser has blocked playback');
         this.state.isAudioUnlocked = false;
         this.state.permissionStatus = 'denied';
         this.state.failureCount = (this.state.failureCount || 0) + 1;
@@ -162,7 +151,6 @@ const audioStateManager = {
             return false; // Already waiting for permission
         }
 
-        console.log('📢 Requesting audio permission...');
         this.state.permissionStatus = 'requested';
         this.emit('permissionRequested');
 
@@ -177,7 +165,6 @@ const audioStateManager = {
      * User explicitly denied audio
      */
     denyAudioPermission() {
-        console.log('❌ Audio permission denied by user');
         this.state.permissionStatus = 'denied';
         this.state.isAudioEnabled = false;
         this.savePersistedState();
@@ -189,7 +176,6 @@ const audioStateManager = {
      * User explicitly granted audio
      */
     grantAudioPermission() {
-        console.log('✅ Audio permission granted by user');
         this.state.permissionStatus = 'granted';
         this.state.isAudioEnabled = true;
         this.state.isAudioUnlocked = true;
@@ -221,7 +207,6 @@ const audioStateManager = {
                 try {
                     callback(data);
                 } catch (e) {
-                    console.error(`❌ Error in ${event} listener:`, e);
                 }
             });
         }

@@ -9,7 +9,6 @@ const cartStore = {
     init() {
         this.loadCart();
         this.updateSummary();
-        console.log('🛒 Cart Store Initialized', this.state);
     },
 
     loadCart() {
@@ -20,7 +19,6 @@ const cartStore = {
                 this.state.items = parsedCart.items || [];
             }
         } catch (e) {
-            console.error("Error loading cart from localStorage:", e);
             this.state.items = [];
         }
     },
@@ -54,13 +52,11 @@ const cartStore = {
             this.state.items.push({ ...product, quantity });
         }
         this.updateSummary();
-        console.log('🛒 Added to cart:', product.name, 'Quantity:', quantity);
     },
 
     removeFromCart(productId) {
         this.state.items = this.state.items.filter(item => item.id !== productId);
         this.updateSummary();
-        console.log('🛒 Removed from cart:', productId);
     },
 
     updateQuantity(productId, quantity) {
@@ -71,14 +67,12 @@ const cartStore = {
                 this.removeFromCart(productId);
             }
             this.updateSummary();
-            console.log('🛒 Updated quantity for:', productId, 'to', quantity);
         }
     },
 
     clearCart() {
         this.state.items = [];
         this.updateSummary();
-        console.log('🛒 Cart cleared.');
     },
 
     // Getters

@@ -79,18 +79,16 @@
 
         // Step 1: Inject theme CSS variables
         injectTheme();
-        console.log('[About Page Desk] Theme injected');
 
         // Step 2: Load page content from config
         document.addEventListener('DOMContentLoaded', () => {
-            const updates = loadAboutPageContent();
-            console.log(`[About Page Desk] ${updates} elements updated from config`);
+            loadAboutPageContent();
         });
     </script>
 
     <script>
         function navigateBack() {
-            window.location.href = '/demo-desk.html';
+            window.location.href = '/booking';
         }
 
         document.addEventListener('keydown', (e) => {

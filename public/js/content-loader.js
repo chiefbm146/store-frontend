@@ -32,8 +32,6 @@ export function loadPageContent(pageName = null, options = {}) {
         logChanges = true,
     } = options;
 
-    console.log('[Content Loader] Loading content...');
-
     let updates = 0;
 
     try {
@@ -62,10 +60,6 @@ export function loadPageContent(pageName = null, options = {}) {
             }
         }
 
-        if (logChanges) {
-            console.log(`✅ Content Loader: ${updates} elements updated`);
-        }
-
         // Emit custom event
         const contentLoadedEvent = new CustomEvent('contentLoaded', {
             detail: { pageName, updates }
@@ -78,8 +72,6 @@ export function loadPageContent(pageName = null, options = {}) {
         };
 
     } catch (error) {
-        console.error('❌ Content Loader: Failed to load content', error);
-
         return {
             success: false,
             error: error.message,
@@ -560,11 +552,8 @@ function renderValuesCards(valuesArray) {
  * Load specific section content (e.g., founder profile)
  */
 export function loadSectionContent(sectionName, containerSelector) {
-    console.log(`[Content Loader] Loading section: ${sectionName}`);
-
     const container = document.querySelector(containerSelector);
     if (!container) {
-        console.warn(`Container not found: ${containerSelector}`);
         return 0;
     }
 
@@ -578,8 +567,6 @@ export function loadSectionContent(sectionName, containerSelector) {
  * Reload all content (useful after config changes)
  */
 export function reloadContent(pageName = null) {
-    console.log('[Content Loader] Reloading all content...');
-
     return loadPageContent(pageName, {
         updateMetaTags: true,
         updateTitle: true,
@@ -619,8 +606,6 @@ export function getCurrentPageName() {
 export function autoLoadContent() {
     const pageName = getCurrentPageName();
 
-    console.log(`[Content Loader] Auto-loading content for page: ${pageName || 'unknown'}`);
-
     return loadPageContent(pageName);
 }
 
@@ -628,8 +613,6 @@ export function autoLoadContent() {
  * Initialize content loader (can be called once on DOMContentLoaded)
  */
 export function initContentLoader() {
-    console.log('[Content Loader] Initializing...');
-
     // Auto-load on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', autoLoadContent);

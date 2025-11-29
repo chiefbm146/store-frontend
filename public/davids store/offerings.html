@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/device-detector.js"></script>
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 Products & Services - Sxexet Spath (David Peters)</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aarie.ca/davids-store">
+    <meta property="og:title" content="🌿 Sxexet Spath - Products & Services">
+    <meta property="og:description" content="Traditional medicines, courses, and healing services from Stó:lō medicine maker Sxexet Spath">
+    <meta property="og:image" content="https://aarie.ca/images/sxexet-spath.jpg">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            background: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            overflow: hidden;
+            color: #1a1a1a;
+            position: relative;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2D4A3E, #1a3a2a);
+            backdrop-filter: blur(10px);
+            border: 2px solid #C9A962;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 28px;
+            color: #FFFFFF;
+            box-shadow: 0 4px 20px rgba(201, 169, 98, 0.4);
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #1a3a2a, #2D4A3E);
+            border-color: #C9A962;
+            box-shadow: 0 0 40px rgba(201, 169, 98, 0.6);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .workshops-container {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 40px;
+        }
+
+        .workshops-title {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #C9A962, #2D4A3E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 40px;
+            text-align: center;
+            letter-spacing: 2px;
+            animation: fadeInDown 0.6s ease-out;
+            filter: drop-shadow(0 2px 8px rgba(201, 169, 98, 0.3));
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .workshops-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 40px;
+            width: 100%;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .workshops-container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .workshops-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+
+        .workshops-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #C9A962, #2D4A3E);
+            border-radius: 10px;
+        }
+
+        .workshop-card {
+            background: linear-gradient(135deg, #2D4A3E, #1a3a2a);
+            backdrop-filter: blur(20px);
+            border: 2px solid #C9A962;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: cardEntrance 0.6s ease-out backwards;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 30px rgba(201, 169, 98, 0.4), 0 0 40px rgba(201, 169, 98, 0.2);
+            min-height: 420px;
+        }
+
+        .workshop-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(201, 169, 98, 0.15), rgba(197, 154, 80, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+
+        .workshop-card:hover::before {
+            opacity: 1;
+        }
+
+        .workshop-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            border-color: #C9A962;
+            box-shadow: 0 16px 50px rgba(201, 169, 98, 0.6), 0 0 60px rgba(201, 169, 98, 0.4);
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .workshop-card:nth-child(1) { animation-delay: 0.05s; }
+        .workshop-card:nth-child(2) { animation-delay: 0.1s; }
+        .workshop-card:nth-child(3) { animation-delay: 0.15s; }
+        .workshop-card:nth-child(4) { animation-delay: 0.2s; }
+        .workshop-card:nth-child(5) { animation-delay: 0.25s; }
+        .workshop-card:nth-child(6) { animation-delay: 0.3s; }
+        .workshop-card:nth-child(7) { animation-delay: 0.35s; }
+        .workshop-card:nth-child(8) { animation-delay: 0.4s; }
+        .workshop-card:nth-child(9) { animation-delay: 0.45s; }
+        .workshop-card:nth-child(10) { animation-delay: 0.5s; }
+        .workshop-card:nth-child(11) { animation-delay: 0.55s; }
+        .workshop-card:nth-child(12) { animation-delay: 0.6s; }
+
+        .workshop-image-wrapper {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            border-radius: 24px 24px 0 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .workshop-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .workshop-card:hover .workshop-image {
+            transform: scale(1.1);
+        }
+
+        .workshop-content {
+            padding: 30px;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .workshop-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            margin-bottom: 15px;
+        }
+
+        .workshop-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            line-height: 1.4;
+            flex: 1;
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.5px;
+        }
+
+        .workshop-duration {
+            font-size: 1rem;
+            color: #C9A962;
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .workshop-learn-more {
+            font-size: 1.1rem;
+            color: #C9A962;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #C9A962;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-top: auto;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .workshop-card:hover .workshop-learn-more {
+            background: rgba(201, 169, 98, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 1400px) {
+            .workshops-grid {
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .workshops-container {
+                padding: 80px 15px 20px;
+                height: auto;
+                overflow: visible;
+            }
+
+            .workshops-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 15px;
+            }
+
+            .workshop-card {
+                min-height: 200px;
+            }
+
+            .workshop-image-wrapper {
+                height: 120px;
+            }
+
+            .workshop-content {
+                padding: 12px;
+            }
+
+            .workshop-name {
+                font-size: 0.9rem;
+                line-height: 1.3;
+            }
+
+            .workshop-duration {
+                font-size: 0.75rem;
+                margin-bottom: 5px;
+            }
+
+            .workshop-learn-more {
+                font-size: 0.75rem;
+            }
+
+            .back-button {
+                width: 45px;
+                height: 45px;
+                top: 15px;
+                right: 15px;
+                font-size: 22px;
+            }
+
+            .workshops-title {
+                margin-bottom: 20px;
+                font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .workshops-container {
+                padding: 70px 10px 15px;
+            }
+
+            .workshops-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .workshop-card {
+                min-height: 180px;
+            }
+
+            .workshop-image-wrapper {
+                height: 100px;
+            }
+
+            .workshop-content {
+                padding: 10px;
+            }
+
+            .workshop-name {
+                font-size: 0.8rem;
+            }
+
+            .workshop-duration {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="back-button" onclick="window.location.href='/home'" title="Back">✕</div>
+
+    <div class="workshops-container">
+        <h1 class="workshops-title">Products & Services</h1>
+
+        <div class="workshops-grid" id="workshops-grid">
+            <!-- Populated by JavaScript from workshop-data.js -->
+        </div>
+    </div>
+
+    <!-- MOBILE VERSION - SIMPLE LAYOUT -->
+    <div class="mobile-version">
+        <div class="mobile-header">
+            <button class="mobile-back" onclick="window.location.href='/home'">← Back</button>
+            <h1>Products & Services</h1>
+            <button class="mobile-home" onclick="window.location.href='/home'">🏠</button>
+        </div>
+
+        <div class="mobile-content">
+            <h2 class="mobile-title">All Offerings</h2>
+            <div id="mobile-workshops-grid" class="mobile-workshops-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Water Background for AI Chat -->
+    <script src="./js/water4chat.js"></script>
+
+    <!-- David Peters Dedicated AI Chat Widget -->
+    <script src="./ai-chat-davids.js"></script>
+
+    <style>
+        /* Mobile Version */
+        .mobile-version {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+            }
+
+            body > :not(.mobile-version) {
+                display: none;
+            }
+
+            .mobile-version {
+                display: block !important;
+                background: #F5F1E8;
+                width: 100%;
+            }
+
+            .mobile-header {
+                background: linear-gradient(135deg, #2D4A3E, #1a3a2a);
+                color: #FFF;
+                padding: 12px 15px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+            }
+
+            .mobile-header h1 {
+                flex: 1;
+                text-align: center;
+                font-size: 1.2rem;
+                margin: 0;
+            }
+
+            .mobile-back,
+            .mobile-home {
+                background: rgba(255, 255, 255, 0.15);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                color: #FFF;
+                padding: 8px 12px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                font-weight: 600;
+                transition: all 0.3s;
+            }
+
+            .mobile-back:hover,
+            .mobile-home:hover {
+                background: rgba(255, 255, 255, 0.25);
+                transform: scale(1.05);
+            }
+
+            .mobile-content {
+                padding: 70px 15px 80px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .mobile-title {
+                font-size: 1.5rem;
+                color: #2D4A3E;
+                margin: 0 0 20px;
+                text-align: center;
+            }
+
+            .mobile-workshops-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .mobile-workshop-card {
+                background: #FFFFFF;
+                border: 1px solid #C9A962;
+                border-radius: 12px;
+                overflow: hidden;
+                cursor: pointer;
+                transition: all 0.3s;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .mobile-workshop-card:active {
+                transform: scale(0.95);
+                box-shadow: 0 4px 12px rgba(45, 74, 62, 0.3);
+            }
+
+            .mobile-workshop-image {
+                width: 100%;
+                height: 140px;
+                object-fit: cover;
+            }
+
+            .mobile-workshop-info {
+                padding: 12px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .mobile-workshop-name {
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: #1a1a1a;
+                margin-bottom: 6px;
+                line-height: 1.3;
+            }
+
+            .mobile-workshop-duration {
+                font-size: 0.8rem;
+                color: #666;
+                margin-bottom: 8px;
+            }
+
+            .mobile-workshop-action {
+                font-size: 0.75rem;
+                color: #2D4A3E;
+                font-weight: 700;
+                margin-top: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-header {
+                padding: 10px 10px;
+            }
+
+            .mobile-header h1 {
+                font-size: 1.1rem;
+            }
+
+            .mobile-back,
+            .mobile-home {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            .mobile-content {
+                padding: 65px 12px 70px;
+            }
+
+            .mobile-title {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            .mobile-workshops-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .mobile-workshop-image {
+                height: 120px;
+            }
+
+            .mobile-workshop-info {
+                padding: 10px;
+            }
+
+            .mobile-workshop-name {
+                font-size: 0.9rem;
+                margin-bottom: 4px;
+            }
+
+            .mobile-workshop-duration {
+                font-size: 0.75rem;
+            }
+
+            .mobile-workshop-action {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+
+    <script src="./workshop-data.js"></script>
+    <script>
+        function navigateToWorkshop(workshopId) {
+            window.location.href = `/details?id=${workshopId}`;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                window.history.back();
+            }
+        });
+
+        // Populate workshops grid from workshop-data.js
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('workshops-grid');
+            const mobileGrid = document.getElementById('mobile-workshops-grid');
+
+            Object.values(window.workshopData).forEach((workshop, index) => {
+                // Desktop card
+                const card = document.createElement('div');
+                card.className = 'workshop-card';
+                card.style.animationDelay = `${index * 0.05}s`;
+                card.innerHTML = `
+                    <div class="workshop-image-wrapper" style="display: flex; align-items: center; justify-content: center; font-size: 5rem; background: linear-gradient(135deg, rgba(201, 169, 98, 0.1), rgba(45, 74, 62, 0.1));">
+                        ${workshop.icon}
+                    </div>
+                    <div class="workshop-content">
+                        <div class="workshop-header">
+                            <div class="workshop-name">${workshop.title}</div>
+                        </div>
+                        <div class="workshop-duration">${workshop.type}</div>
+                        <div class="workshop-learn-more">Learn More</div>
+                    </div>
+                `;
+                card.onclick = () => navigateToWorkshop(workshop.id);
+                grid.appendChild(card);
+
+                // Mobile card
+                const mobileCard = document.createElement('div');
+                mobileCard.className = 'mobile-workshop-card';
+                mobileCard.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; font-size: 2.5rem; height: 140px; background: linear-gradient(135deg, rgba(201, 169, 98, 0.1), rgba(45, 74, 62, 0.1));">
+                        ${workshop.icon}
+                    </div>
+                    <div class="mobile-workshop-info">
+                        <div class="mobile-workshop-name">${workshop.title}</div>
+                        <div class="mobile-workshop-duration">${workshop.type}</div>
+                        <div class="mobile-workshop-action">Learn More →</div>
+                    </div>
+                `;
+                mobileCard.addEventListener('click', () => navigateToWorkshop(workshop.id));
+                mobileGrid.appendChild(mobileCard);
+            });
+        });
+    </script>
+</body>
+</html>

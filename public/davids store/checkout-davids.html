@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Bert Peters - Salish Taught Artist</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Checkout - Bert Peters">
+    <meta property="og:description" content="Reserve your commission spot with Bert Peters - $100 deposit">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🪶</text></svg>">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #1a1a1a;
+            background: #F5F3EF;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* === NAVIGATION === */
+        .nav-bar {
+            position: static;
+            background: rgba(45, 74, 62, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 15px 40px;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .nav-back-button {
+            background: #C9A962;
+            color: #1a1a1a;
+            text-decoration: none;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(201, 169, 98, 0.3);
+            position: absolute;
+            left: 0;
+        }
+
+        .nav-back-button:hover {
+            transform: translateX(-3px);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+
+        .nav-logo-icon {
+            font-size: 1.8rem;
+        }
+
+        /* === CHECKOUT CONTAINER === */
+        .checkout-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 40px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* === ORDER SUMMARY === */
+        .order-summary {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .summary-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #E9ECEF;
+        }
+
+        .summary-icon {
+            font-size: 2rem;
+        }
+
+        .summary-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, #2D4A3E 0%, #1a3a2a 100%);
+            border-radius: 16px;
+            padding: 30px;
+            color: #FFFFFF;
+            margin-bottom: 25px;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .product-description {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .product-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #C9A962;
+        }
+
+        .product-note {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #E9ECEF;
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 0.95rem;
+            color: #4a5568;
+        }
+
+        .feature-text strong {
+            color: #1a1a1a;
+        }
+
+        /* === PAYMENT PANEL === */
+        .payment-panel {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #E9ECEF;
+        }
+
+        .payment-icon {
+            font-size: 1.5rem;
+        }
+
+        .payment-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .secure-badge {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: #28a745;
+            background: #E8F5E9;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        /* === FORM === */
+        .checkout-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-section-title span {
+            font-size: 1.2rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #FFFFFF;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2D4A3E;
+            box-shadow: 0 0 0 4px rgba(45, 74, 62, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #98a2b3;
+        }
+
+        /* === STRIPE CARD === */
+        .stripe-card-container {
+            padding: 14px 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            background: #FFFFFF;
+            min-height: 48px;
+            transition: all 0.3s ease;
+        }
+
+        .stripe-card-container.focused {
+            border-color: #2D4A3E;
+            box-shadow: 0 0 0 4px rgba(45, 74, 62, 0.1);
+        }
+
+        .stripe-card-container.error {
+            border-color: #dc3545;
+        }
+
+        /* === TERMS === */
+        .terms-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: #F8F9FA;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .terms-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            flex-shrink: 0;
+            accent-color: #2D4A3E;
+        }
+
+        .terms-wrapper label {
+            font-size: 0.9rem;
+            color: #4a5568;
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .terms-link {
+            color: #2D4A3E;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+
+        /* === SUBMIT BUTTON === */
+        .submit-btn {
+            width: 100%;
+            padding: 18px 24px;
+            background: #C9A962;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(201, 169, 98, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(201, 169, 98, 0.5);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .submit-btn .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(26, 26, 26, 0.3);
+            border-top-color: #1a1a1a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .submit-btn.loading .spinner {
+            display: block;
+        }
+
+        .submit-btn.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* === ERROR MESSAGE === */
+        .error-message {
+            display: none;
+            background: #FFEBEE;
+            border-left: 4px solid #dc3545;
+            border-radius: 8px;
+            padding: 14px 16px;
+            color: #c62828;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .error-message.visible {
+            display: block;
+        }
+
+        /* === SUCCESS OVERLAY === */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-overlay.visible {
+            display: flex;
+        }
+
+        .success-modal {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 50px;
+            text-align: center;
+            max-width: 500px;
+            margin: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        .success-btn {
+            display: inline-block;
+            padding: 14px 40px;
+            background: #C9A962;
+            color: #1a1a1a;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .success-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(201, 169, 98, 0.4);
+        }
+
+        /* === SECURITY FOOTER === */
+        .security-footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 15px;
+            background: #F8F9FA;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .security-footer span {
+            color: #28a745;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .checkout-wrapper {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 30px 20px;
+            }
+            .order-summary { order: 1; }
+            .payment-panel { order: 2; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-bar { padding: 10px 15px; }
+            .nav-back-button { width: 40px; height: 40px; }
+            .nav-logo { font-size: 1.1rem; }
+            .nav-logo-icon { font-size: 1.5rem; }
+
+            .checkout-wrapper { padding: 20px 15px; gap: 20px; }
+            .order-summary, .payment-panel { padding: 25px; border-radius: 16px; }
+            .product-card { padding: 25px; }
+            .product-name { font-size: 1.1rem; }
+            .product-price { font-size: 2.5rem; }
+            .summary-title, .payment-title { font-size: 1.2rem; }
+            .submit-btn { font-size: 1.1rem; padding: 16px 20px; }
+            .success-modal { padding: 30px 25px; }
+            .success-icon { font-size: 4rem; }
+            .success-title { font-size: 1.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .checkout-wrapper { padding: 15px 10px; }
+            .form-input { padding: 12px 14px; font-size: 16px; }
+            .secure-badge { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="/offerings" class="nav-back-button" title="Back to Products">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            <a href="/" class="nav-logo">
+                <span class="nav-logo-icon">🌿</span>
+                <span>Sxexet Spath</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Checkout Container -->
+    <div class="checkout-wrapper">
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <div class="summary-header">
+                <span class="summary-icon">🛍️</span>
+                <h2 class="summary-title" id="summary-title">Order Summary</h2>
+            </div>
+
+            <div id="cart-items-container">
+                <!-- Cart items will be populated by JS -->
+            </div>
+
+            <div class="features-list" id="features-container" style="display: none;">
+                <!-- Features will be populated based on items -->
+            </div>
+
+            <div id="empty-cart-message" style="text-align: center; padding: 40px; display: none;">
+                <p style="font-size: 1.1rem; color: #666; margin-bottom: 20px;">Your cart is empty</p>
+                <a href="/offerings" style="display: inline-block; padding: 12px 24px; background: #2D4A3E; color: #FFFFFF; text-decoration: none; border-radius: 8px; font-weight: 600;">Continue Shopping</a>
+            </div>
+        </div>
+
+        <!-- Payment Panel -->
+        <div class="payment-panel">
+            <div class="payment-header">
+                <span class="payment-icon">🔒</span>
+                <h2 class="payment-title">Secure Checkout</h2>
+                <div class="secure-badge">
+                    <span>🛡️</span>
+                    Secured by Stripe
+                </div>
+            </div>
+
+            <form id="checkout-form" class="checkout-form">
+                <!-- Customer Information -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <span>👤</span>
+                        Your Information
+                    </div>
+                    <input type="text" id="customer-name" class="form-input" placeholder="Full Name" required>
+                    <input type="email" id="customer-email" class="form-input" placeholder="Email Address" required>
+                    <input type="tel" id="customer-phone" class="form-input" placeholder="Phone Number" required>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <span>💳</span>
+                        Payment Details
+                    </div>
+                    <div id="stripe-card-element" class="stripe-card-container"></div>
+                    <input type="text" id="postal-code" class="form-input" placeholder="Postal Code" required style="margin-top: 16px;">
+                </div>
+
+                <!-- Error Message -->
+                <div id="error-message" class="error-message"></div>
+
+                <!-- Terms -->
+                <div class="terms-wrapper">
+                    <input type="checkbox" id="accept-terms" required>
+                    <label for="accept-terms">
+                        I agree to share my information for commission consultation.
+                        I have read and accept the
+                        <a href="/privacy" target="_blank" class="terms-link">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="button" id="submit-btn" class="submit-btn" disabled>
+                    <span class="btn-text">Coming Soon</span>
+                </button>
+
+                <!-- Security Footer -->
+                <div class="security-footer">
+                    <span>🔐</span>
+                    Your payment is encrypted and secure. We never store your card details.
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Overlay -->
+    <div id="success-overlay" class="success-overlay">
+        <div class="success-modal">
+            <div class="success-icon">🌿</div>
+            <h2 class="success-title">Order Confirmed!</h2>
+            <p class="success-message">
+                Thank you for your order! We've sent a confirmation email to your address. David will be in touch to arrange delivery or pickup.
+            </p>
+            <a href="/offerings" class="success-btn">Continue Shopping</a>
+        </div>
+    </div>
+
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script>
+        // ========================================
+        // CART MANAGEMENT
+        // ========================================
+        const CART_KEY = 'sxexet_cart';
+
+        function getCart() {
+            const cart = localStorage.getItem(CART_KEY);
+            return cart ? JSON.parse(cart) : [];
+        }
+
+        function calculateTotal() {
+            const cart = getCart();
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = Math.round(subtotal * 0.05); // 5% tax
+            return subtotal + tax;
+        }
+
+        function formatPrice(cents) {
+            return '$' + (cents / 100).toFixed(2);
+        }
+
+        function renderCartItems() {
+            const cart = getCart();
+            const container = document.getElementById('cart-items-container');
+            const emptyMessage = document.getElementById('empty-cart-message');
+            const featuresContainer = document.getElementById('features-container');
+
+            if (cart.length === 0) {
+                container.innerHTML = '';
+                emptyMessage.style.display = 'block';
+                featuresContainer.style.display = 'none';
+                document.getElementById('submit-btn').disabled = true;
+                return;
+            }
+
+            emptyMessage.style.display = 'none';
+            container.innerHTML = cart.map(item => `
+                <div class="product-card">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                        <span style="font-size: 2.5rem;">${item.icon}</span>
+                        <div>
+                            <div class="product-name">${item.title}</div>
+                            <span style="display: inline-block; padding: 3px 10px; background: rgba(0,0,0,0.1); border-radius: 15px; font-size: 0.8rem; margin-top: 5px;">${item.type}</span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 5px;">${item.optionLabel}${item.quantity > 1 ? ` × ${item.quantity}` : ''}</div>
+                    </div>
+                    <div class="product-price">${formatPrice(item.price * item.quantity)}</div>
+                </div>
+            `).join('');
+        }
+
+        // ========================================
+        // STRIPE CHECKOUT CONFIGURATION
+        // ========================================
+        // Use the PLATFORM's publishable key for all Connect payments
+        const STRIPE_PUBLISHABLE_KEY = 'pk_test_51SPQ3W2ONyiEh5kxUpJxBGUhHXaUPpAKJeC9nSJLul8ctzUqPZgMYkeJ8glWndaIgDhMVaVlc142aZCRdXH1NwlK00mzd5iMG8';
+        const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+
+        // Product Details - Will be dynamic from cart
+        let PRODUCT = {
+            id: 'sxexet-order',
+            name: 'Sxexet Spath Order',
+            price: calculateTotal(), // Will be updated
+            description: 'Order from Sxexet Spath - David Peters'
+        };
+
+        // ========================================
+        // INITIALIZE STRIPE
+        // ========================================
+        const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+        const elements = stripe.elements();
+
+        const cardElement = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#1a1a1a',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                    '::placeholder': { color: '#98a2b3' }
+                },
+                invalid: { color: '#dc3545', iconColor: '#dc3545' }
+            },
+            hidePostalCode: true
+        });
+
+        cardElement.mount('#stripe-card-element');
+
+        // ========================================
+        // FORM STATE
+        // ========================================
+        let cardComplete = false;
+        let clientSecret = null;
+
+        const cardContainer = document.getElementById('stripe-card-element');
+
+        cardElement.on('focus', () => cardContainer.classList.add('focused'));
+        cardElement.on('blur', () => cardContainer.classList.remove('focused'));
+
+        cardElement.on('change', (event) => {
+            cardComplete = event.complete;
+            if (event.error) {
+                cardContainer.classList.add('error');
+                showError(event.error.message);
+            } else {
+                cardContainer.classList.remove('error');
+                hideError();
+            }
+            updateSubmitButton();
+        });
+
+        // ========================================
+        // FORM VALIDATION
+        // ========================================
+        const nameInput = document.getElementById('customer-name');
+        const emailInput = document.getElementById('customer-email');
+        const phoneInput = document.getElementById('customer-phone');
+        const postalCodeInput = document.getElementById('postal-code');
+        const termsCheckbox = document.getElementById('accept-terms');
+        const submitBtn = document.getElementById('submit-btn');
+
+        [nameInput, emailInput, phoneInput, postalCodeInput, termsCheckbox].forEach(el => {
+            el.addEventListener('input', updateSubmitButton);
+            el.addEventListener('change', updateSubmitButton);
+        });
+
+        function updateSubmitButton() {
+            const formComplete =
+                nameInput.value.trim() &&
+                emailInput.value.trim() &&
+                phoneInput.value.trim() &&
+                postalCodeInput.value.trim() &&
+                termsCheckbox.checked &&
+                cardComplete;
+            submitBtn.disabled = !formComplete;
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('visible');
+        }
+
+        function hideError() {
+            document.getElementById('error-message').classList.remove('visible');
+        }
+
+        function showSuccess() {
+            document.getElementById('success-overlay').classList.add('visible');
+        }
+
+        function setLoading(loading) {
+            if (loading) {
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+            } else {
+                submitBtn.classList.remove('loading');
+                updateSubmitButton();
+            }
+        }
+
+        // ========================================
+        // CREATE PAYMENT INTENT
+        // ========================================
+        async function createPaymentIntent() {
+            try {
+                const customerEmail = emailInput.value.trim();
+
+                const response = await fetch(`${BACKEND_URL}/api/v1/david-peters/create-payment-intent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        items: getCart(),
+                        customer_email: customerEmail
+                    })
+                });
+
+                if (!response.ok) throw new Error(`Failed to create payment intent: ${response.status}`);
+
+                const data = await response.json();
+                clientSecret = data.clientSecret;
+                return clientSecret;
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        // ========================================
+        // HANDLE FORM SUBMISSION
+        // ========================================
+        document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            setLoading(true);
+            hideError();
+
+            try {
+                if (!clientSecret) await createPaymentIntent();
+
+                const customerName = nameInput.value.trim();
+                const customerEmail = emailInput.value.trim();
+                const customerPhone = phoneInput.value.trim();
+
+                const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: customerName,
+                            email: customerEmail,
+                            phone: customerPhone
+                        }
+                    }
+                });
+
+                if (error) {
+                    showError(error.message);
+                    setLoading(false);
+                    return;
+                }
+
+                if (paymentIntent.status === 'succeeded') {
+                    showSuccess();
+                }
+            } catch (error) {
+                showError(error.message || 'An unexpected error occurred. Please try again.');
+                setLoading(false);
+            }
+        });
+
+        // ========================================
+        // INITIALIZE
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Render cart items
+            renderCartItems();
+
+            // Update product total and button
+            const totalCents = calculateTotal();
+            PRODUCT.price = totalCents;
+            document.getElementById('btn-total').textContent = formatPrice(totalCents);
+
+            // Disable submit if cart is empty
+            if (getCart().length === 0) {
+                document.getElementById('submit-btn').disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>

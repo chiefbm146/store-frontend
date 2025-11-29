@@ -155,10 +155,7 @@ class AffiliateUserMenu {
   }
 
   // Update social share buttons on page with affiliate link
-  updatePageShareButtons() {
-    if (!this.affiliateData || !this.affiliateData.isAffiliate) return;
-
-    const affiliateId = this.affiliateData.affiliateId;
+  updatePageShareButtons(affiliateId) {
     const referralLink = `https://aarie.ca/?ref=${affiliateId}`;
     const encodedUrl = encodeURIComponent(referralLink);
 
@@ -180,7 +177,13 @@ class AffiliateUserMenu {
     // Show affiliate badge
     const affiliateBadge = document.getElementById('affiliateBadge');
     if (affiliateBadge) {
-      affiliateBadge.style.display = 'inline-block';
+      affiliateBadge.style.display = 'inline';
+    }
+
+    // Hide non-affiliate message
+    const shareMessage = document.getElementById('shareMessage');
+    if (shareMessage) {
+      shareMessage.style.display = 'none';
     }
   }
 }

@@ -12,7 +12,7 @@ export const desktopPage = {
         description: 'We create custom websites for workshops, products, or services with intelligent chatbots that help your customers 24/7. Only 4 projects per month to ensure quality.',
         ctaPrimary: {
             text: 'START YOUR PROJECT',
-            link: '/demo-desk.html'
+            link: '/booking'
         },
         ctaSecondary: {
             text: 'MOON TIDE',
@@ -116,7 +116,7 @@ export const desktopPage = {
         description: 'Check out Moon Tide Reconciliation - a website we built for a client. See how your customers will shop workshops, products, and services with AI assistance.',
         buttonPrimary: {
             text: 'START YOUR PROJECT',
-            link: '/demo-desk.html'
+            link: '/booking'
         },
         buttonSecondary: {
             text: 'MOON TIDE',
@@ -128,7 +128,7 @@ export const desktopPage = {
     footer: {
         tagline: 'AARIE.CA - Your Website Live in 7 Days',
         links: [
-            { text: 'GET A STORE', url: '/demo-desk.html' },
+            { text: 'GET A STORE', url: '/booking' },
             { text: 'About', url: '/about-desk.html' },
             { text: 'Contact', url: '/contact-desk.html' }
         ],

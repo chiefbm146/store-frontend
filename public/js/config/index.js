@@ -187,11 +187,6 @@ export function validateConfig() {
     // Check required settings
     if (!settings.backend.aiChatUrl) errors.push('settings.backend.aiChatUrl is required');
 
-    // Check if at least one service exists
-    if (Object.keys(services).length === 0) {
-        console.warn('Warning: No services defined');
-    }
-
     // Return validation result
     return {
         valid: errors.length === 0,
@@ -241,21 +236,9 @@ export function mergeConfig(overrides) {
  * Can be used for validation, logging, etc.
  */
 export function initConfig() {
-    console.log('✅ Config System Initialized');
-    console.log(`   Version: ${appConfig.version}`);
-    console.log(`   Environment: ${appConfig.environment}`);
-    console.log(`   Brand: ${appConfig.brand.companyName}`);
-    console.log(`   Services: ${Object.keys(appConfig.services).length}`);
-    console.log(`   Products: ${Object.keys(appConfig.products).length}`);
-
     // Validate config
     if (appConfig.debug) {
         const validation = validateConfig();
-        if (!validation.valid) {
-            console.error('❌ Config validation errors:', validation.errors);
-        } else {
-            console.log('✅ Config validation passed');
-        }
     }
 
     return appConfig;
@@ -267,6 +250,5 @@ export default appConfig;
 // ===== AUTO-INIT IN DEBUG MODE =====
 // If debug mode is enabled, auto-init and log config
 if (appConfig.debug) {
-    console.log('🔧 Debug mode enabled - auto-initializing config');
     initConfig();
 }

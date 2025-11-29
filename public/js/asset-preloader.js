@@ -15,16 +15,12 @@ const assetPreloader = {
      * @param {number} [delay=1500] - The delay in milliseconds before starting.
      */
     init(imageUrls, delay = 1500) {
-        console.log('✅ Asset Preloader: Initialized. Waiting for app to settle...');
-
         if (!imageUrls || !Array.isArray(imageUrls) || imageUrls.length === 0) {
-            console.warn('[AssetPreloader] No image URLs provided to preload.');
             return;
         }
 
         // Wait for the specified delay before starting the process
         setTimeout(() => {
-            console.log(`[AssetPreloader] Starting preload of ${imageUrls.length} images...`);
             let loadedCount = 0;
             let failedCount = 0;
 
@@ -42,19 +38,11 @@ const assetPreloader = {
                 // Listen for the 'load' event to confirm it's cached
                 img.onload = () => {
                     loadedCount++;
-                    console.log(`[AssetPreloader] ✅ (${loadedCount}/${imageUrls.length}) Cached: ${url}`);
-                    if (loadedCount + failedCount === imageUrls.length) {
-                        console.log(`[AssetPreloader] ✨ Preloading complete! (${loadedCount} success, ${failedCount} failed) - Images will now load instantly from cache.`);
-                    }
                 };
 
                 // Listen for errors (e.g., image not found)
                 img.onerror = () => {
                     failedCount++;
-                    console.warn(`[AssetPreloader] ❌ Failed to preload image: ${url}`);
-                    if (loadedCount + failedCount === imageUrls.length) {
-                        console.log(`[AssetPreloader] ✨ Preloading complete! (${loadedCount} success, ${failedCount} failed)`);
-                    }
                 };
             });
         }, delay);

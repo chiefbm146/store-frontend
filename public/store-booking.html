@@ -36,11 +36,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 
-    <!-- Firebase SDK for Affiliate System -->
-    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
-    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/init.js"></script>
-    <script defer src="./js/affiliate-user-menu.js"></script>
 
     <style>
         * {
@@ -851,18 +846,66 @@
 
 </head>
 <body>
-    <!-- Affiliate User Menu (Top Right) -->
-    <div style="position: fixed; top: 20px; right: 40px; z-index: 9999;">
-        <button id="affiliateSignInBtn" onclick="window.affiliateMenu.signInWithGoogle()" style="padding: 12px 24px; background: #0891b2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; display: none;">🔐 Sign In</button>
+    <!-- Firebase for Smart Affiliate Button -->
+    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
 
-        <div id="affiliatePortalContainer" style="display: none; background: white; border: 2px solid #0891b2; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); min-width: 300px;">
-            <div style="padding: 15px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 700; color: #0891b2;">Hi, <span id="affiliateUserName">User</span>!</span>
-                <button onclick="window.affiliateMenu.logout()" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1.2rem;">✕</button>
-            </div>
-            <div id="affiliatePortalContent" style="max-height: 500px; overflow-y: auto;"></div>
-        </div>
+    <!-- Sign In to Earn / Go to Dashboard Button (Top Right) -->
+    <div style="position: fixed; top: 20px; right: 40px; z-index: 9999;">
+        <button id="affiliateBtn" onclick="handleAffiliateClick()" style="padding: 12px 24px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">💵 Sign In to Earn</button>
     </div>
+
+    <script>
+        let currentUser = null;
+
+        // Wait for Firebase to initialize
+        function waitForFirebase(callback, attempts = 0) {
+            if (typeof firebase !== 'undefined' && firebase.auth) {
+                callback();
+            } else if (attempts < 50) {
+                setTimeout(() => waitForFirebase(callback, attempts + 1), 100);
+            }
+        }
+
+        // Check auth state on page load
+        waitForFirebase(() => {
+            firebase.auth().onAuthStateChanged(user => {
+                currentUser = user;
+                const btn = document.getElementById('affiliateBtn');
+
+                if (user) {
+                    // User is signed in - show "Go to Dashboard" button
+                    btn.textContent = '📊 Go to Affiliate Dashboard';
+                    btn.style.background = '#0891b2';
+                } else {
+                    // User is not signed in - show "Sign In to Earn" button
+                    btn.textContent = '💵 Sign In to Earn';
+                    btn.style.background = '#10b981';
+                }
+            });
+        });
+
+        function handleAffiliateClick() {
+            if (currentUser) {
+                // Already signed in - just go to affiliate page
+                window.location.href = '/affiliate-aarie';
+            } else {
+                // Not signed in - sign in first, then go to affiliate page
+                waitForFirebase(() => {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    firebase.auth().signInWithPopup(provider)
+                        .then(() => {
+                            window.location.href = '/affiliate-aarie';
+                        })
+                        .catch(error => {
+                            console.error('Sign-in error:', error);
+                            alert('Failed to sign in. Please try again.');
+                        });
+                });
+            }
+        }
+    </script>
 
     <!-- Navigation Bar -->
     <nav class="nav-bar">
@@ -1075,6 +1118,21 @@
         </div>
     </section>
 
+    <!-- Smart Share Section -->
+    <section style="background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); padding: 80px 40px; text-align: center;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2 style="color: white; font-size: 2rem; margin-bottom: 20px; font-weight: 800;">Share AARIE.CA</h2>
+            <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.1rem; margin-bottom: 40px;">
+                <span id="shareMessage">Want to get paid to share? <a href="/affiliate-aarie" style="color: white; text-decoration: underline; font-weight: 700;">Join our Affiliate Program.</a></span>
+                <span id="affiliateBadge" style="display: none; color: white; font-weight: 700;">✅ Affiliate Link Active: Sharing this earns you commission.</span>
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a id="pageShareBtn_facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #1877f2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">📘 Facebook</a>
+                <a id="pageShareBtn_twitter" href="https://twitter.com/intent/tweet?url=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #000; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">𝕏 Twitter/X</a>
+                <a id="pageShareBtn_linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #0a66c2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">in LinkedIn</a>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="footer">

@@ -26,8 +26,12 @@
     <meta name="twitter:image" content="https://aarie.ca/images/test.jpg">
     <!-- ===== END OF FINAL META TAGS ===== -->
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>💰</text></svg>">
     <script src="./js/clean-url.js"></script>
+    <!-- Firebase SDK -->
+    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
     <style>
         * {
             margin: 0;
@@ -787,13 +791,13 @@
     <!-- Navigation -->
     <nav class="nav-header">
         <div class="nav-container">
-            <a href="/index.html" class="nav-back">← Back to AARIE.CA</a>
+            <a href="/" style="color: #0891b2; text-decoration: none; font-weight: 600; padding: 10px 20px; border-radius: 6px; transition: all 0.3s ease;">← Home</a>
             <a href="/index.html" class="nav-logo">🏪 AARIE.CA</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <!-- Hero Section (shows when NOT logged in) -->
+    <section class="hero" id="heroSection">
         <div class="hero-content">
             <span class="hero-icon">💰</span>
             <h1 class="hero-title">Earn 8% Commission on Every Referral</h1>
@@ -1146,7 +1150,7 @@
             const ageCheck = document.getElementById('ageCheck');
             const tosCheck = document.getElementById('tosCheck');
 
-            // Checkbox toggle logic
+            // Logic to enable/disable the submit button based on checkboxes
             function toggleSubmit() {
                 submitBtn.disabled = !(ageCheck.checked && tosCheck.checked);
             }
@@ -1154,7 +1158,7 @@
             ageCheck.addEventListener('change', toggleSubmit);
             tosCheck.addEventListener('change', toggleSubmit);
 
-            // Form submission
+            // Form submission logic - THIS IS THE PAGE'S ONLY JOB
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 submitBtn.disabled = true;
@@ -1166,23 +1170,25 @@
                     email: document.getElementById('email').value.trim(),
                     website: document.getElementById('website').value.trim(),
                     message: document.getElementById('message').value.trim(),
-                    ageConfirmed: true,
+                    ageConfirmed: ageCheck.checked,
                     tosAcceptedAt: new Date().toISOString()
                 };
 
                 try {
+                    // We use 'aarie-platform' as the storeId for the main site affiliate program
                     const response = await fetch('/api/v1/aarie-platform/apply-for-affiliate', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(applicationData)
                     });
 
+                    const data = await response.json();
+
                     if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.error || 'Something went wrong.');
+                        throw new Error(data.error || 'Something went wrong.');
                     }
 
-                    // Show success view
+                    // Show the success view
                     formView.style.display = 'none';
                     successView.style.display = 'block';
                     successView.scrollIntoView({ behavior: 'smooth', block: 'center' });

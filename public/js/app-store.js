@@ -11,7 +11,6 @@ const appStore = {
     dispatch(actionName, payload) {
         if (this.actions[actionName]) {
             this.actions[actionName](this.state, payload);
-            console.log(`[appStore] Action: ${actionName}`, this.state);
             window.dispatchEvent(new CustomEvent('app-state-changed', { detail: { action: actionName, payload } }));
         }
     },

@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AARIE.CA - Partner Stores</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AARIE.CA - Partner Stores">
+    <meta property="og:description" content="Browse our partner stores - first come, first serve premium positioning.">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏬</text></svg>">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #1E90FF;
+            --color-secondary: #0047AB;
+            --gradient-start: #0d9488;
+            --gradient-end: #1E90FF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 50%, var(--color-secondary) 100%);
+            min-height: 100vh;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        /* === INVISIBLE SCROLLBAR === */
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            background: transparent;
+        }
+
+        html {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        /* ================================================
+           DESKTOP STYLES
+           ================================================ */
+        .desktop-only {
+            display: block;
+        }
+
+        .mobile-only {
+            display: none;
+        }
+
+        /* === NAVIGATION BAR === */
+        .nav-bar {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 15px 40px;
+            position: sticky;
+            top: 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: auto;
+            padding-left: 0;
+            margin-left: 80px;
+        }
+
+        .nav-back-button {
+            background: var(--color-primary);
+            color: #FFFFFF;
+            text-decoration: none;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 2px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(30, 144, 255, 0.3);
+            position: absolute;
+            left: 0;
+        }
+
+        .nav-back-button:hover {
+            background: var(--color-secondary);
+            transform: translateX(-3px);
+            box-shadow: 0 6px 20px rgba(30, 144, 255, 0.5);
+        }
+
+        .nav-back-button svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            color: var(--color-primary);
+        }
+
+        .nav-logo-icon {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #1a1a1a;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link span {
+            font-size: 1.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(30, 144, 255, 0.1);
+            color: var(--color-primary);
+        }
+
+        /* === MOBILE ELEMENTS - HIDDEN ON DESKTOP === */
+        .mobile-hamburger {
+            display: none;
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+        }
+
+        .mobile-menu-drawer {
+            display: none;
+        }
+
+        /* === PAGE HEADER === */
+        .page-header {
+            text-align: center;
+            padding: 60px 40px 40px;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 15px;
+        }
+
+        .page-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* === STORES CONTAINER === */
+        .stores-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 40px 100px;
+        }
+
+        /* === STORE PLACARD === */
+        .store-placard {
+            background: #FFFFFF;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            margin-bottom: 40px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .store-placard.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .store-placard:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .store-placard.placeholder {
+            cursor: default;
+            opacity: 0.7;
+        }
+
+        .store-placard.placeholder:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Rank Badge */
+        .rank-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1a1a1a;
+            font-weight: 800;
+            font-size: 1rem;
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.4);
+            z-index: 10;
+        }
+
+        .rank-badge.silver {
+            background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+        }
+
+        .rank-badge.bronze {
+            background: linear-gradient(135deg, #CD7F32, #B87333);
+            color: #FFFFFF;
+        }
+
+        .store-image-container {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .store-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .store-content {
+            padding: 35px;
+        }
+
+        .store-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .store-description {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .store-contact {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 25px;
+        }
+
+        .store-contact i {
+            font-size: 1.2rem;
+        }
+
+        .visit-store-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 35px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(13, 148, 136, 0.4);
+        }
+
+        .visit-store-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(13, 148, 136, 0.6);
+        }
+
+        /* === PLACEHOLDER PLACARD === */
+        .placeholder-content {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .placeholder-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .placeholder-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .placeholder-text {
+            color: #aaa;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .placeholder-cta {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #E8ECF0;
+            color: #666;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .placeholder-cta:hover {
+            background: var(--color-primary);
+            color: #FFFFFF;
+        }
+
+        /* === LOADING INDICATOR === */
+        .loading-indicator {
+            text-align: center;
+            padding: 40px;
+            color: #FFFFFF;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-indicator.visible {
+            opacity: 1;
+        }
+
+        .loading-indicator i {
+            margin-right: 10px;
+        }
+
+        /* === FOOTER === */
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            color: #FFFFFF;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .footer-tagline {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #FFFFFF;
+        }
+
+        .footer-copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* ================================================
+           MOBILE STYLES (max-width: 768px)
+           ================================================ */
+        @media (max-width: 768px) {
+            .desktop-only {
+                display: none !important;
+            }
+
+            .mobile-only {
+                display: block !important;
+            }
+
+            /* === MOBILE NAV === */
+            .nav-bar {
+                padding: 12px 15px;
+            }
+
+            .nav-left {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-left: 0;
+            }
+
+            .nav-back-button {
+                width: 40px;
+                height: 40px;
+                position: absolute;
+                left: 0;
+            }
+
+            .nav-logo {
+                font-size: 1.2rem;
+            }
+
+            .nav-logo-icon {
+                font-size: 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            /* === MOBILE HAMBURGER === */
+            .mobile-hamburger {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;
+                width: 45px;
+                height: 45px;
+                background: transparent;
+                border: 2px solid var(--color-primary);
+                border-radius: 10px;
+                cursor: pointer;
+                position: absolute;
+                right: 0;
+            }
+
+            .hamburger-line {
+                display: block;
+                width: 22px;
+                height: 3px;
+                background: var(--color-primary);
+                border-radius: 2px;
+            }
+
+            /* === MOBILE PAGE HEADER === */
+            .page-header {
+                padding: 40px 20px 30px;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .page-subtitle {
+                font-size: 1rem;
+            }
+
+            /* === MOBILE STORES CONTAINER === */
+            .stores-container {
+                padding: 10px 15px 80px;
+            }
+
+            /* === MOBILE STORE PLACARD === */
+            .store-placard {
+                border-radius: 20px;
+                margin-bottom: 25px;
+            }
+
+            .rank-badge {
+                top: 15px;
+                left: 15px;
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+
+            .store-image-container {
+                height: 200px;
+            }
+
+            .store-content {
+                padding: 25px 20px;
+            }
+
+            .store-name {
+                font-size: 1.4rem;
+                margin-bottom: 10px;
+            }
+
+            .store-description {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+
+            .store-contact {
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+                flex-wrap: wrap;
+            }
+
+            .visit-store-btn {
+                padding: 12px 28px;
+                font-size: 1rem;
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* === MOBILE PLACEHOLDER === */
+            .placeholder-content {
+                padding: 40px 25px;
+            }
+
+            .placeholder-icon {
+                font-size: 3rem;
+            }
+
+            .placeholder-title {
+                font-size: 1.3rem;
+            }
+
+            .placeholder-text {
+                font-size: 0.95rem;
+            }
+
+            /* === MOBILE MENU DRAWER === */
+            .mobile-menu-overlay {
+                display: none !important;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(5px);
+                z-index: 9998;
+            }
+
+            .mobile-menu-overlay.active {
+                display: block !important;
+            }
+
+            .mobile-menu-drawer {
+                display: flex !important;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 85%;
+                max-width: 320px;
+                height: 100%;
+                background: #FFFFFF;
+                z-index: 9999;
+                flex-direction: column;
+                box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+                transition: right 0.3s ease;
+            }
+
+            .mobile-menu-drawer.active {
+                right: 0;
+            }
+
+            .mobile-menu-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 20px;
+                background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+                color: #FFFFFF;
+            }
+
+            .mobile-menu-logo {
+                font-size: 1.2rem;
+                font-weight: 700;
+            }
+
+            .mobile-menu-close {
+                width: 38px;
+                height: 38px;
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                color: #FFFFFF;
+                cursor: pointer;
+            }
+
+            .mobile-menu-nav {
+                flex: 1;
+                padding: 15px 0;
+                overflow-y: auto;
+            }
+
+            .mobile-menu-link {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 16px 20px;
+                text-decoration: none;
+                color: #1a1a1a;
+                font-size: 1.05rem;
+                font-weight: 500;
+                border-bottom: 1px solid #E8ECF0;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-menu-link:hover,
+            .mobile-menu-link:active {
+                background: rgba(30, 144, 255, 0.1);
+                color: var(--color-primary);
+            }
+
+            .mobile-menu-icon {
+                font-size: 1.4rem;
+            }
+
+            /* === MOBILE FOOTER === */
+            .footer {
+                padding: 30px 20px;
+            }
+
+            .footer-tagline {
+                font-size: 1rem;
+            }
+        }
+
+        /* === VERY SMALL DEVICES === */
+        @media (max-width: 400px) {
+            .page-title {
+                font-size: 1.7rem;
+            }
+
+            .store-image-container {
+                height: 160px;
+            }
+
+            .store-name {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/booking" class="nav-back-button" title="Back to Booking">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <a href="/index.html" class="nav-logo">
+                    <span class="nav-logo-icon">🏬</span>
+                    <span>AARIE.CA</span>
+                </a>
+            </div>
+            <!-- Desktop Nav Links -->
+            <div class="nav-links desktop-only">
+                <a href="/store-booking.html" class="nav-link"><span>🏪</span> Get a Store</a>
+                <a href="/about-desk.html" class="nav-link"><span>ℹ️</span> About</a>
+                <a href="/contact-desk.html" class="nav-link"><span>📬</span> Contact</a>
+                <a href="/portal" class="nav-link"><span>🔐</span> Portal</a>
+            </div>
+            <!-- Mobile Hamburger -->
+            <button class="mobile-hamburger mobile-only" onclick="toggleMobileMenu()" aria-label="Menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+    <!-- Mobile Menu Drawer -->
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+        <div class="mobile-menu-header">
+            <span class="mobile-menu-logo">🏬 AARIE.CA</span>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+        </div>
+        <nav class="mobile-menu-nav">
+            <a href="/store-booking.html" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">🏪</span>
+                <span>Get a Store</span>
+            </a>
+            <a href="/about-desk.html" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">ℹ️</span>
+                <span>About</span>
+            </a>
+            <a href="/contact-desk.html" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">📬</span>
+                <span>Contact</span>
+            </a>
+            <a href="/portal" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">🔐</span>
+                <span>Client Portal</span>
+            </a>
+            <a href="/privacy" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">📄</span>
+                <span>Privacy Policy</span>
+            </a>
+            <a href="/terms" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">📜</span>
+                <span>Terms</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1 class="page-title">Partner Stores</h1>
+        <p class="page-subtitle">First come, first serve - premium positioning that never changes</p>
+    </header>
+
+    <!-- Stores Container -->
+    <main class="stores-container" id="storesContainer">
+        <!-- Store placards will be dynamically inserted here -->
+    </main>
+
+    <!-- Loading Indicator -->
+    <div class="loading-indicator" id="loadingIndicator">
+        <i class="fas fa-spinner fa-spin"></i> Loading more stores...
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-tagline">AARIE.CA - Your Website Live in 7 Days</p>
+        <p class="footer-links">
+            <a href="/contact">Contact</a> |
+            <a href="/privacy">Privacy Policy</a> |
+            <a href="/terms">Terms</a>
+        </p>
+        <p class="footer-copyright">© 2025 AARIE.CA. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // ========================================
+        // STORE DATA - First come, first serve
+        // ========================================
+        const STORES = [
+            {
+                id: 1,
+                rank: 1,
+                name: "Moon Tide Reconciliation",
+                description: "Dedicated to reconciliation, healing, and cultural understanding. Moon Tide Reconciliation provides resources, education, and support for Indigenous communities and those seeking to learn about reconciliation in Canada.",
+                image: "./images/MOON TIDE/moon-logo.png",
+                email: "shona@moontidereconciliation.com",
+                website: "https://moontide.ca",
+                badge: "gold"
+            },
+            {
+                id: 2,
+                rank: 2,
+                name: "Bert Peters Salish Art",
+                description: "Bert Peters is a Salish Taught Artist skilled in all forms of traditional and contemporary Indigenous art including carving, drawing, and graphic design. Each piece carries cultural significance and artistic excellence.",
+                image: "./images/BERT PETERS/bert-moon.png",
+                email: "bertp7888@gmail.com",
+                website: "https://bertpeterssalishart.com",
+                badge: "silver"
+            },
+            {
+                id: 3,
+                rank: 3,
+                name: "Sxexet Spath (David Peters)",
+                description: "A Stó:lō Medicine Maker dedicated to providing traditional Indigenous remedies including salves, tinctures, teas, and syrups. Products focus on anti-inflammatory relief, skin healing, and immune support. Honoring the sacred relationship between healer, plant, and spirit, rooted in Stó:lō tradition.",
+                image: "./images/stores/davids.png",
+                email: "David79peters@gmail.com",
+                website: "https://aarie.ca/davids",
+                badge: "bronze"
+            },
+        ];
+
+        // Number of placeholder stores to show
+        const PLACEHOLDER_COUNT = 10;
+        let currentPlaceholderIndex = 0;
+        let loadedPlaceholders = 0;
+        const LOAD_BATCH_SIZE = 3;
+
+        // ========================================
+        // RENDER FUNCTIONS
+        // ========================================
+        function createStorePlacard(store) {
+            const badgeClass = store.badge === 'gold' ? '' : store.badge === 'silver' ? 'silver' : 'bronze';
+
+            return `
+                <article class="store-placard" onclick="window.open('${store.website}', '_blank')" data-store-id="${store.id}">
+                    <div class="store-image-container">
+                        <span class="rank-badge ${badgeClass}">#${store.rank}</span>
+                        <img src="${store.image}" alt="${store.name}" class="store-image" onerror="this.style.display='none'">
+                    </div>
+                    <div class="store-content">
+                        <h2 class="store-name">${store.name}</h2>
+                        <p class="store-description">${store.description}</p>
+                        <div class="store-contact">
+                            <i class="fas fa-envelope"></i>
+                            <span>${store.email}</span>
+                        </div>
+                        <a href="${store.website}" class="visit-store-btn" onclick="event.stopPropagation()">
+                            <i class="fas fa-external-link-alt"></i>
+                            Visit Store
+                        </a>
+                    </div>
+                </article>
+            `;
+        }
+
+        function createPlaceholderPlacard(rank) {
+            return `
+                <article class="store-placard placeholder" data-placeholder-rank="${rank}">
+                    <div class="placeholder-content">
+                        <div class="placeholder-icon">🏪</div>
+                        <h3 class="placeholder-title">Your Store Here</h3>
+                        <p class="placeholder-text">Position #${rank} - First come, first serve premium placement</p>
+                        <a href="/store-booking.html" class="placeholder-cta" onclick="event.stopPropagation()">
+                            Get Started
+                        </a>
+                    </div>
+                </article>
+            `;
+        }
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        function initializeStores() {
+            const container = document.getElementById('storesContainer');
+
+            // Render actual stores first (these always have the best positions)
+            STORES.forEach(store => {
+                container.insertAdjacentHTML('beforeend', createStorePlacard(store));
+            });
+
+            // Set the starting rank for placeholders
+            currentPlaceholderIndex = STORES.length + 1;
+
+            // Load initial batch of placeholders
+            loadMorePlaceholders();
+
+            // Animate in the visible placards
+            setTimeout(animateVisiblePlacards, 100);
+        }
+
+        function loadMorePlaceholders() {
+            const container = document.getElementById('storesContainer');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
+            if (loadedPlaceholders >= PLACEHOLDER_COUNT) {
+                loadingIndicator.style.display = 'none';
+                return;
+            }
+
+            loadingIndicator.classList.add('visible');
+
+            // Simulate loading delay for smooth UX
+            setTimeout(() => {
+                const batchEnd = Math.min(loadedPlaceholders + LOAD_BATCH_SIZE, PLACEHOLDER_COUNT);
+
+                for (let i = loadedPlaceholders; i < batchEnd; i++) {
+                    const rank = currentPlaceholderIndex + i;
+                    container.insertAdjacentHTML('beforeend', createPlaceholderPlacard(rank));
+                }
+
+                loadedPlaceholders = batchEnd;
+                loadingIndicator.classList.remove('visible');
+
+                // Animate new placards
+                setTimeout(animateVisiblePlacards, 50);
+            }, 300);
+        }
+
+        // ========================================
+        // ANIMATION & SCROLL HANDLING
+        // ========================================
+        function animateVisiblePlacards() {
+            const placards = document.querySelectorAll('.store-placard:not(.visible)');
+
+            placards.forEach((placard, index) => {
+                const rect = placard.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight + 100;
+
+                if (isVisible) {
+                    setTimeout(() => {
+                        placard.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }
+
+        // Intersection Observer for lazy loading and animations
+        function setupIntersectionObserver() {
+            const options = {
+                root: null,
+                rootMargin: '100px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, options);
+
+            // Observe all placards
+            document.querySelectorAll('.store-placard').forEach(placard => {
+                observer.observe(placard);
+            });
+        }
+
+        // Infinite scroll detection
+        function setupInfiniteScroll() {
+            let isLoading = false;
+
+            window.addEventListener('scroll', () => {
+                if (isLoading) return;
+
+                const scrollHeight = document.documentElement.scrollHeight;
+                const scrollTop = window.scrollY;
+                const clientHeight = window.innerHeight;
+
+                // Load more when near bottom
+                if (scrollTop + clientHeight >= scrollHeight - 300) {
+                    isLoading = true;
+                    loadMorePlaceholders();
+                    setTimeout(() => {
+                        isLoading = false;
+                        setupIntersectionObserver();
+                    }, 500);
+                }
+            });
+        }
+
+        // ========================================
+        // MOBILE MENU FUNCTIONS
+        // ========================================
+        function toggleMobileMenu() {
+            const drawer = document.getElementById('mobileMenuDrawer');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            drawer.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = drawer.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            const drawer = document.getElementById('mobileMenuDrawer');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            drawer.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeStores();
+            setupIntersectionObserver();
+            setupInfiniteScroll();
+
+            // Close mobile menu on escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeMobileMenu();
+                }
+            });
+
+            console.log('[Stores] Initialized with', STORES.length, 'partner stores');
+        });
+    </script>
+</body>
+</html>

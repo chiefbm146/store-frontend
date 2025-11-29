@@ -72,18 +72,16 @@
 
         // Step 1: Inject theme CSS variables
         injectTheme();
-        console.log('[Contact Page Desk] Theme injected');
 
         // Step 2: Load page content from config
         document.addEventListener('DOMContentLoaded', () => {
-            const updates = loadContactPageContent();
-            console.log(`[Contact Page Desk] ${updates} elements updated from config`);
+            loadContactPageContent();
         });
     </script>
 
     <script>
         function navigateBack() {
-            window.location.href = '/demo-desk.html';
+            window.location.href = '/booking';
         }
 
         async function copyToClipboard(button) {
@@ -101,7 +99,7 @@
                     button.classList.remove('copied');
                 }, 2000);
             } catch (err) {
-                console.error('Failed to copy:', err);
+                // Silent error handling
             }
         }
 
