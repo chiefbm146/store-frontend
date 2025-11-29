@@ -796,6 +796,24 @@
         </div>
     </nav>
 
+    <!-- Toast Notification (Call to Action - Always Visible) -->
+    <div id="toastNotification" style="position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 20px 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; font-weight: 700; font-size: 1.1rem; animation: slideIn 0.3s ease; max-width: 320px;">
+        ✅ Complete the form to start earning money!
+    </div>
+
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+
     <!-- Hero Section (shows when NOT logged in) -->
     <section class="hero" id="heroSection">
         <div class="hero-content">
