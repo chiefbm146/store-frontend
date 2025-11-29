@@ -6,15 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The 7-Day Launchpad - AARIE.CA</title>
 
+    <!-- ===== FINAL META TAGS FOR FACEBOOK PREVIEW ===== -->
+    <meta property="og:title" content="AARIE.CA - The 7-Day Launchpad">
+    <meta property="og:description" content="See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="The 7-Day Launchpad - AARIE.CA">
-    <meta property="og:description" content="See your first design mockup in 72 hours. Go live in 7-10 days. Only 4 projects per month.">
+    <meta property="og:url" content="https://aarie.ca/">
+    <meta property="og:site_name" content="AARIE.CA">
+    <meta property="og:see_also" content="https://www.facebook.com/profile.php?id=61578712383717">
+
+    <!-- The Image, Dimensions, and Your App ID -->
+    <meta property="og:image" content="https://aarie.ca/images/test.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="fb:app_id" content="3753347551626837">
+
+    <!-- Twitter Card for Consistency -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AARIE.CA - The 7-Day Launchpad">
+    <meta name="twitter:description" content="See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.">
+    <meta name="twitter:image" content="https://aarie.ca/images/test.jpg">
+    <!-- ===== END OF FINAL META TAGS ===== -->
+
+    
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
 
     <!-- Add these inside the <head> tag -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+    <!-- Firebase SDK for Smart Sharing -->
+    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
 
     <style>
         * {
@@ -60,7 +85,7 @@
         }
 
         .nav-back-button {
-            background: #6366f1;
+            background: #f97316;
             color: #FFFFFF;
             text-decoration: none;
             width: 50px;
@@ -69,15 +94,15 @@
             align-items: center;
             justify-content: center;
             border-radius: 12px;
-            border: 2px solid #4f46e5;
+            border: 2px solid #ea580c;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
             position: absolute;
             left: 0;
         }
 
         .nav-back-button:hover {
-            background: #4f46e5;
+            background: #ea580c;
             transform: translateX(-3px);
         }
 
@@ -93,7 +118,7 @@
         }
 
         .nav-logo:hover {
-            color: #6366f1;
+            color: #f97316;
         }
 
         .nav-logo-icon {
@@ -124,8 +149,8 @@
         }
 
         .nav-link:hover {
-            background: rgba(99, 102, 241, 0.1);
-            color: #6366f1;
+            background: rgba(249, 115, 22, 0.1);
+            color: #f97316;
         }
 
         /* === HAMBURGER MENU === */
@@ -138,7 +163,7 @@
             width: 50px;
             height: 50px;
             background: transparent;
-            border: 2px solid #6366f1;
+            border: 2px solid #f97316;
             border-radius: 12px;
             cursor: pointer;
         }
@@ -147,7 +172,7 @@
             display: block;
             width: 24px;
             height: 3px;
-            background: #6366f1;
+            background: #f97316;
             border-radius: 2px;
         }
 
@@ -191,7 +216,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 20px 25px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: linear-gradient(135deg, #f97316, #fb923c);
             color: #FFFFFF;
         }
 
@@ -233,8 +258,8 @@
         }
 
         .mobile-menu-link:hover {
-            background: rgba(99, 102, 241, 0.1);
-            color: #6366f1;
+            background: rgba(249, 115, 22, 0.1);
+            color: #f97316;
         }
 
         .mobile-menu-icon {
@@ -247,7 +272,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
             position: relative;
             overflow: hidden;
             text-align: center;
@@ -314,7 +339,7 @@
             display: inline-block;
             padding: 18px 50px;
             background: #FFFFFF;
-            color: #6366f1;
+            color: #f97316;
             text-decoration: none;
             border-radius: 50px;
             font-size: 1.3rem;
@@ -585,7 +610,7 @@
         /* === CTA SECTION === */
         .cta-section {
             padding: 100px 40px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -641,7 +666,7 @@
             display: inline-block;
             padding: 22px 60px;
             background: #FFFFFF;
-            color: #6366f1;
+            color: #f97316;
             text-decoration: none;
             border-radius: 50px;
             font-size: 1.4rem;
@@ -681,230 +706,6 @@
             font-size: 0.9rem;
         }
 
-        /* === MOBILE CHAT === */
-        .mobile-chat-fab {
-            display: none;
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 65px;
-            height: 65px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            border-radius: 50%;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            cursor: pointer;
-            z-index: 9997;
-            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
-            border: none;
-            animation: fabPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes fabPulse {
-            0%, 100% { box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5); }
-            50% { box-shadow: 0 8px 35px rgba(99, 102, 241, 0.7); }
-        }
-
-        .mobile-chat-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-        }
-
-        .mobile-chat-overlay.active {
-            display: block;
-        }
-
-        .mobile-chat-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100dvh;
-            background: #FFFFFF;
-            z-index: 10000;
-            flex-direction: column;
-        }
-
-        .mobile-chat-modal.active {
-            display: flex;
-        }
-
-        .mobile-chat-header {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            padding: 20px;
-            color: #FFFFFF;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0;
-        }
-
-        .mobile-chat-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .mobile-header-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .mobile-speaker-btn {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            color: #FFFFFF;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-speaker-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .mobile-speaker-btn.unlocked {
-            background: #10B981;
-            border-color: #10B981;
-        }
-
-        .mobile-speaker-btn i {
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-        }
-
-        .mobile-chat-close {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: #FFFFFF;
-            cursor: pointer;
-        }
-
-        .mobile-chat-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: transparent;
-            max-height: calc(100dvh - 160px);
-            position: relative;
-        }
-
-        .mobile-chat-messages {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .mobile-chat-message {
-            padding: 14px 18px;
-            border-radius: 16px;
-            max-width: 85%;
-            line-height: 1.5;
-            font-size: 0.95rem;
-        }
-
-        .mobile-chat-message.ai {
-            background: #FFFFFF;
-            align-self: flex-start;
-            border: 1px solid #E0E0E0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .mobile-chat-message.user {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            color: #FFFFFF;
-            align-self: flex-end;
-        }
-
-        .mobile-chat-input-area {
-            display: flex;
-            gap: 10px;
-            padding: 15px 20px;
-            background: #FFFFFF;
-            border-top: 1px solid #E0E0E0;
-            flex-shrink: 0;
-        }
-
-        .mobile-chat-input {
-            flex: 1;
-            padding: 14px 18px;
-            border: 2px solid #E0E0E0;
-            border-radius: 25px;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .mobile-chat-input:focus {
-            border-color: #6366f1;
-        }
-
-        .mobile-chat-send {
-            padding: 14px 22px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            color: #FFFFFF;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .mobile-typing-indicator {
-            display: none;
-            align-items: center;
-            gap: 6px;
-            padding: 14px 18px;
-            background: #FFFFFF;
-            border-radius: 16px;
-            align-self: flex-start;
-            border: 1px solid #E0E0E0;
-        }
-
-        .mobile-typing-indicator.visible {
-            display: flex;
-        }
-
-        .mobile-typing-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #6366f1;
-            animation: mobileBounce 1.4s ease-in-out infinite;
-        }
-
-        .mobile-typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .mobile-typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes mobileBounce {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-8px); }
-        }
-
         /* === RESPONSIVE === */
         @media (max-width: 768px) {
             .nav-links {
@@ -916,10 +717,6 @@
             }
 
             .mobile-menu-drawer {
-                display: flex;
-            }
-
-            .mobile-chat-fab {
                 display: flex;
             }
 
@@ -1047,272 +844,10 @@
                 font-size: 2.5rem;
             }
         }
-
-        /* PASTE THIS ENTIRE BLOCK INTO THE <style> TAG IN store-booking.html */
-        
-        /* === AI CHAT ICON (BOTTOM RIGHT) === */
-        .ai-chat-icon {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            cursor: pointer;
-            z-index: 9998;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
-            transition: all 0.3s ease;
-            border: none;
-        }
-        .ai-chat-icon:hover {
-            transform: scale(1.15);
-            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.6);
-        }
-        
-        /* === AI CHAT MODAL (DESKTOP) === */
-        .ai-chat-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 900px;
-            height: 85vh;
-            background: #FFFFFF;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            z-index: 10000;
-            overflow: hidden;
-            flex-direction: column;
-        }
-        .ai-chat-modal.active {
-            display: flex;
-        }
-        .ai-chat-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-        }
-        .ai-chat-overlay.active {
-            display: block;
-        }
-        .chat-modal-header {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            padding: 25px 30px;
-            color: #FFFFFF;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .chat-modal-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0;
-        }
-        .chat-modal-close {
-            background: transparent;
-            border: none;
-            color: #FFFFFF;
-            font-size: 2rem;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-        .chat-modal-close:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .chat-modal-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 30px;
-            position: relative;
-            background: #0a0f14;
-        }
-        .water-background-container {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; pointer-events: none; overflow: hidden;
-        }
-        .water-background-container canvas {
-            display: block; width: 100% !important; height: 100% !important;
-        }
-        .messages {
-            position: relative; z-index: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background: transparent;
-        }
-        .message {
-            padding: 15px 20px;
-            border-radius: 18px;
-            max-width: 80%;
-            line-height: 1.6;
-        }
-        .ai-message {
-            background: #FFFFFF;
-            align-self: flex-start;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        .user-message {
-            background: #6366f1;
-            color: #FFFFFF;
-            align-self: flex-end;
-        }
-        .chat-modal-input {
-            display: flex;
-            gap: 15px;
-            padding: 20px;
-            background: #FFFFFF;
-            border-top: 2px solid #E0E0E0;
-        }
-        .chat-modal-input input {
-            flex: 1;
-            padding: 15px 20px;
-            border: 2px solid #E0E0E0;
-            border-radius: 25px;
-            font-size: 1rem;
-            outline: none;
-        }
-        .chat-modal-input input:focus {
-            border-color: #6366f1;
-        }
-        .chat-modal-input button {
-            padding: 15px 35px;
-            background: #6366f1;
-            color: #FFFFFF;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .chat-modal-input button:hover {
-            background: #4f46e5;
-        }
-        
-        /* === TTS & AUDIO SYSTEM STYLES === */
-        .chat-header-controls { display: flex; align-items: center; gap: 10px; }
-        .mobile-header-controls { display: flex; align-items: center; gap: 10px; }
-        .master-speaker-btn, .mobile-speaker-btn {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.5);
-            color: #FFFFFF; font-size: 1.1rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;
-        }
-        .master-speaker-btn:hover, .mobile-speaker-btn:hover { background: rgba(255, 255, 255, 0.3); }
-        .master-speaker-btn.unlocked, .mobile-speaker-btn.unlocked { background: #10B981; border-color: #10B981; }
-        .audio-permission-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
-            z-index: 100000; align-items: center; justify-content: center;
-        }
-        .audio-permission-overlay.active { display: flex; }
-        .audio-permission-modal {
-            background: #FFFFFF; border-radius: 24px; padding: 40px; max-width: 400px;
-            text-align: center; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-        .audio-permission-icon { font-size: 4rem; margin-bottom: 20px; }
-        .audio-permission-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 15px; color: #1a1a1a; }
-        .audio-permission-text { font-size: 1rem; color: #666; margin-bottom: 25px; line-height: 1.6; }
-        .audio-permission-buttons {
-            display: flex;
-            flex-direction: column; /* Make buttons vertical */
-            gap: 12px;
-            justify-content: center;
-        }
-        .audio-permission-enable {
-            padding: 12px 28px;
-            background: linear-gradient(135deg, #10B981, #8b5cf6); /* Green to purple gradient */
-            color: #FFFFFF;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .audio-permission-enable:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-        }
-        .audio-permission-skip {
-            padding: 12px 28px;
-            background: #FFFFFF; /* White button */
-            color: #666;
-            border: 2px solid #E0E0E0;
-            border-radius: 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .audio-permission-skip:hover {
-            background: #F5F5F5;
-        }
-        .message-wrapper { display: flex; flex-direction: column; gap: 8px; max-width: 80%; }
-        .message-wrapper.user { align-self: flex-end; align-items: flex-end; }
-        .message-wrapper.ai { align-self: flex-start; align-items: flex-start; }
-        .message-play-btn {
-            width: 32px; height: 32px; border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; color: #FFFFFF;
-            font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-        }
-        .message-play-btn:hover { transform: scale(1.1); }
-        .ai-message special, .mobile-chat-message.ai special {
-            font-weight: 700; color: #6366f1; cursor: pointer;
-            padding: 1px 4px; border-radius: 3px;
-        }
-        .ai-message special:hover, .mobile-chat-message.ai special:hover {
-            background-color: rgba(99, 102, 241, 0.1); text-decoration: underline;
-        }
-        .ai-message price, .mobile-chat-message.ai price { font-weight: 700; color: #c82333; }
-        #ttsAudio { display: none; }
-        
-        /* Hide desktop chat on mobile and vice-versa */
-        @media (max-width: 768px) {
-            .ai-chat-icon { display: none; }
-        }
-        @media (min-width: 769px) {
-            .mobile-chat-fab { display: none !important; }
-        }
-
-        /*
-          FIX: Allow message bubbles to size themselves correctly in store-booking.html.
-          This ensures the user message bubble expands to fit its content.
-        */
-        .message-wrapper .message,
-        .message-wrapper .ai-message,
-        .message-wrapper .user-message {
-            width: -moz-fit-content; /* Firefox support */
-            width: fit-content;      /* Modern browsers */
-        }
-
-        /*
-          FIX: Also target the mobile chat message class for the same behavior.
-        */
-        .message-wrapper .mobile-chat-message {
-            width: -moz-fit-content;
-            width: fit-content;
-        }
     </style>
+
+
+
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -1323,18 +858,17 @@
                     <span class="nav-logo-icon">🏪</span>
                     <span>AARIE.CA</span>
                 </a>
-                <a href="/demo-desk.html" class="nav-back-button" title="Back">
+                <a href="/" class="nav-back-button" title="Back">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </a>
             </div>
             <div class="nav-links">
-                <a href="/store-booking.html" class="nav-link"><span>🏪</span> Get a Store</a>
                 <a href="/about-desk.html" class="nav-link"><span>ℹ️</span> About</a>
                 <a href="/contact-desk.html" class="nav-link"><span>📬</span> Contact</a>
                 <a href="/ai-chat" class="nav-link"><span>🤖</span> A.I. Chat</a>
-                <a href="#" class="nav-link"><span>🏬</span> Stores</a>
+                <a href="/stores" class="nav-link"><span>🏬</span> Stores</a>
                 <a href="/portal" class="nav-link"><span>🔐</span> Client Portal</a>
             </div>
             <button class="mobile-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -1355,10 +889,6 @@
             <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
         </div>
         <nav class="mobile-menu-nav">
-            <a href="/store-booking.html" class="mobile-menu-link" onclick="closeMobileMenu()">
-                <span class="mobile-menu-icon">🏪</span>
-                <span>Get a Store</span>
-            </a>
             <a href="/about-desk.html" class="mobile-menu-link" onclick="closeMobileMenu()">
                 <span class="mobile-menu-icon">ℹ️</span>
                 <span>About</span>
@@ -1371,7 +901,7 @@
                 <span class="mobile-menu-icon">🤖</span>
                 <span>A.I. Chat</span>
             </a>
-            <a href="#" class="mobile-menu-link" onclick="closeMobileMenu()">
+            <a href="/stores" class="mobile-menu-link" onclick="closeMobileMenu()">
                 <span class="mobile-menu-icon">🏬</span>
                 <span>Stores</span>
             </a>
@@ -1488,8 +1018,8 @@
 
         <div class="fee-info">
             <div class="fee-title">Transaction Fee</div>
-            <div class="fee-rate">2.5%</div>
-            <p class="fee-description">We collect a small fee on purchases made through your store. That's it - no other ongoing costs. Payments go directly to your bank account.</p>
+            <div class="fee-rate">16%</div>
+            <p class="fee-description">We collect a 16% fee on purchases made through your store. That's it - no other ongoing costs. Payments go directly to your bank account.</p>
         </div>
     </section>
 
@@ -1531,6 +1061,22 @@
         </div>
     </section>
 
+    <!-- Smart Sharing Section -->
+    <section style="background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); padding: 80px 40px; text-align: center;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2 style="color: white; font-size: 2rem; margin-bottom: 20px; font-weight: 800;">Share AARIE.CA</h2>
+            <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.1rem; margin-bottom: 40px;">
+                <span id="shareMessage">Want to get paid to share? <a href="/affiliate" style="color: white; text-decoration: underline; font-weight: 700;">Join our Affiliate Program.</a></span>
+                <span id="affiliateShareMessage" style="display: none;">Affiliate Link Active: Sharing this earns you commission.</span>
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a id="shareButton_facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #1877f2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">📘 Facebook</a>
+                <a id="shareButton_twitter" href="https://twitter.com/intent/tweet?url=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #000; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">𝕏 Twitter/X</a>
+                <a id="shareButton_linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #0a66c2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">in LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <p class="footer-tagline">AARIE.CA - Your Website Live in 7 Days</p>
@@ -1541,67 +1087,7 @@
         <p class="footer-copyright">© 2025 AARIE.CA. All rights reserved.</p>
     </footer>
 
-    <!-- Mobile Floating Chat Button -->
-    <button class="mobile-chat-fab" onclick="openMobileChat()" title="Chat with AI">
-        🤖
-    </button>
-
-    <!-- Mobile Chat Overlay -->
-    <div class="mobile-chat-overlay" id="mobileChatOverlay" onclick="closeMobileChat()"></div>
-
-    <!-- Mobile Fullscreen Chat Modal -->
-    <div class="mobile-chat-modal" id="mobileChatModal">
-        <div class="mobile-chat-header">
-            <h3 class="mobile-chat-title">🤖 AI Assistant</h3>
-            <div class="mobile-header-controls">
-                <button class="mobile-speaker-btn" id="mobileSpeakerBtn" title="Enable Voice">
-                    <i class="fa-solid fa-volume-xmark"></i>
-                </button>
-                <button class="mobile-chat-close" onclick="closeMobileChat()">✕</button>
-            </div>
-        </div>
-        <div class="mobile-chat-body">
-            <div class="water-background-container"></div>
-            <div class="mobile-chat-messages" id="mobileChatMessages">
-                <div class="message-wrapper ai">
-                    <div class="mobile-chat-message ai">
-                        Hi! 👋 I'm the AI assistant from AARIE.CA. We build professional websites with our 7-Day Launchpad - see your design mockup in 72 hours, go live in 7-10 days. Ask me anything about our services, pricing, or how we can help your business!
-                    </div>
-                    <button class="message-play-btn" id="mobile-greeting-tts">
-                        <i class="fa-solid fa-volume-xmark"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="mobile-typing-indicator" id="mobileTypingIndicator">
-                <span class="mobile-typing-dot"></span>
-                <span class="mobile-typing-dot"></span>
-                <span class="mobile-typing-dot"></span>
-            </div>
-        </div>
-        <div class="mobile-chat-input-area">
-            <input type="text" class="mobile-chat-input" id="mobileChatInput" placeholder="Ask me anything..." maxlength="4000">
-            <button class="mobile-chat-send" onclick="sendMobileMessage()">Send</button>
-        </div>
-    </div>
-
-    <!-- Audio Permission Modal -->
-    <div class="audio-permission-overlay" id="audioPermissionOverlay">
-        <div class="audio-permission-modal">
-            <div class="audio-permission-icon">🔊</div>
-            <h2 class="audio-permission-title">Enable Voice</h2>
-            <p class="audio-permission-text">Enable audio to hear AI responses read aloud. This creates a more engaging experience!</p>
-            <div class="audio-permission-buttons">
-                <button class="audio-permission-enable" id="audioEnableBtn">Enable Voice</button>
-                <button class="audio-permission-skip" id="audioSkipBtn">Maybe Later</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hidden Audio Element for TTS -->
-    <audio id="ttsAudio"></audio>
-
     <!-- Scripts -->
-    <script src="./js/water.js"></script>
     <script>
         // Mobile Menu Functions
         function toggleMobileMenu() {
@@ -1620,393 +1106,8 @@
             document.body.style.overflow = '';
         }
 
-        // ========================================
-        // CHAT & TTS SYSTEM (FROM demo-desk.html)
-        // ========================================
-        const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
-        const CHAT_ENDPOINT = '/chat';
-        const TTS_ENDPOINT = '/tts';
-
-        let CHAT_SESSION_ID = null;
-        let MOBILE_CHAT_SESSION_ID = null;
-        let deviceFingerprint = null;
-        let ttsUnlocked = false;
-        let isPlaying = false;
-        let currentAudio = null;
-        let audioCache = new Map();
-        const ttsAudio = document.getElementById('ttsAudio');
-        let waterInstance = null; // For water background
-
-        const GREETING_MESSAGE_TEXT = "Hi! 👋 I'm the AI assistant from AARIE.CA. Ask me anything about our 7-Day Launchpad, pricing, or how we can help your business!";
-
-        // ========================================
-        // INITIALIZATION
-        // ========================================
-        function initializeChatSession() {
-            CHAT_SESSION_ID = 'booking_' + crypto.randomUUID();
-            console.log('[Booking Chat] New session:', CHAT_SESSION_ID);
-        }
-
-        function initMobileChatSession() {
-            MOBILE_CHAT_SESSION_ID = 'booking_mobile_' + crypto.randomUUID();
-        }
-
-        function initializeDeviceFingerprint() {
-            const formFactor = window.innerWidth < 768 ? 'mobile' : 'desktop';
-            const screenWidth = window.screen.width;
-            const screenHeight = window.screen.height;
-            const pixelDensity = (window.devicePixelRatio || 1).toFixed(1);
-            deviceFingerprint = `${formFactor}_${screenWidth}x${screenHeight}_${pixelDensity}`;
-            console.log('[Booking Chat] Device fingerprint:', deviceFingerprint);
-        }
-
-        // ========================================
-        // TTS SYSTEM
-        // ========================================
-        function showAudioModal() {
-            document.getElementById('audioPermissionOverlay').classList.add('active');
-        }
-
-        function hideAudioModal() {
-            document.getElementById('audioPermissionOverlay').classList.remove('active');
-        }
-
-        async function attemptTTSUnlock() {
-            if (ttsUnlocked) return true;
-
-            return new Promise((resolve) => {
-                showAudioModal();
-
-                document.getElementById('audioEnableBtn').onclick = async () => {
-                    try {
-                        const testAudio = new Audio('/sounds/unlock.mp3?v=1.0');
-                        testAudio.volume = 0.5;
-                        await testAudio.play();
-                        ttsUnlocked = true;
-                        updateSpeakerButtons();
-                        hideAudioModal();
-                        resolve(true);
-                    } catch (error) {
-                        hideAudioModal();
-                        resolve(false);
-                    }
-                };
-
-                document.getElementById('audioSkipBtn').onclick = () => {
-                    hideAudioModal();
-                    resolve(false);
-                };
-            });
-        }
-
-        function updateSpeakerButtons() {
-            const desktopBtn = document.getElementById('desktopSpeakerBtn');
-            const mobileBtn = document.getElementById('mobileSpeakerBtn');
-
-            if (ttsUnlocked) {
-                if (desktopBtn) {
-                    desktopBtn.classList.add('unlocked');
-                    desktopBtn.querySelector('i').className = 'fa-solid fa-volume-high';
-                }
-                if (mobileBtn) {
-                    mobileBtn.classList.add('unlocked');
-                    mobileBtn.querySelector('i').className = 'fa-solid fa-volume-high';
-                }
-            }
-            document.querySelectorAll('.message-play-btn').forEach(btn => {
-                const icon = btn.querySelector('i');
-                if (ttsUnlocked) {
-                    icon.className = 'fa-solid fa-play';
-                } else {
-                    icon.className = 'fa-solid fa-volume-xmark';
-                }
-            });
-        }
-
-        async function getTTSAudio(text) {
-            const cacheKey = text.substring(0, 100);
-            if (audioCache.has(cacheKey)) return audioCache.get(cacheKey);
-            try {
-                const response = await fetch(`${BACKEND_URL}${TTS_ENDPOINT}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: text })
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    const audioData = data.audio || data.audio_base64;
-                    if (audioData) {
-                        audioCache.set(cacheKey, audioData);
-                        return audioData;
-                    }
-                }
-            } catch (error) { console.error('[TTS] Failed to fetch audio:', error); }
-            return null;
-        }
-
-        async function playTTSAudio(base64Audio) {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
-            let mimeType = 'audio/mpeg';
-            if (base64Audio.startsWith('T2d')) mimeType = 'audio/ogg';
-            else if (base64Audio.startsWith('Ukl')) mimeType = 'audio/wav';
-            
-            ttsAudio.src = `data:${mimeType};base64,${base64Audio}`;
-            isPlaying = true;
-            currentAudio = ttsAudio;
-            ttsAudio.onended = () => { isPlaying = false; updatePlayButtonStates(); };
-            await ttsAudio.play();
-        }
-
-        function stopTTSAudio() {
-            if (ttsAudio) {
-                ttsAudio.pause();
-                ttsAudio.currentTime = 0;
-            }
-            isPlaying = false;
-            updatePlayButtonStates();
-        }
-        
-        function updatePlayButtonStates(playingText = null) {
-            document.querySelectorAll('.message-play-btn').forEach(btn => {
-                const msgText = btn.dataset.text;
-                const icon = btn.querySelector('i');
-                if (!ttsUnlocked) icon.className = 'fa-solid fa-volume-xmark';
-                else if (msgText === playingText && isPlaying) icon.className = 'fa-solid fa-stop';
-                else icon.className = 'fa-solid fa-play';
-            });
-        }
-
-        async function handlePlayClick(text, button) {
-            const icon = button.querySelector('i');
-            if (!ttsUnlocked) {
-                const unlocked = await attemptTTSUnlock();
-                if (!unlocked) return;
-                updatePlayButtonStates();
-                return;
-            }
-            if (icon.classList.contains('fa-stop')) {
-                stopTTSAudio();
-                return;
-            }
-            icon.className = 'fa-solid fa-spinner fa-spin';
-            button.disabled = true;
-            try {
-                const audioData = await getTTSAudio(text);
-                if (audioData) {
-                    await playTTSAudio(audioData);
-                    updatePlayButtonStates(text);
-                }
-            } finally {
-                button.disabled = false;
-            }
-        }
-
-        // ========================================
-        // SPECIAL TAG HANDLING
-        // ========================================
-        function attachSpecialTagListeners(container, inputElement, sendFunction) {
-            container.querySelectorAll('special').forEach(el => {
-                el.style.cursor = 'pointer';
-                el.onclick = (e) => {
-                    e.stopPropagation();
-                    inputElement.value = el.textContent;
-                    sendFunction();
-                };
-            });
-        }
-
-        function createAIMessage(text, isMobile = false) {
-            const wrapper = document.createElement('div');
-            wrapper.className = `message-wrapper ai`;
-            const msgDiv = document.createElement('div');
-            msgDiv.className = isMobile ? 'mobile-chat-message ai' : 'message ai-message';
-            msgDiv.innerHTML = text;
-            wrapper.appendChild(msgDiv);
-
-            const playBtn = document.createElement('button');
-            playBtn.className = 'message-play-btn';
-            playBtn.dataset.text = text.replace(/<[^>]*>/g, '');
-            playBtn.innerHTML = ttsUnlocked ? '<i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-volume-xmark"></i>';
-            playBtn.onclick = () => handlePlayClick(playBtn.dataset.text, playBtn);
-            wrapper.appendChild(playBtn);
-            return wrapper;
-        }
-
-        function createUserMessage(text, isMobile = false) {
-            const wrapper = document.createElement('div');
-            wrapper.className = `message-wrapper user`;
-            const msgDiv = document.createElement('div');
-            msgDiv.className = isMobile ? 'mobile-chat-message user' : 'message user-message';
-            msgDiv.textContent = text;
-            wrapper.appendChild(msgDiv);
-            return wrapper;
-        }
-
-        // ========================================
-        // CHAT MODAL & WATER CONTROLS
-        // ========================================
-        function openAIChat() {
-            document.getElementById('aiChatModal').classList.add('active');
-            document.getElementById('aiChatOverlay').classList.add('active');
-            document.getElementById('aiChatInput').focus();
-            const container = document.querySelector('.ai-chat-modal .water-background-container');
-            if (container && window.WaterBackground && !waterInstance) {
-                waterInstance = Object.assign({}, window.WaterBackground);
-                waterInstance.init(container);
-            }
-        }
-
-        function closeAIChat() {
-            stopTTSAudio();
-            document.getElementById('aiChatModal').classList.remove('active');
-            document.getElementById('aiChatOverlay').classList.remove('active');
-            if (waterInstance) { waterInstance.destroy(); waterInstance = null; }
-        }
-
-        function openMobileChat() {
-            document.getElementById('mobileChatModal').classList.add('active');
-            document.getElementById('mobileChatOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            const container = document.querySelector('.mobile-chat-modal .water-background-container');
-            if (container && window.WaterBackground && !waterInstance) {
-                waterInstance = Object.assign({}, window.WaterBackground);
-                waterInstance.init(container);
-            }
-        }
-
-        function closeMobileChat() {
-            stopTTSAudio();
-            document.getElementById('mobileChatModal').classList.remove('active');
-            document.getElementById('mobileChatOverlay').classList.remove('active');
-            document.body.style.overflow = '';
-            if (waterInstance) { waterInstance.destroy(); waterInstance = null; }
-        }
-        
-        async function sendAIMessage() {
-            const input = document.getElementById('aiChatInput');
-            const messagesDiv = document.getElementById('aiMessages');
-            const userText = input.value.trim();
-            if (!userText) return;
-            stopTTSAudio();
-            input.disabled = true;
-            messagesDiv.innerHTML = '';
-            messagesDiv.appendChild(createUserMessage(userText, false));
-            input.value = '';
-            messagesDiv.scrollTop = 0;
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message ai-message typing-msg';
-            typingDiv.innerHTML = '<span class="typing-dots">...</span>';
-            messagesDiv.appendChild(typingDiv);
-            try {
-                const payload = { session_id: CHAT_SESSION_ID, prompt: userText, device_fingerprint: deviceFingerprint };
-                const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const data = await response.json();
-                const aiResponse = data.response || 'Sorry, I could not generate a response.';
-                typingDiv.remove();
-                const aiMsgWrapper = createAIMessage(aiResponse, false);
-                messagesDiv.appendChild(aiMsgWrapper);
-                attachSpecialTagListeners(aiMsgWrapper, input, sendAIMessage);
-                messagesDiv.scrollTop = 0;
-            } catch (error) {
-                typingDiv.remove();
-                messagesDiv.appendChild(createAIMessage('Sorry, I encountered an error. Please try again.', false));
-                messagesDiv.scrollTop = 0;
-            } finally {
-                input.disabled = false;
-                input.focus();
-            }
-        }
-        
-        async function sendMobileMessage() {
-            const input = document.getElementById('mobileChatInput');
-            const messagesDiv = document.getElementById('mobileChatMessages');
-            const typingIndicator = document.getElementById('mobileTypingIndicator');
-            const userText = input.value.trim();
-            if (!userText) return;
-            stopTTSAudio();
-            input.disabled = true;
-            messagesDiv.innerHTML = '';
-            messagesDiv.appendChild(createUserMessage(userText, true));
-            input.value = '';
-            messagesDiv.scrollTop = 0;
-            typingIndicator.classList.add('visible');
-            try {
-                const payload = { session_id: MOBILE_CHAT_SESSION_ID, prompt: userText, device_fingerprint: deviceFingerprint };
-                const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const data = await response.json();
-                const aiResponse = data.response || 'Sorry, I could not generate a response.';
-                typingIndicator.classList.remove('visible');
-                const aiMsgWrapper = createAIMessage(aiResponse, true);
-                messagesDiv.appendChild(aiMsgWrapper);
-                attachSpecialTagListeners(aiMsgWrapper, input, sendMobileMessage);
-                messagesDiv.scrollTop = 0;
-            } catch (error) {
-                typingIndicator.classList.remove('visible');
-                messagesDiv.appendChild(createAIMessage('Sorry, I encountered an error. Please try again.', true));
-                messagesDiv.scrollTop = 0;
-            } finally {
-                input.disabled = false;
-                input.blur();
-            }
-        }
-        
-        // ========================================
-        // EVENT LISTENERS
-        // ========================================
+        // Page-specific button handlers
         document.addEventListener('DOMContentLoaded', () => {
-            initializeChatSession();
-            initMobileChatSession();
-            initializeDeviceFingerprint();
-
-            // Greeting TTS buttons
-            const desktopTTSBtn = document.getElementById('desktop-greeting-tts');
-            if (desktopTTSBtn) {
-                desktopTTSBtn.addEventListener('click', () => handlePlayClick(GREETING_MESSAGE_TEXT, desktopTTSBtn));
-            }
-            const mobileTTSBtn = document.getElementById('mobile-greeting-tts');
-            if (mobileTTSBtn) {
-                mobileTTSBtn.addEventListener('click', () => handlePlayClick(GREETING_MESSAGE_TEXT, mobileTTSBtn));
-            }
-
-            // Chat inputs
-            document.getElementById('aiChatInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.target.disabled) sendAIMessage();
-            });
-            document.getElementById('mobileChatInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.target.disabled) sendMobileMessage();
-            });
-
-            // Speaker buttons
-            const desktopSpeakerBtn = document.getElementById('desktopSpeakerBtn');
-            if(desktopSpeakerBtn) desktopSpeakerBtn.addEventListener('click', async () => { if (!ttsUnlocked) await attemptTTSUnlock(); });
-            
-            const mobileSpeakerBtn = document.getElementById('mobileSpeakerBtn');
-            if(mobileSpeakerBtn) mobileSpeakerBtn.addEventListener('click', async () => { if (!ttsUnlocked) await attemptTTSUnlock(); });
-
-            // Global keydown
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeAIChat();
-                    closeMobileChat();
-                    closeMobileMenu();
-                    hideAudioModal();
-                }
-            });
-
-            // Page-specific buttons
             document.getElementById('heroBookButton').addEventListener('click', () => {
                 window.location.href = '/checkout.html';
             });
@@ -2016,45 +1117,73 @@
         });
     </script>
 
-    <!-- PASTE THIS ENTIRE BLOCK BEFORE THE CLOSING </body> TAG -->
-    
-    <!-- AI Chat Icon (Bottom Right) - Desktop -->
-    <button class="ai-chat-icon" onclick="openAIChat()" title="Chat with AI Assistant">
-        🤖
-    </button>
-    
-    <!-- AI Chat Modal Overlay - Desktop -->
-    <div class="ai-chat-overlay" id="aiChatOverlay" onclick="closeAIChat()"></div>
-    
-    <!-- AI Chat Modal - Desktop -->
-    <div class="ai-chat-modal" id="aiChatModal">
-        <div class="chat-modal-header">
-            <h3 class="chat-modal-title">🤖 AI Assistant</h3>
-            <div class="chat-header-controls">
-                <button class="master-speaker-btn" id="desktopSpeakerBtn" title="Enable Voice">
-                    <i class="fa-solid fa-volume-xmark"></i>
-                </button>
-                <button class="chat-modal-close" onclick="closeAIChat()">✕</button>
-            </div>
-        </div>
-        <div class="chat-modal-body">
-            <div class="water-background-container"></div>
-            <div class="messages" id="aiMessages">
-                <div class="message-wrapper ai">
-                    <div class="message ai-message">
-                        Hi! 👋 I'm the AI assistant from AARIE.CA. Ask me anything about our 7-Day Launchpad, pricing, or how we can help your business!
-                    </div>
-                    <button class="message-play-btn" id="desktop-greeting-tts">
-                        <i class="fa-solid fa-volume-xmark"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="chat-modal-input">
-            <input type="text" placeholder="Ask me anything..." id="aiChatInput" />
-            <button onclick="sendAIMessage()">Send</button>
-        </div>
-    </div>
+    <!-- Water Background for AI Chat -->
+    <script src="./js/water4chat.js"></script>
+
+    <!-- Universal AI Chat Widget v3.0 - Auto-configures for AARIE Platform -->
+    <script src="./js/ai-chat.js" data-store-id="aarie-platform"></script>
+
+    <!-- Smart Sharing Logic for Affiliates -->
+    <script>
+        // Check if user is logged in as an affiliate and update share buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    // User is logged in - check if they're an affiliate
+                    checkAffiliateStatusAndUpdateShareButtons(user);
+                }
+            });
+        });
+
+        async function checkAffiliateStatusAndUpdateShareButtons(user) {
+            try {
+                const idToken = await user.getIdToken(true);
+
+                // Call affiliate-status endpoint
+                const response = await fetch('/api/client/affiliate-status', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${idToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    if (data.isAffiliate && data.affiliateId) {
+                        // User is an affiliate - update share buttons with their affiliate link
+                        updateShareButtonsWithAffiliateLink(data.affiliateId);
+                    }
+                }
+            } catch (error) {
+                console.log('Affiliate check skipped:', error.message);
+            }
+        }
+
+        function updateShareButtonsWithAffiliateLink(affiliateId) {
+            const affiliateUrl = `https://aarie.ca/?ref=${affiliateId}`;
+            const encodedUrl = encodeURIComponent(affiliateUrl);
+            const encodedTitle = encodeURIComponent('AARIE.CA - The 7-Day Launchpad');
+            const encodedDescription = encodeURIComponent('See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.');
+
+            // Update Facebook share button
+            document.getElementById('shareButton_facebook').href =
+                `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+
+            // Update Twitter/X share button
+            document.getElementById('shareButton_twitter').href =
+                `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedDescription}`;
+
+            // Update LinkedIn share button
+            document.getElementById('shareButton_linkedin').href =
+                `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+
+            // Update message
+            document.getElementById('shareMessage').style.display = 'none';
+            document.getElementById('affiliateShareMessage').style.display = 'inline';
+        }
+    </script>
 
 </body>
 </html>

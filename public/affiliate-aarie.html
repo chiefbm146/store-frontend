@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Program - AARIE.CA</title>
+    <!-- ===== FINAL META TAGS FOR FACEBOOK PREVIEW ===== -->
+    <meta property="og:title" content="AARIE.CA - The 7-Day Launchpad">
+    <meta property="og:description" content="See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aarie.ca/">
+    <meta property="og:site_name" content="AARIE.CA">
+    <meta property="og:see_also" content="https://www.facebook.com/profile.php?id=61578712383717">
+
+    <!-- The Image, Dimensions, and Your App ID -->
+    <meta property="og:image" content="https://aarie.ca/images/test.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="fb:app_id" content="3753347551626837">
+
+    <!-- Twitter Card for Consistency -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AARIE.CA - The 7-Day Launchpad">
+    <meta name="twitter:description" content="See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.">
+    <meta name="twitter:image" content="https://aarie.ca/images/test.jpg">
+    <!-- ===== END OF FINAL META TAGS ===== -->
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
+    <script src="./js/clean-url.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #1a1a1a;
+            background: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .nav-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(8, 145, 178, 0.1);
+            padding: 15px 40px;
+            position: static;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0891b2;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-back {
+            color: #0891b2;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            background: rgba(8, 145, 178, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            color: white;
+            padding: 100px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+            background-image: radial-gradient(circle at 25% 25%, #ffffff 2px, transparent 2px),
+                              radial-gradient(circle at 75% 75%, #ffffff 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #0891b2;
+            padding: 16px 45px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Key Benefits Grid */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .benefit-card {
+            background: linear-gradient(135deg, rgba(8, 145, 178, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+            border: 2px solid rgba(8, 145, 178, 0.2);
+            border-radius: 16px;
+            padding: 40px 30px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            border-color: #0891b2;
+            box-shadow: 0 20px 40px rgba(8, 145, 178, 0.1);
+        }
+
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .benefit-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .benefit-text {
+            color: #666;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Earning Potential Section */
+        .earning-section {
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 16px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .earning-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+        }
+
+        .earning-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .earning-example {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .earning-example-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .earning-example-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .earning-example-detail {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* How It Works */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .step {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50px;
+            height: 50px;
+            background: #0891b2;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .step p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .steps {
+            counter-reset: step-counter;
+        }
+
+        /* Payment Methods */
+        .payment-section {
+            background: rgba(8, 145, 178, 0.05);
+            padding: 50px 40px;
+            border-radius: 16px;
+            margin-bottom: 60px;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .payment-method {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            border-color: #0891b2;
+            box-shadow: 0 10px 25px rgba(8, 145, 178, 0.1);
+        }
+
+        .payment-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .payment-method h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .payment-method p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #0891b2;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* Terms Section */
+        .terms-section {
+            background: #f8f9fa;
+            padding: 50px 40px;
+            border-radius: 16px;
+            margin-bottom: 60px;
+        }
+
+        .terms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .term-item {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #0891b2;
+        }
+
+        .term-item h3 {
+            font-size: 1.1rem;
+            color: #0891b2;
+            margin-bottom: 10px;
+        }
+
+        .term-item p {
+            color: #666;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Application Section */
+        .application-section {
+            background: white;
+            padding: 0 40px 60px 40px;
+            margin: 0 auto;
+            text-align: center;
+            max-width: 1200px;
+        }
+
+        .form-container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border: 2px solid rgba(8, 145, 178, 0.2);
+            border-radius: 16px;
+            padding: 50px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0891b2;
+        }
+
+        .checkbox-group {
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(8, 145, 178, 0.05);
+            border-radius: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: #0891b2;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: 400;
+            font-size: 0.95rem;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .checkbox-item a {
+            color: #0891b2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .checkbox-item a:hover {
+            text-decoration: underline;
+        }
+
+        .form-error {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 0.95rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px 30px;
+            background: #0891b2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: #067a92;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .form-disclaimer {
+            text-align: center;
+            margin-top: 15px;
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        /* Success State */
+        .success-view {
+            text-align: center;
+            padding: 60px 40px;
+            display: none;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-size: 2rem;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+
+        .success-text {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .success-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #0891b2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .success-btn:hover {
+            background: #067a92;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 40px;
+            margin-top: 60px;
+        }
+
+        .footer-text {
+            margin-bottom: 10px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: #0891b2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Media Gallery Section */
+        .media-section {
+            background: white;
+            padding: 60px 40px;
+            margin: 0 auto;
+            border-radius: 0;
+            max-width: 1200px;
+        }
+
+        .media-intro {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(8, 145, 178, 0.05);
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        .media-intro h3 {
+            color: #0891b2;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .media-intro p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 0 auto 2px auto;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .media-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(8, 145, 178, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .media-item:hover {
+            border-color: #0891b2;
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .media-preview {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .media-preview video,
+        .media-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .media-preview.image {
+            background: #fff;
+        }
+
+        .media-content {
+            padding: 20px;
+        }
+
+        .media-filename {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            word-break: break-word;
+        }
+
+        .media-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 10px 16px;
+            background: #0891b2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .download-btn:hover {
+            background: #067a92;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(8, 145, 178, 0.3);
+        }
+
+        .download-btn.preview {
+            background: rgba(8, 145, 178, 0.1);
+            color: #0891b2;
+            border: 2px solid #0891b2;
+        }
+
+        .download-btn.preview:hover {
+            background: rgba(8, 145, 178, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-header {
+                position: static;
+            }
+
+            .hero {
+                padding: 60px 20px;
+            }
+
+            .container {
+                padding: 40px 20px;
+            }
+
+            .media-section {
+                padding: 40px 20px 2px 20px;
+            }
+
+            .application-section {
+                padding: 0 20px 40px 20px;
+            }
+
+            .form-container {
+                padding: 30px 20px;
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .media-grid {
+                grid-template-columns: 1fr;
+                margin-bottom: 2px;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+
+
+
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <a href="/index.html" class="nav-back">← Back to AARIE.CA</a>
+            <a href="/index.html" class="nav-logo">🏪 AARIE.CA</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-icon">💰</span>
+            <h1 class="hero-title">Earn 8% Commission on Every Referral</h1>
+            <p class="hero-subtitle">Turn your network into income. No coding required. Zero startup cost.</p>
+            <button class="cta-button" onclick="document.getElementById('application-section').scrollIntoView({ behavior: 'smooth' })">Start Your Application</button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Key Benefits -->
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Why Become an AARIE.CA Affiliate?</h2>
+                <p class="section-subtitle">Everything you need to succeed in one program</p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">💸</div>
+                    <h3 class="benefit-title">8% Commission</h3>
+                    <p class="benefit-text">Earn 8% on every completed sale. Higher-value services mean bigger commissions for you.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">📊</div>
+                    <h3 class="benefit-title">Simple Tracking</h3>
+                    <p class="benefit-text">Share your unique ?ref= link. We handle all the tracking automatically. No complex dashboards.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h3 class="benefit-title">Complete Freedom</h3>
+                    <p class="benefit-text">Promote however you want - social media, email, your website, anywhere. Organic promotion unlimited.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">✅</div>
+                    <h3 class="benefit-title">Guaranteed Payouts</h3>
+                    <p class="benefit-text">Monthly payouts. No minimum threshold. Flexible payment methods you choose.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">🚀</div>
+                    <h3 class="benefit-title">Fast Approval</h3>
+                    <p class="benefit-text">Apply today, get approved within 3-5 business days. Start earning immediately.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">🤝</div>
+                    <h3 class="benefit-title">Real Partnership</h3>
+                    <p class="benefit-text">We support our affiliates. Professional, transparent, no games. Just honest earning potential.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Earning Potential -->
+        <section class="earning-section">
+            <h2>Real Earning Potential</h2>
+            <p>Here's what you could earn at 8%:</p>
+            <div class="earning-examples">
+                <div class="earning-example">
+                    <div class="earning-example-label">on a $500 sale</div>
+                    <div class="earning-example-amount">$40</div>
+                    <div class="earning-example-detail">One referral</div>
+                </div>
+                <div class="earning-example">
+                    <div class="earning-example-label">on a $2,000 sale</div>
+                    <div class="earning-example-amount">$160</div>
+                    <div class="earning-example-detail">Premium package</div>
+                </div>
+                <div class="earning-example">
+                    <div class="earning-example-label">on 10 referrals/month</div>
+                    <div class="earning-example-amount">$400-800</div>
+                    <div class="earning-example-detail">Average commission</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">How It Works</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <h3>Apply & Get Approved</h3>
+                    <p>Fill out a quick application below. We review and get back to you within 3-5 business days.</p>
+                </div>
+                <div class="step">
+                    <h3>Receive Your Link</h3>
+                    <p>Get your unique affiliate link with your custom ?ref= parameter. Share it anywhere.</p>
+                </div>
+                <div class="step">
+                    <h3>Drive Referrals</h3>
+                    <p>Share your link on social media, email, your site, community groups - anywhere you have influence.</p>
+                </div>
+                <div class="step">
+                    <h3>Earn & Get Paid</h3>
+                    <p>Every customer who books through your link earns you 8% commission, paid monthly to your preferred method.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Methods -->
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Flexible Payment Options</h2>
+                <p class="section-subtitle">Get paid the way that works for you</p>
+            </div>
+            <div class="payment-methods">
+                <div class="payment-method">
+                    <div class="payment-icon">🔗</div>
+                    <h3>Stripe Connect</h3>
+                    <p>Automatic monthly payouts directly to your Stripe account. Real-time tracking, fastest option.</p>
+                    <span class="badge">Recommended</span>
+                </div>
+                <div class="payment-method">
+                    <div class="payment-icon">💳</div>
+                    <h3>E-Transfer</h3>
+                    <p>For Canadian affiliates. Received to your registered email within 10 business days.</p>
+                </div>
+                <div class="payment-method">
+                    <div class="payment-icon">💰</div>
+                    <h3>PayPal</h3>
+                    <p>Direct PayPal transfers. Received within 10 business days of month end.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Terms Overview -->
+        <section class="terms-section">
+            <div class="section-header">
+                <h2 class="section-title">The Terms (Simple & Fair)</h2>
+            </div>
+            <div class="terms-grid">
+                <div class="term-item">
+                    <h3>🎯 Promotion Freedom</h3>
+                    <p>Share your link on any platform - social media, email, your website. No paid ads on your own link, but organic promotion is unlimited.</p>
+                </div>
+                <div class="term-item">
+                    <h3>✨ Professional Standards</h3>
+                    <p>Be honest about what we offer. Disclose your affiliate relationship. No spam or misleading claims. That's it.</p>
+                </div>
+                <div class="term-item">
+                    <h3>📋 Age & Consent</h3>
+                    <p>Must be 18+. You'll confirm you've read and agree to the full terms before we finalize your application.</p>
+                </div>
+                <div class="term-item">
+                    <h3>💯 Refund Policy</h3>
+                    <p>If a customer gets refunded, that commission is reversed. Tracked automatically through our system.</p>
+                </div>
+                <div class="term-item">
+                    <h3>🔄 Monthly Payouts</h3>
+                    <p>Calculated 1st-last of each month. Paid within 10 business days. No minimum threshold.</p>
+                </div>
+                <div class="term-item">
+                    <h3>📖 Full Details</h3>
+                    <p>Everything is spelled out in our complete <a href="/aarie-terms.html" target="_blank" style="color: #0891b2; text-decoration: none; font-weight: 600;">Affiliate Program Terms</a>.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marketing Materials -->
+        <section class="media-section">
+            <div class="section-header">
+                <h2 class="section-title">Marketing Materials for Your Campaign</h2>
+                <p class="section-subtitle">Professional videos and graphics to use in your affiliate promotion</p>
+            </div>
+
+            <div class="media-intro">
+                <h3>🎬 Free to Download & Use</h3>
+                <p>These professional marketing videos and images are created for you to use in your affiliate campaigns. Download them for free and share across your social media, email, website, and more. Use them however you'd like to promote AARIE.CA and earn commissions!</p>
+            </div>
+
+            <!-- Videos -->
+            <h3 style="font-size: 1.5rem; margin-bottom: 30px; color: #1a1a1a;">📹 Campaign Videos</h3>
+            <div class="media-grid">
+                <!-- Video 1 -->
+                <div class="media-item">
+                    <div class="media-preview">
+                        <video width="100%" height="100%" controls style="object-fit: cover;">
+                            <source src="/videos/A_dynamic_motion.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">A_dynamic_motion.mp4</div>
+                        <div class="media-actions">
+                            <a href="/videos/A_dynamic_motion.mp4" download class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video 2 -->
+                <div class="media-item">
+                    <div class="media-preview">
+                        <video width="100%" height="100%" controls style="object-fit: cover;">
+                            <source src="/videos/Digital_art_tiktok.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">Digital_art_tiktok.mp4</div>
+                        <div class="media-actions">
+                            <a href="/videos/Digital_art_tiktok.mp4" download class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video 3 -->
+                <div class="media-item">
+                    <div class="media-preview">
+                        <video width="100%" height="100%" controls style="object-fit: cover;">
+                            <source src="/videos/A_sophisticated_motion.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">A_sophisticated_motion.mp4</div>
+                        <div class="media-actions">
+                            <a href="/videos/A_sophisticated_motion.mp4" download class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video 4 -->
+                <div class="media-item">
+                    <div class="media-preview">
+                        <video width="100%" height="100%" controls style="object-fit: cover;">
+                            <source src="/videos/serene.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">serene.mp4</div>
+                        <div class="media-actions">
+                            <a href="/videos/serene.mp4" download class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Images -->
+            <h3 style="font-size: 1.5rem; margin: 50px 0 30px 0; color: #1a1a1a;">🖼️ Marketing Graphics</h3>
+            <div class="media-grid">
+                <!-- Image 1 -->
+                <div class="media-item">
+                    <div class="media-preview image">
+                        <img src="/images/AFFILIATE/1.png" alt="Affiliate Marketing Material 1">
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">affiliate-banner-1.png</div>
+                        <div class="media-actions">
+                            <a href="/images/AFFILIATE/1.png" download="affiliate-banner-1.png" class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image 2 -->
+                <div class="media-item">
+                    <div class="media-preview image">
+                        <img src="/images/AFFILIATE/2.jpg" alt="Affiliate Marketing Material 2">
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">affiliate-banner-2.jpg</div>
+                        <div class="media-actions">
+                            <a href="/images/AFFILIATE/2.jpg" download="affiliate-banner-2.jpg" class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Application Section -->
+    <section class="application-section container" id="application-section">
+        <div class="form-container">
+            <div id="formView">
+                <h2 style="text-align: center; margin-bottom: 10px; font-size: 1.8rem;">Apply Now</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 40px;">Join our affiliate network and start earning today.</p>
+
+                <form id="affiliateForm">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required placeholder="Your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="website">Your Website or Primary Social Media (Optional)</label>
+                        <input type="url" id="website" name="website" placeholder="https://www.your-website.com or @yourhandle">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Tell Us About Your Audience (Optional)</label>
+                        <textarea id="message" name="message" rows="3" placeholder="Describe your followers, email list, community, or how you'll promote..."></textarea>
+                    </div>
+
+                    <div id="formError" class="form-error"></div>
+
+                    <!-- Consent Checkboxes -->
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ageCheck" required>
+                            <label for="ageCheck">I confirm that I am 18 years of age or older.</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="tosCheck" required>
+                            <label for="tosCheck">I have read and agree to the <a href="/aarie-terms.html" target="_blank">Affiliate Program Terms</a></label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn" disabled>Submit Application</button>
+                    <p class="form-disclaimer">Instant approval! You'll be approved and ready to start earning immediately.</p>
+                </form>
+            </div>
+
+            <div id="successView" class="success-view">
+                <div class="success-icon">🎉</div>
+                <h2 class="success-title">Congratulations! You are Instantly Approved!</h2>
+                <p class="success-text">Welcome to the AARIE.CA Affiliate Program.</p>
+                <p class="success-text">Your referral link is ready to use. Start sharing and earning 8% commission on every referral!</p>
+                <a href="/affiliate-portal.html" class="success-btn">Go To Affiliate Portal</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">© 2025 AARIE.CA. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="/aarie-terms.html" class="footer-link">Affiliate Terms</a>
+            <a href="/privacy" class="footer-link">Privacy Policy</a>
+            <a href="/terms" class="footer-link">Terms & Conditions</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('affiliateForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const errorDiv = document.getElementById('formError');
+            const formView = document.getElementById('formView');
+            const successView = document.getElementById('successView');
+            const ageCheck = document.getElementById('ageCheck');
+            const tosCheck = document.getElementById('tosCheck');
+
+            // Checkbox toggle logic
+            function toggleSubmit() {
+                submitBtn.disabled = !(ageCheck.checked && tosCheck.checked);
+            }
+
+            ageCheck.addEventListener('change', toggleSubmit);
+            tosCheck.addEventListener('change', toggleSubmit);
+
+            // Form submission
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
+                errorDiv.style.display = 'none';
+
+                const applicationData = {
+                    name: document.getElementById('name').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    website: document.getElementById('website').value.trim(),
+                    message: document.getElementById('message').value.trim(),
+                    ageConfirmed: true,
+                    tosAcceptedAt: new Date().toISOString()
+                };
+
+                try {
+                    const response = await fetch('/api/v1/aarie-platform/apply-for-affiliate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(applicationData)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Something went wrong.');
+                    }
+
+                    // Show success view
+                    formView.style.display = 'none';
+                    successView.style.display = 'block';
+                    successView.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                } catch (error) {
+                    errorDiv.textContent = error.message;
+                    errorDiv.style.display = 'block';
+                    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Application';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

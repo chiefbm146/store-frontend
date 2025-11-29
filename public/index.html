@@ -6,9 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AARIE.CA - Your Website Live in 7 Days</title>
 
-    <meta property="og:type" content="website">
+    <!-- ===== FINAL META TAGS FOR FACEBOOK PREVIEW ===== -->
     <meta property="og:title" content="AARIE.CA - The 7-Day Launchpad">
     <meta property="og:description" content="See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aarie.ca/">
+    <meta property="og:site_name" content="AARIE.CA">
+    <meta property="og:see_also" content="https://www.facebook.com/profile.php?id=61578712383717">
+
+    <!-- The Image, Dimensions, and Your App ID -->
+    <meta property="og:image" content="https://aarie.ca/images/test.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="fb:app_id" content="3753347551626837">
+
+    <!-- Twitter Card for Consistency -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AARIE.CA - The 7-Day Launchpad">
+    <meta name="twitter:description" content="See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.">
+    <meta name="twitter:image" content="https://aarie.ca/images/test.jpg">
+    <!-- ===== END OF FINAL META TAGS ===== -->
+
+    
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
 
@@ -35,13 +55,10 @@
         !window.THREE || !window.THREE.GLTFLoader && document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.134/examples/js/loaders/GLTFLoader.js" integrity="sha256-gM3k2e/CWwjs72W22fP0vs6h3gSOx65j8s3Q229KBFo=" crossorigin="anonymous"><\/script>');
     </script>
 
-    <!-- Water Background (loaded as script so it's available for both script and module contexts) -->
-    <script src="./js/water.js?v=11.0.12"></script>
-
-    <!-- Audio System Modules (Production-Ready from mobile.html) -->
-    <script src="./js/audioStateManager.js?v=11.0.12" type="module"></script>
-    <script src="./js/audioPermissionUI.js?v=11.0.12" type="module"></script>
-    <script src="./js/soundManager.js?v=11.0.12" type="module"></script>
+    <!-- Firebase SDK for Smart Sharing -->
+    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
 
     <style>
         /* === BASE STYLES === */
@@ -65,7 +82,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
             position: relative;
             overflow: hidden;
             text-align: center;
@@ -85,6 +102,8 @@
                 radial-gradient(circle at 75% 75%, #FFFFFF 1px, transparent 1px);
             background-size: 60px 60px;
             animation: drift 20s ease-in-out infinite;
+            z-index: 1;
+            pointer-events: none;
         }
 
         @keyframes drift {
@@ -96,7 +115,7 @@
             max-width: 800px;
             margin: 0 auto;
             position: relative;
-            z-index: 1;
+            z-index: 10;
         }
 
         .hero-icon {
@@ -158,7 +177,7 @@
 
         .btn-primary {
             background: #FFFFFF;
-            color: #6366f1;
+            color: #0891b2;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
@@ -216,7 +235,7 @@
         }
 
         .who-highlight {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
             color: #FFFFFF;
             padding: 30px 40px;
             border-radius: 16px;
@@ -224,7 +243,7 @@
             font-weight: 600;
             text-align: center;
             margin-bottom: 60px;
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 40px rgba(8, 145, 178, 0.3);
             line-height: 1.6;
         }
 
@@ -247,8 +266,8 @@
 
         .business-type-card:hover {
             transform: translateY(-8px);
-            border-color: #6366f1;
-            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.2);
+            border-color: #0891b2;
+            box-shadow: 0 15px 40px rgba(8, 145, 178, 0.2);
         }
 
         .business-type-icon {
@@ -303,7 +322,7 @@
         }
 
         .example-item:hover {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
             transform: translateY(-3px);
         }
 
@@ -378,8 +397,8 @@
 
         .feature-card:hover {
             transform: translateY(-10px);
-            border-color: #6366f1;
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.2);
+            border-color: #0891b2;
+            box-shadow: 0 10px 40px rgba(8, 145, 178, 0.2);
         }
 
         .feature-icon {
@@ -400,202 +419,34 @@
             line-height: 1.8;
         }
 
-        /* === DESKTOP CHAT SECTION (Now a placeholder) === */
-        .chat-section {
-            padding: 80px 20px;
-            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+        /* === AARIES IMAGE SECTION === */
+        .aaries-section {
+            padding: 100px 20px;
+            background: #FFFFFF;
         }
 
-        .chat-wrapper {
-            max-width: 900px;
+        .aaries-content {
+            max-width: 1400px;
             margin: 0 auto;
-            min-height: 600px; /* Ensure space for chat instance */
         }
-        
-        /* === MASTER CHAT INSTANCE STYLES (Used by both Desktop and Mobile) === */
-        #master-chat-instance {
-            width: 100%;
-            height: 100%;
+
+        .aaries-image-container {
             display: flex;
-            flex-direction: column;
-            background: #FFFFFF;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
-        }
-
-        .desktop-view #master-chat-instance {
-            height: 600px; /* Fixed height for desktop */
-        }
-        
-        .mobile-view #master-chat-instance {
-            height: 100%; /* Full height for mobile modal */
-            border-radius: 0;
-            box-shadow: none;
-        }
-        
-        .chat-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        /* Water Background Container (For both Desktop and Mobile) */
-        .water-background-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            background: #0a0f14;
-            border-radius: inherit;
-            overflow: hidden;
-        }
-
-        .water-background-container canvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-        }
-
-        .chat-header {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            padding: 25px 30px;
-            color: #FFFFFF;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            position: relative;
-            z-index: 1;
-            flex-shrink: 0;
-        }
-
-        .chat-icon {
-            font-size: 2rem;
-        }
-
-        .chat-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 30px;
-            background: transparent;
-            position: relative;
-            z-index: 1;
-            min-height: 0; /* Fix for flexbox overflow */
-        }
-
-        .messages {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .message {
-            padding: 15px 20px;
-            border-radius: 18px;
-            max-width: 80%;
-            line-height: 1.6;
-        }
-
-        .ai-message {
-            background: #FFFFFF;
-            align-self: flex-start;
-            border: 2px solid #E0E0E0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .user-message {
-            background: #6366f1;
-            color: #FFFFFF;
-            align-self: flex-end;
-        }
-
-        .typing-indicator {
-            display: none;
-            align-items: center;
-            gap: 8px;
-            padding: 15px 20px;
-            background: #FFFFFF;
-            border-radius: 18px;
-            align-self: flex-start;
-            border: 2px solid #E0E0E0;
-        }
-        .typing-indicator.visible { display: flex; }
-
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #6366f1;
-            animation: bounce 1.4s ease-in-out infinite;
-        }
-
-        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes bounce {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-10px); }
-        }
-
-        .input-area {
-            display: flex;
-            gap: 15px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            border-top: 2px solid rgba(224, 224, 224, 0.8);
-            position: relative;
-            z-index: 1;
-            flex-shrink: 0;
-        }
-
-        .input-wrapper {
-            flex: 1;
-        }
-
-        #userInput {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #E0E0E0;
-            border-radius: 25px;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        #userInput:focus {
-            border-color: #6366f1;
-        }
-
-        #sendButton {
-            padding: 0;
-            width: 50px;
-            height: 50px;
-            background: #6366f1;
-            color: #FFFFFF;
-            border: none;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            margin-top: 50px;
         }
 
-        #sendButton:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        .aaries-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(8, 145, 178, 0.25);
+            transition: transform 0.3s ease;
+        }
+
+        .aaries-image:hover {
+            transform: scale(1.02);
         }
 
         /* === AI BLURB SECTION (Mobile Only) === */
@@ -650,7 +501,7 @@
         /* === CTA SECTION === */
         .cta-section {
             padding: 100px 20px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -739,121 +590,16 @@
         
         /* === RESPONSIVE - TABLET AND BELOW === */
         @media (max-width: 768px) {
-            /* FIX: Hides the redundant header from the master chat instance in mobile view */
-            .mobile-view #master-chat-instance .chat-header {
-                display: none;
-            }
-            /* Hide desktop chat placeholder, show mobile elements */
-            .chat-section {
-                display: none;
-            }
-
-            .ai-blurb-section {
-                display: block;
-                padding: 50px 20px;
-                background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
-            }
-            .ai-blurb-content {
-                background: #FFFFFF; padding: 30px 25px; border-radius: 16px; text-align: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            }
-            .ai-blurb-icon { font-size: 3.5rem; display: block; margin-bottom: 15px; }
-            .ai-blurb-title { font-size: 1.4rem; font-weight: 700; color: #1a1a1a; margin-bottom: 15px; }
-            .ai-blurb-text { font-size: 1rem; color: #666; line-height: 1.7; margin-bottom: 20px; }
-            .ai-blurb-cta { display: inline-block; padding: 12px 25px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: #FFFFFF; border-radius: 25px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; }
-
-            /* Mobile Chat FAB */
-            .mobile-chat-fab {
-                display: flex;
-                position: fixed;
-                bottom: 25px;
-                right: 25px;
-                width: 65px;
-                height: 65px;
-                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-                border-radius: 50%;
-                align-items: center;
-                justify-content: center;
-                font-size: 2rem;
-                cursor: pointer;
-                z-index: 9998;
-                box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
-                border: none;
-                animation: fabPulse 2s ease-in-out infinite;
-            }
-
-            @keyframes fabPulse {
-                0%, 100% { box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5); }
-                50% { box-shadow: 0 8px 35px rgba(99, 102, 241, 0.7); }
-            }
-
-            .mobile-chat-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                backdrop-filter: blur(5px);
-                z-index: 9999;
-            }
-            .mobile-chat-overlay.active { display: block; }
-
-            .mobile-chat-modal {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100dvh;
-                background: #FFFFFF;
-                z-index: 10000;
-                flex-direction: column;
-            }
-            .mobile-chat-modal.active { display: flex; }
-            
-            .mobile-chat-header {
-                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-                padding: 20px;
-                color: #FFFFFF;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                flex-shrink: 0;
-            }
-            .mobile-chat-title { font-size: 1.2rem; font-weight: 700; margin: 0; }
-            .mobile-header-controls { display: flex; align-items: center; gap: 10px; }
-            .mobile-speaker-btn { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #FFFFFF; cursor: pointer; }
-            .mobile-speaker-btn.unlocked { background: #10B981; border-color: #10B981; }
-            /* FIX: Ensures the Font Awesome icon renders correctly inside the mobile speaker button */
-            .mobile-speaker-btn i {
-                font-family: "Font Awesome 6 Free";
-                font-weight: 900; /* This is required for solid icons */
-            }
-            .mobile-chat-close { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #FFFFFF; cursor: pointer; }
-            
-            .mobile-chat-body {
-                flex: 1;
-                overflow: hidden; /* Important for containing the master instance */
-                background: #F8F9FA;
-                position: relative;
-            }
-
-            /* Styles for Master Chat instance when in mobile view */
-            .mobile-view #master-chat-instance .messages-container { padding: 20px; }
-            .mobile-view #master-chat-instance .message { max-width: 85%; font-size: 0.95rem; }
-            .mobile-view #master-chat-instance .input-area { padding: 15px; }
-            .mobile-view #master-chat-instance #userInput { padding: 14px 18px; font-size: 1rem; }
-            .mobile-view #master-chat-instance #sendButton { width: 44px; height: 44px; font-size: 1rem; }
-
             /* General Mobile Layout */
             .hero-section { min-height: auto; padding: 60px 20px; }
             .hero-icon { font-size: 4rem; }
             .hero-buttons { flex-direction: column; gap: 15px; }
-            .btn { width: 100%; }
+            .btn { width: 100%; display: block; }
             .who-section { padding: 50px 20px; }
             .business-types-grid, .examples-grid, .features-grid { display: flex; flex-direction: column; gap: 15px; }
             .business-type-card, .feature-card { flex-direction: row; text-align: left; }
+            .aaries-section { padding: 50px 20px; }
+            .aaries-image-container { margin-top: 30px; }
             .about-section { padding: 50px 20px; }
             .about-content { grid-template-columns: 1fr; }
             .cta-section { padding: 50px 20px; }
@@ -861,48 +607,15 @@
             .footer { padding-bottom: 100px; }
         }
 
-        /* Ensure mobile chat elements are hidden on desktop */
-        body.desktop-view .mobile-chat-fab,
-        body.desktop-view .mobile-chat-overlay,
-        body.desktop-view .mobile-chat-modal {
-            display: none !important;
-        }
-
-        /* === TTS & AUDIO SYSTEM === */
-        .master-speaker-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            color: #FFFFFF;
-            font-size: 1.1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .master-speaker-btn.unlocked { background: #10B981; border-color: #10B981; }
-        .audio-permission-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 100000; align-items: center; justify-content: center; }
-        .audio-permission-overlay.active { display: flex; }
-        .audio-permission-modal { background: #FFFFFF; border-radius: 24px; padding: 40px; max-width: 400px; text-align: center; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
-        .audio-permission-icon { font-size: 4rem; margin-bottom: 20px; }
-        .audio-permission-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 15px; }
-        .audio-permission-text { font-size: 1rem; color: #666; margin-bottom: 25px; }
-        .audio-permission-buttons { display: flex; gap: 12px; justify-content: center; }
-        .audio-permission-enable { padding: 12px 28px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #FFFFFF; border: none; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer; }
-        .audio-permission-skip { padding: 12px 28px; background: transparent; color: #666; border: 2px solid #E0E0E0; border-radius: 25px; font-size: 1rem; cursor: pointer; }
-        .message-play-btn { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; color: #FFFFFF; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3); }
-        .message-wrapper { display: flex; flex-direction: column; gap: 8px; max-width: 80%; }
-        .message-wrapper.user { align-self: flex-end; align-items: flex-end; }
-        .message-wrapper.ai { align-self: flex-start; align-items: flex-start; }
-
         /* === SPECIAL TAGS === */
-        special { font-weight: 700; color: #6366f1; cursor: pointer; padding: 1px 4px; border-radius: 3px; }
-        special:hover { background-color: rgba(99, 102, 241, 0.1); text-decoration: underline; }
+        special { font-weight: 700; color: #0891b2; cursor: pointer; padding: 1px 4px; border-radius: 3px; }
+        special:hover { background-color: rgba(8, 145, 178, 0.1); text-decoration: underline; }
         price { font-weight: 700; color: #c82333; }
-        
+
     </style>
+
+
+
 </head>
 <body>
     <!-- Hero Section -->
@@ -913,9 +626,13 @@
             <p class="hero-subtitle">AARIE.CA builds professional websites with AI-powered chat. See your first design mockup within 72 hours.</p>
             <p class="hero-description">We create custom websites for workshops, products, or services with intelligent chatbots that help your customers 24/7. Only 4 projects per month to ensure quality.</p>
             <div class="hero-buttons">
-                <a href="/demo-desk.html" class="btn btn-primary">LEARN MORE</a>
-                <p class="client-explore-text">Explore a Client's Site</p>
-                <a href="https://moontidereconciliation.com" class="btn btn-secondary" target="_blank" rel="noopener">MOON TIDE</a>
+                <a href="/booking" class="btn btn-primary">Start Your Site</a>
+                <a href="/affiliate" class="btn btn-secondary">Join Our Affiliate Program</a>
+                <p class="client-explore-text">SERVING CLIENTS RIGHT NOW:</p>
+                <a href="https://moontide.ca" class="btn btn-secondary" target="_blank" rel="noopener">MOON TIDE</a>
+                <p class="client-explore-text">SERVING CLIENTS SOON:</p>
+                <a href="https://bertpeterssalishart.com" class="btn btn-secondary" target="_blank" rel="noopener">Salish Art</a>
+                <a href="https://aarie.ca/home" class="btn btn-secondary" target="_blank" rel="noopener">Stó:lō Medicine</a>
             </div>
         </div>
     </section>
@@ -964,17 +681,15 @@
         </div>
     </section>
 
-    <!-- Desktop Chat Section (Now just a wrapper) -->
-    <section class="chat-section" id="chat">
-        <div class="chat-wrapper">
-            <div class="section-header">
-                <h2 class="section-title">Meet Your Custom AI Assistant</h2>
-                <p class="section-subtitle">Every store we build includes a chatbot trained specifically on your business</p>
+    <!-- AARIES Image Section -->
+    <section class="aaries-section">
+        <div class="aaries-content">
+            <div class="aaries-image-container">
+                <img src="/images/AARIES.jpeg" alt="AARIE.CA Platform Overview" class="aaries-image">
             </div>
-            <!-- The master chat instance will be moved here by JS on desktop -->
         </div>
     </section>
-    
+
     <!-- AI Blurb Section (Mobile Only - replaces chat section) -->
     <section class="ai-blurb-section">
         <div class="ai-blurb-content">
@@ -1004,8 +719,29 @@
             <h2>See What We've Built</h2>
             <p>Check out Moon Tide Reconciliation - a website we built for a client. See how your customers will shop workshops, products, and services with AI assistance.</p>
             <div class="cta-buttons">
-                <a href="/demo-desk.html" class="btn btn-primary">LEARN MORE</a>
-                <a href="https://moontidereconciliation.com" class="btn btn-secondary" target="_blank" rel="noopener">MOON TIDE</a>
+                <a href="/booking" class="btn btn-primary">Start Your Site</a>
+                <a href="/affiliate" class="btn btn-secondary">Join Our Affiliate Program</a>
+                <p class="client-explore-text">SERVING CLIENTS RIGHT NOW:</p>
+                <a href="https://moontide.ca" class="btn btn-secondary" target="_blank" rel="noopener">MOON TIDE</a>
+                <p class="client-explore-text">SERVING CLIENTS SOON:</p>
+                <a href="https://bertpeterssalishart.com" class="btn btn-secondary" target="_blank" rel="noopener">Salish Art</a>
+                <a href="https://aarie.ca/home" class="btn btn-secondary" target="_blank" rel="noopener">Stó:lō Medicine</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Smart Sharing Section -->
+    <section style="background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); padding: 80px 40px; text-align: center;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2 style="color: white; font-size: 2rem; margin-bottom: 20px; font-weight: 800;">Share AARIE.CA</h2>
+            <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.1rem; margin-bottom: 40px;">
+                <span id="shareMessage">Want to get paid to share? <a href="/affiliate" style="color: white; text-decoration: underline; font-weight: 700;">Join our Affiliate Program.</a></span>
+                <span id="affiliateShareMessage" style="display: none;">Affiliate Link Active: Sharing this earns you commission.</span>
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a id="shareButton_facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #1877f2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">📘 Facebook</a>
+                <a id="shareButton_twitter" href="https://twitter.com/intent/tweet?url=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #000; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">𝕏 Twitter/X</a>
+                <a id="shareButton_linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #0a66c2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">in LinkedIn</a>
             </div>
         </div>
     </section>
@@ -1015,7 +751,7 @@
         <div class="footer-content">
             <p class="footer-tagline">AARIE.CA - Your Website Live in 7 Days</p>
             <div class="footer-links">
-                <a href="/demo-desk.html">GET A STORE</a>
+                <a href="/booking">GET A STORE</a>
                 <a href="/about-desk.html">About</a>
                 <a href="/contact-desk.html">Contact</a>
                 <a href="/privacy">Privacy Policy</a>
@@ -1025,237 +761,85 @@
         </div>
     </footer>
 
-    <!-- =================================================================== -->
-    <!-- MASTER AI CHAT INSTANCE (Used by both Desktop and Mobile) -->
-    <!-- This is kept hidden until moved into position by JavaScript. -->
-    <!-- =================================================================== -->
-    <div id="master-chat-instance" style="display: none;">
-        <div class="chat-container ai-portal">
-            <div class="water-background-container"></div> <!-- Generic water container -->
-            <div class="chat-header portal-header">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <span class="chat-icon">🤖</span>
-                    <h3 class="chat-title portal-title">AI Chat Assistant</h3>
-                </div>
-                <!-- Master Speaker Button will be added here by soundManager.js -->
-            </div>
-            <div class="messages-container" id="messagesContainer">
-                <div class="messages" id="messages"></div>
-                <div class="typing-indicator" id="typingIndicator">
-                    <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
-                </div>
-                <div id="moduleContainer"></div>
-            </div>
-            <div class="input-area">
-                <div class="input-wrapper" id="inputWrapper">
-                    <input type="text" id="userInput" placeholder="Ask about stores, features, pricing..." autocomplete="off" maxlength="4000">
-                </div>
-                <button id="sendButton"><i class="fas fa-arrow-up"></i></button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Audio Permission Modal (for TTS unlock) -->
-    <div class="audio-permission-overlay" id="audioPermissionOverlay">
-        <div class="audio-permission-modal">
-            <div class="audio-permission-icon">🔊</div>
-            <h2 class="audio-permission-title">Enable Voice</h2>
-            <p class="audio-permission-text">Enable audio to hear AI responses read aloud. This creates a more engaging experience!</p>
-            <div class="audio-permission-buttons">
-                <button class="audio-permission-enable" id="audioEnableBtn">Enable Voice</button>
-                <button class="audio-permission-skip" id="audioSkipBtn">Maybe Later</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Hidden Audio Element for TTS -->
-    <audio id="ttsPlayer"></audio>
+    <!-- Water Background for AI Chat -->
+    <script src="./js/water4chat.js"></script>
 
-    <!-- Mobile Floating Chat Button -->
-    <button class="mobile-chat-fab" id="mobileChatFab" title="Chat with AI">🤖</button>
+    <!-- Universal AI Chat Widget v3.0 - Auto-configures for AARIE Platform -->
+    <script src="./js/ai-chat.js" data-store-id="aarie-platform"></script>
 
-    <!-- Mobile Chat Overlay -->
-    <div class="mobile-chat-overlay" id="mobileChatOverlay"></div>
-
-    <!-- Mobile Fullscreen Chat Modal (Now an empty shell) -->
-    <div class="mobile-chat-modal" id="mobileChatModal">
-        <div class="mobile-chat-header">
-            <h3 class="mobile-chat-title">🤖 AI Assistant</h3>
-            <div class="mobile-header-controls">
-
-                <button class="mobile-chat-close" id="mobileChatClose">✕</button>
-            </div>
-        </div>
-        <div class="mobile-chat-body">
-            <!-- The master chat instance will be moved here by JS on mobile -->
-        </div>
-    </div>
-
-    <!-- CHAT MODULES & CONTROLLERS (Single instance for both views) -->
-    <script type="module" src="./js/tts-manager.js?v=11.0.12"></script>
-    <script type="module" src="./js/jarvis-ui-manager.js?v=11.0.12"></script>
-    <script type="module" src="./js/smart-message-renderer.js?v=11.0.12"></script>
-    <script type="module" src="./js/portal-controller.js?v=11.0.12"></script>
-    
-    <!-- MASTER SCRIPT for Water Background & View Management -->
-    <script type="module">
-        import WaterBackground from './js/water-module.js?v=11.0.12';
-
-        let waterInstance = null; // To hold the active water instance
-
-        // Function to initialize a water background in a specific container
-        function initializeWaterBackground(container) {
-            if (!container || typeof THREE === 'undefined') {
-                console.warn('[ViewManager] Water background container not found or THREE not loaded');
-                return null;
-            }
-
-            // Create a new, isolated WaterBackground object to avoid state conflicts
-            const scopedWater = { ...WaterBackground, isRendering: false, clock: new THREE.Clock() };
-            
-            // Add a destroy method to clean up resources, crucial for mobile
-            scopedWater.destroy = function() {
-                if (!this.isRendering) return;
-                this.isRendering = false;
-                cancelAnimationFrame(this.rafId);
-                if (this._resizeObserver) this._resizeObserver.disconnect();
-                if (this.renderer) {
-                    this.renderer.dispose();
-                    if (this.renderer.domElement.parentNode) {
-                        this.renderer.domElement.parentNode.removeChild(this.renderer.domElement);
-                    }
-                }
-                console.log('[WaterBackground] Instance destroyed.');
-            };
-
-            // Override _injectCSS to not use fixed positioning
-            scopedWater._injectCSS = function() {};
-
-            // Override init to use container dimensions
-            scopedWater.init = function(parentContainer) {
-                if (this.isRendering) return;
-                this.container = parentContainer;
-                WaterBackground._injectShaders.call(this);
-
-                const width = parentContainer.offsetWidth;
-                const height = parentContainer.offsetHeight;
-
-                this.scene = new THREE.Scene();
-                this.camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 10000);
-                this.camera.position.set(0, 0, 0);
-                this.camera.lookAt(0, 0, -1);
-
-                this.timeUniform = {
-                    iGlobalTime: { type: 'f', value: 0.1 },
-                    iResolution: { type: 'v2', value: new THREE.Vector2(width, height) }
-                };
-                
-                this.material = new THREE.ShaderMaterial({
-                    uniforms: this.timeUniform,
-                    vertexShader: document.getElementById('water-vertex-shader').textContent,
-                    fragmentShader: document.getElementById('water-fragment-shader').textContent
-                });
-
-                const planeGeometry = new THREE.PlaneBufferGeometry(width, height, 40, 40);
-                const mesh = new THREE.Mesh(planeGeometry, this.material);
-                mesh.position.set(0, 0, -100);
-                this.scene.add(mesh);
-
-                const canvas = document.createElement('canvas');
-                this.container.appendChild(canvas);
-                this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-                this.renderer.setSize(width, height);
-                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-                this.renderer.setClearColor(0x0a0f14, 1);
-
-                this._resizeObserver = new ResizeObserver(() => {
-                    const w = this.container.offsetWidth;
-                    const h = this.container.offsetHeight;
-                    if (w > 0 && h > 0) {
-                        this.camera.aspect = w / h;
-                        this.camera.updateProjectionMatrix();
-                        this.renderer.setSize(w, h);
-                        this.timeUniform.iResolution.value.set(w, h);
-                    }
-                });
-                this._resizeObserver.observe(this.container);
-
-                this.isRendering = true;
-                this._renderLoop();
-                console.log('[WaterBackground] Instance initialized.');
-            };
-
-            scopedWater._renderLoop = WaterBackground._renderLoop.bind(scopedWater);
-            scopedWater.init(container);
-            return scopedWater;
+    <!-- Affiliate Tracking Script -->
+    <script>
+    // Capture affiliate ref parameter from URL and store for booking flow
+    function captureAffiliateRef() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const affiliateRef = urlParams.get('ref');
+        if (affiliateRef) {
+            sessionStorage.setItem('affiliate_ref', affiliateRef.trim());
         }
-        
-        // Main View Manager Logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const masterChatInstance = document.getElementById('master-chat-instance');
-            
-            if (window.innerWidth > 768) {
-                // --- DESKTOP VIEW ---
-                console.log('[ViewManager] Desktop mode detected.');
-                document.body.classList.add('desktop-view');
-                const desktopWrapper = document.querySelector('.chat-wrapper');
-                if (desktopWrapper && masterChatInstance) {
-                    desktopWrapper.appendChild(masterChatInstance);
-                    masterChatInstance.style.display = 'flex';
-                    const waterContainer = masterChatInstance.querySelector('.water-background-container');
-                    waterInstance = initializeWaterBackground(waterContainer);
+    }
+    captureAffiliateRef();
+    </script>
+
+    <!-- Smart Sharing Logic for Affiliates -->
+    <script>
+        // Check if user is logged in as an affiliate and update share buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    // User is logged in - check if they're an affiliate
+                    checkAffiliateStatusAndUpdateShareButtons(user);
                 }
-            } else {
-                // --- MOBILE VIEW ---
-                console.log('[ViewManager] Mobile mode detected.');
-                document.body.classList.add('mobile-view');
-                const fab = document.getElementById('mobileChatFab');
-                const blurbCta = document.getElementById('aiBlurbCta');
-                const overlay = document.getElementById('mobileChatOverlay');
-                const modal = document.getElementById('mobileChatModal');
-                const closeBtn = document.getElementById('mobileChatClose');
-                const mobileBody = document.querySelector('.mobile-chat-body');
-                
-                const openMobilePortal = () => {
-                    modal.classList.add('active');
-                    overlay.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                    mobileBody.appendChild(masterChatInstance);
-                    masterChatInstance.style.display = 'flex';
-
-                    // Initialize water background for mobile
-                    const waterContainer = masterChatInstance.querySelector('.water-background-container');
-                    if (waterContainer) {
-                        // Ensure any previous instance is destroyed before creating a new one
-                        if(waterInstance) waterInstance.destroy();
-                        waterInstance = initializeWaterBackground(waterContainer);
-                    }
-                };
-
-                const closeMobilePortal = () => {
-                    modal.classList.remove('active');
-                    overlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                    
-                    // Move the instance back to the body and hide it
-                    document.body.appendChild(masterChatInstance);
-                    masterChatInstance.style.display = 'none';
-
-                    // Destroy water background instance to save resources
-                    if (waterInstance) {
-                        waterInstance.destroy();
-                        waterInstance = null;
-                    }
-                };
-                
-                fab.addEventListener('click', openMobilePortal);
-                blurbCta.addEventListener('click', openMobilePortal);
-                closeBtn.addEventListener('click', closeMobilePortal);
-                overlay.addEventListener('click', closeMobilePortal);
-
-
-            }
+            });
         });
+
+        async function checkAffiliateStatusAndUpdateShareButtons(user) {
+            try {
+                const idToken = await user.getIdToken(true);
+
+                // Call affiliate-status endpoint
+                const response = await fetch('/api/client/affiliate-status', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${idToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    if (data.isAffiliate && data.affiliateId) {
+                        // User is an affiliate - update share buttons with their affiliate link
+                        updateShareButtonsWithAffiliateLink(data.affiliateId);
+                    }
+                }
+            } catch (error) {
+                console.log('Affiliate check skipped:', error.message);
+            }
+        }
+
+        function updateShareButtonsWithAffiliateLink(affiliateId) {
+            const affiliateUrl = `https://aarie.ca/?ref=${affiliateId}`;
+            const encodedUrl = encodeURIComponent(affiliateUrl);
+            const encodedTitle = encodeURIComponent('AARIE.CA - The 7-Day Launchpad');
+            const encodedDescription = encodeURIComponent('See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.');
+
+            // Update Facebook share button
+            document.getElementById('shareButton_facebook').href =
+                `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+
+            // Update Twitter/X share button
+            document.getElementById('shareButton_twitter').href =
+                `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedDescription}`;
+
+            // Update LinkedIn share button
+            document.getElementById('shareButton_linkedin').href =
+                `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+
+            // Update message
+            document.getElementById('shareMessage').style.display = 'none';
+            document.getElementById('affiliateShareMessage').style.display = 'inline';
+        }
     </script>
 </body>
 </html>

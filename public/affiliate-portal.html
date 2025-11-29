@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Portal - AARIE.CA</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>💰</text></svg>">
+
+    <!-- Firebase SDK -->
+    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #1a1a1a;
+            background: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .nav-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(8, 145, 178, 0.1);
+            padding: 15px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0891b2;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #0891b2;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(8, 145, 178, 0.1);
+        }
+
+        .logout-btn {
+            background: #0891b2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #067a92;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 16px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        /* Referral Link Section */
+        .referral-section {
+            background: white;
+            border: 2px solid rgba(8, 145, 178, 0.2);
+            border-radius: 16px;
+            padding: 50px 40px;
+            margin-bottom: 60px;
+        }
+
+        .referral-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .referral-link-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .referral-link-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            color: #0891b2;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .referral-link-input:focus {
+            outline: none;
+            border-color: #0891b2;
+            background: white;
+        }
+
+        .copy-btn {
+            padding: 14px 30px;
+            background: #0891b2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            background: #067a92;
+            transform: translateY(-2px);
+        }
+
+        .copy-feedback {
+            display: none;
+            text-align: center;
+            color: #10b981;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* Smart Share Section */
+        .share-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .share-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 12px 24px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #1a1a1a;
+            background: white;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(8, 145, 178, 0.15);
+        }
+
+        .share-btn.facebook {
+            border-color: #1877f2;
+            color: #1877f2;
+        }
+
+        .share-btn.facebook:hover {
+            background: #f0f7ff;
+        }
+
+        .share-btn.twitter {
+            border-color: #000;
+            color: #000;
+        }
+
+        .share-btn.twitter:hover {
+            background: #f5f5f5;
+        }
+
+        .share-btn.linkedin {
+            border-color: #0a66c2;
+            color: #0a66c2;
+        }
+
+        .share-btn.linkedin:hover {
+            background: #f5fbff;
+        }
+
+        /* Media Gallery Section */
+        .media-section {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 16px;
+            margin-bottom: 60px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .media-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(8, 145, 178, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .media-item:hover {
+            border-color: #0891b2;
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .media-preview {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .media-preview video,
+        .media-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .media-preview.image {
+            background: #fff;
+        }
+
+        .media-content {
+            padding: 20px;
+        }
+
+        .media-filename {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            word-break: break-word;
+        }
+
+        .media-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 10px 16px;
+            background: #0891b2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .download-btn:hover {
+            background: #067a92;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 40px;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            .referral-section {
+                padding: 30px 20px;
+            }
+
+            .referral-link-container {
+                flex-direction: column;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+            }
+
+            .share-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .welcome-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <a href="/index.html" class="nav-logo">🏪 AARIE.CA</a>
+            <div class="nav-right">
+                <a href="/index.html" class="nav-link">← Back Home</a>
+                <button class="logout-btn" onclick="logoutUser()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h1 class="welcome-title">Welcome, <span id="userName">Affiliate</span>!</h1>
+            <p class="welcome-subtitle">Your personalized affiliate dashboard is ready</p>
+        </section>
+
+        <!-- Referral Link Section -->
+        <section class="referral-section">
+            <h2 class="referral-title">Your Referral Link</h2>
+            <div class="referral-link-container">
+                <input
+                    type="text"
+                    id="referralLink"
+                    class="referral-link-input"
+                    readonly
+                    placeholder="https://aarie.ca/?ref=youraffiliateID"
+                >
+                <button class="copy-btn" onclick="copyReferralLink()">📋 Copy Link</button>
+            </div>
+            <div id="copyFeedback" class="copy-feedback">✅ Copied to clipboard!</div>
+
+            <!-- Smart Share Section -->
+            <div class="share-section">
+                <h3 class="share-title">Share Across Social Media</h3>
+                <div class="share-buttons">
+                    <a id="facebookShare" class="share-btn facebook" target="_blank">
+                        <span>f</span> Facebook
+                    </a>
+                    <a id="twitterShare" class="share-btn twitter" target="_blank">
+                        <span>𝕏</span> Twitter/X
+                    </a>
+                    <a id="linkedinShare" class="share-btn linkedin" target="_blank">
+                        <span>in</span> LinkedIn
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Media Gallery Section -->
+        <section class="media-section">
+            <div class="section-header">
+                <h2 class="section-title">Marketing Materials</h2>
+                <p class="section-subtitle">Professional videos and graphics to use in your affiliate campaigns</p>
+            </div>
+
+            <!-- Videos -->
+            <h3 style="font-size: 1.5rem; margin-bottom: 30px; color: #1a1a1a;">📹 Campaign Videos</h3>
+            <div class="media-grid">
+                <!-- Video 1 -->
+                <div class="media-item">
+                    <div class="media-preview">
+                        <video width="100%" height="100%" controls style="object-fit: cover;">
+                            <source src="/videos/A_dynamic_motion.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">A_dynamic_motion.mp4</div>
+                        <div class="media-actions">
+                            <a href="/videos/A_dynamic_motion.mp4" download class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video 2 -->
+                <div class="media-item">
+                    <div class="media-preview">
+                        <video width="100%" height="100%" controls style="object-fit: cover;">
+                            <source src="/videos/Digital_art_tiktok.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">Digital_art_tiktok.mp4</div>
+                        <div class="media-actions">
+                            <a href="/videos/Digital_art_tiktok.mp4" download class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video 3 -->
+                <div class="media-item">
+                    <div class="media-preview">
+                        <video width="100%" height="100%" controls style="object-fit: cover;">
+                            <source src="/videos/A_sophisticated_motion.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">A_sophisticated_motion.mp4</div>
+                        <div class="media-actions">
+                            <a href="/videos/A_sophisticated_motion.mp4" download class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video 4 -->
+                <div class="media-item">
+                    <div class="media-preview">
+                        <video width="100%" height="100%" controls style="object-fit: cover;">
+                            <source src="/videos/serene.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">serene.mp4</div>
+                        <div class="media-actions">
+                            <a href="/videos/serene.mp4" download class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Images -->
+            <h3 style="font-size: 1.5rem; margin: 50px 0 30px 0; color: #1a1a1a;">🖼️ Marketing Graphics</h3>
+            <div class="media-grid">
+                <!-- Image 1 -->
+                <div class="media-item">
+                    <div class="media-preview image">
+                        <img src="/images/AFFILIATE/1.png" alt="Affiliate Marketing Material 1">
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">affiliate-banner-1.png</div>
+                        <div class="media-actions">
+                            <a href="/images/AFFILIATE/1.png" download="affiliate-banner-1.png" class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image 2 -->
+                <div class="media-item">
+                    <div class="media-preview image">
+                        <img src="/images/AFFILIATE/2.jpg" alt="Affiliate Marketing Material 2">
+                    </div>
+                    <div class="media-content">
+                        <div class="media-filename">affiliate-banner-2.jpg</div>
+                        <div class="media-actions">
+                            <a href="/images/AFFILIATE/2.jpg" download="affiliate-banner-2.jpg" class="download-btn">⬇️ Download</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 AARIE.CA. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let affiliateData = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            firebase.auth().onAuthStateChanged(user => {
+                if (!user) {
+                    // Not logged in - redirect to affiliate gateway
+                    window.location.replace('/affiliate.html');
+                } else {
+                    // User is logged in - check affiliate status
+                    checkAndLoadAffiliateData(user);
+                }
+            });
+        });
+
+        async function checkAndLoadAffiliateData(user) {
+            try {
+                const idToken = await user.getIdToken(true);
+
+                // Call affiliate-status endpoint
+                const response = await fetch('/api/client/affiliate-status', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${idToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to check affiliate status');
+                }
+
+                const data = await response.json();
+
+                if (!data.isAffiliate) {
+                    // User is not an approved affiliate - redirect to application
+                    window.location.replace('/affiliate-aarie.html');
+                } else {
+                    // User is an approved affiliate - load data
+                    affiliateData = data;
+                    loadAffiliatePortal(user);
+                }
+            } catch (error) {
+                console.error('Error loading affiliate data:', error);
+                alert('Error loading affiliate portal. Please try again.');
+                window.location.replace('/affiliate.html');
+            }
+        }
+
+        function loadAffiliatePortal(user) {
+            const name = user.displayName || user.email.split('@')[0];
+            const affiliateId = affiliateData.affiliateId;
+
+            // Set welcome message
+            document.getElementById('userName').textContent = name;
+
+            // Set referral link
+            const referralUrl = `https://aarie.ca/?ref=${affiliateId}`;
+            document.getElementById('referralLink').value = referralUrl;
+
+            // Set share buttons
+            updateShareButtons(referralUrl);
+        }
+
+        function updateShareButtons(referralUrl) {
+            const encodedUrl = encodeURIComponent(referralUrl);
+            const encodedTitle = encodeURIComponent('AARIE.CA - The 7-Day Launchpad');
+            const encodedDescription = encodeURIComponent('See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.');
+
+            // Facebook share
+            document.getElementById('facebookShare').href =
+                `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+
+            // Twitter/X share
+            document.getElementById('twitterShare').href =
+                `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedDescription}`;
+
+            // LinkedIn share
+            document.getElementById('linkedinShare').href =
+                `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+        }
+
+        function copyReferralLink() {
+            const linkInput = document.getElementById('referralLink');
+            linkInput.select();
+            document.execCommand('copy');
+
+            // Show feedback
+            const feedback = document.getElementById('copyFeedback');
+            feedback.style.display = 'block';
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 2000);
+        }
+
+        function logoutUser() {
+            firebase.auth().signOut().then(() => {
+                window.location.replace('/affiliate.html');
+            }).catch(error => {
+                console.error('Logout error:', error);
+                alert('Error logging out. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html>
