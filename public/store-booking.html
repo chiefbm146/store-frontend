@@ -851,11 +851,6 @@
     <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
     <script defer src="/__/firebase/init.js"></script>
 
-    <!-- Sign In to Earn / Go to Dashboard Button (Top Right) -->
-    <div style="position: fixed; top: 20px; right: 40px; z-index: 9999;">
-        <button id="affiliateBtn" onclick="handleAffiliateClick()" style="padding: 12px 24px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">💵 Sign In to Earn</button>
-    </div>
-
     <style>
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -868,6 +863,36 @@
             border-top: 2px solid white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
+        }
+        .affiliate-nav-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+        .affiliate-nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+        .affiliate-nav-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        @media (max-width: 768px) {
+            .affiliate-nav-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 12px 16px;
+                font-size: 15px;
+            }
         }
     </style>
 
@@ -888,15 +913,22 @@
             firebase.auth().onAuthStateChanged(user => {
                 currentUser = user;
                 const btn = document.getElementById('affiliateBtn');
+                const mobileBtn = document.getElementById('mobileAffiliateBtn');
 
                 if (user) {
                     // User is signed in - show "Go to Dashboard" button
-                    btn.textContent = '📊 Go to Affiliate Dashboard';
+                    btn.textContent = '📊 Dashboard';
                     btn.style.background = '#0891b2';
+                    if (mobileBtn) {
+                        mobileBtn.innerHTML = '<span class="mobile-menu-icon">📊</span><span>Affiliate Dashboard</span>';
+                    }
                 } else {
                     // User is not signed in - show "Sign In to Earn" button
-                    btn.textContent = '💵 Sign In to Earn';
+                    btn.textContent = '💵 Earn';
                     btn.style.background = '#10b981';
+                    if (mobileBtn) {
+                        mobileBtn.innerHTML = '<span class="mobile-menu-icon">💵</span><span>Earn (Affiliate)</span>';
+                    }
                 }
             });
         });
@@ -982,6 +1014,7 @@
                 <a href="/ai-chat" class="nav-link"><span>🤖</span> A.I. Chat</a>
                 <a href="/stores" class="nav-link"><span>🏬</span> Stores</a>
                 <a href="/portal" class="nav-link"><span>🔐</span> Client Portal</a>
+                <button id="affiliateBtn" onclick="handleAffiliateClick()" class="affiliate-nav-btn">💵 Earn</button>
             </div>
             <button class="mobile-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
                 <span class="hamburger-line"></span>
@@ -1021,6 +1054,10 @@
                 <span class="mobile-menu-icon">🔐</span>
                 <span>Client Portal</span>
             </a>
+            <button id="mobileAffiliateBtn" onclick="handleAffiliateClick(); closeMobileMenu();" class="mobile-menu-link" style="width: 100%; text-align: left;">
+                <span class="mobile-menu-icon">💵</span>
+                <span>Earn (Affiliate)</span>
+            </button>
             <a href="/privacy" class="mobile-menu-link" onclick="closeMobileMenu()">
                 <span class="mobile-menu-icon">📄</span>
                 <span>Privacy Policy</span>
