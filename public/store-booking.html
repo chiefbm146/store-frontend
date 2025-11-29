@@ -888,15 +888,15 @@
 
         function handleAffiliateClick() {
             if (currentUser) {
-                // Already signed in - just go to affiliate page
-                window.location.href = '/affiliate-aarie';
+                // Already signed in - go to gateway which will route to portal or form
+                window.location.href = '/affiliate';
             } else {
-                // Not signed in - sign in first, then go to affiliate page
+                // Not signed in - sign in first, then go to gateway
                 waitForFirebase(() => {
                     const provider = new firebase.auth.GoogleAuthProvider();
                     firebase.auth().signInWithPopup(provider)
                         .then(() => {
-                            window.location.href = '/affiliate-aarie';
+                            window.location.href = '/affiliate';
                         })
                         .catch(error => {
                             console.error('Sign-in error:', error);
