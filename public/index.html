@@ -626,10 +626,35 @@
     <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
     <script defer src="/__/firebase/init.js"></script>
 
-    <!-- Sign In to Earn / Go to Dashboard Button (Top Right) -->
-    <div style="position: fixed; top: 20px; right: 40px; z-index: 9999;">
-        <button id="affiliateBtn" onclick="handleAffiliateClick()" style="padding: 12px 24px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">💵 Sign In to Earn</button>
+    <!-- NEW NAVIGATION BAR -->
+    <nav style="background: white; padding: 15px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000;">
+        <a href="/" style="font-size: 1.5rem; font-weight: 700; color: #0891b2; text-decoration: none; display: flex; align-items: center; gap: 10px;">
+            🏪 AARIE.CA
+        </a>
+        <div id="desktopNavLinks" style="display: flex; gap: 20px; align-items: center;">
+            <!-- Affiliate Button will be injected here by JavaScript -->
+        </div>
+        <button id="hamburgerMenuBtn" style="display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #0891b2;">
+            ☰
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001;"></div>
+    <div id="mobileMenu" style="display: none; position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 1002; transition: right 0.3s ease; box-shadow: -5px 0 15px rgba(0,0,0,0.2); padding-top: 60px;">
+        <button id="closeMobileMenuBtn" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+        <div id="mobileNavLinks" style="display: flex; flex-direction: column; gap: 15px; padding: 20px;">
+            <!-- Affiliate Button will be injected here -->
+        </div>
     </div>
+
+    <style>
+        @media (max-width: 768px) {
+            #desktopNavLinks { display: none !important; }
+            #hamburgerMenuBtn { display: block !important; }
+        }
+    </style>
+
 
     <style>
         @keyframes spin {
@@ -639,91 +664,152 @@
         .affiliate-spinner {
             width: 16px;
             height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top: 2px solid white;
+            border: 2px solid rgba(0,0,0,0.3);
+            border-top: 2px solid black;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
+        }
+        .affiliate-spinner-light {
+            border-color: rgba(255,255,255,0.3);
+            border-top-color: white;
+        }
+        .nav-affiliate-btn {
+            padding: 10px 20px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+        .nav-affiliate-btn:hover {
+            transform: translateY(-2px);
         }
     </style>
 
     <script>
         let currentUser = null;
 
-        // Wait for Firebase app to be initialized
         function waitForFirebase(callback, attempts = 0) {
             if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
                 callback();
             } else if (attempts < 50) {
                 setTimeout(() => waitForFirebase(callback, attempts + 1), 100);
+            } else {
+                console.error("Firebase failed to initialize.");
             }
         }
 
-        // Check auth state on page load
-        waitForFirebase(() => {
-            firebase.auth().onAuthStateChanged(user => {
-                currentUser = user;
-                const btn = document.getElementById('affiliateBtn');
+        function createAffiliateButton() {
+            const btn = document.createElement('button');
+            btn.id = 'affiliateBtn';
+            btn.className = 'nav-affiliate-btn';
+            btn.onclick = handleAffiliateClick;
+            btn.innerHTML = '💵 Sign In to Earn';
+            return btn;
+        }
 
-                if (user) {
-                    // User is signed in - show "Go to Dashboard" button
-                    btn.textContent = '📊 Go to Affiliate Dashboard';
-                    btn.style.background = '#0891b2';
-                } else {
-                    // User is not signed in - show "Sign In to Earn" button
-                    btn.textContent = '💵 Sign In to Earn';
-                    btn.style.background = '#10b981';
-                }
+        document.addEventListener('DOMContentLoaded', () => {
+            const desktopNav = document.getElementById('desktopNavLinks');
+            const mobileNav = document.getElementById('mobileNavLinks');
+
+            const desktopBtn = createAffiliateButton();
+            const mobileBtn = createAffiliateButton();
+            mobileBtn.style.width = '100%';
+            mobileBtn.style.justifyContent = 'center';
+
+            if(desktopNav) desktopNav.appendChild(desktopBtn);
+            if(mobileNav) mobileNav.appendChild(mobileBtn);
+
+            const hamburgerBtn = document.getElementById('hamburgerMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileOverlay = document.getElementById('mobileMenuOverlay');
+            const closeMobileMenuBtn = document.getElementById('closeMobileMenuBtn');
+
+            const openMenu = () => {
+                mobileMenu.style.display = 'block';
+                mobileOverlay.style.display = 'block';
+                setTimeout(() => { mobileMenu.style.right = '0'; }, 10);
+            };
+
+            const closeMenu = () => {
+                mobileMenu.style.right = '-300px';
+                setTimeout(() => {
+                    mobileMenu.style.display = 'none';
+                    mobileOverlay.style.display = 'none';
+                }, 300);
+            };
+
+            if(hamburgerBtn) hamburgerBtn.addEventListener('click', openMenu);
+            if(closeMobileMenuBtn) closeMobileMenuBtn.addEventListener('click', closeMenu);
+            if(mobileOverlay) mobileOverlay.addEventListener('click', closeMenu);
+
+            waitForFirebase(() => {
+                firebase.auth().onAuthStateChanged(user => {
+                    currentUser = user;
+                    updateAllAffiliateButtons(user);
+                });
             });
         });
 
-        function handleAffiliateClick() {
-            const btn = document.getElementById('affiliateBtn');
-            const originalText = btn.innerHTML;
+        function updateAllAffiliateButtons(user) {
+            const buttons = document.querySelectorAll('#affiliateBtn');
+            buttons.forEach(btn => {
+                if (user) {
+                    btn.innerHTML = '📊 Go to Dashboard';
+                    btn.style.background = '#0891b2';
+                } else {
+                    btn.innerHTML = '💵 Sign In to Earn';
+                    btn.style.background = '#10b981';
+                }
+                btn.disabled = false;
+            });
+        }
 
+        function handleAffiliateClick() {
             if (currentUser) {
-                // Already signed in - check affiliate status with loading spinner
-                showButtonSpinner(btn);
+                showButtonSpinnerOnAll();
                 checkAndRouteAffiliate(currentUser);
             } else {
-                // Not signed in - sign in first
                 waitForFirebase(() => {
                     const provider = new firebase.auth.GoogleAuthProvider();
                     firebase.auth().signInWithPopup(provider)
                         .then((result) => {
-                            showButtonSpinner(btn);
+                            showButtonSpinnerOnAll();
                             checkAndRouteAffiliate(result.user);
                         })
                         .catch(error => {
                             console.error('Sign-in error:', error);
                             alert('Failed to sign in. Please try again.');
+                            updateAllAffiliateButtons(null);
                         });
                 });
             }
         }
 
-        function showButtonSpinner(btn) {
-            btn.innerHTML = '<div class="affiliate-spinner"></div>Checking...';
-            btn.disabled = true;
+        function showButtonSpinnerOnAll() {
+            const buttons = document.querySelectorAll('#affiliateBtn');
+            buttons.forEach(btn => {
+                btn.innerHTML = '<div class="affiliate-spinner affiliate-spinner-light"></div> Checking...';
+                btn.disabled = true;
+            });
         }
 
         async function checkAndRouteAffiliate(user) {
             try {
                 const idToken = await user.getIdToken(true);
                 const response = await fetch('/api/client/affiliate-status', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${idToken}`,
-                        'Content-Type': 'application/json'
-                    }
+                    headers: { 'Authorization': `Bearer ${idToken}` }
                 });
 
-                if (!response.ok) {
-                    throw new Error('Failed to check affiliate status');
-                }
-
+                if (!response.ok) throw new Error('Failed to check status');
                 const data = await response.json();
 
-                // Route based on affiliate status
                 if (data.isAffiliate) {
                     window.location.href = '/affiliate-portal';
                 } else {
@@ -731,7 +817,6 @@
                 }
             } catch (error) {
                 console.error('Error checking affiliate status:', error);
-                // Fallback to gateway if check fails
                 window.location.href = '/affiliate';
             }
         }

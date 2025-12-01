@@ -1,0 +1,173 @@
+Part 2: The Frontend Fix (User Experience)
+Now we'll fix the frontend so existing affiliates get a friendly message instead of seeing the form at all. This prevents confusion.
+File to Edit: affiliate-aarie.html
+First, update the HTML structure to include a "loading" state. Replace the <div id="formView"> with this new structure:
+code
+Html
+<!-- In affiliate-aarie.html, inside the .form-container div -->
+
+<!-- NEW LOADING VIEW (Visible by default) -->
+<div id="loadingView" style="text-align: center; padding: 60px 20px;">
+    <p style="font-weight: 600; color: #666;">Checking your status...</p>
+</div>
+
+<!-- EXISTING FORM VIEW (Now hidden by default) -->
+<div id="applicationFormView" style="display: none;">
+    <h2 style="text-align: center; margin-bottom: 10px; font-size: 1.8rem;">Apply Now</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 40px;">Join our affiliate network and start earning today.</p>
+    <form id="affiliateForm">
+        <!-- ... your existing form fields ... -->
+        <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" required placeholder="Your full name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" required placeholder="your@email.com">
+        </div>
+        <!-- ... rest of your form ... -->
+        <button type="submit" class="submit-btn" id="submitBtn" disabled>Submit Application</button>
+        <p class="form-disclaimer">Instant approval! You'll be approved and ready to start earning immediately.</p>
+    </form>
+</div>
+
+<!-- NEW "ALREADY AFFILIATE" VIEW (Hidden by default) -->
+<div id="alreadyAffiliateView" style="display: none; text-align: center; padding: 40px 20px;">
+    <div class="success-icon" style="font-size: 4rem; margin-bottom: 20px;">✅</div>
+    <h2 class="success-title" style="font-size: 1.8rem;">You're Already an Affiliate!</h2>
+    <p class="success-text" style="font-size: 1.1rem; line-height: 1.6;">
+        Welcome back! You are already part of the AARIE.CA Affiliate Program.
+        You can access your referral link and marketing materials in your portal.
+    </p>
+    <a href="/affiliate-portal.html" class="success-btn" style="display: inline-block; margin-top: 20px;">Go to Your Affiliate Portal</a>
+</div>
+
+<!-- The success view for NEW applications remains the same -->
+<div id="successView" class="success-view">
+    <!-- ... your existing success content ... -->
+</div>
+Second, replace the entire JavaScript logic at the bottom of affiliate-aarie.html with this improved version. This new script correctly handles the different views.
+code
+Html
+<!-- At the very bottom of affiliate-aarie.html -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form submission logic
+        const form = document.getElementById('affiliateForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorDiv = document.getElementById('formError');
+        const applicationFormView = document.getElementById('applicationFormView');
+        const successView = document.getElementById('successView');
+        const ageCheck = document.getElementById('ageCheck');
+        const tosCheck = document.getElementById('tosCheck');
+
+        function toggleSubmit() {
+            submitBtn.disabled = !(ageCheck.checked && tosCheck.checked);
+        }
+        ageCheck.addEventListener('change', toggleSubmit);
+        tosCheck.addEventListener('change', toggleSubmit);
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            errorDiv.style.display = 'none';
+
+            const applicationData = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                website: document.getElementById('website').value.trim(),
+                message: document.getElementById('message').value.trim(),
+                ageConfirmed: ageCheck.checked,
+                tosAcceptedAt: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch('/api/v1/aarie-platform/apply-for-affiliate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(applicationData)
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    // Use the error message from the backend!
+                    throw new Error(data.error || 'Something went wrong.');
+                }
+
+                applicationFormView.style.display = 'none';
+                successView.style.display = 'block';
+                successView.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.getElementById('goToPortalBtn').addEventListener('click', () => {
+                     window.location.href = '/affiliate-portal.html';
+                });
+
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+                errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Application';
+            }
+        });
+
+        // Toast notification logic
+        const toast = document.getElementById('toastNotification');
+        if (toast) {
+            toast.addEventListener('click', () => { toast.style.display = 'none'; });
+            setTimeout(() => { if (toast) toast.style.display = 'none'; }, 2500);
+        }
+    });
+
+    // Separate logic for checking user status and showing the correct view
+    document.addEventListener('DOMContentLoaded', () => {
+        const loadingView = document.getElementById('loadingView');
+        const applicationView = document.getElementById('applicationFormView');
+        const alreadyAffiliateView = document.getElementById('alreadyAffiliateView');
+
+        const onFirebaseReady = (callback) => {
+            const interval = setInterval(() => {
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    clearInterval(interval);
+                    callback();
+                }
+            }, 100);
+        };
+
+        onFirebaseReady(() => {
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (user) {
+                    // User is signed in, check status
+                    try {
+                        const idToken = await user.getIdToken(true);
+                        const response = await fetch('/api/client/affiliate-status', {
+                            headers: { 'Authorization': `Bearer ${idToken}` }
+                        });
+                        const data = await response.json();
+
+                        if (data.isAffiliate) {
+                            loadingView.style.display = 'none';
+                            applicationView.style.display = 'none';
+                            alreadyAffiliateView.style.display = 'block';
+                        } else {
+                            document.getElementById('name').value = user.displayName || '';
+                            document.getElementById('email').value = user.email || '';
+                            loadingView.style.display = 'none';
+                            applicationView.style.display = 'block';
+                        }
+                    } catch (err) {
+                        console.error("Status check failed:", err);
+                        loadingView.style.display = 'none';
+                        applicationView.style.display = 'block'; // Fallback to form
+                    }
+                } else {
+                    // User not signed in, show the form
+                    loadingView.style.display = 'none';
+                    applicationView.style.display = 'block';
+                }
+            });
+        });
+    });
+</script>
+Why This New Solution Is Foolproof
+Backend Authority: The server (main.py) now has the final say. Even if a user managed to bypass the frontend JavaScript, the backend would reject their application with a "409 Conflict" error.
+Clear User Experience: The frontend (affiliate-aarie.html) now shows a "Checking status..." message first, then cleanly directs existing affiliates to their portal and new users to the application form, preventing any chance of confusion.

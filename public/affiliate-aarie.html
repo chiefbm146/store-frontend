@@ -788,6 +788,18 @@
 
 </head>
 <body>
+    <!-- NEW: Sign-in Wall Overlay -->
+    <div id="signInWall" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 16px; padding: 40px; text-align: center; max-width: 400px; margin: 20px;">
+            <div style="font-size: 3rem; margin-bottom: 20px;">🔐</div>
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 15px;">Sign In to Apply</h2>
+            <p style="color: #666; margin-bottom: 30px;">To apply for the affiliate program, please sign in with your Google account first.</p>
+            <button id="googleSignInBtn" style="width: 100%; padding: 14px; background: white; border: 2px solid #0891b2; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; color: #0891b2;">
+                Sign In with Google
+            </button>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="nav-header">
         <div class="nav-container">
@@ -796,9 +808,10 @@
         </div>
     </nav>
 
-    <!-- Toast Notification (Call to Action - Always Visible) -->
-    <div id="toastNotification" style="position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 20px 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; font-weight: 700; font-size: 1.1rem; animation: slideIn 0.3s ease; max-width: 320px;">
-        ✅ Complete the form to start earning money!
+    <!-- Toast Notification (Call to Action - Dismissable) -->
+    <div id="toastNotification" style="position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 20px 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; font-weight: 700; font-size: 1.1rem; animation: slideIn 0.3s ease; max-width: 320px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+        <span>✅ Complete the form to start earning money!</span>
+        <span style="font-size: 1.5rem; line-height: 1; margin-left: 15px; opacity: 0.7;">&times;</span>
     </div>
 
     <style>
@@ -1094,34 +1107,34 @@
     <!-- Application Section -->
     <section class="application-section container" id="application-section">
         <div class="form-container">
-            <div id="formView">
+
+            <!-- NEW LOADING VIEW (Visible by default) -->
+            <div id="loadingView" style="text-align: center; padding: 60px 20px;">
+                <p style="font-weight: 600; color: #666;">Checking your status...</p>
+            </div>
+
+            <!-- EXISTING FORM VIEW (Now hidden by default) -->
+            <div id="applicationFormView" style="display: none;">
                 <h2 style="text-align: center; margin-bottom: 10px; font-size: 1.8rem;">Apply Now</h2>
                 <p style="text-align: center; color: #666; margin-bottom: 40px;">Join our affiliate network and start earning today.</p>
-
                 <form id="affiliateForm">
                     <div class="form-group">
                         <label for="name">Full Name *</label>
                         <input type="text" id="name" name="name" required placeholder="Your full name">
                     </div>
-
                     <div class="form-group">
                         <label for="email">Email Address *</label>
                         <input type="email" id="email" name="email" required placeholder="your@email.com">
                     </div>
-
                     <div class="form-group">
                         <label for="website">Your Website or Primary Social Media (Optional)</label>
                         <input type="url" id="website" name="website" placeholder="https://www.your-website.com or @yourhandle">
                     </div>
-
                     <div class="form-group">
                         <label for="message">Tell Us About Your Audience (Optional)</label>
                         <textarea id="message" name="message" rows="3" placeholder="Describe your followers, email list, community, or how you'll promote..."></textarea>
                     </div>
-
                     <div id="formError" class="form-error"></div>
-
-                    <!-- Consent Checkboxes -->
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="ageCheck" required>
@@ -1132,18 +1145,29 @@
                             <label for="tosCheck">I have read and agree to the <a href="/aarie-terms.html" target="_blank">Affiliate Program Terms</a></label>
                         </div>
                     </div>
-
                     <button type="submit" class="submit-btn" id="submitBtn" disabled>Submit Application</button>
                     <p class="form-disclaimer">Instant approval! You'll be approved and ready to start earning immediately.</p>
                 </form>
             </div>
 
+            <!-- NEW "ALREADY AFFILIATE" VIEW (Hidden by default) -->
+            <div id="alreadyAffiliateView" style="display: none; text-align: center; padding: 40px 20px;">
+                <div class="success-icon" style="font-size: 4rem; margin-bottom: 20px;">✅</div>
+                <h2 class="success-title" style="font-size: 1.8rem;">You're Already an Affiliate!</h2>
+                <p class="success-text" style="font-size: 1.1rem; line-height: 1.6;">
+                    Welcome back! You are already part of the AARIE.CA Affiliate Program.
+                    You can access your referral link and marketing materials in your portal.
+                </p>
+                <a href="/affiliate-portal.html" class="success-btn" style="display: inline-block; margin-top: 20px;">Go to Your Affiliate Portal</a>
+            </div>
+
+            <!-- The success view for NEW applications remains the same -->
             <div id="successView" class="success-view">
-                <div class="success-icon">🎉</div>
+                 <div class="success-icon">🎉</div>
                 <h2 class="success-title">Congratulations! You are Instantly Approved!</h2>
                 <p class="success-text">Welcome to the AARIE.CA Affiliate Program.</p>
                 <p class="success-text">Your referral link is ready to use. Start sharing and earning 8% commission on every referral!</p>
-                <a href="/affiliate-portal.html" class="success-btn">Go To Affiliate Portal</a>
+                <button id="goToPortalBtn" class="success-btn">Go To Affiliate Portal</button>
             </div>
         </div>
     </section>
@@ -1160,24 +1184,120 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- Views ---
+            const loadingView = document.getElementById('loadingView');
+            const applicationFormView = document.getElementById('applicationFormView');
+            const alreadyAffiliateView = document.getElementById('alreadyAffiliateView');
+            const successView = document.getElementById('successView');
+            const signInWall = document.getElementById('signInWall');
+            const googleSignInBtn = document.getElementById('googleSignInBtn');
+
+            // --- Form Elements ---
             const form = document.getElementById('affiliateForm');
             const submitBtn = document.getElementById('submitBtn');
             const errorDiv = document.getElementById('formError');
-            const formView = document.getElementById('formView');
-            const successView = document.getElementById('successView');
             const ageCheck = document.getElementById('ageCheck');
             const tosCheck = document.getElementById('tosCheck');
 
-            // Logic to enable/disable the submit button based on checkboxes
-            function toggleSubmit() {
-                submitBtn.disabled = !(ageCheck.checked && tosCheck.checked);
+            // --- Other Elements ---
+            const toast = document.getElementById('toastNotification');
+
+            let currentUser = null;
+
+            // --- Google Sign-In Handler ---
+            if (googleSignInBtn) {
+                googleSignInBtn.addEventListener('click', () => {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    firebase.auth().signInWithPopup(provider).catch(error => {
+                        console.error("Sign-in error:", error);
+                        alert('Failed to sign in. Please try again.');
+                    });
+                });
             }
 
-            ageCheck.addEventListener('change', toggleSubmit);
-            tosCheck.addEventListener('change', toggleSubmit);
+            // ===================================
+            // --- Main Initialization Logic ---
+            // ===================================
 
-            // Form submission logic - THIS IS THE PAGE'S ONLY JOB
-            form.addEventListener('submit', async (e) => {
+            // 1. Set initial view state
+            loadingView.style.display = 'block';
+            applicationFormView.style.display = 'none';
+            alreadyAffiliateView.style.display = 'none';
+            successView.style.display = 'none';
+
+            // 2. Handle the dismissable toast notification
+            if (toast) {
+                toast.addEventListener('click', () => { toast.style.display = 'none'; });
+                setTimeout(() => { if (toast) toast.style.display = 'none'; }, 2500);
+            }
+
+            // 3. Wait for Firebase to be ready, then check auth and affiliate status
+            onFirebaseReady(() => {
+                firebase.auth().onAuthStateChanged(async (user) => {
+                    currentUser = user;
+                    if (user) {
+                        signInWall.style.display = 'none';
+                        await checkUserAffiliateStatus(user);
+                    } else {
+                        // User is not signed in, show the sign-in wall
+                        signInWall.style.display = 'flex';
+                        loadingView.style.display = 'none';
+                        applicationFormView.style.display = 'none';
+                        alreadyAffiliateView.style.display = 'none';
+                    }
+                });
+            });
+
+            // 4. Set up form submission logic if the form exists
+            if (form) {
+                form.addEventListener('submit', handleFormSubmit);
+                ageCheck.addEventListener('change', toggleSubmit);
+                tosCheck.addEventListener('change', toggleSubmit);
+            }
+
+            // =========================
+            // --- Primary Functions ---
+            // =========================
+
+            /**
+             * Checks if a signed-in user is already an affiliate and shows the correct view.
+             */
+            async function checkUserAffiliateStatus(user) {
+                try {
+                    const idToken = await user.getIdToken(true);
+                    const response = await fetch('/api/client/affiliate-status', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${idToken}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    const data = await response.json();
+
+                    loadingView.style.display = 'none';
+                    if (data.isAffiliate) {
+                        // User is an affiliate, show the "already affiliated" view
+                        alreadyAffiliateView.style.display = 'block';
+                    } else {
+                        // User is not an affiliate, show form and pre-fill details
+                        applicationFormView.style.display = 'block';
+                        const nameInput = document.getElementById('name');
+                        const emailInput = document.getElementById('email');
+                        if (nameInput) nameInput.value = user.displayName || '';
+                        if (emailInput) emailInput.value = user.email || '';
+                    }
+                } catch (error) {
+                    console.error('Error checking affiliate status:', error);
+                    // On error, fall back to showing the application form
+                    loadingView.style.display = 'none';
+                    applicationFormView.style.display = 'block';
+                }
+            }
+
+            /**
+             * Handles the submission of the affiliate application form.
+             */
+            async function handleFormSubmit(e) {
                 e.preventDefault();
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Submitting...';
@@ -1193,23 +1313,21 @@
                 };
 
                 try {
-                    // We use 'aarie-platform' as the storeId for the main site affiliate program
                     const response = await fetch('/api/v1/aarie-platform/apply-for-affiliate', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(applicationData)
                     });
-
                     const data = await response.json();
+                    if (!response.ok) throw new Error(data.error || 'Something went wrong.');
 
-                    if (!response.ok) {
-                        throw new Error(data.error || 'Something went wrong.');
-                    }
-
-                    // Show the success view
-                    formView.style.display = 'none';
+                    // On success, hide form and show success view
+                    applicationFormView.style.display = 'none';
                     successView.style.display = 'block';
                     successView.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    // Add listener to the new button for polling
+                    document.getElementById('goToPortalBtn').addEventListener('click', attemptToEnterPortal);
 
                 } catch (error) {
                     errorDiv.textContent = error.message;
@@ -1218,7 +1336,76 @@
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Submit Application';
                 }
-            });
+            }
+            
+            /**
+             * After a new user applies, this polls the status endpoint until they are
+             * confirmed as an affiliate, then redirects to the portal.
+             */
+            async function attemptToEnterPortal() {
+                if (!currentUser) {
+                    alert('Could not verify your sign-in status. Please refresh and try again.');
+                    return;
+                }
+
+                const goToPortalBtn = document.getElementById('goToPortalBtn');
+                goToPortalBtn.disabled = true;
+                goToPortalBtn.textContent = 'Verifying Account...';
+
+                const maxAttempts = 10;
+                let attempts = 0;
+
+                const pollForStatus = setInterval(async () => {
+                    attempts++;
+                    if (attempts > maxAttempts) {
+                        clearInterval(pollForStatus);
+                        alert('Could not verify your affiliate status after several attempts. Please try again in a few moments or contact support.');
+                        goToPortalBtn.disabled = false;
+                        goToPortalBtn.textContent = 'Go To Affiliate Portal';
+                        return;
+                    }
+
+                    try {
+                        const idToken = await currentUser.getIdToken(true);
+                        const response = await fetch('/api/client/affiliate-status', {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${idToken}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (!response.ok) return; // Let it retry on server error
+
+                        const data = await response.json();
+                        if (data.isAffiliate) {
+                            clearInterval(pollForStatus);
+                            window.location.href = '/affiliate-portal.html';
+                        }
+                    } catch (error) {
+                        console.error('Error polling for affiliate status:', error);
+                    }
+                }, 2000); // Poll every 2 seconds
+            }
+
+            // =======================
+            // --- Utility Functions ---
+            // =======================
+            
+            function onFirebaseReady(callback) {
+                const interval = setInterval(() => {
+                    if (typeof firebase !== 'undefined' && firebase.auth) {
+                        clearInterval(interval);
+                        callback();
+                    }
+                }, 100);
+            }
+
+            function toggleSubmit() {
+                if(submitBtn) {
+                   submitBtn.disabled = !(ageCheck.checked && tosCheck.checked);
+                }
+            }
         });
     </script>
 </body>

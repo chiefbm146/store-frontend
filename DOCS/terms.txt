@@ -1,0 +1,129 @@
+Understood. This is a significant and necessary strategic pivot. You're clarifying the business model from a one-time sale to a "Website-as-a-Service" platform. This protects you, sets clear expectations for merchants, and establishes a long-term service relationship.
+
+Here are the precise, clear instructions for your developer to update both the legal terms and the public-facing sales page to reflect this new reality.
+
+To the Developer: Instructions for Business Model & Legal Updates
+
+Objective: Update terms.html and store-booking.html to reflect our new business model. Key changes include a revised transaction fee, clarification of platform ownership, our right to suspend service, and the process for managed website updates.
+
+Part 1: Updates for terms.html
+
+File: terms.html
+
+1. Update the Transaction Fee:
+
+Go to Section 2. Fees and Payment Terms.
+
+Find the subsection "Transaction Fees".
+
+Locate the line: AARIE.CA charges a platform fee of <strong>16% on every transaction</strong>
+
+Change it to: AARIE.CA charges a platform fee of <strong>2.5% on every transaction</strong>
+
+2. Clarify Platform Services & Managed Updates:
+
+Go to Section 1. Platform Services.
+
+Add the following new list item to the <ul>:
+
+code
+Html
+download
+content_copy
+expand_less
+<li>Managed Website Updates: Merchants must contact AARIE.CA support to request changes to website content or design. Updates that fall within the scope of the original service agreement will be implemented by our team.</li>
+
+3. Redefine Website Ownership (Crucial Legal Update):
+
+Go to Section 5. Intellectual Property and Branding.
+
+Replace the entire existing section with the following new, more detailed section. This clarifies that we own the platform and merchants have a license to use it.
+
+code
+Html
+download
+content_copy
+expand_less
+<h2>5. Intellectual Property, Platform License, and Branding</h2>
+<div class="important">
+    <p><strong>Platform Ownership:</strong> You acknowledge that the underlying website code, design framework, AI technology, server infrastructure, and all other components of the AARIE.CA platform ("the Platform") are the exclusive intellectual property of AARIE.CA. You do not own the website code or the platform it runs on.</p>
+</div>
+<ul>
+    <li><strong>Platform License:</strong> Upon payment of the setup fee, AARIE.CA grants you a non-exclusive, revocable license to use the Platform for the purpose of operating your online store. This license is contingent upon your adherence to these Terms.</li>
+    <li><strong>Merchant Content Ownership:</strong> You retain full ownership of your business name, logo, product images, product descriptions, pricing, and all customer data you collect.</li>
+    <li><strong>Our Right to Display:</strong> You grant AARIE.CA a royalty-free right to display your store and its content as part of our portfolio and for marketing purposes.</li>
+    <li><strong>Platform Integrity:</strong> You may not copy, reproduce, modify, decompile, or distribute AARIE.CA platform code or technology.</li>
+</ul>
+
+4. Add an Explicit Service Takedown Clause:
+
+Go to Section 6. Account Monitoring and Compliance.
+
+Find the subsection "Grounds for Suspension or Termination".
+
+Add the following new list item to the <ul> at the very end. This gives you ultimate discretion.
+
+code
+Html
+download
+content_copy
+expand_less
+<li>For any reason deemed necessary by AARIE.CA, at our sole discretion, to protect the integrity, security, or reputation of the platform.</li>
+Part 2: Updates for store-booking.html
+
+File: store-booking.html
+
+1. Update the Transaction Fee on the Pricing Cards:
+
+Go to the Pricing Section (<section id="pricing">).
+
+Find the featured pricing card for "The 7-Day Launchpad".
+
+Right below the price, it should mention the fee. We need to add this text if it's missing and ensure it's correct.
+
+Add or modify a small <span> or <p> tag directly under the $499 price element to display the new fee.
+
+Example of what to add/change:
+
+code
+Html
+download
+content_copy
+expand_less
+<div class="price">$499 <span>One-Time</span></div>
+<p style="font-size: 0.9rem; color: #555; margin-top: -10px; margin-bottom: 15px;">+ 2.5% transaction fee</p> <!-- ADD THIS LINE -->
+<p class="for-whom">For individuals, artists, and small businesses...</p>
+
+Important: Make sure any other mention of a transaction fee on this page is also updated to 2.5%.
+
+2. Update the FAQ Section to Align with New Terms:
+
+Go to the FAQ Section (<section class="faq-section">).
+
+You will be replacing the answers to two key questions.
+
+A) Replace the "Can I update the site myself?" Answer:
+
+Find the FAQ item for the question: "Can I update the site myself?"
+
+Replace its entire <p> answer with the following:
+
+code
+Html
+download
+content_copy
+expand_less
+<p>Not directly, and that's by design. We provide a fully managed service to ensure your site remains fast, secure, and professional. You have a dedicated technical partner—simply email us the changes you need (like updating a product price or adding a new photo), and if it falls within the scope of your plan, we'll handle it for you. Future plans will include a self-service dashboard.</p>
+
+B) Replace the "Will I actually own my website?" Answer:
+
+Find the FAQ item for the question: "Will I actually own my website?"
+
+Replace its entire <p> answer with the following. This is a transparent explanation of the new ownership model.
+
+code
+Html
+download
+content_copy
+expand_less
+<p>You 100% own what matters most: your brand, your logo, all of your content, and your customer data. The underlying code and AI platform that power your site are proprietary to AARIE.CA. We provide this technology to you as a service. This model allows us to handle all the complex security, maintenance, and performance updates for you, so you never have to worry about the technical side.</p>
