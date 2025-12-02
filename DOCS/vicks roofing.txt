@@ -1,0 +1,31 @@
+To the Developer: Instructions to Update Pricing to $99
+Objective: Change the price of the flagship "7-Day Launchpad" package from 
+499
+t
+o
+∗
+∗
+499to∗∗
+99** across the platform. This involves updating both the frontend display and the backend's source of truth for payments.
+Part 1: Update the Frontend Display (store-booking.html)
+This change updates the price the customer sees on the sales page.
+File to Edit: store-booking.html
+Locate the Pricing Section: Find the pricing-grid section and the specific pricing-card for "The 7-Day Launchpad".
+Modify the Price Element:
+Find this line:
+code
+Html
+<div class="price">$499 <span>One-Time</span></div>
+Replace it with this:
+code
+Html
+<div class="price">$99 <span>One-Time</span></div>
+Modify the Transaction Fee:
+Find this line:
+code
+Html
+<p style="font-size: 0.9rem; color: #555; margin-top: -10px; margin-bottom: 15px;">+ 16% transaction fee</p>
+Replace it with this:
+code
+Html
+<p style="font-size: 0.9rem; color: #555; margin-top: -10px; margin-bottom: 15px;">+ 2.5% transaction fee</p>
