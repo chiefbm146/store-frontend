@@ -8,7 +8,7 @@
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="Checkout - AARIE.CA">
-    <meta property="og:description" content="Complete your purchase - 7-Day Launchpad Package $499">
+    <meta property="og:description" content="Complete your purchase for the 7-Day Launchpad.">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
 
@@ -657,7 +657,7 @@
                 <p class="product-description">
                     Design mockup in 72 hours. Complete website live in 7-10 days. Custom design, product setup, AI chatbot, and payment processing - all included.
                 </p>
-                <div class="product-price">$499</div>
+                <div class="product-price">$99</div>
                 <div class="product-note">One-time payment - No monthly fees</div>
             </div>
 
@@ -734,7 +734,7 @@
                 <!-- Submit Button -->
                 <button type="submit" id="submit-btn" class="submit-btn" disabled>
                     <span class="spinner"></span>
-                    <span class="btn-text">Pay $499</span>
+                    <span class="btn-text">Pay $99</span>
                 </button>
 
                 <!-- Security Footer -->
@@ -766,279 +766,177 @@
         // ========================================
         // STRIPE CHECKOUT CONFIGURATION
         // ========================================
-        const STRIPE_PUBLISHABLE_KEY = 'pk_live_51Rp7gdRuBpQt4n9NyNv9RHiHf3QOmJdETL8Boyu7uC2YUKJUz2OIXXzgAN4h91WC2F21qhXHs7T2QUbDEGCEwMeg00bJbhDvn6';
+        const STRIPE_PUBLISHABLE_KEY = 'pk_test_51Rp7gdRuBpQt4n9NHC1N9DjWmBDfj6Q7N4sR8mTgkIlDFvPOpgE8VLhztsX0WWtfa1nnn1upiboEo8OzsaVzSrAj00g3wM9yCA';
         const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
 
-        // Product Details for the 7-Day Launchpad
-        const urlParams = new URLSearchParams(window.location.search);
-        const PRODUCT = {
-            id: '7-day-launchpad',
-            name: 'The 7-Day Launchpad Package',
-            price: 49900, // cents - $499
-            description: 'Design mockup in 72 hours. Live website in 7-10 days.'
+        // NEW: Map of product details for the UI. Price comes from the backend.
+        const PRODUCT_DETAILS_MAP = {
+            '7-day-launchpad': {
+                name: 'The 7-Day Launchpad',
+                description: 'Our flagship package: a custom-coded landing page, store, AI chatbot, and Stripe integration. Live in 7-10 days.',
+                features: [
+                    'Custom Store Design',
+                    'Product & Service Setup',
+                    'Secure Payment Processing',
+                    'Custom AI Chatbot',
+                    '7-10 Day Delivery Guarantee'
+                ]
+            },
+            'professional-suite': {
+                name: 'The Professional Suite',
+                description: 'For growing businesses needing advanced features like custom database integrations and multi-language support.',
+                features: [
+                    'Everything in Launchpad',
+                    'Advanced UI/UX Design',
+                    'Custom Database Integrations',
+                    'Multi-Language Support',
+                    'Complex Backend Logic'
+                ]
+            },
+            'enterprise-plan': {
+                name: 'The Enterprise Plan',
+                description: 'For scaling companies needing a full platform, API access, and dedicated support.',
+                features: [
+                    'Everything in Professional',
+                    'Full API Access',
+                    'Dedicated Support & SLA',
+                    'Monthly Optimization Reviews',
+                    'White-Label Branding'
+                ]
+            }
         };
 
-        // Update displayed price if using URL params
-        const displayPrice = '$' + (PRODUCT.price / 100).toFixed(2).replace('.00', '');
-        document.querySelector('.product-price').textContent = displayPrice;
-        document.querySelector('.btn-text').textContent = 'Pay ' + displayPrice;
-        if (urlParams.get('name')) {
-            document.querySelector('.product-name').textContent = PRODUCT.name;
-            document.querySelector('.product-description').textContent = PRODUCT.description;
-        }
-
-        // ========================================
-        // INITIALIZE STRIPE
-        // ========================================
+        let clientSecret = null;
         const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
         const elements = stripe.elements();
-
-        // Create card element
         const cardElement = elements.create('card', {
             style: {
-                base: {
-                    fontSize: '16px',
-                    color: '#1a1a1a',
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                    '::placeholder': {
-                        color: '#98a2b3'
-                    }
-                },
-                invalid: {
-                    color: '#dc3545',
-                    iconColor: '#dc3545'
-                }
+                base: { fontSize: '16px', color: '#1a1a1a', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' },
+                invalid: { color: '#dc3545', iconColor: '#dc3545' }
             },
             hidePostalCode: true
         });
 
-        cardElement.mount('#stripe-card-element');
-        console.log('[Checkout] Stripe card element mounted');
-
-        // ========================================
-        // FORM STATE
-        // ========================================
-        let cardComplete = false;
-        let clientSecret = null;
-
-        // Card element event listeners
-        const cardContainer = document.getElementById('stripe-card-element');
-
-        cardElement.on('focus', () => {
-            cardContainer.classList.add('focused');
-        });
-
-        cardElement.on('blur', () => {
-            cardContainer.classList.remove('focused');
-        });
-
-        cardElement.on('change', (event) => {
-            cardComplete = event.complete;
-
-            if (event.error) {
-                cardContainer.classList.add('error');
-                showError(event.error.message);
-            } else {
-                cardContainer.classList.remove('error');
-                hideError();
-            }
-
-            updateSubmitButton();
-        });
-
-        // ========================================
-        // FORM VALIDATION
-        // ========================================
         const nameInput = document.getElementById('customer-name');
         const emailInput = document.getElementById('customer-email');
         const phoneInput = document.getElementById('customer-phone');
         const postalCodeInput = document.getElementById('postal-code');
         const termsCheckbox = document.getElementById('accept-terms');
         const submitBtn = document.getElementById('submit-btn');
+        const errorDiv = document.getElementById('error-message');
+
+        let cardComplete = false;
+
+        function updateSubmitButton() {
+            const formComplete = nameInput.value.trim() && emailInput.value.trim() && phoneInput.value.trim() && postalCodeInput.value.trim() && termsCheckbox.checked && cardComplete;
+            submitBtn.disabled = !formComplete;
+        }
+
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.classList.add('visible');
+        }
+
+        function hideError() {
+            errorDiv.classList.remove('visible');
+        }
+
+        function setLoading(loading) {
+            submitBtn.classList.toggle('loading', loading);
+            submitBtn.disabled = loading;
+        }
+
+        // NEW: Main initialization function
+        async function initializeCheckout() {
+            // 1. Get Product ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('product_id') || '7-day-launchpad'; // Default to launchpad
+
+            const productDetails = PRODUCT_DETAILS_MAP[productId];
+            if (!productDetails) {
+                showError("Invalid product selected. Please go back and choose a plan.");
+                return;
+            }
+
+            // 2. Update UI with product details
+            document.querySelector('.product-name').textContent = productDetails.name;
+            document.querySelector('.product-description').textContent = productDetails.description;
+            const featuresList = document.querySelector('.features-list');
+            featuresList.innerHTML = productDetails.features.map(feature => `
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text"><strong>${feature}</strong></span>
+                </div>
+            `).join('');
+
+            try {
+                // 3. Create Payment Intent to get the price from backend
+                const affiliateRef = sessionStorage.getItem('affiliate_ref');
+                const response = await fetch(`${BACKEND_URL}/api/v1/aarie-platform/create-payment-intent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ product_id: productId, affiliate_ref: affiliateRef || null })
+                });
+
+                if (!response.ok) throw new Error('Could not initialize payment.');
+                
+                const data = await response.json();
+                clientSecret = data.clientSecret;
+                const amount = data.amount;
+                const displayPrice = `$${(amount / 100).toFixed(2).replace('.00', '')}`;
+
+                // 4. Update UI with the dynamic price from backend
+                document.querySelector('.product-price').textContent = displayPrice;
+                document.querySelector('.btn-text').textContent = 'Pay ' + displayPrice;
+                
+                // 5. Setup Stripe Elements now that we have the clientSecret
+                cardElement.mount('#stripe-card-element');
+
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        // Attach event listeners for validation
+        cardElement.on('change', (event) => {
+            cardComplete = event.complete;
+            if (event.error) showError(event.error.message);
+            else hideError();
+            updateSubmitButton();
+        });
 
         [nameInput, emailInput, phoneInput, postalCodeInput, termsCheckbox].forEach(el => {
             el.addEventListener('input', updateSubmitButton);
             el.addEventListener('change', updateSubmitButton);
         });
 
-        function updateSubmitButton() {
-            const formComplete =
-                nameInput.value.trim() &&
-                emailInput.value.trim() &&
-                phoneInput.value.trim() &&
-                postalCodeInput.value.trim() &&
-                termsCheckbox.checked &&
-                cardComplete;
-
-            submitBtn.disabled = !formComplete;
-        }
-
-        function showError(message) {
-            const errorDiv = document.getElementById('error-message');
-            errorDiv.textContent = message;
-            errorDiv.classList.add('visible');
-        }
-
-        function hideError() {
-            const errorDiv = document.getElementById('error-message');
-            errorDiv.classList.remove('visible');
-        }
-
-        function showSuccess() {
-            document.getElementById('success-overlay').classList.add('visible');
-        }
-
-        function setLoading(loading) {
-            if (loading) {
-                submitBtn.classList.add('loading');
-                submitBtn.disabled = true;
-            } else {
-                submitBtn.classList.remove('loading');
-                updateSubmitButton();
-            }
-        }
-
-        // ========================================
-        // CREATE PAYMENT INTENT
-        // ========================================
-        async function createPaymentIntent() {
-            try {
-                console.log('[Checkout] Creating payment intent...');
-
-                // SECURITY: Only send product_id - backend looks up price server-side
-                // Also send customer_email for Stripe receipt
-                const customerEmailForReceipt = document.getElementById('customer-email')?.value?.trim() || null;
-
-                // AFFILIATE TRACKING: Get affiliate ref from sessionStorage
-                const affiliateRef = sessionStorage.getItem('affiliate_ref');
-                if (affiliateRef) {
-                    console.log(`[Checkout] Affiliate tracked: ${affiliateRef}`);
-                }
-
-                const response = await fetch(`${BACKEND_URL}/api/v1/aarie-platform/create-payment-intent`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        product_id: PRODUCT.id,
-                        customer_email: customerEmailForReceipt,
-                        affiliate_ref: affiliateRef || null  // Pass affiliate ref to backend
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Failed to create payment intent: ${response.status}`);
-                }
-
-                const data = await response.json();
-                clientSecret = data.clientSecret;
-                console.log('[Checkout] Payment intent created successfully');
-                return clientSecret;
-
-            } catch (error) {
-                console.error('[Checkout] Error creating payment intent:', error);
-                throw error;
-            }
-        }
-
-        // ========================================
-        // HANDLE FORM SUBMISSION
-        // ========================================
+        // Handle form submission
         document.getElementById('checkout-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            console.log('[Checkout] Processing payment...');
             setLoading(true);
             hideError();
 
-            try {
-                // Create payment intent if not already created
-                if (!clientSecret) {
-                    await createPaymentIntent();
-                }
-
-                // Collect customer details
-                const customerName = nameInput.value.trim();
-                const customerEmail = emailInput.value.trim();
-                const customerPhone = phoneInput.value.trim();
-
-                // Confirm payment with Stripe
-                const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-                    payment_method: {
-                        card: cardElement,
-                        billing_details: {
-                            name: customerName,
-                            email: customerEmail,
-                            phone: customerPhone
-                        }
+            const { error } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: nameInput.value.trim(),
+                        email: emailInput.value.trim(),
+                        phone: phoneInput.value.trim()
                     }
-                });
-
-                if (error) {
-                    console.error('[Checkout] Payment failed:', error.message);
-                    showError(error.message);
-                    setLoading(false);
-                    return;
                 }
+            });
 
-                if (paymentIntent.status === 'succeeded') {
-                    console.log('[Checkout] Payment successful!');
-
-                    // NOTE: Transaction recording is now handled via on-demand sync in client portal
-                    // The sync endpoint fetches all transactions from Stripe when the client logs in
-                    // try {
-                    //     await recordTransaction({
-                    //         stripePaymentId: paymentIntent.id,
-                    //         name: customerName,
-                    //         email: customerEmail,
-                    //         phone: customerPhone,
-                    //         product: PRODUCT
-                    //     });
-                    // } catch (err) {
-                    //     console.warn('[Checkout] Transaction recording failed (non-blocking):', err);
-                    // }
-
-                    // Show success
-                    showSuccess();
-                }
-
-            } catch (error) {
-                console.error('[Checkout] Error:', error);
-                showError(error.message || 'An unexpected error occurred. Please try again.');
+            if (error) {
+                showError(error.message);
                 setLoading(false);
+            } else {
+                document.getElementById('success-overlay').classList.add('visible');
             }
         });
 
-        // ========================================
-        // RECORD TRANSACTION
-        // ========================================
-        async function recordTransaction(data) {
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/v1/aarie-platform/record-transaction`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                if (response.ok) {
-                    console.log('[Checkout] Transaction recorded successfully');
-                }
-            } catch (error) {
-                console.error('[Checkout] Error recording transaction:', error);
-            }
-        }
-
-        // ========================================
-        // INITIALIZE ON PAGE LOAD
-        // ========================================
-        document.addEventListener('DOMContentLoaded', async () => {
-            console.log('[Checkout] Page loaded');
-            // Payment intent is now created on form submit (not pre-created)
-            // This ensures customer email is captured for Stripe receipt
-        });
+        // Run initialization on page load
+        document.addEventListener('DOMContentLoaded', initializeCheckout);
     </script>
 </body>
 </html>

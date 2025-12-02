@@ -1,0 +1,305 @@
+Of course. This is the perfect next step. Making the checkout page dynamic is critical for the new tiered pricing strategy to work.
+
+Here are the precise, direct instructions for your developer to update checkout.html and store-booking.html. This will make the price and product details on the checkout page change based on which plan the user selects.
+
+To the Developer: Instructions for Implementing Dynamic Checkout
+
+Objective: We need to update our sales and checkout pages to support our new tiered pricing. The checkout.html page must dynamically display the correct product name, price, and features based on the plan selected on the store-booking.html page.
+
+Part 1: Update the Sales Page (store-booking.html) to Pass the Product Choice
+
+Goal: When a user clicks a "BUY NOW" or "Request a Quote" button for a specific plan, we need to send them to the checkout page with a URL parameter that identifies their choice.
+
+File to Edit: store-booking.html
+
+Instructions:
+
+Find the pricing-grid section you recently built.
+
+Locate the Call-to-Action button (<a> or <button>) for each of the three pricing tiers.
+
+Update the links/actions for these buttons to navigate to checkout.html and pass the correct product_id in the URL.
+
+Code Changes:
+
+For "The 7-Day Launchpad" ($99 Plan):
+
+Find: The "BUY NOW" button.
+
+Change its href attribute to this:
+
+code
+Html
+download
+content_copy
+expand_less
+<a href="/checkout.html?product_id=7-day-launchpad" class="cta-button primary" style="width: 100%; text-align: center;">BUY NOW</a>
+
+For "The Professional Suite" ($2,500+ Plan):
+
+Find: The "Request a Custom Quote" button.
+
+Change its onclick or href to this URL:
+
+code
+Html
+download
+content_copy
+expand_less
+<a href="/checkout.html?product_id=professional-suite" class="cta-button secondary" style="width: 100%; text-align: center;">Start Project</a>
+
+(Note: We've changed the text to "Start Project" as they will be paying the starting price as a deposit).
+
+For "Enterprise & Platform" ($10,000+ Plan):
+
+Find: The "Talk to Our Team" button.
+
+Change its onclick or href to this URL:
+
+code
+Html
+download
+content_copy
+expand_less
+<a href="/checkout.html?product_id=enterprise-plan" class="cta-button secondary" style="width: 100%; text-align: center;">Start Project</a>
+Part 2: Update the Checkout Page (checkout.html) to Be Dynamic
+
+Goal: The checkout page will now read the product_id from the URL, fetch the correct price from our backend, and display the corresponding details.
+
+File to Edit: checkout.html
+
+Instructions:
+
+Step A: Update the Static HTML Content
+
+First, let's update the hardcoded price in the meta tag and the initial display. This is for the default case if no product is selected.
+
+In the <head> section:
+
+Find: <meta property="og:description" content="Complete your purchase - 7-Day Launchpad Package $499">
+
+Replace with: <meta property="og:description" content="Complete your purchase for the 7-Day Launchpad.">
+
+In the <body> in the .product-card div:
+
+Find: <div class="product-price">$499</div>
+
+Replace with: <div class="product-price">$99</div>
+
+In the <body> in the submit button:
+
+Find: <span class="btn-text">Pay $499</span>
+
+Replace with: <span class="btn-text">Pay $99</span>
+
+Change the publishable key:
+
+Find: const STRIPE_PUBLISHABLE_KEY = 'pk_live_51Rp7gdRuBpQt4n9NyNv9RHiHf3QOmJdETL8Boyu7uC2YUKJUz2OIXXzgAN4h91WC2F21qhXHs7T2QUbDEGCEwMeg00bJbhDvn6';
+
+Replace with: const STRIPE_PUBLISHABLE_KEY = 'pk_test_51Rp7gdRuBpQt4n9NHC1N9DjWmBDfj6Q7N4sR8mTgkIlDFvPOpgE8VLhztsX0WWtfa1nnn1upiboEo8OzsaVzSrAj00g3wM9yCA';
+
+Step B: Modify the JavaScript Logic
+
+This is the core of the change. We will replace the static product logic with a dynamic system.
+
+Locate the main <script> tag at the bottom of the file.
+
+DELETE the existing hardcoded PRODUCT object.
+
+Remove this entire block:
+
+code
+JavaScript
+download
+content_copy
+expand_less
+const PRODUCT = {
+    id: '7-day-launchpad',
+    name: 'The 7-Day Launchpad Package',
+    price: 49900, // cents - $499
+    description: 'Design mockup in 72 hours. Live website in 7-10 days.'
+};
+
+REPLACE the deleted code and the rest of the script with the following new, dynamic logic. This new code reads the URL, fetches the correct price, and updates the entire page.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// ========================================
+// STRIPE CHECKOUT CONFIGURATION
+// ========================================
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_51Rp7gdRuBpQt4n9NHC1N9DjWmBDfj6Q7N4sR8mTgkIlDFvPOpgE8VLhztsX0WWtfa1nnn1upiboEo8OzsaVzSrAj00g3wM9yCA';
+const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+
+// NEW: Map of product details for the UI. Price comes from the backend.
+const PRODUCT_DETAILS_MAP = {
+    '7-day-launchpad': {
+        name: 'The 7-Day Launchpad',
+        description: 'Our flagship package: a custom-coded landing page, store, AI chatbot, and Stripe integration. Live in 7-10 days.',
+        features: [
+            'Custom Store Design',
+            'Product & Service Setup',
+            'Secure Payment Processing',
+            'Custom AI Chatbot',
+            '7-10 Day Delivery Guarantee'
+        ]
+    },
+    'professional-suite': {
+        name: 'The Professional Suite',
+        description: 'For growing businesses needing advanced features like custom database integrations and multi-language support.',
+        features: [
+            'Everything in Launchpad',
+            'Advanced UI/UX Design',
+            'Custom Database Integrations',
+            'Multi-Language Support',
+            'Complex Backend Logic'
+        ]
+    },
+    'enterprise-plan': {
+        name: 'The Enterprise Plan',
+        description: 'For scaling companies needing a full platform, API access, and dedicated support.',
+        features: [
+            'Everything in Professional',
+            'Full API Access',
+            'Dedicated Support & SLA',
+            'Monthly Optimization Reviews',
+            'White-Label Branding'
+        ]
+    }
+};
+
+let clientSecret = null;
+const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+const elements = stripe.elements();
+const cardElement = elements.create('card', {
+    style: {
+        base: { fontSize: '16px', color: '#1a1a1a', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' },
+        invalid: { color: '#dc3545', iconColor: '#dc3545' }
+    },
+    hidePostalCode: true
+});
+
+const nameInput = document.getElementById('customer-name');
+const emailInput = document.getElementById('customer-email');
+const phoneInput = document.getElementById('customer-phone');
+const postalCodeInput = document.getElementById('postal-code');
+const termsCheckbox = document.getElementById('accept-terms');
+const submitBtn = document.getElementById('submit-btn');
+const errorDiv = document.getElementById('error-message');
+
+let cardComplete = false;
+
+function updateSubmitButton() {
+    const formComplete = nameInput.value.trim() && emailInput.value.trim() && phoneInput.value.trim() && postalCodeInput.value.trim() && termsCheckbox.checked && cardComplete;
+    submitBtn.disabled = !formComplete;
+}
+
+function showError(message) {
+    errorDiv.textContent = message;
+    errorDiv.classList.add('visible');
+}
+
+function hideError() {
+    errorDiv.classList.remove('visible');
+}
+
+function setLoading(loading) {
+    submitBtn.classList.toggle('loading', loading);
+    submitBtn.disabled = loading;
+}
+
+// NEW: Main initialization function
+async function initializeCheckout() {
+    // 1. Get Product ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('product_id') || '7-day-launchpad'; // Default to launchpad
+
+    const productDetails = PRODUCT_DETAILS_MAP[productId];
+    if (!productDetails) {
+        showError("Invalid product selected. Please go back and choose a plan.");
+        return;
+    }
+
+    // 2. Update UI with product details
+    document.querySelector('.product-name').textContent = productDetails.name;
+    document.querySelector('.product-description').textContent = productDetails.description;
+    const featuresList = document.querySelector('.features-list');
+    featuresList.innerHTML = productDetails.features.map(feature => `
+        <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <span class="feature-text"><strong>${feature}</strong></span>
+        </div>
+    `).join('');
+
+    try {
+        // 3. Create Payment Intent to get the price from backend
+        const affiliateRef = sessionStorage.getItem('affiliate_ref');
+        const response = await fetch(`${BACKEND_URL}/api/v1/aarie-platform/create-payment-intent`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: productId, affiliate_ref: affiliateRef || null })
+        });
+
+        if (!response.ok) throw new Error('Could not initialize payment.');
+        
+        const data = await response.json();
+        clientSecret = data.clientSecret;
+        const amount = data.amount;
+        const displayPrice = `$${(amount / 100).toFixed(2).replace('.00', '')}`;
+
+        // 4. Update UI with the dynamic price from backend
+        document.querySelector('.product-price').textContent = displayPrice;
+        document.querySelector('.btn-text').textContent = 'Pay ' + displayPrice;
+        
+        // 5. Setup Stripe Elements now that we have the clientSecret
+        cardElement.mount('#stripe-card-element');
+
+    } catch (error) {
+        showError(error.message);
+    }
+}
+
+// Attach event listeners for validation
+cardElement.on('change', (event) => {
+    cardComplete = event.complete;
+    if (event.error) showError(event.error.message);
+    else hideError();
+    updateSubmitButton();
+});
+
+[nameInput, emailInput, phoneInput, postalCodeInput, termsCheckbox].forEach(el => {
+    el.addEventListener('input', updateSubmitButton);
+    el.addEventListener('change', updateSubmitButton);
+});
+
+// Handle form submission
+document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    hideError();
+
+    const { error } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+            card: cardElement,
+            billing_details: {
+                name: nameInput.value.trim(),
+                email: emailInput.value.trim(),
+                phone: phoneInput.value.trim()
+            }
+        }
+    });
+
+    if (error) {
+        showError(error.message);
+        setLoading(false);
+    } else {
+        document.getElementById('success-overlay').classList.add('visible');
+    }
+});
+
+// Run initialization on page load
+document.addEventListener('DOMContentLoaded', initializeCheckout);
+
+After these changes are deployed, store-booking.html will correctly link to the checkout page, and checkout.html will dynamically display the correct plan and price.
