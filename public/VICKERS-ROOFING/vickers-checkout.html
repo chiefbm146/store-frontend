@@ -383,7 +383,7 @@
                 submitBtn.disabled = false;
 
                 // Update Logo Text and Link
-                const storeHomepage = storeId === 'vickers-roofing' ? '/index.html' : '/';
+                const storeHomepage = storeId === 'vickers-roofing' ? '/vickers-roofing' : '/';
                 const navLogoEl = document.getElementById('nav-logo');
                 navLogoEl.innerHTML = `<span class="icon">🏠</span> ${storeId.replace(/-/g, ' ').toUpperCase()}`;
                 navLogoEl.href = storeHomepage;

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/vickers-roofing/">
     <title>Vickers Roofing - Hope, BC | Insured Roofing & Repairs</title>
 
     <!-- SEO & Social Media Meta Tags -->
@@ -29,7 +30,7 @@
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏠</text></svg>">
 
     <!-- Font Awesome (local) for icons -->
-    <link rel="stylesheet" href="./libs/fontawesome/all.min.css?v=1.0.0">
+    <link rel="stylesheet" href="/libs/fontawesome/all.min.css?v=1.0.0">
 
     <style>
         /* === BASE STYLES === */
@@ -1195,7 +1196,7 @@
                             evaluation and temporary fix if possible.</p>
                         <div class="price">...</div>
                         <div class="price-note">Non-refundable deposit. Applied to your final repair bill.</div>
-                        <a href="/checkout.html?store_id=vickers-roofing&product_id=priority-repair-deposit"
+                        <a href="/vickers-checkout?store_id=vickers-roofing&product_id=priority-repair-deposit"
                             class="btn btn-primary">Book Priority Repair</a>
                     </div>
                     <!-- Free Inspection -->
@@ -1569,7 +1570,7 @@
             }
 
             const storeId = 'vickers-roofing';
-            let url = `/checkout.html?store_id=${storeId}&product_id=${productId}`;
+            let url = `/vickers-checkout?store_id=${storeId}&product_id=${productId}`;
 
             if (days) {
                 url += `&duration=daily&quantity=${days}`;
@@ -1581,10 +1582,10 @@
             window.location.href = url;
         }
     </script>
-    <script src="./libs/three/three.min.js"></script>
-    <script src="./js/water4chat.js"></script>
+    <script src="/libs/three/three.min.js"></script>
+    <script src="/js/water4chat.js"></script>
     <!-- Universal AI Chat Widget for Vickers Roofing -->
-    <script src="./js/ai-chat.js" data-store-id="vickers-roofing"></script>
+    <script src="/js/ai-chat.js" data-store-id="vickers-roofing"></script>
 </body>
 
 </html>

@@ -1,8 +1,4 @@
 {
-  "functions": {
-    "source": "functions",
-    "runtime": "nodejs20"
-  },
   "hosting": {
     "public": "public",
     "ignore": [
@@ -272,19 +268,31 @@
       },
       {
         "source": "/vickers-roofing",
-        "destination": "/VICKERS-ROOFING/vickers-main.html"
+        "destination": "/vickers-roofing/vickers-main.html"
+      },
+      {
+        "source": "/vickers-roofing/images/**",
+        "destination": "/vickers-roofing/images/**"
+      },
+      {
+        "source": "/vickers-roofing/libs/**",
+        "destination": "/vickers-roofing/libs/**"
+      },
+      {
+        "source": "/vickers-roofing/js/**",
+        "destination": "/vickers-roofing/js/**"
       },
       {
         "source": "/vickers-roofing/**",
-        "destination": "/VICKERS-ROOFING/vickers-main.html"
+        "destination": "/vickers-roofing/vickers-main.html"
       },
       {
         "source": "/vickers-checkout",
-        "destination": "/VICKERS-ROOFING/vickers-checkout.html"
+        "destination": "/vickers-roofing/vickers-checkout.html"
       },
       {
         "source": "/vickers-checkout/**",
-        "destination": "/VICKERS-ROOFING/vickers-checkout.html"
+        "destination": "/vickers-roofing/vickers-checkout.html"
       }
     ],
     "headers": [
@@ -387,11 +395,5 @@
         ]
       }
     ]
-  },
-  "firestore": {
-    "database": "(default)",
-    "location": "us-central1",
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
   }
 }
