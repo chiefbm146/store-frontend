@@ -11,6 +11,29 @@ let currentUser;
 const API_BASE_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
 
 /**
+ * Intelligently formats the price for a product, handling both simple
+ * and complex (e.g., rental) pricing models.
+ * @param {object} product The product object from Firestore.
+ * @returns {string} A formatted price string (e.g., "$50.00", "From $50.00").
+ */
+function formatProductPrice(product) {
+  if (product.price) {
+    // Simple, fixed-price product
+    return `$${(product.price / 100).toFixed(2)}`;
+  } else if (product.prices) {
+    // Complex product with multiple rates (like rentals)
+    // Find the first available rate to display as a starting price.
+    const firstRateKey = Object.keys(product.prices)[0];
+    if (firstRateKey && product.prices[firstRateKey] && product.prices[firstRateKey].rate) {
+      const rate = product.prices[firstRateKey].rate;
+      return `From $${(rate / 100).toFixed(2)}`;
+    }
+  }
+  // Fallback if no price is found
+  return 'N/A';
+}
+
+/**
  * Helper to make API calls with Firebase token
  */
 async function apiCall(endpoint, options = {}) {
@@ -43,7 +66,7 @@ async function apiCall(endpoint, options = {}) {
 /**
  * Initialize Firebase when SDK loads
  */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   if (typeof firebase !== 'undefined') {
     auth = firebase.auth();
     // NO NEED for Firestore - all data comes from backend API
@@ -88,24 +111,134 @@ async function loadDashboard() {
     // Enable buttons after loading
     disableAllButtons(false);
 
-    // Load products (optional, if they fail, show empty state)
+    // Fetch all dashboard data from the unified endpoint
     try {
-      await loadProducts();
-    } catch (error) {
-      document.getElementById('productsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><div class="empty-state-icon">📭</div><p>No products yet - Setup Stripe first</p></div>';
-    }
+      const dashboardData = await apiCall('/api/client/dashboard-data', {
+        method: 'GET'
+      });
 
-    // Load transactions (optional, if they fail, show empty state)
-    try {
-      await loadTransactions();
-      // After loading transactions, update stats
-      await updateDashboardStats();
+      // Load products
+      if (dashboardData.products && dashboardData.products.length > 0) {
+        await loadProducts();
+      } else {
+        document.getElementById('productsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><div class="empty-state-icon">📭</div><p>No products yet - Setup Stripe first</p></div>';
+      }
+
+      // Load transactions
+      if (dashboardData.transactions && dashboardData.transactions.length > 0) {
+        await loadTransactions();
+        await updateDashboardStats();
+      } else {
+        document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">💤</div><p>No transactions yet</p></div>';
+      }
+
+      // Load consultations - THIS IS THE KEY ADDITION
+      loadConsultations(dashboardData.consultations || []);
+
     } catch (error) {
-      document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">💤</div><p>No transactions yet</p></div>';
+      // If dashboard data fetch fails, try loading components individually
+      try {
+        await loadProducts();
+      } catch (error) {
+        document.getElementById('productsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><div class="empty-state-icon">📭</div><p>No products yet - Setup Stripe first</p></div>';
+      }
+
+      try {
+        await loadTransactions();
+        await updateDashboardStats();
+      } catch (error) {
+        document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">💤</div><p>No transactions yet</p></div>';
+      }
+
+      // Show empty consultations on error
+      loadConsultations([]);
     }
   } catch (error) {
     // Silent error handling
   }
+}
+
+/**
+ * Renders the consultation requests into the dashboard UI.
+ * @param {Array<object>} consultations An array of consultation objects from the API.
+ */
+function loadConsultations(consultations) {
+  const container = document.getElementById('consultationsContainer');
+  const badge = document.getElementById('consultationCountBadge');
+  container.innerHTML = ''; // Clear previous entries
+
+  if (!consultations || consultations.length === 0) {
+    container.innerHTML = '<p class="empty-state" style="padding: 20px 0;">No new consultation requests.</p>';
+    badge.style.display = 'none';
+    return;
+  }
+
+  // Show and update the notification badge
+  const pendingCount = consultations.filter(c => c.status === 'pending').length;
+  if (pendingCount > 0) {
+    badge.textContent = pendingCount;
+    badge.style.display = 'inline-flex';
+  } else {
+    badge.style.display = 'none';
+  }
+
+  // Sort to show pending requests first
+  consultations.sort((a, b) => {
+    if (a.status === 'pending' && b.status !== 'pending') return -1;
+    if (a.status !== 'pending' && b.status === 'pending') return 1;
+    // If statuses are the same, sort by date (newest first)
+    const aTime = a.createdAt?.seconds || a.createdAt?._seconds || 0;
+    const bTime = b.createdAt?.seconds || b.createdAt?._seconds || 0;
+    return bTime - aTime;
+  });
+
+  consultations.forEach(consultation => {
+    // NEW - Robust date handling
+    let date = 'No date';
+    if (consultation.createdAt) {
+      if (consultation.createdAt.seconds) {
+        // Standard Firestore Timestamp
+        date = new Date(consultation.createdAt.seconds * 1000).toLocaleString();
+      } else if (typeof consultation.createdAt === 'string') {
+        // ISO String format
+        date = new Date(consultation.createdAt).toLocaleString();
+      } else if (consultation.createdAt._seconds) {
+        // Another common Firestore Timestamp format
+        date = new Date(consultation.createdAt._seconds * 1000).toLocaleString();
+      }
+    }
+
+    const isRead = consultation.status !== 'pending';
+
+    const consultationHTML = `
+            <div class="consultation-item ${isRead ? 'status-read' : ''}">
+                <div class="consultation-header">
+                    <span class="consultation-from">${consultation.name}</span>
+                    <span class="consultation-date">${date}</span>
+                </div>
+                <p class="consultation-body">${consultation.message || 'No message provided.'}</p>
+                <div class="consultation-contact">
+                    <span>📧 <a href="mailto:${consultation.email}" target="_blank">${consultation.email}</a></span>
+                    ${consultation.phone ? `<span>📞 <a href="tel:${consultation.phone}">${consultation.phone}</a></span>` : ''}
+                </div>
+                ${consultation.address ? `
+                    <div class="consultation-address">
+                        <span>📍</span> 
+                        <a href="https://www.google.com/maps?q=${encodeURIComponent(consultation.address)}" target="_blank" title="View on Google Maps">
+                            ${consultation.address}
+                        </a>
+                    </div>
+                ` : ''}
+                <!-- Action buttons can be added here if needed in the future -->
+                <!--
+                <div class="consultation-actions">
+                    <button class="action-button">Mark as Read</button>
+                </div>
+                -->
+            </div>
+        `;
+    container.innerHTML += consultationHTML;
+  });
 }
 
 /**
@@ -215,12 +348,12 @@ async function loadProducts() {
     // Display products
     let html = '';
     products.forEach(product => {
-      const priceInDollars = (product.price / 100).toFixed(2);
+      const displayPrice = formatProductPrice(product);
       html += `
         <div class="product-item" style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           <h3 style="margin-bottom: 8px; font-size: 18px; font-weight: 600;">💼 ${product.name}</h3>
           <p style="color: #666; margin-bottom: 12px; font-size: 14px;">${product.description}</p>
-          <div style="font-size: 24px; font-weight: 700; color: #27ae60;">$${priceInDollars}</div>
+          <div style="font-size: 24px; font-weight: 700; color: #27ae60;">${displayPrice}</div>
         </div>
       `;
     });

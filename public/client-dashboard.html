@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Dashboard - AARIE.CA</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>📊</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>📊</text></svg>">
 
     <!-- Firebase SDK (using Firebase Hosting's built-in init) -->
     <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
@@ -221,6 +223,140 @@
             cursor: not-allowed;
         }
 
+        /* === NEW: CONSULTATION REQUESTS SECTION === */
+        .consultations-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .consultations-section h2 {
+            font-size: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification-badge {
+            background-color: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .consultations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .consultation-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #f0ad4e;
+            /* Orange for pending */
+        }
+
+        .consultation-item.status-read {
+            border-left-color: #5cb85c;
+            /* Green for read */
+        }
+
+        .consultation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .consultation-from {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .consultation-date {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .consultation-body {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+            /* Preserve line breaks */
+        }
+
+        .consultation-contact {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .consultation-contact a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .consultation-contact a:hover {
+            text-decoration: underline;
+        }
+
+        /* Address styling */
+        .consultation-address {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e9ecef;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .consultation-address a {
+            color: #333;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .consultation-address a:hover {
+            color: #667eea;
+            text-decoration: underline;
+        }
+
+        .consultation-address span {
+            font-size: 18px;
+        }
+
+        .consultation-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .consultation-actions .action-button {
+            width: auto;
+            margin-top: 0;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        /* === END NEW SECTION === */
+
         /* Products Section */
         .products-section {
             background: white;
@@ -349,8 +485,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .empty-state {
@@ -366,7 +507,8 @@
 
         @media (max-width: 768px) {
             .dashboard {
-                padding-top: 80px; /* Space for back button on mobile */
+                padding-top: 80px;
+                /* Space for back button on mobile */
             }
 
             .dashboard-content {
@@ -407,6 +549,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard">
         <!-- Header -->
@@ -414,7 +557,8 @@
             <div class="header-left">
                 <a href="/booking" class="back-button" title="Back to AARIE.CA">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </a>
                 <div class="header-left-content">
@@ -431,6 +575,21 @@
             </div>
         </div>
 
+        <!-- NEW: Consultation Requests Section -->
+        <div class="consultations-section">
+            <h2>
+                📧 Consultation Requests
+                <span id="consultationCountBadge" class="notification-badge" style="display: none;">0</span>
+            </h2>
+            <div id="consultationsContainer" class="consultations-list">
+                <!-- Loading spinner shown by default -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading Consultations...</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Content Grid -->
         <div class="dashboard-content">
             <!-- Status Card -->
@@ -442,7 +601,8 @@
                     <div class="status-value">
                         <span class="status-badge" id="stripeStatusBadge">Not Setup</span>
                     </div>
-                    <button class="action-button" id="stripeSetupBtn" onclick="handleStripeSetup()" style="margin-top: 12px;">
+                    <button class="action-button" id="stripeSetupBtn" onclick="handleStripeSetup()"
+                        style="margin-top: 12px;">
                         ⚡ Setup Stripe Connect
                     </button>
                 </div>
@@ -454,14 +614,17 @@
 
                 <div class="status-item">
                     <div class="status-label">Onboarding Link</div>
-                    <button class="action-button" id="onboardingBtn" onclick="handleOnboarding()" style="display: none;">
+                    <button class="action-button" id="onboardingBtn" onclick="handleOnboarding()"
+                        style="display: none;">
                         📋 Complete Verification
                     </button>
-                    <div id="onboardingMessage" style="color: #666; font-size: 14px; display: none; margin-top: 8px;"></div>
+                    <div id="onboardingMessage" style="color: #666; font-size: 14px; display: none; margin-top: 8px;">
+                    </div>
                 </div>
 
                 <div class="status-item" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">
-                    <button class="action-button" id="deleteBtn" onclick="handleDeleteAccount()" style="background: #ff6b6b; display: none; margin-top: 12px;">
+                    <button class="action-button" id="deleteBtn" onclick="handleDeleteAccount()"
+                        style="background: #ff6b6b; display: none; margin-top: 12px;">
                         🗑️ Delete Account (Reset)
                     </button>
                 </div>
@@ -491,16 +654,29 @@
         <!-- Products Section -->
         <div class="products-section">
             <h2>📦 Your Products</h2>
-            <div id="productsContainer" class="products-grid"></div>
+            <div id="productsContainer" class="products-grid">
+                <!-- Loading spinner shown by default -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading Products...</p>
+                </div>
+            </div>
         </div>
 
         <!-- Transactions Section -->
         <div class="transactions-section" style="margin-top: 30px;">
             <h2>💳 Recent Transactions</h2>
-            <div id="transactionsContainer"></div>
+            <div id="transactionsContainer">
+                <!-- Loading spinner shown by default -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading Transactions...</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script defer src="./js/client-dashboard.js"></script>
 </body>
+
 </html>
