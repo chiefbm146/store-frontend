@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>💳</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ... (CSS from your Vickers checkout.html can be used here, it's well-styled) ... */
+        :root {
+            --primary-color: #1d4ed8;
+            /* Can be dynamically changed later if needed */
+        }
+
+        body {
+            background: #f3f4f6;
+        }
+
+        /* Placeholder for your existing styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f3f4f6;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: #fff;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #111827;
+            text-decoration: none;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .nav-logo .icon {
+            color: var(--primary-color);
+        }
+
+        .checkout-wrapper {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .checkout-wrapper {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+
+        .panel-header h2 {
+            font-size: 1.4rem;
+        }
+
+        .panel-header .icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            color: #6b7280;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .product-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .stripe-card-container {
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            display: none;
+            color: #b91c1c;
+            background: #fee2e2;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+
+        .success-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-modal {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .success-modal .icon {
+            font-size: 4rem;
+            color: #16a34a;
+            margin-bottom: 20px;
+        }
+
+        .success-modal a {
+            margin-top: 20px;
+            display: inline-block;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Contact Info in Success Modal */
+        .success-contact-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .success-contact-info p {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .success-contact-info .icon {
+            font-size: 1rem;
+            color: #6b7280;
+            width: 25px;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .success-contact-info a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            margin: 0;
+            display: inline;
+        }
+
+        .success-contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .copy-btn {
+            margin-left: 8px;
+            padding: 2px 6px;
+            font-size: 11px;
+            cursor: pointer;
+            border: 1px solid #d1d5db;
+            background: #f9fafb;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="#" id="nav-logo" class="nav-logo"><span class="icon">🏠</span> Loading Store...</a>
+    </header>
+    <div class="checkout-wrapper">
+        <!-- Order Summary -->
+        <div class="panel">
+            <div class="panel-header">
+                <i class="fas fa-shopping-cart icon"></i>
+                <h2>Your Order</h2>
+            </div>
+            <div id="product-details">
+                <div class="product-name">Loading Service...</div>
+                <div class="product-description">Fetching details from our secure server.</div>
+                <div class="product-price">...</div>
+            </div>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="panel">
+            <div class="panel-header">
+                <i class="fas fa-lock icon"></i>
+                <h2>Secure Payment</h2>
+            </div>
+            <form id="checkout-form">
+                <input type="text" id="customer-name" class="form-input" placeholder="Full Name" required>
+                <input type="email" id="customer-email" class="form-input" placeholder="Email Address" required>
+                <input type="tel" id="customer-phone" class="form-input" placeholder="Phone Number" required>
+                <div id="stripe-card-element" class="stripe-card-container"></div>
+                <input type="text" id="postal-code" class="form-input" placeholder="Postal Code" required
+                    style="margin-top: 15px;">
+                <div id="error-message" class="error-message"></div>
+                <button type="submit" id="submit-btn" class="submit-btn" disabled>Loading...</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-overlay" class="success-overlay">
+        <div class="success-modal">
+            <div class="icon">🎉</div>
+            <h2>Payment Successful!</h2>
+            <p id="success-message">
+                Thank you for your order! A confirmation has been sent to your email.
+                <br><br>
+                <strong>Vickers Roofing will contact you within 1-2 business days to follow up.</strong>
+            </p>
+
+            <!-- Contact Info Block (shown only for Vickers Roofing) -->
+            <div id="success-contact-container" style="display: none;">
+                <div class="success-contact-info">
+                    <p><i class="fas fa-phone icon"></i> <a href="tel:1-604-615-0075">(604) 615-0075</a></p>
+                    <p>
+                        <i class="fas fa-envelope icon"></i>
+                        <a href="mailto:Joshvickers1982@gmail.com">Joshvickers1982@gmail.com</a>
+                        <button class="copy-btn"
+                            onclick="copyEmailToClipboard(this, 'Joshvickers1982@gmail.com')">Copy</button>
+                    </p>
+                    <p>
+                        <i class="fab fa-facebook icon"></i>
+                        <a href="https://www.facebook.com/profile.php?id=100063818490922" target="_blank">Follow on
+                            Facebook</a>
+                    </p>
+                </div>
+            </div>
+
+            <a href="/" id="return-home-link">Return Home</a>
+        </div>
+    </div>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        // =======================================================================
+        // UNIVERSAL STRIPE CHECKOUT ENGINE v3.0
+        // This script can power the checkout for ANY store.
+        // =======================================================================
+        (async function () {
+            // --- 1. CONFIGURATION ---
+            // The backend URL is constant. The Stripe Key is for the PLATFORM.
+            const BACKEND_URL = 'https://stores-backend-52450564461.us-central1.run.app';
+            const STRIPE_PUBLISHABLE_KEY = 'pk_test_51SPQ3W2ONyiEh5kxUpJxBGUhHXaUPpAKJeC9nSJLul8ctzUqPZgMYkeJ8glWndaIgDhMVaVlc142aZCRdXH1NwlK00mzd5iMG8';
+
+            // --- 2. DOM ELEMENTS ---
+            const form = document.getElementById('checkout-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const errorDiv = document.getElementById('error-message');
+            const productNameEl = document.querySelector('.product-name');
+            const productDescEl = document.querySelector('.product-description');
+            const productPriceEl = document.querySelector('.product-price');
+
+            // --- 3. STATE ---
+            let clientSecret = null;
+            let stripe = null;
+            let cardElement = null;
+
+            // --- 4. HELPER FUNCTIONS ---
+            function showError(message) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            }
+            function setLoading(isLoading, text = 'Processing...') {
+                submitBtn.disabled = isLoading;
+                submitBtn.textContent = isLoading ? text : 'Pay Now';
+            }
+
+            // --- 5. INITIALIZATION ---
+            try {
+                // Step A: Get parameters from URL. This is the core of the universal design.
+                const urlParams = new URLSearchParams(window.location.search);
+                const storeId = urlParams.get('store_id');
+                const productId = urlParams.get('product_id');
+                const duration = urlParams.get('duration');
+                const quantity = urlParams.get('quantity');
+
+                if (!storeId || !productId) {
+                    throw new Error("Invalid booking link. Please return to the booking page and try again.");
+                }
+
+                // Step B: Build the payload for the backend to create the Payment Intent.
+                const intentPayload = { product_id: productId };
+                if (duration) intentPayload.duration = duration;
+                if (quantity) intentPayload.quantity = quantity;
+
+                // Step C: Call the new universal payment intent endpoint.
+                const response = await fetch(`${BACKEND_URL}/api/v1/${storeId}/create-payment-intent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(intentPayload)
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error?.message || 'Could not initialize payment.');
+
+                // Step D: We have the price and secret! Now build the page.
+                clientSecret = data.clientSecret;
+                const amount = data.amount;
+                const productName = data.metadata?.product_name || productId.replace(/-/g, ' ');
+
+                // Update UI
+                document.title = `Checkout - ${productName}`;
+                productNameEl.textContent = productName;
+                productDescEl.textContent = `Quantity: ${quantity || 1}` + (duration ? ` for ${duration}` : '');
+                productPriceEl.textContent = `$${(amount / 100).toFixed(2)}`;
+                submitBtn.textContent = `Pay $${(amount / 100).toFixed(2)}`;
+                submitBtn.disabled = false;
+
+                // Update Logo Text and Link
+                const storeHomepage = storeId === 'vickers-roofing' ? '/index.html' : '/';
+                const navLogoEl = document.getElementById('nav-logo');
+                navLogoEl.innerHTML = `<span class="icon">🏠</span> ${storeId.replace(/-/g, ' ').toUpperCase()}`;
+                navLogoEl.href = storeHomepage;
+                document.getElementById('return-home-link').href = storeHomepage;
+
+                // Initialize Stripe
+                stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+                const elements = stripe.elements({ clientSecret });
+                cardElement = elements.create('card', { hidePostalCode: true });
+                cardElement.mount('#stripe-card-element');
+
+            } catch (error) {
+                showError(error.message);
+                setLoading(true, 'Unavailable');
+            }
+
+            // --- 6. FORM SUBMISSION ---
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                setLoading(true);
+
+                const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: document.getElementById('customer-name').value,
+                            email: document.getElementById('customer-email').value,
+                            phone: document.getElementById('customer-phone').value,
+                            address: { postal_code: document.getElementById('postal-code').value }
+                        }
+                    }
+                });
+
+                if (error) {
+                    showError(error.message);
+                    setLoading(false);
+                } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+                    document.getElementById('success-overlay').style.display = 'flex';
+
+                    // Show contact info if this is Vickers Roofing
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const storeId = urlParams.get('store_id');
+                    if (storeId === 'vickers-roofing') {
+                        document.getElementById('success-contact-container').style.display = 'block';
+                    }
+
+                    // Asynchronously record the transaction in the background (fire and forget)
+                    fetch(`${BACKEND_URL}/record-and-distribute-transaction`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ stripePaymentId: paymentIntent.id }),
+                        keepalive: true
+                    });
+                }
+            });
+
+        })();
+
+        // Helper function to copy email to clipboard
+        function copyEmailToClipboard(button, email) {
+            navigator.clipboard.writeText(email).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy email: ', err);
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -131,6 +131,14 @@
         "destination": "/davids store/davids-main-page.html"
       },
       {
+        "source": "/david-peters",
+        "destination": "/davids store/davids-main-page.html"
+      },
+      {
+        "source": "/david-peters/**",
+        "destination": "/davids store/davids-main-page.html"
+      },
+      {
         "source": "/davids-about",
         "destination": "/davids store/about.html"
       },
@@ -237,6 +245,46 @@
       {
         "source": "/customer-terms/**",
         "destination": "/customer-terms.html"
+      },
+      {
+        "source": "/corporate-gifts",
+        "destination": "/amazon.html"
+      },
+      {
+        "source": "/corporate-gifts/**",
+        "destination": "/amazon.html"
+      },
+      {
+        "source": "/aaries-store",
+        "destination": "/moon-store.html"
+      },
+      {
+        "source": "/aaries-store/**",
+        "destination": "/moon-store.html"
+      },
+      {
+        "source": "/finalize",
+        "destination": "/finalization.html"
+      },
+      {
+        "source": "/finalize/**",
+        "destination": "/finalization.html"
+      },
+      {
+        "source": "/vickers-roofing",
+        "destination": "/VICKERS-ROOFING/vickers-main.html"
+      },
+      {
+        "source": "/vickers-roofing/**",
+        "destination": "/VICKERS-ROOFING/vickers-main.html"
+      },
+      {
+        "source": "/vickers-checkout",
+        "destination": "/VICKERS-ROOFING/vickers-checkout.html"
+      },
+      {
+        "source": "/vickers-checkout/**",
+        "destination": "/VICKERS-ROOFING/vickers-checkout.html"
       }
     ],
     "headers": [
