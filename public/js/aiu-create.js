@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const authGate = document.getElementById('auth-gate');
     const paymentGate = document.getElementById('payment-gate');
     const welcomeMsg = document.getElementById('welcome-msg');
-    
+
     let currentUser = null;
     let firebaseAuth;
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 //     purchaseBtn.onclick = () => { window.location.href = '/aiu-studio'; };
                 //     hideLoading(purchaseBtn, 'Go to Your Studio →');
                 // } else {
-                    hideLoading(purchaseBtn, 'Pay $15 Setup Fee & Begin');
+                hideLoading(purchaseBtn, 'Pay $15 Setup Fee & Begin');
                 // }
             } catch (error) {
                 console.warn("Could not check user status:", error.message);
@@ -102,20 +102,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function handlePurchase() {
-        // This is a simple redirect to the universal checkout page,
-        // pre-filled with the correct product and store information.
-        const checkoutUrl = `/checkout?store_id=${STORE_ID}&product_id=${SETUP_PRODUCT_ID}`;
-        
-        // When the user completes the checkout, the checkout page's own logic
-        // will handle creating the subscription and redirecting to the studio.
-        // For now, we will just redirect.
-        showLoading(purchaseBtn, 'Redirecting to Checkout...');
-        
-        // Simulate a small delay for better UX
-        setTimeout(() => {
-            window.location.href = checkoutUrl;
-        }, 1000);
+    async function handlePurchase() {
+        if (!currentUser) {
+            alert('You must be signed in to complete this purchase.');
+            return;
+        }
+
+        showLoading(purchaseBtn, 'Initializing Checkout...');
+
+        try {
+            // Initialize Stripe (make sure Stripe.js is loaded in the HTML)
+            const stripe = Stripe('pk_test_51Rp7gdRuBpQt4n9NHC1N9DjWmBDfj6Q7N4sR8mTgkIlDFvPOpgE8VLhztsX0WWtfa1nnn1upiboEo8OzsaVzSrAj00g3wM9yCA');
+
+            // Get the user's authentication token
+            const idToken = await currentUser.getIdToken();
+
+            // Call our backend endpoint to create the Stripe Checkout Session
+            const response = await fetch(`${BACKEND_URL}/api/v1/${STORE_ID}/create-aiu-checkout-session`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${idToken}`
+                },
+                body: JSON.stringify({ user_uid: currentUser.uid })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Could not create payment session.');
+            }
+
+            const session = await response.json();
+
+            // Redirect to Stripe's hosted checkout page
+            const { error } = await stripe.redirectToCheckout({
+                sessionId: session.sessionId
+            });
+
+            if (error) {
+                throw new Error(error.message);
+            }
+
+        } catch (error) {
+            console.error('Purchase initialization failed:', error);
+            alert(`Checkout failed: ${error.message}`);
+            hideLoading(purchaseBtn, 'Pay $15 Setup Fee & Begin');
+        }
     }
 
     // --- Start the process ---
