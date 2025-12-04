@@ -28,102 +28,122 @@
     <!-- Main studio content, hidden by default -->
     <main id="studio-content" class="studio-container" style="display: none;">
 
-        <!-- ZONE 1: INTERACTION ZONE (The User's Input) -->
-        <section class="interaction-zone">
-            <header class="zone-header">
-                <span class="zone-icon">💬</span>
-                <h2>Persona Architect</h2>
-                <p class="zone-subtitle">Your collaborative interview</p>
-            </header>
+        <!-- Persistent Header -->
+        <header class="studio-header">
+            <h1 class="studio-title">
+                <span class="title-icon">🎓</span>
+                My Studio
+            </h1>
 
-            <div class="chat-history" id="studio-chat-history">
-                <div class="chat-bubble ai-bubble">
-                    Hello! Let's begin creating your AI persona. To start, tell me a little bit about yourself. What are
-                    your core values or passions? What is your expertise?
-                </div>
+            <div class="condensation-meter">
+                <div class="meter-pip" data-index="1"></div>
+                <div class="meter-pip" data-index="2"></div>
+                <div class="meter-pip" data-index="3"></div>
+                <div class="meter-pip" data-index="4"></div>
+                <div class="meter-pip" data-index="5"></div>
+                <span class="meter-label">Messages</span>
             </div>
 
-            <!-- Core Memory Prompt (conditionally visible) -->
-            <div id="core-memory-prompt" class="core-memory-prompt" style="display: none;">
-                <div class="memory-prompt-content">
-                    <span class="memory-icon">🧠</span>
-                    <p id="core-memory-question"></p>
-                    <div class="memory-buttons">
-                        <button id="core-memory-yes" class="btn btn-primary">Yes</button>
-                        <button id="core-memory-no" class="btn btn-secondary">No</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chat-input-area">
-                <textarea id="studio-user-input"
-                    placeholder="Your response... (Press Enter to send, Shift+Enter for new line)"></textarea>
-                <button id="studio-send-btn" class="btn btn-primary">Send Message</button>
-            </div>
-        </section>
-
-        <!-- ZONE 2: EVOLUTION MONITOR (The AI's "Thought Process") -->
-        <section class="evolution-monitor">
-            <header class="zone-header">
-                <span class="zone-icon">🧬</span>
-                <h2>Evolution Monitor</h2>
-                <p class="zone-subtitle">Watch your digital mind take shape</p>
-            </header>
-
-            <div class="monitor-panels">
-                <!-- Panel 1: Raw Conversation Feed -->
-                <div class="monitor-panel raw-feed-panel">
-                    <div class="panel-header-small">
-                        <span class="panel-icon-small">📡</span>
-                        <h3>Raw Conversation Feed</h3>
-                        <span class="panel-badge">Short-term Memory</span>
-                    </div>
-                    <div id="raw-feed-display" class="panel-content">
-                        <p class="placeholder-text">Your recent conversation will appear here...</p>
-                    </div>
-                </div>
-
-                <!-- Panel 2: Contextual Summary -->
-                <div class="monitor-panel summary-panel">
-                    <div class="panel-header-small">
-                        <span class="panel-icon-small">🧠</span>
-                        <h3>Contextual Summary</h3>
-                        <span class="panel-badge">Long-term Memory</span>
-                    </div>
-                    <div id="summary-display" class="panel-content">
-                        <p class="placeholder-text">As you chat, the AI will condense your conversation into an evolving
-                            summary...</p>
-                    </div>
-                </div>
-
-                <!-- Panel 3: Persona Document Preview -->
-                <div class="monitor-panel preview-panel">
-                    <div class="panel-header-small">
-                        <span class="panel-icon-small">📄</span>
-                        <h3>Persona Document Preview</h3>
-                        <span class="panel-badge">Structured Mind</span>
-                    </div>
-                    <pre id="preview-display"
-                        class="panel-content code-preview"><code class="placeholder-text">Your persona's structured data will be built here...</code></pre>
-                </div>
-            </div>
-
-            <!-- Finalization Controls -->
-            <div class="finalization-controls">
-                <div class="form-group">
-                    <label for="ai-username">
-                        <span class="label-icon">🏷️</span>
-                        Choose a unique username for your AI
-                    </label>
-                    <input type="text" id="ai-username" class="form-input"
-                        placeholder="e.g., korypeters (no spaces, lowercase)">
-                </div>
-                <button id="synthesize-btn" class="btn btn-primary btn-large">
-                    <span class="btn-icon">✨</span>
-                    Generate Final Persona
+            <div class="view-cycler">
+                <button id="prev-view-btn" class="cycle-btn" title="Previous view">
+                    <span class="cycle-arrow">←</span>
+                </button>
+                <span id="current-view-label" class="view-label">Conversation</span>
+                <button id="next-view-btn" class="cycle-btn" title="Next view">
+                    <span class="cycle-arrow">→</span>
                 </button>
             </div>
-        </section>
+        </header>
+
+        <!-- Focus Views Container -->
+        <div class="focus-views-container">
+
+            <!-- VIEW 1: CONVERSATION -->
+            <div id="conversation-view" class="focus-view active">
+                <div class="view-header">
+                    <span class="view-icon">💬</span>
+                    <h2>Conversation</h2>
+                    <p class="view-subtitle">Chat with the Persona Architect</p>
+                </div>
+
+                <div class="chat-history" id="studio-chat-history">
+                    <div class="chat-bubble ai-bubble">
+                        Hello! Let's begin creating your AI persona. To start, tell me a little bit about yourself. What
+                        are your core values or passions? What is your expertise?
+                    </div>
+                </div>
+
+                <!-- Core Memory Prompt (conditionally visible) -->
+                <div id="core-memory-prompt" class="core-memory-prompt" style="display: none;">
+                    <div class="memory-prompt-content">
+                        <span class="memory-icon">🧠</span>
+                        <p id="core-memory-question"></p>
+                        <div class="memory-buttons">
+                            <button id="core-memory-yes" class="btn btn-primary">Yes</button>
+                            <button id="core-memory-no" class="btn btn-secondary">No</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <textarea id="studio-user-input"
+                        placeholder="Your response... (Press Enter to send, Shift+Enter for new line)"></textarea>
+                    <button id="studio-send-btn" class="btn btn-primary">Send Message</button>
+                </div>
+            </div>
+
+            <!-- VIEW 2: SUMMARY -->
+            <div id="summary-view" class="focus-view">
+                <div class="view-header">
+                    <span class="view-icon">🧠</span>
+                    <h2>Summary</h2>
+                    <p class="view-subtitle">AI's evolving understanding of you</p>
+                </div>
+
+                <div id="summary-display" class="summary-content">
+                    <p class="placeholder-text">As you chat, the AI will condense your conversation into an evolving
+                        summary. This is the AI's "long-term memory" of your personality and knowledge.</p>
+                </div>
+
+                <!-- Condensing Overlay -->
+                <div id="condensing-overlay" class="condensing-overlay" style="display: none;">
+                    <div class="condensing-animation">
+                        <span class="condensing-icon">🧠</span>
+                        <p class="condensing-text">Condensing Knowledge...</p>
+                        <div class="condensing-spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 3: PREVIEW -->
+            <div id="preview-view" class="focus-view">
+                <div class="view-header">
+                    <span class="view-icon">📄</span>
+                    <h2>Persona Document</h2>
+                    <p class="view-subtitle">Your structured digital mind</p>
+                </div>
+
+                <pre id="preview-display"
+                    class="preview-content"><code class="placeholder-text">Your persona's structured data will be built here as you chat with the Architect. This is the "code" of your digital mind.</code></pre>
+
+                <!-- Finalization Controls -->
+                <div class="finalization-controls">
+                    <div class="form-group">
+                        <label for="ai-username">
+                            <span class="label-icon">🏷️</span>
+                            Choose a unique username for your AI
+                        </label>
+                        <input type="text" id="ai-username" class="form-input"
+                            placeholder="e.g., korypeters (no spaces, lowercase)">
+                    </div>
+                    <button id="synthesize-btn" class="btn btn-primary btn-large">
+                        <span class="btn-icon">✨</span>
+                        Generate Final Persona
+                    </button>
+                </div>
+            </div>
+
+        </div>
 
     </main>
 

@@ -1,32 +1,46 @@
 /**
- * A.I.U. Studio v2.0 - Evolution Monitor Controller
+ * A.I.U. Studio v3.0 - Focus View Controller
  * 
  * Responsibilities:
  * 1. Verify user authentication and redirect if needed
- * 2. Manage state: coreMemory, contextualSummary, conversationHistory
- * 3. Handle chat interaction with Persona Architect AI
- * 4. Update Evolution Monitor panels with visual feedback
- * 5. Handle Core Memory prompts (Yes/No)
- * 6. Implement two-step finalization (synthesize → confirm → save)
+ * 2. Manage view cycling between Conversation, Summary, and Preview
+ * 3. Track and display condensation meter (messages until summarization)
+ * 4. Handle chat interaction with Persona Architect AI
+ * 5. Trigger condensing animation and auto-switch to Summary view
+ * 6. Handle Core Memory prompts (Yes/No)
+ * 7. Implement two-step finalization (synthesize → confirm → save)
  */
 
 const studioController = (() => {
     // --- Configuration ---
     const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+    const VIEWS = ['conversation-view', 'summary-view', 'preview-view'];
+    const VIEW_LABELS = ['Conversation', 'Summary', 'Preview'];
+    const MESSAGES_UNTIL_SUMMARY = 5;
 
     // --- DOM Elements ---
     const authLoader = document.getElementById('auth-loading');
     const studioContent = document.getElementById('studio-content');
+
+    // Header elements
+    const prevViewBtn = document.getElementById('prev-view-btn');
+    const nextViewBtn = document.getElementById('next-view-btn');
+    const currentViewLabel = document.getElementById('current-view-label');
+    const meterPips = document.querySelectorAll('.meter-pip');
+
+    // Conversation view
     const chatHistory = document.getElementById('studio-chat-history');
     const userInput = document.getElementById('studio-user-input');
     const sendBtn = document.getElementById('studio-send-btn');
 
-    // Evolution Monitor Panels
-    const rawFeedDisplay = document.getElementById('raw-feed-display');
+    // Summary view
     const summaryDisplay = document.getElementById('summary-display');
+    const condensingOverlay = document.getElementById('condensing-overlay');
+
+    // Preview view
     const previewDisplay = document.getElementById('preview-display');
 
-    // Core Memory Prompt
+    // Core Memory
     const coreMemoryPrompt = document.getElementById('core-memory-prompt');
     const coreMemoryQuestion = document.getElementById('core-memory-question');
     const coreMemoryYesBtn = document.getElementById('core-memory-yes');
@@ -45,6 +59,8 @@ const studioController = (() => {
     // --- State ---
     let currentUser = null;
     let firebaseAuth;
+    let currentViewIndex = 0;
+    let messagesSinceLastSummary = 0;
     let coreMemory = {};
     let contextualSummary = '';
     let conversationHistory = [];
@@ -72,82 +88,109 @@ const studioController = (() => {
         chatHistory.appendChild(bubble);
         chatHistory.scrollTop = chatHistory.scrollHeight;
 
-        // Add to conversation history
         conversationHistory.push({ role: sender, content: text });
     }
 
-    function updateRawFeed() {
-        // Show last 5 conversation turns
-        const recentConversation = conversationHistory.slice(-5);
+    // --- View Cycling Logic ---
+    function cycleView(direction) {
+        // Remove active class from current view
+        const currentView = document.getElementById(VIEWS[currentViewIndex]);
+        currentView.classList.remove('active');
 
-        if (recentConversation.length === 0) {
-            rawFeedDisplay.innerHTML = '<p class="placeholder-text">Your recent conversation will appear here...</p>';
-            return;
-        }
+        // Calculate new index with wrapping
+        currentViewIndex = (currentViewIndex + direction + VIEWS.length) % VIEWS.length;
 
-        rawFeedDisplay.innerHTML = recentConversation.map(msg => {
-            const role = msg.role === 'user' ? 'You' : 'Architect';
-            return `<div style="margin-bottom: 12px;">
-                <strong style="color: ${msg.role === 'user' ? 'var(--aiu-primary)' : 'var(--aiu-accent)'};">${role}:</strong>
-                <p style="margin: 5px 0 0 0; color: var(--aiu-text-primary);">${msg.content}</p>
-            </div>`;
-        }).join('');
+        // Add active class to new view
+        const newView = document.getElementById(VIEWS[currentViewIndex]);
+        newView.classList.add('active');
 
-        // Add update animation
-        rawFeedDisplay.parentElement.classList.add('panel-updating');
-        setTimeout(() => {
-            rawFeedDisplay.parentElement.classList.remove('panel-updating');
-        }, 1500);
+        // Update label
+        currentViewLabel.textContent = VIEW_LABELS[currentViewIndex];
     }
 
+    function switchToView(viewName) {
+        const targetIndex = VIEWS.indexOf(viewName);
+        if (targetIndex === -1) return;
+
+        // Remove active from current
+        document.getElementById(VIEWS[currentViewIndex]).classList.remove('active');
+
+        // Set new index and activate
+        currentViewIndex = targetIndex;
+        document.getElementById(VIEWS[currentViewIndex]).classList.add('active');
+        currentViewLabel.textContent = VIEW_LABELS[currentViewIndex];
+    }
+
+    // --- Condensation Meter Logic ---
+    function updateCondensationMeter() {
+        messagesSinceLastSummary++;
+
+        // Fill pips up to current count
+        meterPips.forEach((pip, index) => {
+            if (index < messagesSinceLastSummary) {
+                pip.classList.add('filled');
+            }
+        });
+
+        // If we've hit 5 messages, the next response should trigger summarization
+        // The backend will handle this, we just need to be ready to animate
+    }
+
+    function resetCondensationMeter() {
+        messagesSinceLastSummary = 0;
+        meterPips.forEach(pip => {
+            pip.classList.remove('filled', 'pulsing');
+        });
+    }
+
+    async function triggerSummarizationAnimation() {
+        // Add pulsing effect to all pips
+        meterPips.forEach(pip => pip.classList.add('pulsing'));
+
+        // Switch to Summary view
+        switchToView('summary-view');
+
+        // Show condensing overlay
+        condensingOverlay.style.display = 'flex';
+
+        // Wait 2.5 seconds for effect
+        await new Promise(resolve => setTimeout(resolve, 2500));
+
+        // Hide overlay
+        condensingOverlay.style.display = 'none';
+
+        // Remove pulsing and reset meter
+        meterPips.forEach(pip => pip.classList.remove('pulsing'));
+        resetCondensationMeter();
+    }
+
+    // --- Summary & Preview Updates ---
     function updateSummary(newSummary) {
         if (!newSummary || newSummary.trim() === '') {
-            summaryDisplay.innerHTML = '<p class="placeholder-text">As you chat, the AI will condense your conversation into an evolving summary...</p>';
+            summaryDisplay.innerHTML = '<p class="placeholder-text">As you chat, the AI will condense your conversation into an evolving summary. This is the AI\'s "long-term memory" of your personality and knowledge.</p>';
             return;
         }
 
         contextualSummary = newSummary;
         summaryDisplay.innerHTML = `<p style="margin: 0; white-space: pre-wrap;">${newSummary}</p>`;
-
-        // Add update animation
-        summaryDisplay.parentElement.classList.add('panel-updating');
-        setTimeout(() => {
-            summaryDisplay.parentElement.classList.remove('panel-updating');
-        }, 1500);
     }
 
     function updatePreview(previewData) {
         if (!previewData || previewData.trim() === '') {
-            previewDisplay.innerHTML = '<code class="placeholder-text">Your persona\'s structured data will be built here...</code>';
+            previewDisplay.innerHTML = '<code class="placeholder-text">Your persona\'s structured data will be built here as you chat with the Architect. This is the "code" of your digital mind.</code>';
             return;
         }
 
-        // Try to format as JSON if it's valid JSON
+        // Try to format as JSON
         try {
             const parsed = JSON.parse(previewData);
             previewDisplay.textContent = JSON.stringify(parsed, null, 2);
         } catch (e) {
-            // If not valid JSON, just display as-is
             previewDisplay.textContent = previewData;
         }
-
-        // Add update animation
-        previewDisplay.parentElement.classList.add('panel-updating');
-        setTimeout(() => {
-            previewDisplay.parentElement.classList.remove('panel-updating');
-        }, 1500);
     }
 
-    function showCondensingEffect() {
-        // Show visual feedback that summarization is happening
-        summaryDisplay.parentElement.classList.add('condensing');
-        rawFeedDisplay.innerHTML = '<p class="placeholder-text" style="text-align: center;">🧠 Condensing memories...</p>';
-
-        setTimeout(() => {
-            summaryDisplay.parentElement.classList.remove('condensing');
-        }, 2000);
-    }
-
+    // --- API Communication ---
     async function apiCall(endpoint, options = {}) {
         if (!currentUser) throw new Error("Authentication required.");
         const token = await currentUser.getIdToken();
@@ -183,12 +226,11 @@ const studioController = (() => {
         if (user) {
             currentUser = user;
             authLoader.style.display = 'none';
-            studioContent.style.display = 'grid';
+            studioContent.style.display = 'flex';
 
             // Add initial greeting to conversation history
             const initialGreeting = chatHistory.querySelector('.ai-bubble').textContent;
             conversationHistory.push({ role: 'ai', content: initialGreeting });
-            updateRawFeed();
         } else {
             console.warn("A.I.U. Studio: No user signed in. Redirecting...");
             window.location.href = '/aiu-create';
@@ -201,7 +243,9 @@ const studioController = (() => {
 
         appendMessage(message, 'user');
         userInput.value = '';
-        updateRawFeed();
+
+        // Update condensation meter
+        updateCondensationMeter();
 
         showLoading(sendBtn, 'Architect is thinking...');
 
@@ -214,14 +258,14 @@ const studioController = (() => {
                 })
             });
 
-            // Update conversation history from backend (may be empty after summarization)
+            // Check if summarization occurred (conversation history was reset)
+            const summarizationOccurred = response.conversationHistory !== undefined &&
+                response.conversationHistory.length === 0 &&
+                conversationHistory.length > 0;
+
+            // Update conversation history from backend
             if (response.conversationHistory !== undefined) {
                 conversationHistory = response.conversationHistory;
-
-                // If history was cleared, show condensing effect
-                if (conversationHistory.length === 0) {
-                    showCondensingEffect();
-                }
             }
 
             // Update chat with AI response
@@ -229,15 +273,18 @@ const studioController = (() => {
                 appendMessage(response.chatResponse, 'ai');
             }
 
-            // Update Evolution Monitor panels
-            updateRawFeed();
-
+            // Update summary and preview
             if (response.updatedSummary) {
                 updateSummary(response.updatedSummary);
             }
 
             if (response.personaPreview) {
                 updatePreview(response.personaPreview);
+            }
+
+            // If summarization occurred, trigger animation
+            if (summarizationOccurred) {
+                await triggerSummarizationAnimation();
             }
 
             // Check for Core Memory prompt
@@ -254,7 +301,6 @@ const studioController = (() => {
     }
 
     function showCoreMemoryPrompt(prompt) {
-        // prompt should be an object like: { key: "name", question: "Is your name John?" }
         pendingCoreMemoryKey = prompt.key;
         coreMemoryQuestion.textContent = prompt.question;
         coreMemoryPrompt.style.display = 'block';
@@ -262,16 +308,11 @@ const studioController = (() => {
 
     function handleCoreMemoryResponse(answer) {
         if (pendingCoreMemoryKey && answer) {
-            // Store the confirmed fact
             coreMemory[pendingCoreMemoryKey] = answer;
         }
 
-        // Hide the prompt
         coreMemoryPrompt.style.display = 'none';
         pendingCoreMemoryKey = null;
-
-        // Optionally send a follow-up message to the AI
-        // For now, we'll just hide it and let the conversation continue
     }
 
     async function synthesizePersona() {
@@ -301,7 +342,7 @@ const studioController = (() => {
             if (response.finalDocument) {
                 finalDocument = response.finalDocument;
 
-                // Show the final document in the modal for review
+                // Show in modal
                 finalDocumentReview.textContent = JSON.stringify(finalDocument, null, 2);
                 confirmationModal.style.display = 'flex';
             }
@@ -335,7 +376,7 @@ const studioController = (() => {
             if (response.success) {
                 // Show success page
                 studioContent.innerHTML = `
-                    <div style="text-align: center; padding: 60px 20px; grid-column: 1 / -1;">
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 60px 20px;">
                         <div style="font-size: 5rem; margin-bottom: 20px;">✨</div>
                         <h1 style="font-size: 2.5rem; margin-bottom: 15px;">Congratulations!</h1>
                         <p style="font-size: 1.3rem; color: var(--aiu-text-secondary); margin-bottom: 40px;">
@@ -357,7 +398,6 @@ const studioController = (() => {
                     </div>
                 `;
 
-                // Hide modal
                 confirmationModal.style.display = 'none';
             }
 
@@ -375,8 +415,12 @@ const studioController = (() => {
 
     // --- Event Listeners ---
     function attachEventListeners() {
-        sendBtn.addEventListener('click', sendMessage);
+        // View cycling
+        prevViewBtn.addEventListener('click', () => cycleView(-1));
+        nextViewBtn.addEventListener('click', () => cycleView(1));
 
+        // Chat
+        sendBtn.addEventListener('click', sendMessage);
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -384,9 +428,11 @@ const studioController = (() => {
             }
         });
 
+        // Core Memory
         coreMemoryYesBtn.addEventListener('click', () => handleCoreMemoryResponse(true));
         coreMemoryNoBtn.addEventListener('click', () => handleCoreMemoryResponse(false));
 
+        // Finalization
         synthesizeBtn.addEventListener('click', synthesizePersona);
         confirmSaveBtn.addEventListener('click', confirmAndSave);
         cancelSaveBtn.addEventListener('click', cancelSave);
