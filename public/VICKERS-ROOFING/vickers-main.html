@@ -14,8 +14,8 @@
     <meta property="og:description"
         content="Serving Hope, BC and surrounding areas with reliable, high-quality roofing solutions. Free inspections and estimates available.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://roofingbro.com/">
-    <meta property="og:image" content="https://roofingbro.com/images/roof-social-preview.jpg">
+    <meta property="og:url" content="https://aarie.ca/vickers-roofing/">
+    <meta property="og:image" content="https://aarie.ca/vickers-roofing/images/roof-social-preview.jpg">
     <!-- You should create an image named roof-social-preview.jpg (1200x630px) -->
     <meta property="og:site_name" content="Vickers Roofing">
 
@@ -24,7 +24,7 @@
     <meta name="twitter:title" content="Vickers Roofing - Your Trusted Local Roofers">
     <meta name="twitter:description"
         content="Serving Hope, BC and surrounding areas with reliable, high-quality roofing solutions. Free inspections and estimates available.">
-    <meta name="twitter:image" content="https://roofingbro.com/images/roof-social-preview.jpg">
+    <meta name="twitter:image" content="https://aarie.ca/vickers-roofing/images/roof-social-preview.jpg">
 
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏠</text></svg>">
@@ -954,34 +954,7 @@
                 display: none;
             }
 
-            /* Hide desktop CTA on mobile */
-            #hamburger-btn {
-                display: block;
-                background: none;
-                border: none;
-                font-size: 1.8rem;
-                cursor: pointer;
-                color: #111827;
-            }
-
-            #mobile-menu {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: #fff;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                padding: 20px;
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
-            }
-
-            #mobile-menu.active {
-                display: flex;
-            }
-
+            /* Mobile menu styles removed */
             .why-us-content {
                 grid-template-columns: 1fr;
             }
@@ -1039,17 +1012,7 @@
                 <a href="#booking-rentals" class="nav-link">Booking</a>
             </nav>
             <button class="btn btn-primary desktop-cta-btn js-open-modal">Request a Free Inspection</button>
-            <button id="hamburger-btn" aria-label="Open Menu">
-                <i class="fas fa-bars"></i>
-            </button>
         </div>
-        <nav id="mobile-menu">
-            <a href="#services" class="nav-link">Services</a>
-            <a href="#gallery" class="nav-link">Gallery</a>
-            <a href="#why-us" class="nav-link">Why Us</a>
-            <a href="#booking-rentals" class="nav-link">Booking</a>
-            <button class="btn btn-primary js-open-modal">Request a Free Inspection</button>
-        </nav>
     </header>
 
     <main>
@@ -1384,25 +1347,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Mobile Menu Toggle
-            const hamburgerBtn = document.getElementById('hamburger-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const desktopCta = document.querySelector('.desktop-cta-btn');
-
-            hamburgerBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('active');
-            });
-
-            function checkScreenWidth() {
-                if (window.innerWidth <= 820) {
-                    if (desktopCta) desktopCta.style.display = 'none';
-                } else {
-                    if (desktopCta) desktopCta.style.display = 'inline-block';
-                }
-            }
-            checkScreenWidth();
-            window.addEventListener('resize', checkScreenWidth);
-
             // Consultation Modal Logic
             // NEW: Define the full backend API URL
             // !!! IMPORTANT: Use the correct URL for your deployed Cloud Run service !!!

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - A.I.U.</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>✨</text></svg>">
+    
+    <!-- Dependencies -->
+    <link rel="stylesheet" href="/css/aiu-main.css"> <!-- Re-uses the main A.I.U. styles -->
+    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <style>
+        /* A.I.U. Checkout Specific Theme Overrides */
+        body { background-color: var(--aiu-bg); }
+        .checkout-container { max-width: 600px; margin: 40px auto; padding: 20px; }
+        .panel { background-color: var(--aiu-surface); border: 1px solid var(--aiu-border); border-radius: 16px; padding: 30px; }
+        .panel-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--aiu-border); }
+        .panel-icon { font-size: 1.8rem; color: var(--aiu-primary); }
+        .panel-header h2 { font-size: 1.5rem; }
+        
+        .summary-details p { color: var(--aiu-text-primary); font-size: 1rem; }
+        .summary-details strong { color: #fff; }
+        
+        .price-display { text-align: center; margin: 30px 0; }
+        .price-main { font-size: 3rem; font-weight: 800; color: #fff; }
+        .price-breakdown { color: var(--aiu-text-secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        .form-input, .stripe-card-container { background-color: var(--aiu-bg); border-color: var(--aiu-border); color: var(--aiu-text-primary); }
+        .form-input:focus, .stripe-card-container.focused { border-color: var(--aiu-primary); box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2); }
+        
+        .error-message { display: none; background: rgba(220, 38, 38, 0.1); color: #f87171; border-left: 4px solid #dc2626; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .error-message.visible { display: block; }
+
+        .back-link-container { text-align: center; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <div class="checkout-container">
+        <!-- Order Summary -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-icon">🛒</span>
+                <h2>Your Order</h2>
+            </div>
+            <div class="summary-details">
+                <p><strong>Product:</strong> A.I.U. Persona Onboarding</p>
+                <p>You are purchasing the initial setup and the first month of service to create and host your digital persona.</p>
+                <div class="price-display">
+                    <div class="price-main">$17.99</div>
+                    <div class="price-breakdown">($15.00 setup + $2.99 first month)</div>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--aiu-text-secondary); text-align: center;">After today, you will be charged $2.99 per month. You can cancel anytime from your dashboard.</p>
+            </div>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="panel" style="margin-top: 30px;">
+            <div class="panel-header">
+                <span class="panel-icon">💳</span>
+                <h2>Secure Payment</h2>
+            </div>
+            <form id="payment-form">
+                <button id="submit-btn" class="btn btn-primary" style="width: 100%;">
+                    <span class="btn-text">Proceed to Secure Checkout</span>
+                </button>
+                <div id="error-message" class="error-message"></div>
+            </form>
+        </div>
+
+        <div class="back-link-container">
+            <a href="/aiu-create" class="back-link">← Go Back</a>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CONFIGURATION ---
+            const STRIPE_PUBLISHABLE_KEY = 'pk_test_51Rp7gdRuBpQt4n9NHC1N9DjWmBDfj6Q7N4sR8mTgkIlDFvPOpgE8VLhztsX0WWtfa1nnn1upiboEo8OzsaVzSrAj00g3wM9yCA'; // Your AARIE.ca platform publishable key
+            const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+            const STORE_ID = 'aarie-platform';
+
+            // --- DOM ELEMENTS ---
+            const form = document.getElementById('payment-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const errorDiv = document.getElementById('error-message');
+            
+            // --- STATE ---
+            let currentUser = null;
+            const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+
+            // --- HELPER FUNCTIONS ---
+            function showError(message) {
+                errorDiv.textContent = message;
+                errorDiv.classList.add('visible');
+            }
+            function showLoading(isLoading) {
+                submitBtn.disabled = isLoading;
+                submitBtn.innerHTML = isLoading 
+                    ? `<span class="spinner"></span> Redirecting...` 
+                    : 'Proceed to Secure Checkout';
+            }
+
+            // --- INITIALIZATION ---
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    currentUser = user;
+                    submitBtn.disabled = false;
+                } else {
+                    // Not signed in, redirect back to the create page which has the sign-in button
+                    console.warn("No user signed in on checkout page. Redirecting.");
+                    window.location.href = '/aiu-create';
+                }
+            });
+
+            // --- FORM SUBMISSION ---
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                showLoading(true);
+                showError('');
+
+                if (!currentUser) {
+                    showError("You must be signed in to complete this purchase.");
+                    showLoading(false);
+                    return;
+                }
+
+                try {
+                    // 1. Call our backend endpoint to create the Stripe Checkout Session
+                    const response = await fetch(`${BACKEND_URL}/api/v1/${STORE_ID}/create-aiu-checkout-session`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${await currentUser.getIdToken()}`
+                        },
+                        body: JSON.stringify({ user_uid: currentUser.uid })
+                    });
+
+                    if (!response.ok) {
+                        const errData = await response.json();
+                        throw new Error(errData.error || 'Could not create payment session.');
+                    }
+
+                    const session = await response.json();
+
+                    // 2. Redirect to Stripe's hosted checkout page
+                    const { error } = await stripe.redirectToCheckout({
+                        sessionId: session.sessionId
+                    });
+
+                    if (error) {
+                        throw new Error(error.message);
+                    }
+
+                } catch (error) {
+                    showError(`Initialization failed: ${error.message}`);
+                    showLoading(false);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

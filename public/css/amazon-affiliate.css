@@ -1,0 +1,245 @@
+/* Amazon Affiliate Section */
+.amazon-affiliate-section {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #dc2626 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+}
+
+.section-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+  background-image: 
+    radial-gradient(circle at 25% 25%, #ffffff 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, #ffffff 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: snowDrift 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes snowDrift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10px, -10px); }
+}
+
+.section-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.holiday-badge {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  padding: 12px 24px;
+  margin-bottom: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: white;
+  font-size: 1rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.affiliate-header h2 {
+  color: white;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.details {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: clamp(1rem, 2vw, 1.1rem);
+  margin-bottom: 40px;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+}
+
+.btn {
+  padding: 18px 40px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 280px;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: white;
+  color: #0284c7;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid white;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.product-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.product-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  border-color: #FFA41C;
+}
+
+.product-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+.product-info h3 {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.price-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.current-price {
+  color: #FFA41C;
+  font-weight: bold;
+  font-size: 1.3rem;
+  animation: priceGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes priceGlow {
+  0% { text-shadow: 0 0 5px rgba(255, 164, 28, 0.5); }
+  100% { text-shadow: 0 0 15px rgba(255, 164, 28, 0.8); }
+}
+
+.original-price {
+  text-decoration: line-through;
+  opacity: 0.7;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.deal-badge {
+  background: #dc2626;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  align-self: flex-start;
+}
+
+.product-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .amazon-affiliate-section {
+    padding: 60px 15px;
+    min-height: auto;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+  }
+  
+  .btn {
+    min-width: 100%;
+  }
+  
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .product-card {
+    padding: 15px;
+  }
+  
+  .product-card img {
+    height: 120px;
+  }
+}

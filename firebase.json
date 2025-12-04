@@ -293,6 +293,30 @@
       {
         "source": "/vickers-checkout/**",
         "destination": "/vickers-roofing/vickers-checkout.html"
+      },
+
+      
+      {
+        "source": "/aiu-menu",
+        "destination": "/aiu-menu.html"
+      },
+      {
+        "source": "/aiu-create",
+        "destination": "/aiu-create-info.html"
+      },
+      {
+        "source": "/aiu-studio",
+        "destination": "/aiu-studio.html"
+      },
+      {
+        "source": "/aiu-library",
+        "destination": "/aiu-library.html"
+      },
+
+      
+      {
+        "source": "**",
+        "destination": "/index.html"
       }
     ],
     "headers": [

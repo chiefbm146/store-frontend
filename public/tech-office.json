@@ -1,0 +1,285 @@
+{
+  "sectionName": "Tech & Home Office",
+  "products": [
+    {
+      "id": "to-1",
+      "title": "LongPlus Smart 4K 8CH Home Security Camera System, 4Pcs Wired PoE IP Cameras",
+      "price": "449.99",
+      "wasPrice": "499.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4p9G8d4",
+      "image": "/images/ALL-PRODUCTS/LongPlus.jpg",
+      "category": "Smart Home"
+    },
+    {
+      "id": "to-2",
+      "title": "MOVA P10 Pro Ultra Robot Vacuum and Mop, 13,000Pa Suction, Hot Water Auto Mop Washing",
+      "price": "549.00",
+      "wasPrice": "699.00",
+      "deal": "Deal selling fast",
+      "link": "https://amzn.to/4p4iw9K",
+      "image": "/images/ALL-PRODUCTS/MOVAP10ProUltraRobotVacuum.jpg",
+      "category": "Smart Home"
+    },
+    {
+      "id": "to-3",
+      "title": "CPLA Moon Lamp Upgrade 128 Colors, 5.9inch 3D Night Light with Wooden Stand",
+      "price": "25.99",
+      "wasPrice": "39.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/48HYvQu",
+      "image": "/images/ALL-PRODUCTS/CPLAMoonLampUpgrade.jpg",
+      "category": "Smart Home"
+    },
+    {
+      "id": "to-4",
+      "title": "Micomlan LED Desk Lamp with Clamp, Architect Desk Lamp for Home Office",
+      "price": "68.39",
+      "wasPrice": "79.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/3KoC5uq",
+      "image": "/images/ALL-PRODUCTS/MicomlanLedDeskLamp.jpg",
+      "category": "Smart Home"
+    },
+    {
+      "id": "to-5",
+      "title": "Govee RGBIC Smart Corner Floor Lamp, Standing Lamp with Reactive Music Mode",
+      "price": "69.99",
+      "wasPrice": "79.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/3KiflfE",
+      "image": "/images/ALL-PRODUCTS/GoveeRGBICSmartCornerFloorLamp.jpg",
+      "category": "Smart Home"
+    },
+    {
+      "id": "to-6",
+      "title": "16.54 Inches Tall Safe Box with Fireproof Waterproof Bag, Anti-Theft Digital Security Lock Box",
+      "price": "139.99",
+      "wasPrice": "169.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4iy9xv9",
+      "image": "/images/ALL-PRODUCTS/16.54InchesTallSafeBox.jpg",
+      "category": "Smart Home"
+    },
+    {
+      "id": "to-7",
+      "title": "GloryAir 6L Quiet Top Fill Cool & Warm Mist Humidifier for Bedroom Large Room",
+      "price": "84.99",
+      "wasPrice": "99.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/48wEOdl",
+      "image": "/images/ALL-PRODUCTS/HumidifiersforBedroomLargeRoomHome.jpg",
+      "category": "Smart Home"
+    },
+    {
+      "id": "to-8",
+      "title": "Govee Smart LED Light Bars, RGBICWW WiFi TV Backlights with Scene and Music Modes",
+      "price": "45.99",
+      "wasPrice": "69.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/48m7ENj",
+      "image": "/images/ALL-PRODUCTS/GoveeSmartLEDLightBars.jpg",
+      "category": "Smart Home"
+    },
+    {
+      "id": "to-9",
+      "title": "GoveeLife Smart Air Purifier for Home Large Room up to 1046 ft²",
+      "price": "71.13",
+      "wasPrice": "79.04",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4ox7Hfn",
+      "image": "/images/ALL-PRODUCTS/GoveeLifeSmartAirPurifierforHomeLargeRoom.jpg",
+      "category": "Smart Home"
+    },
+    {
+      "id": "to-10",
+      "title": "Nextmug - Temperature-Controlled, Self-Heating Coffee Mug (415 mL)",
+      "price": "139.95",
+      "wasPrice": "189.95",
+      "deal": null,
+      "link": "https://amzn.to/4anpH8u",
+      "image": "/images/ALL-PRODUCTS/Nextmug-Temperature-Controlled-Self-Heating.jpg",
+      "category": "Office Essentials"
+    },
+    {
+      "id": "to-11",
+      "title": "Ergonomic Foot Rest for Under Desk at Work - Memory Foam",
+      "price": "35.99",
+      "wasPrice": "80.00",
+      "deal": null,
+      "link": "https://amzn.to/44HCCOT",
+      "image": "/images/ALL-PRODUCTS/ErgonomicFootRestforUnderDeskatWork.jpg",
+      "category": "Office Essentials"
+    },
+    {
+      "id": "to-12",
+      "title": "Lamicall Adjustable Laptop Stand, Portable & Foldable Aluminum Riser",
+      "price": "39.99",
+      "wasPrice": "44.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4p7dzgn",
+      "image": "/images/ALL-PRODUCTS/LamicallAdjustableLaptopStand.jpg",
+      "category": "Office Essentials"
+    },
+    {
+      "id": "to-13",
+      "title": "Lumbar Support Pillow for Office Chair & Car, Memory Foam Back Cushion",
+      "price": "27.87",
+      "wasPrice": "30.97",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4iuPttp",
+      "image": "/images/ALL-PRODUCTS/LumbarSupportPillowforOfficeChairCar.jpg",
+      "category": "Office Essentials"
+    },
+    {
+      "id": "to-14",
+      "title": "Novium Hoverpen 2.0 Futuristic Luxury Pen, Free Spinning Executive Pen",
+      "price": "103.00",
+      "wasPrice": "129.00",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4pFPj4L",
+      "image": "/images/ALL-PRODUCTS/NoviumHoverpen2.0FuturisticLuxury.jpg",
+      "category": "Office Essentials"
+    },
+    {
+      "id": "to-15",
+      "title": "JIALONG Large Mouse Pad Desk Mat with Office Shortcuts",
+      "price": "22.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/440mMih",
+      "image": "/images/ALL-PRODUCTS/JIALONGLargeMousePadDeskMat.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-16",
+      "title": "HAJAAN SuperX Gaming PC | Liquid Cooled | GeForce RTX 4060 8GB | AMD Ryzen 5 5600G",
+      "price": "1449.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/48n1Fb1",
+      "image": "/images/ALL-PRODUCTS/HAJAANSuperXGamingPC.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-17",
+      "title": "Skytech Archangel Gaming PC Desktop, Ryzen 7 5700, AMD RX 6600 8GB",
+      "price": "1144.85",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/48b9BgN",
+      "image": "/images/ALL-PRODUCTS/SkytechArchangelGamingPCDesktop.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-18",
+      "title": "HAJAAN Breeze PRO Gaming PC Desktop - GeForce RTX 4060 8GB, Intel Core i5-12400F",
+      "price": "1469.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/4oraXsM",
+      "image": "/images/ALL-PRODUCTS/HAJAANBreezePROGamingPC.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-19",
+      "title": "HAJAAN Breeze Gaming PC - GeForce RTX 3060, Intel Core i5 12400F",
+      "price": "1469.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/4osFTc3",
+      "image": "/images/ALL-PRODUCTS/HAJAANBreezeGamingPC-GeForceRTX3060.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-20",
+      "title": "MSI Optix 34\" AMD Freesync Gaming Curved Monitor, 144Hz Refresh Rate",
+      "price": "289.99",
+      "wasPrice": "420.08",
+      "deal": "Deal selling fast",
+      "link": "https://amzn.to/3MuJh8O",
+      "image": "/images/ALL-PRODUCTS/MSIOptixMAG342CQR1500R.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-21",
+      "title": "SANSUI 32 Inch Curved 240Hz Gaming Monitor, FHD 1080P",
+      "price": "229.97",
+      "wasPrice": "261.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/3XX42fV",
+      "image": "/images/ALL-PRODUCTS/SANSUI32InchCurved240HzGaming.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-22",
+      "title": "CRUA 34'' White Ultrawide Gaming Monitor 120HZ, UWFHD IPS Panel",
+      "price": "239.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/48q2TSP",
+      "image": "/images/ALL-PRODUCTS/CRUA34'WhiteUltrawideGamingMonitor120HZ.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-23",
+      "title": "KOORUI 27 Inch Gaming Monitor, QHD 200Hz 1ms IPS Display with Adaptive Sync",
+      "price": "189.99",
+      "wasPrice": "215.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/43YuKIB",
+      "image": "/images/ALL-PRODUCTS/KOORUI27InchGamingMonitor.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-24",
+      "title": "ACEMAGIC LX15PRO Gaming Laptop 15.6\" FHD - AMD Ryzen 5 7430U",
+      "price": "799.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/3Y5nJlH",
+      "image": "/images/ALL-PRODUCTS/ACEMAGICLX15PROGamingLaptop.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-25",
+      "title": "ASUS TUF Gaming A16 Gaming Laptop, 16” 165Hz, NVIDIA GeForce RTX 5050 GPU",
+      "price": "1149.00",
+      "wasPrice": "1216.50",
+      "deal": null,
+      "link": "https://amzn.to/48aSnA7",
+      "image": "/images/ALL-PRODUCTS/ASUSTUFGamingA16GamingLaptop.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-26",
+      "title": "Acer Nitro V Slim ANV16S-41-R2AJ-US Laptop 16\" FHD, 32GB RAM, 1TB SSD",
+      "price": "1599.00",
+      "wasPrice": "1999.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4pE0H19",
+      "image": "/images/ALL-PRODUCTS/AcerNitroVSlim.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-27",
+      "title": "Redragon M808 Storm Lightweight RGB Wireless Gaming Mouse",
+      "price": "42.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/48s62BE",
+      "image": "/images/ALL-PRODUCTS/RedragonM808StormLightweight.jpg",
+      "category": "PC Gaming & Accessories"
+    },
+    {
+      "id": "to-28",
+      "title": "Redragon M612 PRO RGB Gaming Mouse, Wired/Wireless Optical Gamer Mouse",
+      "price": "32.16",
+      "wasPrice": "36.54",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/3Xu83s7",
+      "image": "/images/ALL-PRODUCTS/RedragonM612PRORGBGaming.jpg",
+      "category": "PC Gaming & Accessories"
+    }
+  ]
+}

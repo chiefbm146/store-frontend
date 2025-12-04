@@ -1,0 +1,364 @@
+Of course. Here is a clear, step-by-step guide for your developer to implement the new multi-section layout, followed by the new JSON files with placeholder content.
+
+Instructions for Your Developer
+
+Here are the precise edits required for the moon-store.html and moon-store.css files.
+
+Step 1: HTML Edits (in moon-store.html)
+
+The goal is to add a new top-level navigation bar for "Sections" and repurpose the existing tab bar for "Categories".
+
+Add the new Section Tabs:
+Right below the <main class="container"> tag, add the following new <nav> block. This will be our main section navigation.
+
+code
+Html
+play_circle
+download
+content_copy
+expand_less
+<main class="container">
+  <!-- ===== ADD THIS NEW BLOCK START ===== -->
+  <nav class="section-tabs" id="section-tabs">
+    <button class="section-tab-button active" data-section="All">All Products</button>
+    <button class="section-tab-button" data-section="Reconciliation & Wellness">Reconciliation & Wellness</button>
+    <button class="section-tab-button" data-section="Tech & Home Office">Tech & Home Office</button>
+    <button class="section-tab-button" data-section="Home & Kitchen">Home & Kitchen</button>
+    <button class="section-tab-button" data-section="Health & Fitness">Health & Fitness</button>
+    <button class="section-tab-button" data-section="Gifts & Style">Gifts & Style</button>
+  </nav>
+  <!-- ===== ADD THIS NEW BLOCK END ===== -->
+
+  <nav class="product-tabs" id="product-tabs">
+    <button class="tab-button active" data-category="All">All Items</button>
+    <!-- ... existing buttons ... -->
+
+Rename the existing Category Tabs container:
+To avoid confusion in the code, we will rename the existing tab container. Find this line:
+<nav class="product-tabs" id="product-tabs">
+And change it to:
+<nav class="category-tabs" id="category-tabs">
+
+Clean out the old Category Tabs:
+The JavaScript will now generate these buttons dynamically. Remove all the <button> elements from inside the <nav class="category-tabs"> container, leaving it empty like this:
+
+code
+Html
+download
+content_copy
+expand_less
+<nav class="category-tabs" id="category-tabs">
+  <!-- This will be populated by JavaScript -->
+</nav>
+Step 2: CSS Edits (in moon-store.css)
+
+We need to add styles for the new section tabs and update the selector for the category tabs.
+
+Add new styles for Section Tabs:
+In moon-store.css, find the /* --- Product Tabs --- */ section. Add the following new CSS code at the beginning of that section. This will style our new, higher-level tabs to make them look distinct.
+
+code
+CSS
+download
+content_copy
+expand_less
+/* ===== ADD THIS NEW CSS START ===== */
+/* --- Main Section Tabs --- */
+.section-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e1e8ed;
+}
+.section-tab-button {
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: var(--heading-font);
+  border: none;
+  background-color: transparent;
+  color: var(--secondary-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.section-tab-button:after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background-color: var(--accent-color);
+  transition: width 0.3s ease;
+}
+.section-tab-button:hover {
+  color: var(--heading-color);
+}
+.section-tab-button.active {
+  color: var(--accent-color);
+}
+.section-tab-button.active:after {
+  width: 80%;
+}
+/* ===== ADD THIS NEW CSS END ===== */
+
+/* --- Product Tabs --- */
+.product-tabs {
+/* ... existing styles ... */
+
+Update the old CSS selector:
+Find the CSS rule for .product-tabs and rename it to .category-tabs.
+
+Find this:
+
+code
+CSS
+download
+content_copy
+expand_less
+.product-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  padding: 10px 0;
+}
+
+And change it to this:
+
+code
+CSS
+download
+content_copy
+expand_less
+.category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  padding: 10px 0;
+}
+New JSON Files for Your Sections
+
+Here are the new JSON files. Create these files in the same directory as your existing moon-store-products.json.
+
+Important Note: You provided a local file path for the image. For a website, you must use a relative web path. I have converted "C:\..." to "/images/MOON-AFFILIATE/9.jpg". This assumes your images folder is accessible from the root of your website.
+
+1. reconciliation-wellness.json
+
+(This will replace your old moon-store-products.json. Rename the old file to this new name.)
+
+code
+JSON
+download
+content_copy
+expand_less
+{
+  "sectionName": "Reconciliation & Wellness",
+  "products": [
+    {
+      "id": "rw-1",
+      "title": "Wayi Wah! Indigenous Pedagogies: An Act for Reconciliation",
+      "price": "14.75",
+      "wasPrice": "36.34",
+      "deal": null,
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/1.jpg",
+      "category": "Books"
+    },
+    {
+      "id": "rw-2",
+      "title": "Orange Shirt Day Kid Hoodie, Children Matters Unisex Hooded Pullover",
+      "price": "26.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/15.jpg",
+      "category": "Apparel"
+    },
+    {
+      "id": "rw-3",
+      "title": "Handcrafted Ceramic Incense Holder with Chimney, Smudge Bowl",
+      "price": "45.23",
+      "wasPrice": null,
+      "deal": null,
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/32.jpg",
+      "category": "Wellness & Ceremony"
+    }
+  ]
+}
+2. tech-office.json
+code
+JSON
+download
+content_copy
+expand_less
+{
+  "sectionName": "Tech & Home Office",
+  "products": [
+    {
+      "id": "to-1",
+      "title": "Smart Wi-Fi LED Light Bulb",
+      "price": "24.99",
+      "wasPrice": null,
+      "deal": "Smart Buy",
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "Smart Home"
+    },
+    {
+      "id": "to-2",
+      "title": "Ergonomic High-Back Office Chair",
+      "price": "189.50",
+      "wasPrice": "229.99",
+      "deal": null,
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "Office Essentials"
+    },
+    {
+      "id": "to-3",
+      "title": "Mechanical RGB Gaming Keyboard",
+      "price": "79.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "PC Gaming & Accessories"
+    }
+  ]
+}
+3. home-kitchen.json
+code
+JSON
+download
+content_copy
+expand_less
+{
+  "sectionName": "Home & Kitchen",
+  "products": [
+    {
+      "id": "hk-1",
+      "title": "High-Speed Personal Blender",
+      "price": "59.95",
+      "wasPrice": null,
+      "deal": null,
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "Kitchen Gadgets"
+    },
+    {
+      "id": "hk-2",
+      "title": "French Press Coffee Maker",
+      "price": "34.99",
+      "wasPrice": "45.00",
+      "deal": "Deal of the Day",
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "Coffee & Tea Corner"
+    },
+    {
+      "id": "hk-3",
+      "title": "Set of 3 Floating Wall Shelves",
+      "price": "28.89",
+      "wasPrice": null,
+      "deal": null,
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "Home Decor"
+    }
+  ]
+}
+4. health-fitness.json
+code
+JSON
+download
+content_copy
+expand_less
+{
+  "sectionName": "Health & Fitness",
+  "products": [
+    {
+      "id": "hf-1",
+      "title": "Adjustable Resistance Band Set",
+      "price": "31.99",
+      "wasPrice": null,
+      "deal": "Amazon's Choice",
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "Workout Gear"
+    },
+    {
+      "id": "hf-2",
+      "title": "Non-Slip Eco-Friendly Yoga Mat",
+      "price": "42.50",
+      "wasPrice": null,
+      "deal": null,
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "Yoga & Meditation"
+    },
+    {
+      "id": "hf-3",
+      "title": "Smart Fitness Tracker Watch",
+      "price": "65.00",
+      "wasPrice": "89.99",
+      "deal": null,
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "Wearable Tech"
+    }
+  ]
+}
+5. gifts-style.json
+code
+JSON
+download
+content_copy
+expand_less
+{
+  "sectionName": "Gifts & Style",
+  "products": [
+    {
+      "id": "gs-1",
+      "title": "Luxury Silk Sleep Mask",
+      "price": "22.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "Gifts for Her"
+    },
+    {
+      "id": "gs-2",
+      "title": "Leather RFID-Blocking Wallet",
+      "price": "39.99",
+      "wasPrice": "55.00",
+      "deal": "Top Gift",
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "Gifts for Him"
+    },
+    {
+      "id": "gs-3",
+      "title": "Compact Travel Hanging Toiletry Bag",
+      "price": "29.50",
+      "wasPrice": null,
+      "deal": null,
+      "link": "#",
+      "image": "/images/MOON-AFFILIATE/9.jpg",
+      "category": "Travel Essentials"
+    }
+  ]
+}
+
+Next Step: The final piece is to update the JavaScript in moon-store.html to load all these new files and handle the new two-level tab filtering logic.

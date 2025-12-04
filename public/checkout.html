@@ -653,11 +653,12 @@
             </div>
 
             <div class="product-card">
-                <div class="product-name">7-Day Launchpad - One-Time Payment</div>
+                <div class="product-name">Loading Product...</div>
                 <p class="product-description">
-                    Design mockup in 72 hours. Complete website live in 7-10 days. Custom design, product setup, AI chatbot, and payment processing - all included.
+                    Please wait while we fetch the details.
                 </p>
-                <div class="product-price">$99</div>
+                <!-- CHANGE 1: REMOVED HARDCODED PRICE -->
+                <div class="product-price">...</div>
                 <div class="product-note">One-time payment - No monthly fees</div>
             </div>
 
@@ -734,7 +735,8 @@
                 <!-- Submit Button -->
                 <button type="submit" id="submit-btn" class="submit-btn" disabled>
                     <span class="spinner"></span>
-                    <span class="btn-text">Pay $99</span>
+                    <!-- CHANGE 2: REMOVED HARDCODED PRICE -->
+                    <span class="btn-text">Loading Price...</span>
                 </button>
 
                 <!-- Security Footer -->
@@ -763,180 +765,218 @@
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
-        // ========================================
-        // STRIPE CHECKOUT CONFIGURATION
-        // ========================================
-        const STRIPE_PUBLISHABLE_KEY = 'pk_test_51Rp7gdRuBpQt4n9NHC1N9DjWmBDfj6Q7N4sR8mTgkIlDFvPOpgE8VLhztsX0WWtfa1nnn1upiboEo8OzsaVzSrAj00g3wM9yCA';
-        const BACKEND_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
+        // =======================================================================
+        // UNIVERSAL STRIPE CHECKOUT ENGINE v2.0
+        // =======================================================================
+        (function() {
+            // --- 1. CONFIGURATION ---
+            // These keys should be for your PLATFORM account, as the backend handles routing.
+            const STRIPE_PUBLISHABLE_KEY = 'pk_test_51Rp7gdRuBpQt4n9NHC1N9DjWmBDfj6Q7N4sR8mTgkIlDFvPOpgE8VLhztsX0WWtfa1nnn1upiboEo8OzsaVzSrAj00g3wM9yCA'; // AARIE.ca Platform Publishable Key
+            const BACKEND_URL = 'https://stores-backend-52450564461.us-central1.run.app';
 
-        // NEW: Map of product details for the UI. Price comes from the backend.
-        const PRODUCT_DETAILS_MAP = {
-            '7-day-launchpad': {
-                name: 'The 7-Day Launchpad',
-                description: 'Our flagship package: a custom-coded landing page, store, AI chatbot, and Stripe integration. Live in 7-10 days.',
-                features: [
-                    'Custom Store Design',
-                    'Product & Service Setup',
-                    'Secure Payment Processing',
-                    'Custom AI Chatbot',
-                    '7-10 Day Delivery Guarantee'
-                ]
-            },
-            'professional-suite': {
-                name: 'The Professional Suite',
-                description: 'For growing businesses needing advanced features like custom database integrations and multi-language support.',
-                features: [
-                    'Everything in Launchpad',
-                    'Advanced UI/UX Design',
-                    'Custom Database Integrations',
-                    'Multi-Language Support',
-                    'Complex Backend Logic'
-                ]
-            },
-            'enterprise-plan': {
-                name: 'The Enterprise Plan',
-                description: 'For scaling companies needing a full platform, API access, and dedicated support.',
-                features: [
-                    'Everything in Professional',
-                    'Full API Access',
-                    'Dedicated Support & SLA',
-                    'Monthly Optimization Reviews',
-                    'White-Label Branding'
-                ]
-            }
-        };
+            // --- 2. GLOBAL STATE ---
+            let clientSecret = null;
+            let storeId = 'aarie-platform'; // Default, will be read from URL if present
+            let productId = '7-day-launchpad'; // Default
+            
+            // --- 3. INITIALIZE STRIPE ---
+            const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+            let cardElement; // Will be initialized later
 
-        let clientSecret = null;
-        const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
-        const elements = stripe.elements();
-        const cardElement = elements.create('card', {
-            style: {
-                base: { fontSize: '16px', color: '#1a1a1a', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' },
-                invalid: { color: '#dc3545', iconColor: '#dc3545' }
-            },
-            hidePostalCode: true
-        });
+            // --- 4. DOM ELEMENTS ---
+            const form = document.getElementById('checkout-form');
+            const nameInput = document.getElementById('customer-name');
+            const emailInput = document.getElementById('customer-email');
+            const phoneInput = document.getElementById('customer-phone');
+            const postalCodeInput = document.getElementById('postal-code');
+            const termsCheckbox = document.getElementById('accept-terms');
+            const submitBtn = document.getElementById('submit-btn');
+            const errorDiv = document.getElementById('error-message');
 
-        const nameInput = document.getElementById('customer-name');
-        const emailInput = document.getElementById('customer-email');
-        const phoneInput = document.getElementById('customer-phone');
-        const postalCodeInput = document.getElementById('postal-code');
-        const termsCheckbox = document.getElementById('accept-terms');
-        const submitBtn = document.getElementById('submit-btn');
-        const errorDiv = document.getElementById('error-message');
-
-        let cardComplete = false;
-
-        function updateSubmitButton() {
-            const formComplete = nameInput.value.trim() && emailInput.value.trim() && phoneInput.value.trim() && postalCodeInput.value.trim() && termsCheckbox.checked && cardComplete;
-            submitBtn.disabled = !formComplete;
-        }
-
-        function showError(message) {
-            errorDiv.textContent = message;
-            errorDiv.classList.add('visible');
-        }
-
-        function hideError() {
-            errorDiv.classList.remove('visible');
-        }
-
-        function setLoading(loading) {
-            submitBtn.classList.toggle('loading', loading);
-            submitBtn.disabled = loading;
-        }
-
-        // NEW: Main initialization function
-        async function initializeCheckout() {
-            // 1. Get Product ID from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = urlParams.get('product_id') || '7-day-launchpad'; // Default to launchpad
-
-            const productDetails = PRODUCT_DETAILS_MAP[productId];
-            if (!productDetails) {
-                showError("Invalid product selected. Please go back and choose a plan.");
-                return;
+            // --- 5. HELPER FUNCTIONS ---
+            function showError(message) {
+                errorDiv.textContent = message;
+                errorDiv.classList.add('visible');
             }
 
-            // 2. Update UI with product details
-            document.querySelector('.product-name').textContent = productDetails.name;
-            document.querySelector('.product-description').textContent = productDetails.description;
-            const featuresList = document.querySelector('.features-list');
-            featuresList.innerHTML = productDetails.features.map(feature => `
-                <div class="feature-item">
-                    <span class="feature-icon">✓</span>
-                    <span class="feature-text"><strong>${feature}</strong></span>
-                </div>
-            `).join('');
+            function hideError() {
+                errorDiv.classList.remove('visible');
+            }
 
-            try {
-                // 3. Create Payment Intent to get the price from backend
-                const affiliateRef = sessionStorage.getItem('affiliate_ref');
-                const response = await fetch(`${BACKEND_URL}/api/v1/aarie-platform/create-payment-intent`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ product_id: productId, affiliate_ref: affiliateRef || null })
+            function setLoading(isLoading) {
+                submitBtn.classList.toggle('loading', isLoading);
+                submitBtn.disabled = isLoading;
+            }
+
+            // --- 6. CORE LOGIC ---
+            async function initializeCheckout() {
+                // Step A: Get parameters from the URL. This makes the page universal.
+                const urlParams = new URLSearchParams(window.location.search);
+                storeId = urlParams.get('store_id') || storeId;
+                productId = urlParams.get('product_id') || productId;
+
+                if (!storeId || !productId) {
+                    showError("Configuration error: Missing store or product ID.");
+                    return;
+                }
+
+                // --- THE DYNAMIC DATA FETCH ---
+                // This is where the old hardcoded PRODUCT_DETAILS_MAP is replaced.
+                // We will need a new endpoint to get product data. Let's assume it's:
+                // GET /api/v1/{store_id}/products/{product_id}
+                // For now, we'll simulate this. Your dev needs to build this simple endpoint.
+                
+                // Let's assume we have a function to fetch product data.
+                // const productData = await fetchProductData(storeId, productId);
+                // For this example, we'll keep the map but acknowledge it's a placeholder for an API call.
+                const PRODUCT_DETAILS_MAP = {
+                    '7-day-launchpad': {
+                        name: 'The 7-Day Launchpad',
+                        description: 'Our flagship package: a custom-coded landing page, store, AI chatbot, and Stripe integration. Live in 7-10 days.',
+                        features: [
+                            'Custom Store Design',
+                            'Product & Service Setup',
+                            'Secure Payment Processing',
+                            'Custom AI Chatbot',
+                            '7-10 Day Delivery Guarantee'
+                        ]
+                    },
+                    'professional-suite': {
+                        name: 'The Professional Suite',
+                        description: 'For growing businesses needing advanced features like custom database integrations and multi-language support.',
+                        features: [
+                            'Everything in Launchpad',
+                            'Advanced UI/UX Design',
+                            'Custom Database Integrations',
+                            'Multi-Language Support',
+                            'Complex Backend Logic'
+                        ]
+                    },
+                    'enterprise-plan': {
+                        name: 'The Enterprise Plan',
+                        description: 'For scaling companies needing a full platform, API access, and dedicated support.',
+                        features: [
+                            'Everything in Professional',
+                            'Full API Access',
+                            'Dedicated Support & SLA',
+                            'Monthly Optimization Reviews',
+                            'White-Label Branding'
+                        ]
+                    }
+                };
+                const productData = PRODUCT_DETAILS_MAP[productId];
+
+
+                if (!productData) {
+                    showError("Invalid product selected.");
+                    setLoading(true); // Disable form
+                    return;
+                }
+
+                // Step B: Update the UI with the fetched product details
+                document.querySelector('.product-name').textContent = productData.name;
+                document.querySelector('.product-description').textContent = productData.description;
+
+                try {
+                    // Step C: Create the Payment Intent on the backend.
+                    // This call is now universal, thanks to the new backend architecture.
+                    const affiliateRef = sessionStorage.getItem('affiliate_ref');
+                    const response = await fetch(`${BACKEND_URL}/api/v1/${storeId}/create-payment-intent`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ product_id: productId, affiliate_ref: affiliateRef || null })
+                    });
+
+                    if (!response.ok) {
+                        const err = await response.json();
+                        throw new Error(err.error?.message || 'Could not initialize payment.');
+                    }
+                    
+                    const data = await response.json();
+                    clientSecret = data.clientSecret;
+                    const amount = data.amount;
+                    const displayPrice = `$${(amount / 100).toFixed(2).replace('.00', '')}`;
+
+                    // Step D: Update UI with the dynamic price from the backend
+                    document.querySelector('.product-price').textContent = displayPrice;
+                    document.querySelector('.btn-text').textContent = 'Pay ' + displayPrice;
+                    
+                    // Step E: Initialize and Mount Stripe Elements
+                    const elements = stripe.elements({ clientSecret });
+                    cardElement = elements.create('card', {
+                        style: {
+                            base: { fontSize: '16px', color: '#1a1a1a' },
+                            invalid: { color: '#dc3545' }
+                        },
+                        hidePostalCode: true
+                    });
+                    cardElement.mount('#stripe-card-element');
+
+                    // Add event listeners for validation
+                    let cardComplete = false;
+                    cardElement.on('change', (event) => {
+                        cardComplete = event.complete;
+                        if (event.error) showError(event.error.message);
+                        else hideError();
+                        updateSubmitButtonState();
+                    });
+
+                    const allInputs = [nameInput, emailInput, phoneInput, postalCodeInput, termsCheckbox];
+                    allInputs.forEach(el => el.addEventListener('input', updateSubmitButtonState));
+
+                    function updateSubmitButtonState() {
+                        const formComplete = allInputs.every(el => el.type === 'checkbox' ? el.checked : el.value.trim() !== '');
+                        submitBtn.disabled = !(formComplete && cardComplete);
+                    }
+
+                } catch (error) {
+                    showError(error.message);
+                    document.querySelector('.btn-text').textContent = 'Payment Unavailable';
+                    setLoading(true); // Disable form
+                }
+            }
+
+            // Step F: Handle the form submission
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                hideError();
+
+                const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: nameInput.value.trim(),
+                            email: emailInput.value.trim(),
+                            phone: phoneInput.value.trim()
+                        }
+                    }
                 });
 
-                if (!response.ok) throw new Error('Could not initialize payment.');
-                
-                const data = await response.json();
-                clientSecret = data.clientSecret;
-                const amount = data.amount;
-                const displayPrice = `$${(amount / 100).toFixed(2).replace('.00', '')}`;
-
-                // 4. Update UI with the dynamic price from backend
-                document.querySelector('.product-price').textContent = displayPrice;
-                document.querySelector('.btn-text').textContent = 'Pay ' + displayPrice;
-                
-                // 5. Setup Stripe Elements now that we have the clientSecret
-                cardElement.mount('#stripe-card-element');
-
-            } catch (error) {
-                showError(error.message);
-            }
-        }
-
-        // Attach event listeners for validation
-        cardElement.on('change', (event) => {
-            cardComplete = event.complete;
-            if (event.error) showError(event.error.message);
-            else hideError();
-            updateSubmitButton();
-        });
-
-        [nameInput, emailInput, phoneInput, postalCodeInput, termsCheckbox].forEach(el => {
-            el.addEventListener('input', updateSubmitButton);
-            el.addEventListener('change', updateSubmitButton);
-        });
-
-        // Handle form submission
-        document.getElementById('checkout-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            setLoading(true);
-            hideError();
-
-            const { error } = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: {
-                    card: cardElement,
-                    billing_details: {
-                        name: nameInput.value.trim(),
-                        email: emailInput.value.trim(),
-                        phone: phoneInput.value.trim()
-                    }
+                if (error) {
+                    showError(error.message);
+                    setLoading(false);
+                } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+                    document.getElementById('success-overlay').classList.add('visible');
+                    
+                    // Asynchronously record the transaction in the background (fire and forget)
+                    const transactionRecord = {
+                        stripePaymentId: paymentIntent.id,
+                        // ... (gather other details like name, email, product, etc.)
+                    };
+                    fetch(`${BACKEND_URL}/record-and-distribute-transaction`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(transactionRecord),
+                        keepalive: true // Ensures the request is sent even if the page is closing
+                    });
                 }
             });
 
-            if (error) {
-                showError(error.message);
-                setLoading(false);
-            } else {
-                document.getElementById('success-overlay').classList.add('visible');
-            }
-        });
+            // --- 7. INITIALIZE ---
+            document.addEventListener('DOMContentLoaded', initializeCheckout);
 
-        // Run initialization on page load
-        document.addEventListener('DOMContentLoaded', initializeCheckout);
+        })();
     </script>
 </body>
 </html>

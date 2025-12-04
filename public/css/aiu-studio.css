@@ -1,0 +1,173 @@
+/* ======================================== */
+/* A.I.U. Studio Styles (aiu-studio.css)    */
+/* ======================================== */
+
+/* --- Main Layout --- */
+.studio-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .studio-container {
+        grid-template-columns: 1fr 1fr;
+        height: calc(100vh - 40px);
+        gap: 40px;
+    }
+}
+
+/* --- Panels (Chat & Document) --- */
+.studio-panel {
+    background-color: var(--aiu-surface);
+    border: 1px solid var(--aiu-border);
+    border-radius: 16px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Important for flexbox layout */
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--aiu-border);
+}
+
+.panel-icon {
+    font-size: 2rem;
+    color: var(--aiu-primary);
+}
+
+.panel-header h2 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+/* --- Chat Interface --- */
+.chat-history {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: var(--aiu-bg);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.chat-bubble {
+    padding: 12px 18px;
+    border-radius: 12px;
+    max-width: 90%;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.ai-bubble {
+    background-color: var(--aiu-border);
+    align-self: flex-start;
+}
+
+.user-bubble {
+    background-color: var(--aiu-primary-dark);
+    color: #ffffff;
+    align-self: flex-end;
+}
+
+.chat-input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-input-area textarea {
+    width: 100%;
+    min-height: 80px;
+    resize: vertical;
+    background-color: var(--aiu-bg);
+    border: 1px solid var(--aiu-border);
+    color: var(--aiu-text-primary);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.chat-input-area textarea:focus {
+    outline: none;
+    border-color: var(--aiu-primary);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+}
+
+/* --- Document Panel --- */
+.document-panel .panel-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#persona-document-draft {
+    flex-grow: 1;
+    width: 100%;
+    resize: none; /* No resizing needed in this layout */
+    background-color: var(--aiu-bg);
+    border: 1px solid var(--aiu-border);
+    color: var(--aiu-text-primary);
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+/* --- Finalization Controls --- */
+.finalization-controls {
+    margin-top: 20px;
+}
+
+.finalization-controls label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 10px;
+}
+
+#ai-username {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* --- Auth Loading / Full Screen Spinner --- */
+.fullscreen-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    background-color: var(--aiu-bg);
+    z-index: 100;
+}
+
+.fullscreen-loader p {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* --- Responsive --- */
+@media (max-width: 991px) {
+    .studio-panel {
+        min-height: 500px;
+    }
+}

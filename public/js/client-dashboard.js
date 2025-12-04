@@ -119,7 +119,7 @@ async function loadDashboard() {
 
       // Load products
       if (dashboardData.products && dashboardData.products.length > 0) {
-        await loadProducts();
+        loadProducts(dashboardData.products);
       } else {
         document.getElementById('productsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><div class="empty-state-icon">📭</div><p>No products yet - Setup Stripe first</p></div>';
       }
@@ -136,12 +136,8 @@ async function loadDashboard() {
       loadConsultations(dashboardData.consultations || []);
 
     } catch (error) {
-      // If dashboard data fetch fails, try loading components individually
-      try {
-        await loadProducts();
-      } catch (error) {
-        document.getElementById('productsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><div class="empty-state-icon">📭</div><p>No products yet - Setup Stripe first</p></div>';
-      }
+      // If dashboard data fetch fails, show empty state for products
+      document.getElementById('productsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><div class="empty-state-icon">📭</div><p>No products yet - Setup Stripe first</p></div>';
 
       try {
         await loadTransactions();
@@ -322,46 +318,129 @@ async function loadStripeStatus() {
 }
 
 /**
- * Load products from backend API - Display only
+ * Renders interactive product management cards in the dashboard.
+ * @param {Array<object>} products An array of product objects from the API.
  */
-async function loadProducts() {
-  try {
-    const token = await currentUser.getIdToken();
-    const response = await fetch('https://stores-backend-phhl2xgwwa-uc.a.run.app/api/client/dashboard-data', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
+function loadProducts(products) {
+  const productsContainer = document.getElementById('productsContainer');
+  productsContainer.innerHTML = ''; // Clear previous entries
 
-    if (!response.ok) throw new Error(`Failed to load products: ${response.status}`);
+  if (!products || products.length === 0) {
+    productsContainer.innerHTML = '<p class="empty-state">No products found for your stores.</p>';
+    return;
+  }
 
-    const data = await response.json();
-    const products = data.products || [];
+  products.forEach(product => {
+    const isAvailable = product.status !== 'unavailable';
 
-    if (!products || products.length === 0) {
-      document.getElementById('productsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No products yet</p></div>';
-      return;
+    // Build the price input fields based on the product's pricing model
+    let priceInputsHTML = '';
+    if (product.price !== undefined) {
+      // Simple fixed-price product
+      priceInputsHTML = `
+                <div class="price-input-group">
+                    <label for="price-${product.storeId}-${product.id}">Price ($)</label>
+                    <input type="number" step="0.01" id="price-${product.storeId}-${product.id}" data-field="price" value="${(product.price / 100).toFixed(2)}">
+                </div>
+            `;
+    } else if (product.prices) {
+      // Complex rental-style product
+      priceInputsHTML = Object.entries(product.prices).map(([key, value]) => `
+                <div class="price-input-group">
+                    <label for="price-${key}-${product.storeId}-${product.id}">${key.charAt(0).toUpperCase() + key.slice(1)} Rate ($)</label>
+                    <input type="number" step="0.01" id="price-${key}-${product.storeId}-${product.id}" data-field="prices.${key}.rate" value="${(value.rate / 100).toFixed(2)}">
+                </div>
+            `).join('');
     }
 
-    // Display products
-    let html = '';
-    products.forEach(product => {
-      const displayPrice = formatProductPrice(product);
-      html += `
-        <div class="product-item" style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-          <h3 style="margin-bottom: 8px; font-size: 18px; font-weight: 600;">💼 ${product.name}</h3>
-          <p style="color: #666; margin-bottom: 12px; font-size: 14px;">${product.description}</p>
-          <div style="font-size: 24px; font-weight: 700; color: #27ae60;">${displayPrice}</div>
-        </div>
-      `;
-    });
+    const productCard = `
+            <div class="product-card interactive" data-store-id="${product.storeId}" data-product-id="${product.id}">
+                <div class="product-header">
+                    <div class="product-name">📦 ${product.name}</div>
+                    <div class="status-toggle-container">
+                        <span>${isAvailable ? 'Available' : 'Unavailable'}</span>
+                        <label class="switch">
+                            <input type="checkbox" class="status-toggle" ${isAvailable ? 'checked' : ''}>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="product-description">${product.description}</div>
+                <div class="price-editor">
+                    ${priceInputsHTML}
+                </div>
+                <button class="action-button save-product-btn">Save Changes</button>
+                <div class="update-status"></div>
+            </div>
+        `;
+    productsContainer.innerHTML += productCard;
+  });
 
-    document.getElementById('productsContainer').innerHTML = html;
-  } catch (error) {
-    document.getElementById('productsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No products available</p></div>';
-  }
+  // Add event listeners to all new interactive elements
+  addProductEventListeners();
+}
+
+/**
+ * Adds event listeners for the interactive product cards.
+ */
+function addProductEventListeners() {
+  document.querySelectorAll('.product-card.interactive').forEach(card => {
+    const saveBtn = card.querySelector('.save-product-btn');
+    const statusDiv = card.querySelector('.update-status');
+
+    saveBtn.addEventListener('click', async () => {
+      const storeId = card.dataset.storeId;
+      const productId = card.dataset.productId;
+
+      const updates = {};
+
+      // Get status update
+      const isAvailable = card.querySelector('.status-toggle').checked;
+      updates.status = isAvailable ? 'active' : 'unavailable';
+
+      // Get price updates
+      card.querySelectorAll('input[type="number"]').forEach(input => {
+        const fieldPath = input.dataset.field;
+        const valueInCents = Math.round(parseFloat(input.value) * 100);
+
+        // This logic handles nested fields like 'prices.daily.rate'
+        const keys = fieldPath.split('.');
+        let current = updates;
+        for (let i = 0; i < keys.length - 1; i++) {
+          current = current[keys[i]] = current[keys[i]] || {};
+        }
+        current[keys[keys.length - 1]] = valueInCents;
+      });
+
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving...';
+      statusDiv.textContent = '';
+
+      try {
+        const response = await apiCall('/api/client/update-product', {
+          method: 'POST',
+          body: JSON.stringify({
+            storeId,
+            productId,
+            updates
+          })
+        });
+        if (response.success) {
+          statusDiv.textContent = '✅ Saved successfully!';
+          statusDiv.style.color = 'green';
+        } else {
+          throw new Error(response.error);
+        }
+      } catch (error) {
+        statusDiv.textContent = `❌ Error: ${error.message}`;
+        statusDiv.style.color = 'red';
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save Changes';
+        setTimeout(() => statusDiv.textContent = '', 3000);
+      }
+    });
+  });
 }
 
 /**

@@ -1,0 +1,203 @@
+/* ======================================== */
+/* A.I.U. Library Styles (aiu-library.css)  */
+/* ======================================== */
+
+/* --- Page Layout --- */
+.library-container {
+    max-width: 900px;
+}
+
+.library-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+/* --- Search Bar --- */
+.search-container {
+    margin-bottom: 50px;
+    position: relative;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#library-search {
+    width: 100%;
+    padding: 18px 25px;
+    padding-left: 55px; /* Space for icon */
+    background-color: var(--aiu-surface);
+    border: 1px solid var(--aiu-border);
+    border-radius: 50px;
+    color: var(--aiu-text-primary);
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+#library-search:focus {
+    outline: none;
+    border-color: var(--aiu-primary);
+    box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.2);
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    font-size: 1.3rem;
+    color: var(--aiu-text-secondary);
+}
+
+/* --- AI Gallery Grid --- */
+#ai-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.ai-card {
+    background-color: var(--aiu-surface);
+    border: 1px solid var(--aiu-border);
+    border-radius: 16px;
+    padding: 25px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ai-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--aiu-primary);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+.ai-card-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    border: 3px solid var(--aiu-border);
+}
+
+.ai-card h3 {
+    font-size: 1.25rem;
+    color: var(--aiu-text-primary);
+    margin: 0;
+}
+
+.ai-card p {
+    font-size: 0.9rem;
+    color: var(--aiu-text-secondary);
+    margin-top: 5px;
+}
+
+/* --- Dynamic Chat Interface --- */
+.chat-view-container {
+    display: none; /* Hidden by default */
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.chat-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.chat-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid var(--aiu-border);
+}
+
+.chat-header h2 {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.chat-interface {
+    background: var(--aiu-surface);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: left;
+}
+
+.chat-history {
+    height: 400px;
+    overflow-y: auto;
+    background: var(--aiu-bg);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.chat-bubble {
+    padding: 12px 18px;
+    border-radius: 12px;
+    max-width: 80%;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.ai-bubble {
+    background-color: var(--aiu-border);
+    align-self: flex-start;
+}
+
+.user-bubble {
+    background-color: var(--aiu-primary-dark);
+    color: #ffffff;
+    align-self: flex-end;
+}
+
+.chat-input-area {
+    display: flex;
+    gap: 15px;
+}
+
+.chat-input-area textarea {
+    flex-grow: 1;
+    min-height: 50px;
+    resize: vertical;
+    background-color: var(--aiu-bg);
+    border: 1px solid var(--aiu-border);
+    color: var(--aiu-text-primary);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.chat-input-area textarea:focus {
+    outline: none;
+    border-color: var(--aiu-primary);
+}
+
+.chat-input-area .btn-primary {
+    flex-shrink: 0;
+    align-self: flex-end; /* Align with bottom of textarea */
+}
+
+/* --- Back Button / Close Chat --- */
+.close-chat-btn {
+    display: block;
+    margin-top: 30px;
+    text-align: center;
+    color: var(--aiu-text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.close-chat-btn:hover {
+    color: var(--aiu-text-primary);
+}

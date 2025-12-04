@@ -1,0 +1,215 @@
+{
+  "sectionName": "Home & Kitchen",
+  "products": [
+    {
+      "id": "hk-1",
+      "title": "MITSUMOTO SAKARI 8 inch Japanese Gyuto Chef Knife, Hand Forged",
+      "price": "68.39",
+      "wasPrice": "89.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/3KoKiyA",
+      "image": "/images/ALL-PRODUCTS/MITSUMOTOSAKARI8inch.jpg",
+      "category": "Kitchen Gadgets"
+    },
+    {
+      "id": "hk-2",
+      "title": "MITSUMOTO SAKARI 8 inch Japanese Chef Knife, AUS-10 Premium Damascus Steel",
+      "price": "115.59",
+      "wasPrice": "129.19",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/3Y3Femo",
+      "image": "/images/ALL-PRODUCTS/MITSUMOTOSAKARI8inchJapaneseChefKnifeAUS-10PremiumDamascusSteel.jpg",
+      "category": "Kitchen Gadgets"
+    },
+    {
+      "id": "hk-3",
+      "title": "MITSUMOTO SAKARI Japanese Detachable Kitchen Scissors, Heavy Duty",
+      "price": "45.59",
+      "wasPrice": "55.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4pJesM5",
+      "image": "/images/ALL-PRODUCTS/MITSUMOTOSAKARIJapaneseDetachableKitchenScissors.jpg",
+      "category": "Kitchen Gadgets"
+    },
+    {
+      "id": "hk-4",
+      "title": "TrendPlain 470ml Olive Oil Spray Bottle for Kitchen Gadgets",
+      "price": "13.29",
+      "wasPrice": "16.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4orvSf9",
+      "image": "/images/ALL-PRODUCTS/TrendPlain470mlOliveOilSprayBottle.jpg",
+      "category": "Kitchen Gadgets"
+    },
+    {
+      "id": "hk-5",
+      "title": "Fullstar Vegetable Chopper Cutter Mandoline Slicer Cheese Grater",
+      "price": "34.99",
+      "wasPrice": "44.99",
+      "deal": null,
+      "link": "https://amzn.to/3XtsC85",
+      "image": "/images/ALL-PRODUCTS/FullstarVegetableChopperCutterMandoline.jpg",
+      "category": "Kitchen Gadgets"
+    },
+    {
+      "id": "hk-6",
+      "title": "Stainless Steel Butter Spreader, 3 in 1 Butter Knife",
+      "price": "12.95",
+      "wasPrice": null,
+      "deal": "Amazon's Choice",
+      "link": "https://amzn.to/3M8ZrVy",
+      "image": "/images/ALL-PRODUCTS/StainlessSteelButterSpreader.jpg",
+      "category": "Kitchen Gadgets"
+    },
+    {
+      "id": "hk-7",
+      "title": "Ground Meat Masher, Heat Resistant Nylon Hamburger Meat Chopper",
+      "price": "13.99",
+      "wasPrice": null,
+      "deal": "Amazon's Choice",
+      "link": "https://amzn.to/443Etxo",
+      "image": "/images/ALL-PRODUCTS/GroundMeatMasher.jpg",
+      "category": "Kitchen Gadgets"
+    },
+    {
+      "id": "hk-8",
+      "title": "Electric Salt and Pepper Grinder Set, USB Rechargeable",
+      "price": "50.99",
+      "wasPrice": "59.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/48KgHJm",
+      "image": "/images/ALL-PRODUCTS/ElectricSaltandPepperGrinder.jpg",
+      "category": "Kitchen Gadgets"
+    },
+    {
+      "id": "hk-9",
+      "title": "HOSHANHO Knife Set with Magnetic Knife Holder, 6 Pieces Japanese Steel",
+      "price": "118.99",
+      "wasPrice": "139.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4iEJr9N",
+      "image": "/images/ALL-PRODUCTS/HOSHANHOKnifeSetwithMagneticKnife.jpg",
+      "category": "Kitchen Gadgets"
+    },
+    {
+      "id": "hk-10",
+      "title": "Nespresso Vertuo Next Coffee and Espresso Machine by De'Longhi",
+      "price": "123.48",
+      "wasPrice": "129.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/440InXJ",
+      "image": "/images/ALL-PRODUCTS/NespressoVertuoNextCoffeeandEspress.jpg",
+      "category": "Coffee & Tea Corner"
+    },
+    {
+      "id": "hk-11",
+      "title": "Nespresso Vertuo Pods, Flavoured coffee Mixed Pack of 60 capsules",
+      "price": "81.00",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/3KuDgZg",
+      "image": "/images/ALL-PRODUCTS/NespressoVertuoPodsflavouredcoffeeMixedPackof60.jpg",
+      "category": "Coffee & Tea Corner"
+    },
+    {
+      "id": "hk-12",
+      "title": "Nespresso Aeroccino 3 Milk Frother - Automatic Hot & Cold Foam Maker",
+      "price": "74.99",
+      "wasPrice": "79.81",
+      "deal": null,
+      "link": "https://amzn.to/48w9yew",
+      "image": "/images/ALL-PRODUCTS/NespressoAeroccino3MilkFrother.jpg",
+      "category": "Coffee & Tea Corner"
+    },
+    {
+      "id": "hk-13",
+      "title": "OutIn Nano Portable Electric Espresso Machine, Travel Coffee Maker",
+      "price": "194.92",
+      "wasPrice": "242.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4isheCV",
+      "image": "/images/ALL-PRODUCTS/OutInNanoPortableElectricEspressoMachine.jpg",
+      "category": "Coffee & Tea Corner"
+    },
+    {
+      "id": "hk-14",
+      "title": "Nextmug - Temperature-Controlled, Self-Heating Coffee Mug (Slate Blue - 415 mL)",
+      "price": "124.95",
+      "wasPrice": "189.95",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/48wFXl9",
+      "image": "/images/ALL-PRODUCTS/Nextmug-Temperature-Controlled.jpg",
+      "category": "Coffee & Tea Corner"
+    },
+    {
+      "id": "hk-15",
+      "title": "Dimmable Night Lights Plug into Wall with Dusk to Dawn Sensor, 2 Pack",
+      "price": "19.99",
+      "wasPrice": "29.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/3K1WxkM",
+      "image": "/images/ALL-PRODUCTS/NightLightsPlugintoWall.jpg",
+      "category": "Home Decor"
+    },
+    {
+      "id": "hk-16",
+      "title": "L LOHAS LED Bubble Night Lights Plug into Wall, 2 Pack",
+      "price": "31.67",
+      "wasPrice": "35.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4oq7fzk",
+      "image": "/images/ALL-PRODUCTS/L-LOHAS-LED-Night-Light-Bubble-Night-Lights-Plug.jpg",
+      "category": "Home Decor"
+    },
+    {
+      "id": "hk-17",
+      "title": "SANDCLE Moving Sand Art Picture Liquid Motion Decor (Yellow, 7\")",
+      "price": "21.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/4rsWgrR",
+      "image": "/images/ALL-PRODUCTS/SANDCLE-Moving-Sand-Art-Picture-Liquid-Motion.jpg",
+      "category": "Home Decor"
+    },
+    {
+      "id": "hk-18",
+      "title": "theaoo Paper Towel Holder - Under Cabinet Adhesive Mount",
+      "price": "15.29",
+      "wasPrice": "17.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4ptOe0B",
+      "image": "/images/ALL-PRODUCTS/theaoo-Paper-Towel-Holder.jpg",
+      "category": "Home Decor"
+    },
+    {
+      "id": "hk-19",
+      "title": "HoMedics Indoor 3-Tier Relaxation Tabletop Fountain",
+      "price": "89.54",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/3MaDjtN",
+      "image": "/images/ALL-PRODUCTS/HoMedics-Indoor-3-TieR.jpg",
+      "category": "Home Decor"
+    },
+    {
+      "id": "hk-20",
+      "title": "Under Cabinet Lights, 40 LED Rechargeable Motion Sensor Light, 2 Pack",
+      "price": "25.80",
+      "wasPrice": "39.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/48kUAcx",
+      "image": "/images/ALL-PRODUCTS/Under-Cabinet-Lights-40-LED.jpg",
+      "category": "Home Decor"
+    },
+    {
+      "id": "hk-21",
+      "title": "Nacome Solar Garden Outdoor Turtle Statue with 7 LED Lights",
+      "price": "30.40",
+      "wasPrice": "38.98",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4pkIlT9",
+      "image": "/images/ALL-PRODUCTS/Nacome-Solar-Garden-Outdoor.jpg",
+      "category": "Home Decor"
+    }
+  ]
+}

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AARIE's Amazon Affiliate Store</title>
+  <meta name="description" content="A curated collection of great products - from tech gadgets to wellness items and unique gifts. Each item is carefully selected to provide value and quality.">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AARIE's Amazon Affiliate Store">
+  <meta property="og:description" content="A curated collection of great products - from tech gadgets to wellness items and unique gifts.">
+  <meta property="og:image" content="https://aarie.ca/images/AARIES.jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://aarie.ca/aaries-store">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AARIE's Amazon Affiliate Store">
+  <meta name="twitter:description" content="A curated collection of great products - from tech gadgets to wellness items and unique gifts.">
+  <meta name="twitter:image" content="https://aarie.ca/images/AARIES.jpeg">
+  
+  <link rel="stylesheet" href="/css/moon-store.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="store-header">
+    <div class="container">
+      <div class="header-top">
+        <h1>AARIE's Amazon Affiliate Store</h1>
+        <a href="/" class="home-button">Home</a>
+      </div>
+      <p class="subtitle" id="store-description">Welcome to AARIE's Amazon Affiliate Store! We find great products for you - from tech gadgets and home essentials to wellness items and unique gifts. Each item is carefully selected to provide value and quality. This isn't just a store; it's our curated collection of products we recommend for your everyday needs and special moments.</p>
+      <p class="disclaimer" id="affiliate-disclosure">Affiliate Disclosure: As an Amazon Associate, AARIE.CA may earn from qualifying purchases. This helps us continue providing great product recommendations and services. Prices are updated regularly but may vary on Amazon.ca. Thank you for your support.</p>
+    </div>
+  </header>
+
+  <main class="container">
+  <!-- ===== ADD THIS NEW BLOCK START ===== -->
+  <nav class="section-tabs" id="section-tabs">
+    <button class="section-tab-button active" data-section="All">All Products</button>
+    <button class="section-tab-button" data-section="Reconciliation & Wellness">Reconciliation & Wellness</button>
+    <button class="section-tab-button" data-section="Tech & Home Office">Tech & Home Office</button>
+    <button class="section-tab-button" data-section="Home & Kitchen">Home & Kitchen</button>
+    <button class="section-tab-button" data-section="Health & Fitness">Health & Fitness</button>
+    <button class="section-tab-button" data-section="Gifts & Style">Gifts & Style</button>
+  </nav>
+  <!-- ===== ADD THIS NEW BLOCK END ===== -->
+    <nav class="category-tabs" id="category-tabs">
+  <!-- This will be populated by JavaScript -->
+</nav>
+
+    <div class="store-controls" id="store-controls">
+        <div class="search-wrapper">
+            <div class="search-input-container">
+                <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20">
+                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <input type="text" id="search-input" class="search-input" placeholder="Search products...">
+                <button type="button" class="search-clear" id="search-clear" aria-label="Clear search">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="sort-wrapper">
+            <label for="sort-select">Sort by:</label>
+            <select id="sort-select" class="sort-select">
+                <option value="default">Default</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="alpha-asc">Name: A to Z</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="product-grid" id="product-grid">
+      <div class="loading-spinner"></div>
+    </div>
+  </main>
+
+  <footer class="store-footer">
+    <div class="container">
+      <p><strong>Affiliate Disclosure:</strong> As an Amazon Associate, AARIE.CA may earn from qualifying purchases. This helps us continue providing great product recommendations and services. Prices and availability are subject to change. All links are directed to Amazon.ca for your convenience. Please check the retailer site for the most up-to-date information.</p>
+    </div>
+  </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const productGrid = document.getElementById('product-grid');
+    const sectionTabsContainer = document.getElementById('section-tabs');
+    const categoryTabsContainer = document.getElementById('category-tabs');
+    const searchInput = document.getElementById('search-input');
+    const sortSelect = document.getElementById('sort-select');
+    const searchClear = document.getElementById('search-clear');
+
+    let allProducts = [];
+    let currentSection = 'All';
+    let currentCategory = 'All';
+    let searchTerm = '';
+    let sortOrder = 'default';
+
+    const sectionFiles = {
+        'All': [
+            'moon-store-products.json',
+            'tech-office.json',
+            'home-kitchen.json',
+            'health-fitness.json',
+            'gifts-style.json'
+        ],
+        'Reconciliation & Wellness': ['moon-store-products.json'],
+        'Tech & Home Office': ['tech-office.json'],
+        'Home & Kitchen': ['home-kitchen.json'],
+        'Health & Fitness': ['health-fitness.json'],
+        'Gifts & Style': ['gifts-style.json']
+    };
+
+    async function loadProducts(section) {
+        productGrid.innerHTML = '<div class="loading-spinner"></div>';
+        categoryTabsContainer.innerHTML = '';
+        currentSection = section;
+        currentCategory = 'All';
+        
+        try {
+            const filesToLoad = sectionFiles[section];
+            const loadPromises = filesToLoad.map(file => fetch(file).then(res => {
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status} for file ${file}`);
+                return res.json();
+            }));
+
+            const sectionsData = await Promise.all(loadPromises);
+            allProducts = sectionsData.flatMap(data => data.products);
+
+            updateCategoryTabs();
+            renderProducts();
+        } catch (error) {
+            productGrid.innerHTML = `<p class="error-message">Could not load products. Please try again later.</p>`;
+            console.error("Error loading products:", error);
+        }
+    }
+
+    function updateCategoryTabs() {
+        const categories = ['All', ...new Set(allProducts.map(p => p.category))];
+        let buttonsHTML = '';
+        categories.forEach(category => {
+            const isActive = category === 'All' ? 'active' : '';
+            buttonsHTML += `<button class="tab-button ${isActive}" data-category="${category}">${category === 'All' ? 'All Items' : category}</button>`;
+        });
+        categoryTabsContainer.innerHTML = buttonsHTML;
+    }
+
+    function renderProducts() {
+        // 1. Filter by category
+        let filteredProducts = currentCategory === 'All'
+            ? [...allProducts]
+            : allProducts.filter(p => p.category === currentCategory);
+
+        // 2. Filter by search term
+        if (searchTerm) {
+            const lowerCaseSearchTerm = searchTerm.toLowerCase();
+            filteredProducts = filteredProducts.filter(p => p.title.toLowerCase().includes(lowerCaseSearchTerm));
+        }
+
+        // 3. Sort
+        switch (sortOrder) {
+            case 'price-asc':
+                filteredProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+                break;
+            case 'price-desc':
+                filteredProducts.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+                break;
+            case 'alpha-asc':
+                filteredProducts.sort((a, b) => a.title.localeCompare(b.title));
+                break;
+        }
+
+        // 4. Render to DOM
+        productGrid.innerHTML = '';
+        if (filteredProducts.length === 0) {
+            productGrid.innerHTML = `<p class="error-message">No products found matching your criteria.</p>`;
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        filteredProducts.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            let priceHTML = `<p class="product-price">$${product.price}</p>`;
+            if (product.wasPrice) {
+                priceHTML = `<p class="product-price">$${product.price} ${product.deal ? `<small class="deal-badge">${product.deal}</small>` : ''}<br><small class="was-price"><s>Was: $${product.wasPrice}</s></small></p>`;
+            } else if (product.deal) {
+                 priceHTML = `<p class="product-price">$${product.price} <small class="deal-badge">${product.deal}</small></p>`;
+            }
+            card.innerHTML = `
+                <div class="product-image-container">
+                    <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <p class="product-title">${product.title}</p>
+                    <div class="product-footer">
+                        ${priceHTML}
+                        <a href="${product.link}" class="product-button" target="_blank" rel="noopener noreferrer">View on Amazon.ca</a>
+                    </div>
+                </div>`;
+            fragment.appendChild(card);
+        });
+        productGrid.appendChild(fragment);
+    }
+
+    sectionTabsContainer.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            document.querySelector('.section-tab-button.active').classList.remove('active');
+            e.target.classList.add('active');
+            const newSection = e.target.dataset.section;
+            loadProducts(newSection);
+        }
+    });
+
+    categoryTabsContainer.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            if (document.querySelector('.tab-button.active')) {
+                document.querySelector('.tab-button.active').classList.remove('active');
+            }
+            e.target.classList.add('active');
+            currentCategory = e.target.dataset.category;
+            renderProducts();
+        }
+    });
+
+    searchInput.addEventListener('input', () => {
+        searchTerm = searchInput.value.trim();
+        searchClear.style.display = searchTerm ? 'block' : 'none';
+        renderProducts();
+    });
+
+    searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        searchTerm = '';
+        searchClear.style.display = 'none';
+        renderProducts();
+        searchInput.focus();
+    });
+
+    sortSelect.addEventListener('change', () => {
+        sortOrder = sortSelect.value;
+        renderProducts();
+    });
+
+    // Initial Load
+    loadProducts('All');
+});
+</script>
+</body>
+</html>

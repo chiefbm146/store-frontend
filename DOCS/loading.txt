@@ -1,0 +1,155 @@
+You've hit the nail on the head. That's not caching—it's a flaw in the frontend logic.
+
+You are seeing the page's hardcoded default state ($99) for a split second before the JavaScript runs, fetches the correct price ($2500) from the backend, and then updates the display. This "flicker" is unprofessional and can erode customer trust at the most critical moment of the sale.
+
+This needs to be fixed immediately. The page should show a loading state until the correct price is confirmed.
+
+Here are the precise instructions for your developer to fix this permanently.
+
+To the Developer: Instructions to Fix the Checkout Page Price Flicker
+
+Objective: The checkout.html page is currently displaying a default price of $99 before asynchronously loading the correct price, causing a jarring visual flicker for the user. We must fix this by showing a loading state until the final, correct price is fetched from the backend.
+
+Part 1: Update the HTML Placeholders in checkout.html
+
+Goal: Remove all hardcoded prices and replace them with loading indicators. This ensures the user never sees an incorrect price.
+
+File to Edit: checkout.html
+
+In the .product-card div:
+
+Find this line:
+
+code
+Html
+download
+content_copy
+expand_less
+<div class="product-price">$99</div>
+
+Replace it with a loading state:
+
+code
+Html
+download
+content_copy
+expand_less
+<div class="product-price" id="price-loading-state">...</div>
+
+In the submit button:
+
+Find this line:
+
+code
+Html
+download
+content_copy
+expand_less
+<span class="btn-text">Pay $99</span>
+
+Replace it with a generic loading state:
+
+code
+Html
+download
+content_copy
+expand_less
+<span class="btn-text">Loading Price...</span>
+
+Add CSS for the new loading state: Add this style block inside the <head> tag of checkout.html. This will create a subtle pulsing animation for the price placeholder.
+
+code
+CSS
+download
+content_copy
+expand_less
+<style>
+    @keyframes pulse-opacity {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 1; }
+    }
+    #price-loading-state {
+        animation: pulse-opacity 1.5s ease-in-out infinite;
+    }
+</style>
+Part 2: Update the JavaScript Logic in checkout.html
+
+Goal: Modify the initializeCheckout function to handle the new loading state and only display the content once the correct price has been successfully fetched.
+
+File to Edit: checkout.html
+
+Locate the main <script> tag at the bottom of the file.
+
+REPLACE the entire initializeCheckout function with this new, improved version. The key changes are highlighted.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// NEW: Main initialization function
+async function initializeCheckout() {
+    // 1. Get Product ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('product_id') || '7-day-launchpad'; // Default to launchpad
+
+    const productDetails = PRODUCT_DETAILS_MAP[productId];
+    if (!productDetails) {
+        showError("Invalid product selected. Please go back and choose a plan.");
+        // NEW: Make sure the page is visible even on error
+        document.querySelector('.checkout-wrapper').style.visibility = 'visible';
+        return;
+    }
+
+    // 2. Update UI with product details (everything except price)
+    document.querySelector('.product-name').textContent = productDetails.name;
+    document.querySelector('.product-description').textContent = productDetails.description;
+    const featuresList = document.querySelector('.features-list');
+    featuresList.innerHTML = productDetails.features.map(feature => `
+        <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <span class="feature-text"><strong>${feature}</strong></span>
+        </div>
+    `).join('');
+
+    try {
+        // 3. Create Payment Intent to get the correct price from the backend
+        const affiliateRef = sessionStorage.getItem('affiliate_ref');
+        const response = await fetch(`${BACKEND_URL}/api/v1/aarie-platform/create-payment-intent`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: productId, affiliate_ref: affiliateRef || null })
+        });
+
+        if (!response.ok) throw new Error('Could not initialize payment session.');
+        
+        const data = await response.json();
+        clientSecret = data.clientSecret;
+        const amount = data.amount;
+        const displayPrice = `$${(amount / 100).toFixed(2).replace(/\.00$/, '')}`;
+
+        // 4. Update UI with the dynamic price from the backend, removing the loading state
+        const priceElement = document.querySelector('.product-price');
+        priceElement.textContent = displayPrice;
+        priceElement.style.animation = 'none'; // Stop the pulsing animation
+
+        document.querySelector('.btn-text').textContent = 'Pay ' + displayPrice;
+        
+        // 5. Setup Stripe Elements now that we have the clientSecret
+        cardElement.mount('#stripe-card-element');
+
+    } catch (error) {
+        showError(error.message);
+        // In case of error, show a fallback price or message
+        document.querySelector('.product-price').textContent = 'Error';
+        document.querySelector('.btn-text').textContent = 'Unavailable';
+        document.getElementById('submit-btn').disabled = true;
+    }
+}
+Summary of the Fix:
+
+HTML Change: We remove the hardcoded $99 and put a "..." placeholder that pulses visually. This immediately signals to the user that the final price is being calculated.
+
+JavaScript Change: The script now fetches the correct price from the backend first. Once it receives the price, it updates both the price display and the payment button text, and then stops the loading animation.
+
+This eliminates the price flicker entirely. The user will see a brief, professional loading animation for the price, which then resolves to the correct final amount. This is the standard and correct way to handle dynamic data on a checkout page.

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A.I.U. Menu - Artificial Intelligence You</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>✨</text></svg>">
+
+    <!-- Dependencies -->
+    <link rel="stylesheet" href="/css/aiu-main.css">
+    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+    <script defer src="/js/aiu-menu.js"></script>
+</head>
+<body>
+
+    <div class="menu-container">
+        <header class="menu-header">
+            <div class="header-icon">✨</div>
+            <h1>Welcome to A.I.U.</h1>
+            <p class="subtitle">Turn your persona into a shareable AI, or talk to the digital minds of others.</p>
+        </header>
+
+        <main class="menu-options">
+            <!-- Option 1: Create a new AI -->
+            <a href="/aiu-create" class="menu-card primary-card">
+                <div class="card-icon">🧠</div>
+                <div class="card-content">
+                    <h2>AI Yourself</h2>
+                    <p>Begin the journey to create your own digital persona.</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <!-- Option 2: Explore the Library -->
+            <a href="/aiu-library" class="menu-card">
+                <div class="card-icon">📚</div>
+                <div class="card-content">
+                    <h2>Talk to an AI</h2>
+                    <p>Explore the library of public AI personas.</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <!-- Option 3: My Studio (Initially hidden) -->
+            <a id="my-studio-btn" href="/aiu-studio" class="menu-card" style="display: none;">
+                <div class="card-icon">🎓</div>
+                <div class="card-content">
+                    <h2 id="my-studio-title">My Studio</h2>
+                    <p>Continue building or manage your AI persona.</p>
+                </div>
+                <div id="my-studio-loader" class="spinner" style="display: none;"></div>
+                <div class="card-arrow">→</div>
+            </a>
+        </main>
+
+        <footer class="menu-footer">
+            <a href="/" class="back-link">← Back to AARIE.ca Home</a>
+        </footer>
+    </div>
+
+</body>
+</html>

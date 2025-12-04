@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 7-Day Launchpad - AARIE.CA</title>
+
+    <!-- ===== FINAL META TAGS FOR FACEBOOK PREVIEW ===== -->
+    <meta property="og:title" content="AARIE.CA - The 7-Day Launchpad">
+    <meta property="og:description" content="See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aarie.ca/">
+    <meta property="og:site_name" content="AARIE.CA">
+    <meta property="og:see_also" content="https://www.facebook.com/profile.php?id=61578712383717">
+
+    <!-- The Image, Dimensions, and Your App ID -->
+    <meta property="og:image" content="https://aarie.ca/images/test.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="fb:app_id" content="3753347551626837">
+
+    <!-- Twitter Card for Consistency -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AARIE.CA - The 7-Day Launchpad">
+    <meta name="twitter:description" content="See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.">
+    <meta name="twitter:image" content="https://aarie.ca/images/test.jpg">
+    <!-- ===== END OF FINAL META TAGS ===== -->
+
+    
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
+
+    <!-- Add these inside the <head> tag -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #1a1a1a;
+            background: #FFFFFF;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* === NAVIGATION BAR === */
+        .nav-bar {
+            position: static;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 15px 40px;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: auto;
+            padding-left: 0;
+            margin-left: 80px;
+        }
+
+        .nav-back-button {
+            background: #f97316;
+            color: #FFFFFF;
+            text-decoration: none;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 2px solid #ea580c;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+            position: absolute;
+            left: 0;
+        }
+
+        .nav-back-button:hover {
+            background: #ea580c;
+            transform: translateX(-3px);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            color: #f97316;
+        }
+
+        .nav-logo-icon {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #1a1a1a;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link span {
+            font-size: 1.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(249, 115, 22, 0.1);
+            color: #f97316;
+        }
+
+        /* === HAMBURGER MENU === */
+        .mobile-hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border: 2px solid #f97316;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .hamburger-line {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: #f97316;
+            border-radius: 2px;
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 9998;
+        }
+
+        .mobile-menu-overlay.active {
+            display: block;
+        }
+
+        .mobile-menu-drawer {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 85%;
+            max-width: 350px;
+            height: 100%;
+            background: #FFFFFF;
+            z-index: 9999;
+            flex-direction: column;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+            transition: right 0.3s ease;
+        }
+
+        .mobile-menu-drawer.active {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 25px;
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            color: #FFFFFF;
+        }
+
+        .mobile-menu-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .mobile-menu-close {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .mobile-menu-nav {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .mobile-menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 25px;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-bottom: 1px solid #E8ECF0;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-link:hover {
+            background: rgba(249, 115, 22, 0.1);
+            color: #f97316;
+        }
+
+        .mobile-menu-icon {
+            font-size: 1.5rem;
+        }
+
+        /* === HERO SECTION === */
+        .hero-section {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            padding: 80px 40px;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image:
+                radial-gradient(circle at 25% 25%, #FFFFFF 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, #FFFFFF 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-emoji {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.95);
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-cta-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hero-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-cta-button {
+            display: inline-block;
+            padding: 18px 50px;
+            background: #FFFFFF;
+            color: #f97316;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .hero-cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-cta-note {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1rem;
+        }
+
+        /* === MAIN CONTENT === */
+        .content-section {
+            padding: 80px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* === WHO CAN SELL === */
+        .who-can-sell {
+            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+            padding: 60px 40px;
+        }
+
+        .who-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .who-card {
+            background: #FFFFFF;
+            padding: 30px 25px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .who-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .who-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .who-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .who-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* === WHAT WE DO === */
+        .what-we-do {
+            padding: 80px 40px;
+        }
+
+        .features-list {
+            display: grid;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 25px;
+            background: #F8F9FA;
+            border-radius: 16px;
+            border-left: 4px solid #6366f1;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .feature-content p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* === PRICING SECTION === */
+        .pricing-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 80px 40px;
+            color: #FFFFFF;
+        }
+
+        .pricing-section .section-title {
+            color: #FFFFFF;
+        }
+
+        .pricing-section .section-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .pricing-timeline {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto 50px;
+        }
+
+        .pricing-step {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px 25px;
+            border-radius: 16px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            max-width: 280px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .pricing-step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #6366f1;
+            color: #FFFFFF;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .pricing-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #6366f1;
+            margin-bottom: 10px;
+        }
+
+        .pricing-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .pricing-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .fee-info {
+            background: rgba(99, 102, 241, 0.2);
+            border: 2px solid rgba(99, 102, 241, 0.4);
+            padding: 25px;
+            border-radius: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .fee-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .fee-rate {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #6366f1;
+            margin-bottom: 10px;
+        }
+
+        .fee-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        /* === STRIPE INFO === */
+        .stripe-section {
+            padding: 60px 40px;
+            background: #F8F9FA;
+        }
+
+        .stripe-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stripe-card {
+            background: #FFFFFF;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .stripe-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stripe-card p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* === CTA SECTION === */
+        .cta-section {
+            padding: 100px 40px;
+            background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image:
+                radial-gradient(circle at 25% 25%, #FFFFFF 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, #FFFFFF 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 15px;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+        }
+
+        .deposit-amount {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .deposit-button {
+            display: inline-block;
+            padding: 22px 60px;
+            background: #FFFFFF;
+            color: #f97316;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .deposit-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .deposit-note {
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        /* === FOOTER === */
+        .footer {
+            background: #1a1a1a;
+            color: #FFFFFF;
+            padding: 40px 40px;
+            text-align: center;
+        }
+
+        .footer-tagline {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .footer-copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-hamburger {
+                display: flex;
+            }
+
+            .mobile-menu-drawer {
+                display: flex;
+            }
+
+            .nav-bar {
+                padding: 10px 15px;
+            }
+
+            .nav-container {
+                position: relative;
+            }
+
+            .nav-left {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .nav-back-button {
+                width: 40px;
+                height: 40px;
+                position: absolute;
+                left: 0;
+            }
+
+            .nav-logo {
+                font-size: 1.2rem;
+                text-align: center;
+            }
+
+            .nav-logo-icon {
+                font-size: 1.5rem;
+            }
+
+            .hero-section {
+                padding: 60px 20px;
+                min-height: auto;
+            }
+
+            .hero-emoji {
+                font-size: 3.5rem;
+            }
+
+            .hero-price {
+                font-size: 2.5rem;
+            }
+
+            .hero-cta-button {
+                padding: 16px 40px;
+                font-size: 1.1rem;
+            }
+
+            .who-can-sell {
+                padding: 50px 20px;
+            }
+
+            .who-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .what-we-do {
+                padding: 50px 20px;
+            }
+
+            .feature-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .pricing-section {
+                padding: 50px 20px;
+            }
+
+            .pricing-timeline {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pricing-step {
+                max-width: 100%;
+            }
+
+            .stripe-section {
+                padding: 50px 20px;
+            }
+
+            .stripe-info {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section {
+                padding: 60px 20px;
+            }
+
+            .deposit-amount {
+                font-size: 3rem;
+            }
+
+            .deposit-button {
+                padding: 18px 40px;
+                font-size: 1.2rem;
+            }
+
+            .footer {
+                padding: 30px 20px;
+                padding-bottom: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-chat-fab {
+                width: 55px;
+                height: 55px;
+                font-size: 1.7rem;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .hero-emoji {
+                font-size: 3rem;
+            }
+
+            .deposit-amount {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+
+
+
+</head>
+<body>
+    <!-- Firebase for Smart Affiliate Button -->
+    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .affiliate-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        .affiliate-nav-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+        .affiliate-nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+        .affiliate-nav-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        @media (max-width: 768px) {
+            .affiliate-nav-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 12px 16px;
+                font-size: 15px;
+            }
+        }
+    </style>
+
+    <script>
+        let currentUser = null;
+
+        // Wait for Firebase app to be initialized
+        function waitForFirebase(callback, attempts = 0) {
+            if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
+                callback();
+            } else if (attempts < 50) {
+                setTimeout(() => waitForFirebase(callback, attempts + 1), 100);
+            }
+        }
+
+        // Check auth state on page load
+        waitForFirebase(() => {
+            firebase.auth().onAuthStateChanged(user => {
+                currentUser = user;
+                const btn = document.getElementById('affiliateBtn');
+                const mobileBtn = document.getElementById('mobileAffiliateBtn');
+
+                if (user) {
+                    // User is signed in - show "Go to Dashboard" button
+                    btn.textContent = '📊 Dashboard';
+                    btn.style.background = '#0891b2';
+                    if (mobileBtn) {
+                        mobileBtn.innerHTML = '<span class="mobile-menu-icon">📊</span><span>Affiliate Dashboard</span>';
+                    }
+                } else {
+                    // User is not signed in - show "Sign In to Earn" button
+                    btn.textContent = '💵 Earn';
+                    btn.style.background = '#10b981';
+                    if (mobileBtn) {
+                        mobileBtn.innerHTML = '<span class="mobile-menu-icon">💵</span><span>Earn (Affiliate)</span>';
+                    }
+                }
+            });
+        });
+
+        function handleAffiliateClick() {
+            const btn = document.getElementById('affiliateBtn');
+            const originalText = btn.innerHTML;
+
+            if (currentUser) {
+                // Already signed in - check affiliate status with loading spinner
+                showButtonSpinner(btn);
+                checkAndRouteAffiliate(currentUser);
+            } else {
+                // Not signed in - sign in first
+                waitForFirebase(() => {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    firebase.auth().signInWithPopup(provider)
+                        .then((result) => {
+                            showButtonSpinner(btn);
+                            checkAndRouteAffiliate(result.user);
+                        })
+                        .catch(error => {
+                            console.error('Sign-in error:', error);
+                            alert('Failed to sign in. Please try again.');
+                        });
+                });
+            }
+        }
+
+        function showButtonSpinner(btn) {
+            btn.innerHTML = '<div class="affiliate-spinner"></div>Checking...';
+            btn.disabled = true;
+        }
+
+        async function checkAndRouteAffiliate(user) {
+            try {
+                const idToken = await user.getIdToken(true);
+                const response = await fetch('/api/client/affiliate-status', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${idToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to check affiliate status');
+                }
+
+                const data = await response.json();
+
+                // Route based on affiliate status
+                if (data.isAffiliate) {
+                    window.location.href = '/affiliate-portal';
+                } else {
+                    window.location.href = '/affiliate-aarie';
+                }
+            } catch (error) {
+                console.error('Error checking affiliate status:', error);
+                // Fallback to gateway if check fails
+                window.location.href = '/affiliate';
+            }
+        }
+    </script>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/index.html" class="nav-logo">
+                    <span class="nav-logo-icon">🏪</span>
+                    <span>AARIE.CA</span>
+                </a>
+                <a href="/" class="nav-back-button" title="Back">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="/about-desk.html" class="nav-link"><span>ℹ️</span> About</a>
+                <a href="/contact-desk.html" class="nav-link"><span>📬</span> Contact</a>
+                <a href="/ai-chat" class="nav-link"><span>🤖</span> A.I. Chat</a>
+                <a href="/stores" class="nav-link"><span>🏬</span> Stores</a>
+                <a href="/portal" class="nav-link"><span>🔐</span> Client Portal</a>
+                <button id="affiliateBtn" onclick="handleAffiliateClick()" class="affiliate-nav-btn">💵 Earn</button>
+            </div>
+            <button class="mobile-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+    <!-- Mobile Menu Drawer -->
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+        <div class="mobile-menu-header">
+            <span class="mobile-menu-logo">🏪 AARIE.CA</span>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+        </div>
+        <nav class="mobile-menu-nav">
+            <a href="/about-desk.html" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">ℹ️</span>
+                <span>About</span>
+            </a>
+            <a href="/contact-desk.html" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">📬</span>
+                <span>Contact</span>
+            </a>
+            <a href="javascript:void(0)" class="mobile-menu-link" onclick="closeMobileMenu(); openMobileChat();">
+                <span class="mobile-menu-icon">🤖</span>
+                <span>A.I. Chat</span>
+            </a>
+            <a href="/stores" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">🏬</span>
+                <span>Stores</span>
+            </a>
+            <a href="/portal" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">🔐</span>
+                <span>Client Portal</span>
+            </a>
+            <button id="mobileAffiliateBtn" onclick="handleAffiliateClick(); closeMobileMenu();" class="mobile-menu-link" style="width: 100%; text-align: left;">
+                <span class="mobile-menu-icon">💵</span>
+                <span>Earn (Affiliate)</span>
+            </button>
+            <a href="/privacy" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">📄</span>
+                <span>Privacy Policy</span>
+            </a>
+            <a href="/terms" class="mobile-menu-link" onclick="closeMobileMenu()">
+                <span class="mobile-menu-icon">📜</span>
+                <span>Terms and Conditions</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <span class="hero-emoji">🏪</span>
+            <h1 class="hero-title">The 7-Day Launchpad</h1>
+            <p class="hero-subtitle">See your first design mockup in 72 hours. Go live in 7-10 days. We handle everything.</p>
+            <div class="hero-cta-container">
+                <div class="hero-price">$499</div>
+                <button class="hero-cta-button" id="heroBookButton">BUY NOW</button>
+                <p class="hero-cta-note">Only 4 projects per month. Secure your spot today.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who Can Sell Section -->
+    <section class="who-can-sell">
+        <h2 class="section-title">Anyone Can Start Selling Online</h2>
+        <p class="section-subtitle">You don't need a registered business to start. Sell under your own name, sole proprietorship, or established company.</p>
+
+        <div class="who-grid">
+            <div class="who-card">
+                <span class="who-icon">👤</span>
+                <h3 class="who-title">Individuals</h3>
+                <p class="who-description">Sell under your own name - artists, freelancers, creators, hobbyists turning passion into profit.</p>
+            </div>
+            <div class="who-card">
+                <span class="who-icon">📋</span>
+                <h3 class="who-title">Sole Proprietors</h3>
+                <p class="who-description">Small business owners ready to take their services online and reach more customers.</p>
+            </div>
+            <div class="who-card">
+                <span class="who-icon">🏢</span>
+                <h3 class="who-title">Registered Businesses</h3>
+                <p class="who-description">Established companies looking for a professional online presence with AI support.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What We Do Section -->
+    <section class="what-we-do">
+        <h2 class="section-title">What We Build For You</h2>
+        <p class="section-subtitle">A complete, professional online store - you don't have to lift a finger.</p>
+
+        <div class="features-list">
+            <div class="feature-item">
+                <span class="feature-icon">🎨</span>
+                <div class="feature-content">
+                    <h3>Custom Store Design</h3>
+                    <p>We design and build your entire store from scratch. Professional, mobile-friendly, and tailored to your brand. Desktop and mobile optimized.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">📦</span>
+                <div class="feature-content">
+                    <h3>Products, Images & Details</h3>
+                    <p>We fill your store with your products, images, prices, and descriptions. Send us your content and we handle the rest.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">💳</span>
+                <div class="feature-content">
+                    <h3>Secure Payment Processing</h3>
+                    <p>Accept payments through Stripe. Customers pay, money goes directly to your bank account. Simple and secure.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">🤖</span>
+                <div class="feature-content">
+                    <h3>Custom AI Chatbot</h3>
+                    <p>Every store includes a custom AI assistant trained specifically on your business. Your customers get instant answers 24/7 - professional, helpful, and always on-brand.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">📊</span>
+                <div class="feature-content">
+                    <h3>Your Own Business Portal</h3>
+                    <p>Access both your Stripe dashboard and a custom portal to manage your business. Track orders, customers, and revenue all in one place.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section">
+        <h2 class="section-title">Simple, Transparent Pricing</h2>
+        <p class="section-subtitle">No hidden fees. No monthly subscriptions. One simple payment.</p>
+
+        <div class="pricing-timeline">
+            <div class="pricing-step" style="max-width: 400px;">
+                <span class="pricing-step-number">✓</span>
+                <div class="pricing-amount">$499</div>
+                <div class="pricing-label">One-Time Payment</div>
+                <p class="pricing-description">Design mockup in 72 hours. Complete website live in 7-10 days. Custom design, product setup, AI chatbot, and payment processing - all included.</p>
+            </div>
+        </div>
+
+        <div class="fee-info">
+            <div class="fee-title">Transaction Fee</div>
+            <div class="fee-rate">16%</div>
+            <p class="fee-description">We collect a 16% fee on purchases made through your store. That's it - no other ongoing costs. Payments go directly to your bank account.</p>
+        </div>
+    </section>
+
+    <!-- Stripe Section -->
+    <section class="stripe-section">
+        <h2 class="section-title">Powered by Stripe</h2>
+        <p class="section-subtitle">Industry-leading payment processing. Your money, your control.</p>
+
+        <div class="stripe-info">
+            <div class="stripe-card">
+                <h3>💳 Stripe Express Account</h3>
+                <p>You sign up with Stripe under our Connect platform. Fast, secure setup. Accept credit cards, Apple Pay, Google Pay, and more.</p>
+            </div>
+            <div class="stripe-card">
+                <h3>🏦 Direct to Your Bank</h3>
+                <p>Customer payments go directly to your bank account. No waiting, no middleman. You're always in control of your money.</p>
+            </div>
+            <div class="stripe-card">
+                <h3>📊 Your Own Dashboard</h3>
+                <p>Access your Stripe dashboard anytime. Track payments, view transactions, download reports. Full transparency.</p>
+            </div>
+            <div class="stripe-card">
+                <h3>🛠️ Custom Business Portal</h3>
+                <p>In addition to Stripe, get access to a custom portal built for your business. Manage products, view orders, and grow your store.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <span class="cta-emoji">🚀</span>
+            <h2 class="cta-title">Start Your Project Today</h2>
+            <p class="cta-subtitle">Design mockup in 72 hours. Live website in 7-10 days. We build it, you run your business.</p>
+
+            <div class="deposit-amount">$499</div>
+            <button class="deposit-button" id="depositButton">BUY NOW</button>
+            <p class="deposit-note">Only 4 projects per month. Secure your spot today.</p>
+        </div>
+    </section>
+
+    <!-- Smart Share Section -->
+    <section style="background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); padding: 80px 40px; text-align: center;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2 style="color: white; font-size: 2rem; margin-bottom: 20px; font-weight: 800;">Share AARIE.CA</h2>
+            <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.1rem; margin-bottom: 40px;">
+                <span id="shareMessage">Want to get paid to share? <a href="/affiliate-aarie" style="color: white; text-decoration: underline; font-weight: 700;">Join our Affiliate Program.</a></span>
+                <span id="affiliateBadge" style="display: none; color: white; font-weight: 700;">✅ Affiliate Link Active: Sharing this earns you commission.</span>
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a id="pageShareBtn_facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #1877f2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">📘 Facebook</a>
+                <a id="pageShareBtn_twitter" href="https://twitter.com/intent/tweet?url=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #000; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">𝕏 Twitter/X</a>
+                <a id="pageShareBtn_linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https://aarie.ca/" target="_blank" style="display: inline-block; padding: 14px 30px; background: white; color: #0a66c2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">in LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-tagline">AARIE.CA - Your Website Live in 7 Days</p>
+        <p class="footer-links">
+            <a href="/privacy" class="footer-link">Privacy Policy</a> |
+            <a href="/terms" class="footer-link">Terms and Conditions</a>
+        </p>
+        <p class="footer-copyright">© 2025 AARIE.CA. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            const drawer = document.getElementById('mobileMenuDrawer');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            drawer.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = drawer.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            const drawer = document.getElementById('mobileMenuDrawer');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            drawer.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Page-specific button handlers
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('heroBookButton').addEventListener('click', () => {
+                window.location.href = '/checkout.html';
+            });
+            document.getElementById('depositButton').addEventListener('click', () => {
+                window.location.href = '/checkout.html';
+            });
+        });
+    </script>
+
+    <!-- Water Background for AI Chat -->
+    <script src="./js/water4chat.js"></script>
+
+    <!-- Universal AI Chat Widget v3.0 - Auto-configures for AARIE Platform -->
+    <script src="./js/ai-chat.js" data-store-id="aarie-platform"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Library - A.I.U.</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>📚</text></svg>">
+    
+    <!-- Dependencies -->
+    <link rel="stylesheet" href="/css/aiu-main.css">
+    <link rel="stylesheet" href="/css/aiu-library.css">
+    <script defer src="/js/aiu-library.js"></script>
+</head>
+<body>
+
+    <div class="aiu-container library-container">
+
+        <!-- VIEW 1: Gallery (Visible by default) -->
+        <div id="gallery-view">
+            <header class="library-header">
+                <h1>AI Library</h1>
+                <p class="subtitle">Talk to the digital personas created by our community.</p>
+            </header>
+
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input id="library-search" type="text" placeholder="Search for an AI by name or username...">
+            </div>
+
+            <div id="ai-gallery" class="aiu-container">
+                <div class="spinner" style="width: 40px; height: 40px;"></div>
+                <p style="color: var(--aiu-text-secondary);">Loading personas...</p>
+            </div>
+        </div>
+
+        <!-- VIEW 2: Chat (Hidden by default) -->
+        <div id="chat-view-container" class="chat-view-container">
+            <header class="chat-header">
+                <div id="chat-avatar" class="chat-avatar"></div>
+                <h2 id="chat-name"></h2>
+            </header>
+
+            <div class="chat-interface">
+                <div id="library-chat-history" class="chat-history">
+                    <!-- Chat bubbles will be injected here -->
+                </div>
+                <div class="chat-input-area">
+                    <textarea id="library-user-input" placeholder="Your message... (Press Enter to send)"></textarea>
+                    <button id="library-send-btn" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+             <a id="close-chat-btn" class="close-chat-btn">← Back to Library</a>
+        </div>
+        
+        <footer style="text-align: center; margin-top: 40px;">
+            <a href="/aiu-menu" class="back-link">← Back to Main Menu</a>
+        </footer>
+    </div>
+</body>
+</html>

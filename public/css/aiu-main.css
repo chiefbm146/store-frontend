@@ -1,0 +1,290 @@
+/* ======================================== */
+/* A.I.U. Main Stylesheet (aiu-main.css)    */
+/* ======================================== */
+
+/* --- 1. Global Styles & Variables --- */
+:root {
+    --aiu-bg: #0f172a; /* Deep navy blue */
+    --aiu-surface: #1e293b; /* Slate blue */
+    --aiu-border: #334155; /* Muted slate */
+    --aiu-text-primary: #e2e8f0; /* Light slate gray */
+    --aiu-text-secondary: #94a3b8; /* Muted slate gray */
+    --aiu-primary: #a855f7; /* Purple */
+    --aiu-primary-dark: #7c3aed; /* Darker purple */
+    --aiu-accent: #10b981; /* Green for success */
+    --aiu-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--aiu-font-sans);
+    background-color: var(--aiu-bg);
+    color: var(--aiu-text-primary);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* --- 2. Layout Containers --- */
+.aiu-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    width: 100%;
+}
+
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+/* --- 3. Typography --- */
+h1 {
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1.1rem;
+    color: var(--aiu-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+p.subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 40px;
+}
+
+a {
+    color: var(--aiu-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #c084fc; /* Lighter purple */
+}
+
+/* --- 4. Buttons --- */
+.btn {
+    display: inline-block;
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--aiu-primary-dark), var(--aiu-primary));
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);
+}
+
+.btn-secondary {
+    background: var(--aiu-surface);
+    color: var(--aiu-text-primary);
+    border: 1px solid var(--aiu-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: #334155;
+    border-color: #475569;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* --- 5. Menu Page Specifics --- */
+.menu-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.menu-header .header-icon {
+    font-size: 4rem;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 450px;
+}
+
+.menu-card {
+    background: var(--aiu-surface);
+    border: 1px solid var(--aiu-border);
+    border-radius: 16px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    color: var(--aiu-text-primary);
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--aiu-primary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.menu-card.primary-card {
+    border-color: var(--aiu-primary-dark);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(168, 85, 247, 0.1));
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.card-content h2 {
+    font-size: 1.25rem;
+    margin-bottom: 5px;
+}
+
+.card-content p {
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.card-arrow {
+    margin-left: auto;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--aiu-text-secondary);
+    transition: transform 0.3s ease;
+}
+
+.menu-card:hover .card-arrow {
+    transform: translateX(5px);
+    color: var(--aiu-primary);
+}
+
+.menu-footer {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.back-link {
+    color: var(--aiu-text-secondary);
+    font-weight: 500;
+}
+
+.back-link:hover {
+    color: var(--aiu-text-primary);
+}
+
+/* --- 6. Utility Classes (Spinners, Forms) --- */
+.spinner {
+    display: inline-block;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top-color: var(--aiu-primary);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    background: var(--aiu-bg);
+    border: 1px solid var(--aiu-border);
+    border-radius: 8px;
+    color: var(--aiu-text-primary);
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--aiu-primary);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+}
+
+/* --- 7. Responsive Design --- */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .aiu-container,
+    .menu-container {
+        padding: 20px 15px;
+    }
+
+    .menu-header {
+        margin-bottom: 40px;
+    }
+
+    .menu-options {
+        gap: 15px;
+    }
+
+    .menu-card {
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .card-icon {
+        font-size: 2rem;
+    }
+
+    .card-content h2 {
+        font-size: 1.1rem;
+    }
+}

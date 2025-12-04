@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your AI - A.I.U.</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>✨</text></svg>">
+
+    <!-- Dependencies -->
+    <link rel="stylesheet" href="/css/aiu-main.css">
+    <link rel="stylesheet" href="/css/aiu-create.css">
+    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+    <script defer src="/js/aiu-create.js"></script>
+</head>
+<body>
+
+    <div class="aiu-container create-info">
+        <header style="text-align: center; margin-bottom: 50px;">
+            <h1>Create Your Digital Persona</h1>
+            <p class="subtitle">Join a new era of digital identity. Let's craft an AI that represents you.</p>
+        </header>
+
+        <!-- How It Works Section -->
+        <section class="info-section">
+            <div class="section-header">
+                <span class="section-icon">🛠️</span>
+                <h2>How It Works</h2>
+            </div>
+            <p>We've made the process of digitizing your persona simple and intuitive.</p>
+            <ul>
+                <li><strong>Converse & Create:</strong> Chat with our Persona Architect AI. It will ask you questions to understand your personality, expertise, and style.</li>
+                <li><strong>Live Drafting:</strong> As you talk, the Architect builds your persona document in real-time. You can ask for unlimited revisions until it's perfect.</li>
+                <li><strong>Finalize & Share:</strong> Once you're satisfied, you "A.I. Yourself" to save your Digital Mind and receive a unique link to share with the world.</li>
+            </ul>
+        </section>
+
+        <!-- Pricing & Action Section -->
+        <section class="info-section">
+            <div class="section-header">
+                <span class="section-icon">💳</span>
+                <h2>Pricing & Onboarding</h2>
+            </div>
+            <p>Your journey begins here. A one-time setup fee unlocks the Creation Studio, followed by a small monthly subscription to keep your AI live.</p>
+
+            <div class="pricing-box">
+                <div class="price-main">$15 <span>one-time setup</span></div>
+                <div class="price-sub">+ $2.99 <span>/ month</span></div>
+            </div>
+
+            <!-- This area will be controlled by JavaScript -->
+            <div id="auth-gate" class="action-gate">
+                <p>To begin, please sign in with your Google account.</p>
+                <button id="sign-in-btn" class="btn btn-primary">🔐 Sign In with Google</button>
+            </div>
+
+            <div id="payment-gate" class="action-gate" style="display: none;">
+                <p id="welcome-msg"></p>
+                <button id="purchase-btn" class="btn btn-primary">Pay $15 Setup Fee & Begin</button>
+            </div>
+        </section>
+
+        <footer style="text-align: center; margin-top: 40px;">
+            <a href="/aiu-menu" class="back-link">← Or, go back to the menu</a>
+        </footer>
+    </div>
+
+</body>
+</html>

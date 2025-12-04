@@ -1,0 +1,125 @@
+{
+  "sectionName": "Health & Fitness",
+  "products": [
+    {
+      "id": "hf-1",
+      "title": "Gym Monster 2 Smart Home Gym, AI-Powered All-in-One Workout Station",
+      "price": "4499.00",
+      "wasPrice": null,
+      "deal": "Amazon's Choice",
+      "link": "https://amzn.to/4past5F",
+      "image": "/images/ALL-PRODUCTS/Gym-Monster-2-Smart-Home-Gym.jpg",
+      "category": "Workout Gear"
+    },
+    {
+      "id": "hf-2",
+      "title": "IMFit Adjustable Dumbbell Set (5 - 52.5 lbs) Single or Pair",
+      "price": "199.95",
+      "wasPrice": "242.95",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/4irxzry",
+      "image": "/images/ALL-PRODUCTS/IMFit-Adjustable-Dumbbell-Set.jpg",
+      "category": "Workout Gear"
+    },
+    {
+      "id": "hf-3",
+      "title": "Push Up Board 14 in 1, with Pushup Handles, Portable Home Gym",
+      "price": "24.99",
+      "wasPrice": "26.49",
+      "deal": null,
+      "link": "https://amzn.to/4iqqibq",
+      "image": "/images/ALL-PRODUCTS/Push-Up-Board-14-in-1.jpg",
+      "category": "Workout Gear"
+    },
+    {
+      "id": "hf-4",
+      "title": "PASYOU Adjustable Weight Bench, Full Body Workout Multi-Purpose",
+      "price": "106.99",
+      "wasPrice": "149.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/48Ie5LY",
+      "image": "/images/ALL-PRODUCTS/PASYOU-Adjustable-Weight-Bench.jpg",
+      "category": "Workout Gear"
+    },
+    {
+      "id": "hf-5",
+      "title": "BangTong&Li Power Tower Pull Up Bar for Home Gym Equipment",
+      "price": "169.99",
+      "wasPrice": "189.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/3XrLy7e",
+      "image": "/images/ALL-PRODUCTS/BangTong&Li-Power-Tower.jpg",
+      "category": "Workout Gear"
+    },
+    {
+      "id": "hf-6",
+      "title": "Yoga Anatomy by Leslie Kaminoff",
+      "price": "28.55",
+      "wasPrice": "34.95",
+      "deal": null,
+      "link": "https://amzn.to/442lkvL",
+      "image": "/images/ALL-PRODUCTS/Yoga-Anatomy.jpg",
+      "category": "Yoga & Meditation"
+    },
+    {
+      "id": "hf-7",
+      "title": "Science of Yoga: Understand the Anatomy and Physiology to Perfect Your Practice",
+      "price": "35.03",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/3M7ZfFW",
+      "image": "/images/ALL-PRODUCTS/Science-of-Yoga.jpg",
+      "category": "Yoga & Meditation"
+    },
+    {
+      "id": "hf-8",
+      "title": "2,100 Asanas: The Complete Yoga Poses",
+      "price": "50.00",
+      "wasPrice": "57.00",
+      "deal": null,
+      "link": "https://amzn.to/4pJV1Tu",
+      "image": "/images/ALL-PRODUCTS/2100-Asanas.jpg",
+      "category": "Yoga & Meditation"
+    },
+    {
+      "id": "hf-9",
+      "title": "merka Yoga Cards, 50 Yoga Deck Flashcards with Asana Poses",
+      "price": "16.99",
+      "wasPrice": null,
+      "deal": null,
+      "link": "https://amzn.to/48woRUw",
+      "image": "/images/ALL-PRODUCTS/merka-Yoga-Cards.jpg",
+      "category": "Yoga & Meditation"
+    },
+    {
+      "id": "hf-10",
+      "title": "Yoga Pretzels: 50 Fun Yoga Activities for Kids & Grownups",
+      "price": "20.70",
+      "wasPrice": "25.88",
+      "deal": null,
+      "link": "https://amzn.to/3KuTq4S",
+      "image": "/images/ALL-PRODUCTS/Yoga-Pretzels-50-Fun.jpg",
+      "category": "Yoga & Meditation"
+    },
+    {
+      "id": "hf-11",
+      "title": "Fitness Tracker with Blood Oxygen, 170+ Sport Modes, 60-Day Battery",
+      "price": "110.49",
+      "wasPrice": "129.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/48JNJJx",
+      "image": "/images/ALL-PRODUCTS/Fitness-Tracker.jpg",
+      "category": "Wearable Tech"
+    },
+    {
+      "id": "hf-12",
+      "title": "Smart Watch for Women Men, 1.83\" HD Smart Watch with Bluetooth Call",
+      "price": "31.99",
+      "wasPrice": "69.99",
+      "deal": "Cyber Monday Deal",
+      "link": "https://amzn.to/3KA8luB",
+      "image": "/images/ALL-PRODUCTS/Smart-Watch-for-Women-Men.jpg",
+      "category": "Wearable Tech"
+    }
+  ]
+}

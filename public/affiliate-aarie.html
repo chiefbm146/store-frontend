@@ -424,6 +424,7 @@
             border: 2px solid rgba(8, 145, 178, 0.2);
             border-radius: 16px;
             padding: 50px;
+            position: relative; /* For the sign-in prompt overlay */
         }
 
         .form-group {
@@ -782,24 +783,50 @@
                 font-size: 2rem;
             }
         }
+
+        /* NEW CSS for form locking */
+        .form-locked {
+            filter: blur(3px); /* Visually indicate it's locked */
+            pointer-events: none; /* Disable interaction */
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        .sign-in-prompt {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95); /* Semi-transparent white overlay */
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            z-index: 10; /* Above the form inputs */
+        }
+        .sign-in-prompt .prompt-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #0891b2;
+        }
+        .sign-in-prompt .prompt-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+        .sign-in-prompt .prompt-text {
+            color: #666;
+            margin-bottom: 25px;
+            max-width: 300px;
+        }
     </style>
-
-
 
 </head>
 <body>
-    <!-- NEW: Sign-in Wall Overlay -->
-    <div id="signInWall" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 10000; display: flex; align-items: center; justify-content: center;">
-        <div style="background: white; border-radius: 16px; padding: 40px; text-align: center; max-width: 400px; margin: 20px;">
-            <div style="font-size: 3rem; margin-bottom: 20px;">🔐</div>
-            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 15px;">Sign In to Apply</h2>
-            <p style="color: #666; margin-bottom: 30px;">To apply for the affiliate program, please sign in with your Google account first.</p>
-            <button id="googleSignInBtn" style="width: 100%; padding: 14px; background: white; border: 2px solid #0891b2; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; color: #0891b2;">
-                Sign In with Google
-            </button>
-        </div>
-    </div>
-
     <!-- Navigation -->
     <nav class="nav-header">
         <div class="nav-container">
@@ -827,7 +854,7 @@
         }
     </style>
 
-    <!-- Hero Section (shows when NOT logged in) -->
+    <!-- Hero Section -->
     <section class="hero" id="heroSection">
         <div class="hero-content">
             <span class="hero-icon">💰</span>
@@ -1113,10 +1140,21 @@
                 <p style="font-weight: 600; color: #666;">Checking your status...</p>
             </div>
 
-            <!-- EXISTING FORM VIEW (Now hidden by default) -->
+            <!-- Application Form View (Conditional Display) -->
             <div id="applicationFormView" style="display: none;">
                 <h2 style="text-align: center; margin-bottom: 10px; font-size: 1.8rem;">Apply Now</h2>
                 <p style="text-align: center; color: #666; margin-bottom: 40px;">Join our affiliate network and start earning today.</p>
+
+                <!-- Sign-in Prompt Overlay for the Form -->
+                <div id="signInPromptOverlay" class="sign-in-prompt" style="display: none;">
+                    <div class="prompt-icon">🔐</div>
+                    <h3 class="prompt-title">Sign In to Apply</h3>
+                    <p class="prompt-text">To fill out and submit the application, please sign in with your Google account.</p>
+                    <button id="googleSignInBtnForm" style="width: 80%; max-width: 300px; padding: 14px; background: white; border: 2px solid #0891b2; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; color: #0891b2;">
+                        Sign In with Google
+                    </button>
+                </div>
+
                 <form id="affiliateForm">
                     <div class="form-group">
                         <label for="name">Full Name *</label>
@@ -1150,7 +1188,7 @@
                 </form>
             </div>
 
-            <!-- NEW "ALREADY AFFILIATE" VIEW (Hidden by default) -->
+            <!-- "ALREADY AFFILIATE" VIEW -->
             <div id="alreadyAffiliateView" style="display: none; text-align: center; padding: 40px 20px;">
                 <div class="success-icon" style="font-size: 4rem; margin-bottom: 20px;">✅</div>
                 <h2 class="success-title" style="font-size: 1.8rem;">You're Already an Affiliate!</h2>
@@ -1189,11 +1227,13 @@
             const applicationFormView = document.getElementById('applicationFormView');
             const alreadyAffiliateView = document.getElementById('alreadyAffiliateView');
             const successView = document.getElementById('successView');
-            const signInWall = document.getElementById('signInWall');
-            const googleSignInBtn = document.getElementById('googleSignInBtn');
+            // const signInWall = document.getElementById('signInWall'); // Removed, no full page wall
+            const signInPromptOverlay = document.getElementById('signInPromptOverlay'); // New overlay for form
+            const googleSignInBtnForm = document.getElementById('googleSignInBtnForm'); // New button for form sign-in
 
             // --- Form Elements ---
             const form = document.getElementById('affiliateForm');
+            const formInputs = form ? form.querySelectorAll('input, textarea, button[type="submit"], input[type="checkbox"]') : []; // Get all form interactive elements
             const submitBtn = document.getElementById('submitBtn');
             const errorDiv = document.getElementById('formError');
             const ageCheck = document.getElementById('ageCheck');
@@ -1204,9 +1244,9 @@
 
             let currentUser = null;
 
-            // --- Google Sign-In Handler ---
-            if (googleSignInBtn) {
-                googleSignInBtn.addEventListener('click', () => {
+            // --- Google Sign-In Handler (for the button within the form) ---
+            if (googleSignInBtnForm) {
+                googleSignInBtnForm.addEventListener('click', () => {
                     const provider = new firebase.auth.GoogleAuthProvider();
                     firebase.auth().signInWithPopup(provider).catch(error => {
                         console.error("Sign-in error:", error);
@@ -1224,6 +1264,7 @@
             applicationFormView.style.display = 'none';
             alreadyAffiliateView.style.display = 'none';
             successView.style.display = 'none';
+            signInPromptOverlay.style.display = 'none'; // Ensure form overlay is hidden initially
 
             // 2. Handle the dismissable toast notification
             if (toast) {
@@ -1236,14 +1277,14 @@
                 firebase.auth().onAuthStateChanged(async (user) => {
                     currentUser = user;
                     if (user) {
-                        signInWall.style.display = 'none';
+                        // User is signed in, check affiliate status
                         await checkUserAffiliateStatus(user);
+                        unlockFormAfterSignIn(); // Unlock form if user is signed in
                     } else {
-                        // User is not signed in, show the sign-in wall
-                        signInWall.style.display = 'flex';
+                        // User is not signed in, show form but keep it locked
                         loadingView.style.display = 'none';
-                        applicationFormView.style.display = 'none';
-                        alreadyAffiliateView.style.display = 'none';
+                        applicationFormView.style.display = 'block';
+                        lockFormForSignIn(); // Lock form if user is not signed in
                     }
                 });
             });
@@ -1278,6 +1319,7 @@
                     if (data.isAffiliate) {
                         // User is an affiliate, show the "already affiliated" view
                         alreadyAffiliateView.style.display = 'block';
+                        applicationFormView.style.display = 'none'; // Hide application form
                     } else {
                         // User is not an affiliate, show form and pre-fill details
                         applicationFormView.style.display = 'block';
@@ -1295,6 +1337,34 @@
             }
 
             /**
+             * Locks the form visually and functionally, showing a sign-in prompt.
+             */
+            function lockFormForSignIn() {
+                signInPromptOverlay.style.display = 'flex';
+                // Make form elements non-interactive (visually blurred by overlay)
+                formInputs.forEach(input => input.disabled = true);
+                form.classList.add('form-locked'); // Add a class for visual blur/opacity
+            }
+
+            /**
+             * Unlocks the form after a successful sign-in.
+             */
+            function unlockFormAfterSignIn() {
+                signInPromptOverlay.style.display = 'none';
+                formInputs.forEach(input => input.disabled = false);
+                form.classList.remove('form-locked'); // Remove visual blur/opacity
+                // Pre-fill fields if user data is available
+                if (currentUser) {
+                    const nameInput = document.getElementById('name');
+                    const emailInput = document.getElementById('email');
+                    if (nameInput) nameInput.value = currentUser.displayName || '';
+                    if (emailInput) emailInput.value = currentUser.email || '';
+                }
+                toggleSubmit(); // Re-evaluate submit button state
+            }
+
+
+            /**
              * Handles the submission of the affiliate application form.
              */
             async function handleFormSubmit(e) {
@@ -1302,6 +1372,15 @@
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Submitting...';
                 errorDiv.style.display = 'none';
+
+                if (!currentUser) {
+                    errorDiv.textContent = 'You must be signed in to submit the application.';
+                    errorDiv.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Application';
+                    lockFormForSignIn(); // Re-lock the form just in case
+                    return;
+                }
 
                 const applicationData = {
                     name: document.getElementById('name').value.trim(),
@@ -1313,9 +1392,13 @@
                 };
 
                 try {
+                    const idToken = await currentUser.getIdToken(true); // Get fresh ID token
                     const response = await fetch('/api/v1/aarie-platform/apply-for-affiliate', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${idToken}` // Send ID token
+                        },
                         body: JSON.stringify(applicationData)
                     });
                     const data = await response.json();
@@ -1403,7 +1486,7 @@
 
             function toggleSubmit() {
                 if(submitBtn) {
-                   submitBtn.disabled = !(ageCheck.checked && tosCheck.checked);
+                   submitBtn.disabled = !(ageCheck.checked && tosCheck.checked && currentUser); // Also check if user is signed in
                 }
             }
         });

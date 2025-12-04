@@ -976,8 +976,9 @@
             <div class="pricing-card featured">
                 <div class="featured-badge">Most Popular</div>
                 <h3>The 7-Day Launchpad</h3>
-                <div class="price">$99 <span>One-Time</span></div>
+                <div class="price">$99 <span>Deposit</span></div>
                 <p style="font-size: 0.9rem; color: #555; margin-top: -10px; margin-bottom: 15px;">+ 2.5% transaction fee</p>
+                <p style="font-size: 1rem; color: #f97316; font-weight: 700; margin-bottom: 15px;"><strong>Full Price: $499</strong> (Pay $99 deposit now, $400 after completion)</p>
                 <p class="for-whom">For individuals, artists, and small businesses ready to launch fast.</p>
                 <ul>
                     <li>Custom Landing Page</li>
@@ -987,7 +988,10 @@
                     <li>Client Management Dashboard</li>
                     <li>7-10 Day Launch Guarantee</li>
                 </ul>
-                <a href="/checkout.html?product_id=7-day-launchpad" class="cta-button primary" style="width: 100%; text-align: center;">BUY NOW</a>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                    <a href="/checkout.html?product_id=7-day-launchpad" class="cta-button primary" style="width: 100%; text-align: center;">BUY NOW</a>
+                    <button onclick="copyEmailForETransfer()" class="cta-button secondary" style="width: 100%; text-align: center; border: 2px solid #10b981; color: #10b981; background: transparent;" onmouseover="this.style.background='#10b981'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#10b981';">E-Transfer</button>
+                </div>
             </div>
 
             <!-- Tier 2: The Professional Suite -->
@@ -1026,6 +1030,21 @@
             <strong>Please Note:</strong> The cost of your custom domain name (e.g., <code>yourbusiness.com</code>) is separate. We'll research available options for you, you choose and pay for the one you want, and we will handle the purchase and technical management on your behalf.
         </p>
     </section>
+
+    <!-- ======================================================================= -->
+    <!-- NEW SECTION: Finalize Payment CTA -->
+    <!-- ======================================================================= -->
+    <section class="content-section" style="background: #fff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: 60px 40px;">
+        <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+            <h2 class="section-title">Already Started a Project?</h2>
+            <p class="section-subtitle" style="margin-bottom: 30px;">If you have already paid your deposit and approved your design mockups, you can complete the final step here to launch your website.</p>
+            <a href="/finalize" class="cta-button primary">Finalize Your $400 Payment</a>
+        </div>
+    </section>
+    <!-- ======================================================================= -->
+    <!-- END OF NEW SECTION -->
+    <!-- ======================================================================= -->
+
 
     <!-- Section 4: Objection Handling & FAQ Section -->
     <section class="content-section faq-section">
@@ -1211,6 +1230,178 @@
 
     <!-- Universal AI Chat Widget v3.0 - Auto-configures for AARIE Platform -->
     <script src="./js/ai-chat.js" data-store-id="aarie-platform"></script>
+
+    <!-- E-Transfer Toast Notification -->
+    <script>
+        function copyEmailForETransfer() {
+            const email = 'korypetersbm146@gmail.com';
+            
+            // Copy email to clipboard
+            navigator.clipboard.writeText(email).then(() => {
+                // Show both toasts
+                showCenterToast('COPIED: KORYPETERSBM146@GMAIL.COM');
+                showToast('Email copied! Send e-transfer of $99 to korypetersbm146@gmail.com to get started. Remaining $400 due after completion.');
+            }).catch(err => {
+                console.error('Failed to copy email: ', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = email;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCenterToast('COPIED: KORYPETERSBM146@GMAIL.COM');
+                showToast('Email copied! Send e-transfer of $99 to korypetersbm146@gmail.com to get started. Remaining $400 due after completion.');
+            });
+        }
+
+        function showCenterToast(message) {
+            // Remove any existing center toast
+            const existingCenterToast = document.getElementById('centerToast');
+            if (existingCenterToast) {
+                existingCenterToast.remove();
+            }
+
+            // Create center toast element
+            const toast = document.createElement('div');
+            toast.id = 'centerToast';
+            toast.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+                color: white;
+                padding: 24px 32px;
+                border-radius: 16px;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+                z-index: 10001;
+                text-align: center;
+                font-weight: 800;
+                font-size: 1.2rem;
+                line-height: 1.4;
+                letter-spacing: 0.5px;
+                animation: zoomIn 0.5s ease-out;
+                border: 2px solid #10b981;
+            `;
+            toast.textContent = message;
+
+            // Add animation keyframes if not already present
+            if (!document.getElementById('centerToastAnimations')) {
+                const style = document.createElement('style');
+                style.id = 'centerToastAnimations';
+                style.textContent = `
+                    @keyframes zoomIn {
+                        from {
+                            transform: translate(-50%, -50%) scale(0.8);
+                            opacity: 0;
+                        }
+                        to {
+                            transform: translate(-50%, -50%) scale(1);
+                            opacity: 1;
+                        }
+                    }
+                    @keyframes zoomOut {
+                        from {
+                            transform: translate(-50%, -50%) scale(1);
+                            opacity: 1;
+                        }
+                        to {
+                            transform: translate(-50%, -50%) scale(0.8);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // Add to page
+            document.body.appendChild(toast);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.animation = 'zoomOut 0.4s ease-out';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 400);
+            }, 3000);
+        }
+
+        function showToast(message) {
+            // Remove any existing toast
+            const existingToast = document.getElementById('eTransferToast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.id = 'eTransferToast';
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                z-index: 10000;
+                max-width: 90%;
+                text-align: center;
+                font-weight: 600;
+                font-size: 0.95rem;
+                line-height: 1.5;
+                animation: slideUp 0.4s ease-out;
+            `;
+            toast.textContent = message;
+
+            // Add animation keyframes if not already present
+            if (!document.getElementById('toastAnimations')) {
+                const style = document.createElement('style');
+                style.id = 'toastAnimations';
+                style.textContent = `
+                    @keyframes slideUp {
+                        from {
+                            transform: translateX(-50%) translateY(100px);
+                            opacity: 0;
+                        }
+                        to {
+                            transform: translateX(-50%) translateY(0);
+                            opacity: 1;
+                        }
+                    }
+                    @keyframes slideDown {
+                        from {
+                            transform: translateX(-50%) translateY(0);
+                            opacity: 1;
+                        }
+                        to {
+                            transform: translateX(-50%) translateY(100px);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // Add to page
+            document.body.appendChild(toast);
+
+            // Remove after 6 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideDown 0.4s ease-out';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 400);
+            }, 6000);
+        }
+    </script>
 
 </body>
 </html>
