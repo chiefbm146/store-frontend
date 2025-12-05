@@ -230,6 +230,73 @@
     margin-left: 5px;
 }
 
+/* Condensing Indicator (non-intrusive notification) */
+.condensing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 8px 15px;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(124, 58, 237, 0.15));
+    border-radius: 8px;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    animation: fadeInSlide 0.3s ease-out;
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.condensing-icon-small {
+    font-size: 1.2rem;
+    animation: gentlePulse 2s ease-in-out infinite;
+}
+
+@keyframes gentlePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.condensing-text-small {
+    font-size: 0.85rem;
+    color: var(--aiu-primary);
+    font-weight: 600;
+}
+
+/* Meter glow animation during summarization */
+.meter-pip.summarizing {
+    animation: meterGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes meterGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(168, 85, 247, 1), 0 0 40px rgba(168, 85, 247, 0.8);
+    }
+}
+
 /* Chat History - Maximized */
 .chat-history {
     flex-grow: 1;

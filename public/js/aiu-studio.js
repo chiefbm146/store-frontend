@@ -1,14 +1,15 @@
 /**
- * A.I.U. Studio v3.0 - Focus View Controller
+ * A.I.U. Studio v3.1 - Focus View Controller with Asynchronous Summarization
  * 
  * Responsibilities:
  * 1. Verify user authentication and redirect if needed
  * 2. Manage view cycling between Conversation, Summary, and Preview
  * 3. Track and display condensation meter (messages until summarization)
  * 4. Handle chat interaction with Persona Architect AI
- * 5. Trigger condensing animation and auto-switch to Summary view
- * 6. Handle Core Memory prompts (Yes/No)
- * 7. Implement two-step finalization (synthesize → confirm → save)
+ * 5. Implement TWO-CALL asynchronous summarization (no view switching)
+ * 6. Show non-intrusive notification during background summarization
+ * 7. Handle Core Memory prompts (Yes/No)
+ * 8. Implement two-step finalization (synthesize → confirm → save)
  */
 
 const studioController = (() => {
@@ -30,6 +31,7 @@ const studioController = (() => {
     // Condensation meter (now in conversation view)
     const meterPips = document.querySelectorAll('.meter-pip');
     const meterLabel = document.querySelector('.meter-label');
+    const condensingIndicator = document.getElementById('condensing-indicator');
 
     // Conversation view
     const chatHistory = document.getElementById('studio-chat-history');
@@ -70,6 +72,7 @@ const studioController = (() => {
     let finalDocument = null;
     let pendingCoreMemoryKey = null;
     let isWaitingForAI = false;
+    let isSummarizing = false;
 
     // --- Helper Functions ---
     function showLoading(button, text = 'Loading...') {
@@ -99,18 +102,14 @@ const studioController = (() => {
 
     // --- View Cycling Logic ---
     function cycleView(direction) {
-        // Remove active class from current view
         const currentView = document.getElementById(VIEWS[currentViewIndex]);
         currentView.classList.remove('active');
 
-        // Calculate new index with wrapping
         currentViewIndex = (currentViewIndex + direction + VIEWS.length) % VIEWS.length;
 
-        // Add active class to new view
         const newView = document.getElementById(VIEWS[currentViewIndex]);
         newView.classList.add('active');
 
-        // Update label
         currentViewLabel.textContent = VIEW_LABELS[currentViewIndex];
     }
 
@@ -118,18 +117,15 @@ const studioController = (() => {
         const targetIndex = VIEWS.indexOf(viewName);
         if (targetIndex === -1) return;
 
-        // Remove active from current
         document.getElementById(VIEWS[currentViewIndex]).classList.remove('active');
 
-        // Set new index and activate
         currentViewIndex = targetIndex;
         document.getElementById(VIEWS[currentViewIndex]).classList.add('active');
         currentViewLabel.textContent = VIEW_LABELS[currentViewIndex];
     }
 
-    // --- Condensation Meter Logic (CORRECTED) ---
+    // --- Condensation Meter Logic ---
     function updateCondensationMeter() {
-        // Update pips to show filled state
         meterPips.forEach((pip, index) => {
             if (index < messagesSinceLastSummary) {
                 pip.classList.add('filled');
@@ -138,7 +134,6 @@ const studioController = (() => {
             }
         });
 
-        // Update label text
         if (meterLabel) {
             meterLabel.textContent = `${messagesSinceLastSummary}/${MESSAGES_UNTIL_SUMMARY} Messages`;
         }
@@ -147,30 +142,36 @@ const studioController = (() => {
     function resetCondensationMeter() {
         messagesSinceLastSummary = 0;
         meterPips.forEach(pip => {
-            pip.classList.remove('filled', 'pulsing');
+            pip.classList.remove('filled', 'summarizing');
         });
         updateCondensationMeter();
     }
 
-    async function triggerSummarizationAnimation() {
-        // Add pulsing effect to all pips
-        meterPips.forEach(pip => pip.classList.add('pulsing'));
+    // --- Non-Intrusive Notification System ---
+    function showSummarizingNotification() {
+        // Add glow to all filled pips
+        meterPips.forEach(pip => {
+            if (pip.classList.contains('filled')) {
+                pip.classList.add('summarizing');
+            }
+        });
 
-        // Switch to Summary view
-        switchToView('summary-view');
+        // Show condensing indicator
+        if (condensingIndicator) {
+            condensingIndicator.style.display = 'flex';
+        }
+    }
 
-        // Show condensing overlay
-        condensingOverlay.style.display = 'flex';
+    function hideSummarizingNotification() {
+        // Remove glow from pips
+        meterPips.forEach(pip => {
+            pip.classList.remove('summarizing');
+        });
 
-        // Wait 2.5 seconds for effect
-        await new Promise(resolve => setTimeout(resolve, 2500));
-
-        // Hide overlay
-        condensingOverlay.style.display = 'none';
-
-        // Remove pulsing and reset meter
-        meterPips.forEach(pip => pip.classList.remove('pulsing'));
-        resetCondensationMeter();
+        // Hide condensing indicator
+        if (condensingIndicator) {
+            condensingIndicator.style.display = 'none';
+        }
     }
 
     // --- Summary & Preview Updates ---
@@ -190,7 +191,6 @@ const studioController = (() => {
             return;
         }
 
-        // Try to format as JSON
         try {
             const parsed = JSON.parse(previewData);
             previewDisplay.textContent = JSON.stringify(parsed, null, 2);
@@ -221,6 +221,39 @@ const studioController = (() => {
         return response.json();
     }
 
+    // --- Asynchronous Summarization (Background Task) ---
+    async function performBackgroundSummarization() {
+        if (isSummarizing) return; // Prevent duplicate calls
+
+        isSummarizing = true;
+        showSummarizingNotification();
+
+        try {
+            // Call the dedicated summarization endpoint
+            const response = await apiCall('/api/aiu/summarize-context', {
+                body: JSON.stringify({
+                    contextualSummary: contextualSummary,
+                    conversationHistory: conversationHistory
+                })
+            });
+
+            // Silently update the summary
+            if (response.updatedSummary) {
+                updateSummary(response.updatedSummary);
+            }
+
+            // Reset the meter
+            resetCondensationMeter();
+
+        } catch (error) {
+            console.error('Background summarization error:', error);
+            // Don't show error to user - it's a background task
+        } finally {
+            isSummarizing = false;
+            hideSummarizingNotification();
+        }
+    }
+
     // --- Core Logic ---
     function initializeStudio() {
         if (typeof firebase !== 'undefined' && firebase.auth) {
@@ -237,11 +270,9 @@ const studioController = (() => {
             authLoader.style.display = 'none';
             studioContent.style.display = 'flex';
 
-            // Add initial greeting to conversation history
             const initialGreeting = chatHistory.querySelector('.ai-bubble').textContent;
             conversationHistory.push({ role: 'ai', content: initialGreeting });
 
-            // Initialize meter display
             updateCondensationMeter();
         } else {
             console.warn("A.I.U. Studio: No user signed in. Redirecting...");
@@ -260,22 +291,19 @@ const studioController = (() => {
         messagesSinceLastSummary++;
         updateCondensationMeter();
 
+        // Check if we need to request summarization
+        const shouldRequestSummary = messagesSinceLastSummary >= MESSAGES_UNTIL_SUMMARY;
+
         showLoading(sendBtn, 'Architect is thinking...');
 
-        // Check if we should trigger summarization animation
-        const shouldSummarize = messagesSinceLastSummary >= MESSAGES_UNTIL_SUMMARY;
-
         try {
-            // Trigger animation BEFORE API call if at threshold
-            if (shouldSummarize) {
-                await triggerSummarizationAnimation();
-            }
-
+            // STEP 1: Get immediate chat response
             const response = await apiCall('/api/aiu/studio-chat', {
                 body: JSON.stringify({
                     coreMemory: coreMemory,
                     contextualSummary: contextualSummary,
-                    conversationHistory: conversationHistory
+                    conversationHistory: conversationHistory,
+                    requestSummary: shouldRequestSummary // Flag for backend
                 })
             });
 
@@ -284,16 +312,12 @@ const studioController = (() => {
                 conversationHistory = response.conversationHistory;
             }
 
-            // Update chat with AI response
+            // Display AI response immediately
             if (response.chatResponse) {
                 appendMessage(response.chatResponse, 'ai');
             }
 
-            // Update summary and preview
-            if (response.updatedSummary) {
-                updateSummary(response.updatedSummary);
-            }
-
+            // Update preview
             if (response.personaPreview) {
                 updatePreview(response.personaPreview);
             }
@@ -301,6 +325,12 @@ const studioController = (() => {
             // Check for Core Memory prompt
             if (response.coreMemoryPrompt) {
                 showCoreMemoryPrompt(response.coreMemoryPrompt);
+            }
+
+            // STEP 2: If we hit the threshold, trigger background summarization
+            if (shouldRequestSummary) {
+                // Don't await - let it run in background
+                performBackgroundSummarization();
             }
 
         } catch (error) {
@@ -353,7 +383,6 @@ const studioController = (() => {
             if (response.finalDocument) {
                 finalDocument = response.finalDocument;
 
-                // Show in modal
                 finalDocumentReview.textContent = JSON.stringify(finalDocument, null, 2);
                 confirmationModal.style.display = 'flex';
             }
@@ -385,7 +414,6 @@ const studioController = (() => {
             });
 
             if (response.success) {
-                // Show success page
                 studioContent.innerHTML = `
                     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 60px 20px;">
                         <div style="font-size: 5rem; margin-bottom: 20px;">✨</div>
@@ -426,11 +454,9 @@ const studioController = (() => {
 
     // --- Event Listeners ---
     function attachEventListeners() {
-        // View cycling
         prevViewBtn.addEventListener('click', () => cycleView(-1));
         nextViewBtn.addEventListener('click', () => cycleView(1));
 
-        // Chat
         sendBtn.addEventListener('click', sendMessage);
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -439,11 +465,9 @@ const studioController = (() => {
             }
         });
 
-        // Core Memory
         coreMemoryYesBtn.addEventListener('click', () => handleCoreMemoryResponse(true));
         coreMemoryNoBtn.addEventListener('click', () => handleCoreMemoryResponse(false));
 
-        // Finalization
         synthesizeBtn.addEventListener('click', synthesizePersona);
         confirmSaveBtn.addEventListener('click', confirmAndSave);
         cancelSaveBtn.addEventListener('click', cancelSave);
