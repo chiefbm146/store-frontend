@@ -35,15 +35,6 @@
                 My Studio
             </h1>
 
-            <div class="condensation-meter">
-                <div class="meter-pip" data-index="1"></div>
-                <div class="meter-pip" data-index="2"></div>
-                <div class="meter-pip" data-index="3"></div>
-                <div class="meter-pip" data-index="4"></div>
-                <div class="meter-pip" data-index="5"></div>
-                <span class="meter-label">Messages</span>
-            </div>
-
             <div class="view-cycler">
                 <button id="prev-view-btn" class="cycle-btn" title="Previous view">
                     <span class="cycle-arrow">←</span>
@@ -60,10 +51,16 @@
 
             <!-- VIEW 1: CONVERSATION -->
             <div id="conversation-view" class="focus-view active">
-                <div class="view-header">
-                    <span class="view-icon">💬</span>
-                    <h2>Conversation</h2>
-                    <p class="view-subtitle">Chat with the Persona Architect</p>
+                <!-- Condensation Meter (moved here from header) -->
+                <div class="condensation-meter-container">
+                    <div class="condensation-meter">
+                        <div class="meter-pip" data-index="1"></div>
+                        <div class="meter-pip" data-index="2"></div>
+                        <div class="meter-pip" data-index="3"></div>
+                        <div class="meter-pip" data-index="4"></div>
+                        <div class="meter-pip" data-index="5"></div>
+                        <span class="meter-label">0/5 Messages</span>
+                    </div>
                 </div>
 
                 <div class="chat-history" id="studio-chat-history">
@@ -94,10 +91,8 @@
 
             <!-- VIEW 2: SUMMARY -->
             <div id="summary-view" class="focus-view">
-                <div class="view-header">
-                    <span class="view-icon">🧠</span>
-                    <h2>Summary</h2>
-                    <p class="view-subtitle">AI's evolving understanding of you</p>
+                <div class="view-header-compact">
+                    <h2><span class="view-icon-inline">🧠</span> Summary</h2>
                 </div>
 
                 <div id="summary-display" class="summary-content">
@@ -117,16 +112,17 @@
 
             <!-- VIEW 3: PREVIEW -->
             <div id="preview-view" class="focus-view">
-                <div class="view-header">
-                    <span class="view-icon">📄</span>
-                    <h2>Persona Document</h2>
-                    <p class="view-subtitle">Your structured digital mind</p>
+                <div class="view-header-compact">
+                    <h2><span class="view-icon-inline">📄</span> Persona Document</h2>
                 </div>
 
-                <pre id="preview-display"
-                    class="preview-content"><code class="placeholder-text">Your persona's structured data will be built here as you chat with the Architect. This is the "code" of your digital mind.</code></pre>
+                <!-- Scrollable content wrapper -->
+                <div class="preview-body">
+                    <pre id="preview-display"
+                        class="preview-content"><code class="placeholder-text">Your persona's structured data will be built here as you chat with the Architect. This is the "code" of your digital mind.</code></pre>
+                </div>
 
-                <!-- Finalization Controls -->
+                <!-- Sticky Footer with Finalization Controls -->
                 <div class="finalization-controls">
                     <div class="form-group">
                         <label for="ai-username">

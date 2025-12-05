@@ -26,7 +26,10 @@ const studioController = (() => {
     const prevViewBtn = document.getElementById('prev-view-btn');
     const nextViewBtn = document.getElementById('next-view-btn');
     const currentViewLabel = document.getElementById('current-view-label');
+
+    // Condensation meter (now in conversation view)
     const meterPips = document.querySelectorAll('.meter-pip');
+    const meterLabel = document.querySelector('.meter-label');
 
     // Conversation view
     const chatHistory = document.getElementById('studio-chat-history');
@@ -60,15 +63,17 @@ const studioController = (() => {
     let currentUser = null;
     let firebaseAuth;
     let currentViewIndex = 0;
-    let messagesSinceLastSummary = 0;
+    let messagesSinceLastSummary = 0; // Start at 0
     let coreMemory = {};
     let contextualSummary = '';
     let conversationHistory = [];
     let finalDocument = null;
     let pendingCoreMemoryKey = null;
+    let isWaitingForAI = false;
 
     // --- Helper Functions ---
     function showLoading(button, text = 'Loading...') {
+        isWaitingForAI = true;
         button.disabled = true;
         const originalText = button.innerHTML;
         button.dataset.originalText = originalText;
@@ -76,6 +81,7 @@ const studioController = (() => {
     }
 
     function hideLoading(button) {
+        isWaitingForAI = false;
         button.disabled = false;
         const originalText = button.dataset.originalText || 'Send';
         button.innerHTML = originalText;
@@ -121,19 +127,21 @@ const studioController = (() => {
         currentViewLabel.textContent = VIEW_LABELS[currentViewIndex];
     }
 
-    // --- Condensation Meter Logic ---
+    // --- Condensation Meter Logic (CORRECTED) ---
     function updateCondensationMeter() {
-        messagesSinceLastSummary++;
-
-        // Fill pips up to current count
+        // Update pips to show filled state
         meterPips.forEach((pip, index) => {
             if (index < messagesSinceLastSummary) {
                 pip.classList.add('filled');
+            } else {
+                pip.classList.remove('filled');
             }
         });
 
-        // If we've hit 5 messages, the next response should trigger summarization
-        // The backend will handle this, we just need to be ready to animate
+        // Update label text
+        if (meterLabel) {
+            meterLabel.textContent = `${messagesSinceLastSummary}/${MESSAGES_UNTIL_SUMMARY} Messages`;
+        }
     }
 
     function resetCondensationMeter() {
@@ -141,6 +149,7 @@ const studioController = (() => {
         meterPips.forEach(pip => {
             pip.classList.remove('filled', 'pulsing');
         });
+        updateCondensationMeter();
     }
 
     async function triggerSummarizationAnimation() {
@@ -231,6 +240,9 @@ const studioController = (() => {
             // Add initial greeting to conversation history
             const initialGreeting = chatHistory.querySelector('.ai-bubble').textContent;
             conversationHistory.push({ role: 'ai', content: initialGreeting });
+
+            // Initialize meter display
+            updateCondensationMeter();
         } else {
             console.warn("A.I.U. Studio: No user signed in. Redirecting...");
             window.location.href = '/aiu-create';
@@ -239,17 +251,26 @@ const studioController = (() => {
 
     async function sendMessage() {
         const message = userInput.value.trim();
-        if (!message) return;
+        if (!message || isWaitingForAI) return;
 
         appendMessage(message, 'user');
         userInput.value = '';
 
-        // Update condensation meter
+        // Increment message count AFTER sending
+        messagesSinceLastSummary++;
         updateCondensationMeter();
 
         showLoading(sendBtn, 'Architect is thinking...');
 
+        // Check if we should trigger summarization animation
+        const shouldSummarize = messagesSinceLastSummary >= MESSAGES_UNTIL_SUMMARY;
+
         try {
+            // Trigger animation BEFORE API call if at threshold
+            if (shouldSummarize) {
+                await triggerSummarizationAnimation();
+            }
+
             const response = await apiCall('/api/aiu/studio-chat', {
                 body: JSON.stringify({
                     coreMemory: coreMemory,
@@ -257,11 +278,6 @@ const studioController = (() => {
                     conversationHistory: conversationHistory
                 })
             });
-
-            // Check if summarization occurred (conversation history was reset)
-            const summarizationOccurred = response.conversationHistory !== undefined &&
-                response.conversationHistory.length === 0 &&
-                conversationHistory.length > 0;
 
             // Update conversation history from backend
             if (response.conversationHistory !== undefined) {
@@ -280,11 +296,6 @@ const studioController = (() => {
 
             if (response.personaPreview) {
                 updatePreview(response.personaPreview);
-            }
-
-            // If summarization occurred, trigger animation
-            if (summarizationOccurred) {
-                await triggerSummarizationAnimation();
             }
 
             // Check for Core Memory prompt
@@ -307,7 +318,7 @@ const studioController = (() => {
     }
 
     function handleCoreMemoryResponse(answer) {
-        if (pendingCoreMemoryKey && answer) {
+        if (pendingCoreMemoryKey && answer !== null) {
             coreMemory[pendingCoreMemoryKey] = answer;
         }
 

@@ -13,103 +13,34 @@
 }
 
 /* ========================================= */
-/* PERSISTENT HEADER                        */
+/* PERSISTENT HEADER (Optimized)            */
 /* ========================================= */
 
 .studio-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 30px;
+    padding: 10px 30px;
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
     backdrop-filter: blur(10px);
     border-bottom: 2px solid var(--aiu-border);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     gap: 20px;
-    flex-wrap: wrap;
 }
 
 .studio-title {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 1.5rem;
+    gap: 10px;
+    font-size: 1.3rem;
     margin: 0;
     color: #ffffff;
     flex-shrink: 0;
 }
 
 .title-icon {
-    font-size: 1.8rem;
-}
-
-/* --- Condensation Meter (5-pip design) --- */
-.condensation-meter {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
-.meter-pip {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid rgba(148, 163, 184, 0.4);
-    background: transparent;
-    transition: all 0.4s ease;
-    position: relative;
-}
-
-.meter-pip.filled {
-    background: linear-gradient(135deg, var(--aiu-primary-dark), var(--aiu-primary));
-    border-color: var(--aiu-primary);
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
-    animation: pipFill 0.3s ease-out;
-}
-
-@keyframes pipFill {
-    0% {
-        transform: scale(0.8);
-        opacity: 0.5;
-    }
-
-    50% {
-        transform: scale(1.2);
-    }
-
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.meter-pip.pulsing {
-    animation: pipPulse 1s ease-in-out infinite;
-}
-
-@keyframes pipPulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
-    }
-
-    50% {
-        transform: scale(1.15);
-        box-shadow: 0 0 25px rgba(168, 85, 247, 0.9);
-    }
-}
-
-.meter-label {
-    font-size: 0.85rem;
-    color: var(--aiu-text-secondary);
-    font-weight: 500;
-    margin-left: 5px;
+    font-size: 1.5rem;
 }
 
 /* --- View Cycler --- */
@@ -121,8 +52,8 @@
 }
 
 .cycle-btn {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: rgba(168, 85, 247, 0.15);
     border: 1px solid var(--aiu-primary);
@@ -192,34 +123,29 @@
     visibility: visible;
 }
 
-/* --- View Headers --- */
-.view-header {
-    text-align: center;
-    margin-bottom: 20px;
-    padding: 20px 30px;
-    border-bottom: 2px solid var(--aiu-border);
+/* --- Compact View Headers (Icon + Title on one line) --- */
+.view-header-compact {
     flex-shrink: 0;
+    text-align: center;
+    padding: 15px 30px;
+    border-bottom: 2px solid var(--aiu-border);
 }
 
-.view-icon {
-    font-size: 3rem;
-    display: block;
-    margin-bottom: 10px;
-}
-
-.view-header h2 {
-    font-size: 2rem;
-    margin: 0 0 10px 0;
+.view-header-compact h2 {
+    font-size: 1.5rem;
+    margin: 0;
     background: linear-gradient(135deg, var(--aiu-primary), #c084fc);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
-.view-subtitle {
-    font-size: 1rem;
-    color: var(--aiu-text-secondary);
-    margin: 0;
+.view-icon-inline {
+    font-size: 1.8rem;
 }
 
 /* ========================================= */
@@ -227,22 +153,94 @@
 /* ========================================= */
 
 #conversation-view {
-    padding: 0 30px 30px 30px;
+    padding: 0 30px 20px 30px;
+    gap: 15px;
 }
 
+/* Condensation Meter (moved to conversation view) */
+.condensation-meter-container {
+    flex-shrink: 0;
+    padding: 12px 20px;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 12px;
+    border: 1px solid var(--aiu-border);
+}
+
+.condensation-meter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.meter-pip {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(148, 163, 184, 0.4);
+    background: transparent;
+    transition: all 0.4s ease;
+}
+
+.meter-pip.filled {
+    background: linear-gradient(135deg, var(--aiu-primary-dark), var(--aiu-primary));
+    border-color: var(--aiu-primary);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+    animation: pipFill 0.3s ease-out;
+}
+
+@keyframes pipFill {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.meter-pip.pulsing {
+    animation: pipPulse 1s ease-in-out infinite;
+}
+
+@keyframes pipPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+    }
+
+    50% {
+        transform: scale(1.15);
+        box-shadow: 0 0 25px rgba(168, 85, 247, 0.9);
+    }
+}
+
+.meter-label {
+    font-size: 0.85rem;
+    color: var(--aiu-text-secondary);
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+/* Chat History - Maximized */
 .chat-history {
     flex-grow: 1;
     overflow-y: auto;
     background: rgba(15, 23, 42, 0.6);
     padding: 20px;
     border-radius: 16px;
-    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     gap: 15px;
     border: 1px solid rgba(51, 65, 85, 0.5);
-    min-height: 300px;
-    max-height: 500px;
 }
 
 .chat-bubble {
@@ -285,8 +283,8 @@
     border: 2px solid var(--aiu-accent);
     border-radius: 12px;
     padding: 20px;
-    margin-bottom: 20px;
     animation: pulseGlow 2s ease-in-out infinite;
+    flex-shrink: 0;
 }
 
 @keyframes pulseGlow {
@@ -333,6 +331,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    flex-shrink: 0;
 }
 
 .chat-input-area textarea {
@@ -357,7 +356,7 @@
 }
 
 /* ========================================= */
-/* VIEW 2: SUMMARY                          */
+/* VIEW 2: SUMMARY (Centered on Desktop)    */
 /* ========================================= */
 
 #summary-view {
@@ -366,14 +365,23 @@
 }
 
 .summary-content {
+    flex-grow: 1;
     background: rgba(15, 23, 42, 0.6);
     border: 1px solid rgba(51, 65, 85, 0.5);
     border-radius: 16px;
-    padding: 30px;
-    min-height: 400px;
-    font-size: 1.05rem;
+    padding: 40px;
+    font-size: 1.1rem;
     line-height: 1.8;
     color: var(--aiu-text-primary);
+    overflow-y: auto;
+    /* Center content on desktop */
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.summary-content p {
+    margin: 0 0 1em 0;
 }
 
 .placeholder-text {
@@ -469,26 +477,34 @@
 }
 
 /* ========================================= */
-/* VIEW 3: PREVIEW                          */
+/* VIEW 3: PREVIEW (with Sticky Footer)     */
 /* ========================================= */
 
 #preview-view {
-    padding: 0 30px 30px 30px;
+    padding: 0;
+    gap: 0;
+}
+
+/* Scrollable content wrapper */
+.preview-body {
+    flex-grow: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 0 30px;
 }
 
 .preview-content {
+    flex-grow: 1;
     background: rgba(15, 23, 42, 0.8);
     border: 1px solid rgba(51, 65, 85, 0.5);
     border-radius: 16px;
     padding: 25px;
-    min-height: 400px;
-    max-height: 500px;
     overflow-y: auto;
     font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
     font-size: 0.9rem;
     line-height: 1.7;
     color: #a5f3fc;
-    margin-bottom: 30px;
     white-space: pre-wrap;
     word-wrap: break-word;
 }
@@ -498,16 +514,16 @@
     font-style: italic;
 }
 
-/* Finalization Controls */
+/* --- STICKY FOOTER --- */
 .finalization-controls {
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid var(--aiu-border);
-    border-radius: 16px;
-    padding: 25px;
+    flex-shrink: 0;
+    padding: 20px 30px;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0), rgba(15, 23, 42, 1) 30%);
+    border-top: 1px solid var(--aiu-border);
 }
 
 .finalization-controls .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .finalization-controls label {
@@ -515,7 +531,7 @@
     align-items: center;
     gap: 8px;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.95rem;
     margin-bottom: 10px;
 }
 
@@ -702,27 +718,16 @@
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .studio-header {
-        padding: 12px 15px;
+        padding: 10px 15px;
         gap: 15px;
     }
 
     .studio-title {
-        font-size: 1.2rem;
-        width: 100%;
-        justify-content: center;
+        font-size: 1.1rem;
     }
 
-    .condensation-meter {
-        gap: 8px;
-    }
-
-    .meter-pip {
-        width: 16px;
-        height: 16px;
-    }
-
-    .meter-label {
-        font-size: 0.75rem;
+    .title-icon {
+        font-size: 1.3rem;
     }
 
     .view-cycler {
@@ -730,8 +735,8 @@
     }
 
     .cycle-btn {
-        width: 35px;
-        height: 35px;
+        width: 32px;
+        height: 32px;
         font-size: 1rem;
     }
 
@@ -741,21 +746,32 @@
     }
 
     #conversation-view,
-    #summary-view,
-    #preview-view {
+    #summary-view {
         padding: 0 15px 20px 15px;
     }
 
-    .view-icon {
-        font-size: 2.5rem;
+    #preview-view .preview-body {
+        padding: 0 15px;
     }
 
-    .view-header h2 {
+    #preview-view .finalization-controls {
+        padding: 15px;
+    }
+
+    .view-header-compact {
+        padding: 12px 15px;
+    }
+
+    .view-header-compact h2 {
+        font-size: 1.3rem;
+    }
+
+    .view-icon-inline {
         font-size: 1.5rem;
     }
 
-    .chat-history {
-        max-height: 400px;
+    .summary-content {
+        padding: 25px;
     }
 
     .chat-bubble {
@@ -784,8 +800,8 @@
 }
 
 @media (max-width: 480px) {
-    .view-header h2 {
-        font-size: 1.3rem;
+    .view-header-compact h2 {
+        font-size: 1.2rem;
     }
 
     .btn-large {
