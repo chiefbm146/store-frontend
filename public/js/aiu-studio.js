@@ -395,16 +395,40 @@ const studioController = (() => {
         }
     }
 
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--aiu-accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translate(-50%, 20px);
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(-50%)';
+        }, 10);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translate(-50%, 20px)';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
     async function confirmAndSave() {
         const username = usernameInput.value.trim().toLowerCase();
-
-        if (!finalDocument) {
-            alert("No persona document to save. Please generate it first.");
-            return;
-        }
-
-        showLoading(confirmSaveBtn, 'Saving your AI...');
-
+        if (!username) return alert("Please choose a unique username.");
+        showLoading(confirmSaveBtn, 'Going Live...');
         try {
             const response = await apiCall('/api/aiu/save-persona', {
                 body: JSON.stringify({
@@ -415,35 +439,40 @@ const studioController = (() => {
 
             if (response.success) {
                 studioContent.innerHTML = `
-                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 60px 20px;">
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 40px;">
                         <div style="font-size: 5rem; margin-bottom: 20px;">✨</div>
                         <h1 style="font-size: 2.5rem; margin-bottom: 15px;">Congratulations!</h1>
-                        <p style="font-size: 1.3rem; color: var(--aiu-text-secondary); margin-bottom: 40px;">
-                            Your Digital Mind, "${response.personaName}", is now live.
-                        </p>
-                        <div style="background: var(--aiu-surface); padding: 30px; border-radius: 16px; margin: 0 auto 40px; max-width: 600px; border: 1px solid var(--aiu-border);">
-                            <p style="color: var(--aiu-text-secondary); margin-bottom: 15px; font-size: 0.95rem;">Your Shareable Link:</p>
-                            <input type="text" readonly value="${response.shareableLink}" class="form-input" style="text-align: center; font-size: 1.1rem; margin-bottom: 15px;">
-                            <button onclick="navigator.clipboard.writeText('${response.shareableLink}')" class="btn btn-secondary" style="width: 100%;">
-                                📋 Copy Link
-                            </button>
+                        <p class="subtitle">${response.personaName} is now live.</p>
+                        <div style="background: var(--aiu-surface); padding: 20px; border-radius: 8px; margin: 20px 0; width:100%; max-width: 500px;">
+                            <p style="color: var(--aiu-text-secondary); margin-bottom: 10px;">Your Shareable Link:</p>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" readonly value="${response.shareableLink}" id="shareable-link-input" class="form-input" style="text-align: center; font-weight: bold;">
+                                <button id="copy-link-btn" class="btn btn-secondary" style="flex-shrink: 0;">📋 Copy</button>
+                            </div>
                         </div>
-                        <a href="${response.shareableLink}" class="btn btn-primary btn-large" style="display: inline-flex; margin-bottom: 20px;">
-                            <span class="btn-icon">💬</span>
-                            Talk to Your AI
-                        </a>
+                        <a href="${response.shareableLink}" class="btn btn-primary" style="display: inline-flex; margin-bottom: 20px;">Talk to Your AI</a>
                         <br>
                         <a href="/aiu-menu" style="color: var(--aiu-text-secondary); font-size: 1rem;">← Back to A.I.U. Menu</a>
                     </div>
                 `;
 
+                // Add the event listener for the new copy button
+                document.getElementById('copy-link-btn').addEventListener('click', () => {
+                    const linkInput = document.getElementById('shareable-link-input');
+                    navigator.clipboard.writeText(linkInput.value).then(() => {
+                        showToast("Link Copied!");
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        showToast("Failed to copy link.");
+                    });
+                });
+
                 confirmationModal.style.display = 'none';
             }
 
         } catch (error) {
-            alert(`Error saving persona: ${error.message}`);
-            console.error('Save error:', error);
-            hideLoading(confirmSaveBtn);
+            alert(`Save failed: ${error.message}`);
+            hideLoading(confirmSaveBtn, '✅ Confirm & Go Live');
         }
     }
 

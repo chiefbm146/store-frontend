@@ -1,12 +1,5 @@
 /**
- * A.I.U. Library Controller (aiu-library.js) - v2.0 Dynamic
- * 
- * Responsibilities:
- * 1. Fetch and display a list of public AI personas from the backend.
- * 2. Handle deep-linking via URL hash to load a specific AI on page load.
- * 3. Implement search/filtering functionality.
- * 4. Manage the UI transition from the gallery view to the chat view.
- * 5. Power the chat interaction with the selected public AI.
+ * A.I.U. Library Controller (aiu-library.js) - v2.1 Fixed
  */
 
 const libraryController = (() => {
@@ -54,7 +47,7 @@ const libraryController = (() => {
             if (hash) {
                 const persona = allPersonas.find(p => p.username.toLowerCase() === hash.toLowerCase());
                 if (persona) {
-                    switchToChatView(persona.username); // Pass username to fetch full data
+                    switchToChatView(persona.username);
                 }
             }
         } catch (error) {
@@ -100,7 +93,7 @@ const libraryController = (() => {
     async function switchToChatView(username) {
         galleryView.style.display = 'none';
         chatView.style.display = 'block';
-        chatHistory.innerHTML = '<div class="spinner" style="margin: 20px auto;"></div>'; // Show loading in chat
+        chatHistory.innerHTML = '<div class="spinner" style="margin: 20px auto;"></div>';
 
         try {
             const fullPersonaData = await publicApiCall(`/api/aiu/persona/${username}`);
@@ -149,7 +142,6 @@ const libraryController = (() => {
         showLoading(sendBtn);
 
         try {
-            // NOTE: The backend needs to create this /public-chat endpoint
             const response = await publicApiCall('/api/aiu/public-chat', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -168,7 +160,11 @@ const libraryController = (() => {
         }
     }
 
-    return { init };
+    // --- Public Interface ---
+    return {
+        init: initializeLibrary
+    };
 })();
 
+// FIX: Correctly call the init function after the DOM is loaded
 document.addEventListener('DOMContentLoaded', libraryController.init);
