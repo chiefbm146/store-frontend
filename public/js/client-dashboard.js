@@ -235,6 +235,14 @@ function renderConsultations(consultations) {
                     <span class="consultation-date">${date}</span>
                 </div>
                 <p class="consultation-body">${(consultation.message && typeof consultation.message === 'string') ? consultation.message : 'No message provided.'}</p>
+                
+                <!-- ADD THIS NEW SECTION -->
+                <div class="consultation-details-grid">
+                    <div><strong>Roof Type:</strong> ${consultation.roofType || 'N/A'}</div>
+                    <div><strong>Urgency:</strong> ${consultation.urgency ? consultation.urgency.charAt(0).toUpperCase() + consultation.urgency.slice(1) : 'N/A'}</div>
+                </div>
+                <!-- END OF NEW SECTION -->
+                
                 <div class="consultation-contact">
                     <span>📧 <a href="mailto:${consultation.email}" target="_blank">${consultation.email}</a></span>
                     ${consultation.phone ? `<span>📞 <a href="tel:${consultation.phone}">${consultation.phone}</a></span>` : ''}
