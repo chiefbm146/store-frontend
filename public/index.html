@@ -31,19 +31,20 @@
     <meta name="twitter:image" content="https://aarie.ca/images/test.jpg">
     <!-- ===== END OF FINAL META TAGS ===== -->
 
-
-
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
 
     <!-- Font Awesome (local) -->
     <link rel="stylesheet" href="./libs/fontawesome/all.min.css?v=11.0.12">
 
-    <!-- Linked CSS for Modals & Smart Messages (from mobile.html architecture) -->
+    <!-- Linked CSS for Modals & Smart Messages -->
     <link rel="stylesheet" href="./css/smart-message.css?v=11.0.12">
     <link rel="stylesheet" href="./css/fullscreen-modals.css?v=11.0.12">
     <link rel="stylesheet" href="./css/stripe-checkout.css?v=11.0.12">
     <link rel="stylesheet" href="./css/amazon-affiliate.css">
+
+    <!-- Main Stylesheet for this page -->
+    <link rel="stylesheet" href="./css/style.css">
 
     <!-- Device Detector (CRITICAL: Required for rate-limiting security system) -->
     <script src="./js/device-detector.js?v=11.0.12"></script>
@@ -59,661 +60,6 @@
         // Fallback for GLTFLoader
         !window.THREE || !window.THREE.GLTFLoader && document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.134/examples/js/loaders/GLTFLoader.js" integrity="sha256-gM3k2e/CWwjs72W22fP0vs6h3gSOx65j8s3Q229KBFo=" crossorigin="anonymous"><\/script>');
     </script>
-
-
-    <style>
-        /* === BASE STYLES === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            color: #1a1a1a;
-            background: #FFFFFF;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* === HERO SECTION === */
-        .hero-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-            padding: 80px 20px;
-        }
-
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.1;
-            background-image:
-                radial-gradient(circle at 25% 25%, #FFFFFF 2px, transparent 2px),
-                radial-gradient(circle at 75% 75%, #FFFFFF 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: drift 20s ease-in-out infinite;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        @keyframes drift {
-
-            0%,
-            100% {
-                transform: translate(0, 0);
-            }
-
-            50% {
-                transform: translate(10px, -10px);
-            }
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
-        }
-
-        .hero-icon {
-            font-size: 6rem;
-            margin-bottom: 20px;
-            display: block;
-            filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        .hero-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            color: #FFFFFF;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-            color: rgba(255, 255, 255, 0.95);
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .hero-description {
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 16px 40px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-            display: inline-block;
-        }
-
-        /* Make first two buttons (Start Your Site & Join Affiliate) equal width on desktop */
-        .hero-buttons .btn:nth-child(1),
-        .hero-buttons .btn:nth-child(2) {
-            min-width: 280px;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #FFFFFF;
-            color: #0891b2;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #FFFFFF;
-            border: 2px solid #FFFFFF;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-3px);
-        }
-
-        .client-explore-text {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            font-weight: 500;
-            margin: 10px 0;
-            width: 100%;
-            text-align: center;
-        }
-
-        /* === WHO IS THIS FOR SECTION === */
-        .who-section {
-            padding: 100px 20px;
-            background: linear-gradient(180deg, #FAFBFC 0%, #FFFFFF 100%);
-        }
-
-        .who-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-title {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 15px;
-        }
-
-        .section-subtitle {
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            color: #666;
-        }
-
-        .who-highlight {
-            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
-            color: #FFFFFF;
-            padding: 30px 40px;
-            border-radius: 16px;
-            font-size: 1.3rem;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 60px;
-            box-shadow: 0 10px 40px rgba(8, 145, 178, 0.3);
-            line-height: 1.6;
-        }
-
-        .business-types-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        .business-type-card {
-            background: #FFFFFF;
-            padding: 40px 30px;
-            border-radius: 20px;
-            text-align: center;
-            border: 2px solid #E8ECF0;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .business-type-card:hover {
-            transform: translateY(-8px);
-            border-color: #0891b2;
-            box-shadow: 0 15px 40px rgba(8, 145, 178, 0.2);
-        }
-
-        .business-type-icon {
-            font-size: 4rem;
-            display: block;
-            margin-bottom: 20px;
-        }
-
-        .business-type-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 15px;
-        }
-
-        .business-type-description {
-            color: #666;
-            line-height: 1.7;
-            font-size: 1rem;
-        }
-
-        .examples-section {
-            background: #FFFFFF;
-            padding: 50px;
-            border-radius: 24px;
-            margin-bottom: 50px;
-            border: 2px solid #E8ECF0;
-        }
-
-        .examples-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .examples-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-        }
-
-        .example-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 18px 20px;
-            background: #F8FAFC;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .example-item:hover {
-            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
-            transform: translateY(-3px);
-        }
-
-        .example-item:hover .example-text {
-            color: #FFFFFF;
-        }
-
-        .example-icon {
-            font-size: 1.8rem;
-            flex-shrink: 0;
-        }
-
-        .example-text {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #1a1a1a;
-            transition: color 0.3s ease;
-        }
-
-        .advantage-box {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            color: #FFFFFF;
-            padding: 50px;
-            border-radius: 24px;
-            text-align: center;
-            box-shadow: 0 15px 50px rgba(16, 185, 129, 0.3);
-        }
-
-        .advantage-icon {
-            font-size: 4rem;
-            display: block;
-            margin-bottom: 20px;
-        }
-
-        .advantage-title {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-        }
-
-        .advantage-description {
-            font-size: 1.2rem;
-            line-height: 1.7;
-            max-width: 700px;
-            margin: 0 auto;
-            opacity: 0.95;
-        }
-
-        /* === FEATURES SECTION === */
-        .features-section {
-            padding: 100px 20px;
-            background: #FFFFFF;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: #FFFFFF;
-            padding: 40px 30px;
-            border-radius: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: #0891b2;
-            box-shadow: 0 10px 40px rgba(8, 145, 178, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .feature-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 15px;
-        }
-
-        .feature-description {
-            color: #666;
-            line-height: 1.8;
-        }
-
-        /* === AARIES IMAGE SECTION === */
-        .aaries-section {
-            padding: 100px 20px;
-            background: #FFFFFF;
-        }
-
-        .aaries-content {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .aaries-image-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 50px;
-        }
-
-        .aaries-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(8, 145, 178, 0.25);
-            transition: transform 0.3s ease;
-        }
-
-        .aaries-image:hover {
-            transform: scale(1.02);
-        }
-
-        /* === AI BLURB SECTION (Mobile Only) === */
-        .ai-blurb-section {
-            display: none;
-        }
-
-        /* === ABOUT SECTION === */
-        .about-section {
-            padding: 100px 20px;
-            background: #FFFFFF;
-        }
-
-        .about-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .about-text h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            margin-bottom: 20px;
-            color: #1a1a1a;
-        }
-
-        .about-text h3 {
-            font-size: 1.3rem;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .about-text p {
-            margin-bottom: 20px;
-            color: #666;
-            line-height: 1.8;
-        }
-
-        .about-visual {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .about-emoji {
-            font-size: 12rem;
-            filter: drop_shadow(0 10px 30px rgba(0, 0, 0, 0.1));
-        }
-
-        /* === CTA SECTION === */
-        .cta-section {
-            padding: 100px 20px;
-            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.1;
-            background-image:
-                radial-gradient(circle at 25% 25%, #FFFFFF 2px, transparent 2px),
-                radial-gradient(circle at 75% 75%, #FFFFFF 1px, transparent 1px);
-            background-size: 60px 60px;
-        }
-
-        .cta-content {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .cta-content h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            color: #FFFFFF;
-            margin-bottom: 20px;
-        }
-
-        .cta-content p {
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 40px;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* === FOOTER === */
-        .footer {
-            background: #1a1a1a;
-            color: #FFFFFF;
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-tagline {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: #FFFFFF;
-        }
-
-        .footer-copyright {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-        }
-
-        /* === RESPONSIVE - TABLET AND BELOW === */
-        @media (max-width: 768px) {
-
-            /* General Mobile Layout */
-            .hero-section {
-                min-height: auto;
-                padding: 60px 20px;
-            }
-
-            .hero-icon {
-                font-size: 4rem;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .btn {
-                width: 100%;
-                display: block;
-            }
-
-            .who-section {
-                padding: 50px 20px;
-            }
-
-            .business-types-grid,
-            .examples-grid,
-            .features-grid {
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .business-type-card,
-            .feature-card {
-                flex-direction: row;
-                text-align: left;
-            }
-
-            .aaries-section {
-                padding: 50px 20px;
-            }
-
-            .aaries-image-container {
-                margin-top: 30px;
-            }
-
-            .about-section {
-                padding: 50px 20px;
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-
-            .cta-section {
-                padding: 50px 20px;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .footer {
-                padding-bottom: 100px;
-            }
-
-            /* Corporate Gifts specific mobile styling */
-            .corporate-gifts-grid {
-                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-                /* 2 columns on mobile */
-            }
-
-            .corporate-gifts-grid .gift-item:nth-child(4) {
-                display: none;
-                /* Hide 4th item on mobile */
-            }
-        }
-
-        /* === SPECIAL TAGS === */
-        special {
-            font-weight: 700;
-            color: #0891b2;
-            cursor: pointer;
-            padding: 1px 4px;
-            border-radius: 3px;
-        }
-
-        special:hover {
-            background-color: rgba(8, 145, 178, 0.1);
-            text-decoration: underline;
-        }
-
-        price {
-            font-weight: 700;
-            color: #c82333;
-        }
-    </style>
-
-
-
 </head>
 
 <body>
@@ -750,64 +96,6 @@
             <!-- Affiliate Button will be injected here -->
         </div>
     </div>
-
-    <style>
-        @media (max-width: 768px) {
-            #desktopNavLinks {
-                display: none !important;
-            }
-
-            #hamburgerMenuBtn {
-                display: block !important;
-            }
-        }
-    </style>
-
-
-    <style>
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .affiliate-spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(0, 0, 0, 0.3);
-            border-top: 2px solid black;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        .affiliate-spinner-light {
-            border-color: rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-        }
-
-        .nav-affiliate-btn {
-            padding: 10px 20px;
-            background: #10b981;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1rem;
-        }
-
-        .nav-affiliate-btn:hover {
-            transform: translateY(-2px);
-        }
-    </style>
 
     <script>
         let currentUser = null;
@@ -990,6 +278,42 @@
         </div>
     </section>
 
+    <!-- RJ Roofing Bros Section - SERVING CLIENTS SOON -->
+    <section style="padding: 80px 20px; background: white; text-align: center; position: relative; overflow: hidden;">
+        <div
+            style="max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; padding: 40px; background: rgba(0, 0, 0, 0.05); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(0, 0, 0, 0.1);">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="/vickers-roofing/images/roof30.jpg" alt="RJ Roofing Bros Logo"
+                    style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 20px;">
+            </div>
+            <span
+                style="background: #ef4444; color: white; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px;">
+                🚧 SERVING CLIENTS SOON
+            </span>
+            <h2 style="color: #b91c1c; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 20px; font-weight: 800;">
+                RJ Roofing Bros</h2>
+            <p
+                style="color: #ef4444; font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                A comprehensive website for RJ Roofing Bros, featuring service booking, detailed project showcases, and
+                an AI assistant providing expert advice on roofing issues.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://rjroofingbros.com" target="_blank" rel="noopener" class="btn"
+                    style="background: white; color: #b91c1c; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    🏠 Preview Roofing Site
+                </a>
+                <a href="/booking" class="btn"
+                    style="background: #b91c1c; color: white; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    🏪 Build Your Service Site
+                </a>
+            </div>
+        </div>
+        <!-- Subtle background pattern -->
+        <div
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; background-image: radial-gradient(circle at 25% 25%, #000000 2px, transparent 2px), radial-gradient(circle at 75% 75%, #000000 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;">
+        </div>
+    </section>
+
     <!-- ======================================== -->
     <!-- A.I.U. (Artificial Intelligence You) Section -->
     <!-- ======================================== -->
@@ -1036,42 +360,6 @@
     <!-- ======================================== -->
     <!-- End of A.I.U. Section -->
     <!-- ======================================== -->
-
-    <!-- Vickers Roofing Section - SERVING CLIENTS SOON -->
-    <section style="padding: 80px 20px; background: white; text-align: center; position: relative; overflow: hidden;">
-        <div
-            style="max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; padding: 40px; background: rgba(0, 0, 0, 0.05); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(0, 0, 0, 0.1);">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <img src="/vickers-roofing/images/roof30.jpg" alt="Vickers Roofing Logo"
-                    style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 20px;">
-            </div>
-            <span
-                style="background: #ef4444; color: white; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px;">
-                🚧 SERVING CLIENTS SOON
-            </span>
-            <h2 style="color: #b91c1c; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 20px; font-weight: 800;">
-                Vickers Roofing</h2>
-            <p
-                style="color: #ef4444; font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
-                A comprehensive website for Vickers Roofing, featuring service booking, detailed project showcases, and
-                an AI assistant providing expert advice on roofing issues.
-            </p>
-            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                <a href="/vickers-roofing" class="btn"
-                    style="background: white; color: #b91c1c; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
-                    🏠 Preview Roofing Site
-                </a>
-                <a href="/booking" class="btn"
-                    style="background: #b91c1c; color: white; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
-                    🏪 Build Your Service Site
-                </a>
-            </div>
-        </div>
-        <!-- Subtle background pattern -->
-        <div
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; background-image: radial-gradient(circle at 25% 25%, #000000 2px, transparent 2px), radial-gradient(circle at 75% 75%, #000000 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;">
-        </div>
-    </section>
 
     <!-- Bert Peters Salish Art Section - SERVING CLIENTS SOON -->
     <section style="padding: 80px 20px; background: white; text-align: center; position: relative; overflow: hidden;">

@@ -180,18 +180,18 @@ function injectChatCSS() {
             z-index: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            padding: 30px;
+            padding: 20px 15px;
         }
         .messages {
             display: flex;
             flex-direction: column;
             gap: 15px;
             background: transparent;
-            max-width: 85%;
-            margin: 0 auto;
+            width: 100%;
+            padding: 0;
         }
         .messages > * {
-            width: fit-content;
+            max-width: 80%;
         }
         .message {
             padding: 16px 24px;
@@ -854,8 +854,8 @@ function initializeChatSystem() {
     (async () => {
         try {
             const wakeupUrl = `${BACKEND_URL}/api/v1/${STORE_ID}/wakeup`;
-            fetch(wakeupUrl).catch(() => {});
-        } catch (e) {}
+            fetch(wakeupUrl).catch(() => { });
+        } catch (e) { }
     })();
 
     // Inject Font Awesome for icons (BEFORE CSS to ensure availability)
@@ -1001,7 +1001,7 @@ async function getTTSAudio(text) {
                 return audioData;
             }
         }
-    } catch (error) {}
+    } catch (error) { }
     return null;
 }
 
@@ -1264,7 +1264,7 @@ async function sendMessage(isMobile = false) {
             device_fingerprint: deviceFingerprint
             // ... (Add signature/timestamp if available)
         };
-        
+
         const response = await fetch(BACKEND_URL + CHAT_ENDPOINT, {
             method: 'POST',
             headers: {

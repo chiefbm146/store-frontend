@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <script src="./js/clean-url.js"></script>
@@ -10,7 +11,8 @@
     <meta property="og:title" content="Checkout - AARIE.CA">
     <meta property="og:description" content="Complete your purchase for the 7-Day Launchpad.">
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
 
     <style>
         * {
@@ -394,7 +396,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* === ERROR MESSAGE === */
@@ -448,6 +452,7 @@
                 opacity: 0;
                 transform: scale(0.9);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -612,7 +617,8 @@
 
             .form-input {
                 padding: 12px 14px;
-                font-size: 16px; /* Prevents iOS zoom */
+                font-size: 16px;
+                /* Prevents iOS zoom */
             }
 
             .secure-badge {
@@ -625,6 +631,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation Bar -->
     <nav class="nav-bar">
@@ -636,7 +643,8 @@
                 </a>
                 <a href="/store-booking.html" class="nav-back-button" title="Back to Booking">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </a>
             </div>
@@ -665,23 +673,28 @@
             <div class="features-list">
                 <div class="feature-item">
                     <span class="feature-icon">🎨</span>
-                    <span class="feature-text"><strong>Custom Store Design</strong> - Professional, mobile-friendly store tailored to your brand</span>
+                    <span class="feature-text"><strong>Custom Store Design</strong> - Professional, mobile-friendly
+                        store tailored to your brand</span>
                 </div>
                 <div class="feature-item">
                     <span class="feature-icon">📦</span>
-                    <span class="feature-text"><strong>Product Setup</strong> - We add your products, images, prices, and descriptions</span>
+                    <span class="feature-text"><strong>Product Setup</strong> - We add your products, images, prices,
+                        and descriptions</span>
                 </div>
                 <div class="feature-item">
                     <span class="feature-icon">💳</span>
-                    <span class="feature-text"><strong>Payment Processing</strong> - Secure Stripe integration for accepting payments</span>
+                    <span class="feature-text"><strong>Payment Processing</strong> - Secure Stripe integration for
+                        accepting payments</span>
                 </div>
                 <div class="feature-item">
                     <span class="feature-icon">🤖</span>
-                    <span class="feature-text"><strong>AI Chatbot</strong> - Custom assistant trained on your business</span>
+                    <span class="feature-text"><strong>AI Chatbot</strong> - Custom assistant trained on your
+                        business</span>
                 </div>
                 <div class="feature-item">
                     <span class="feature-icon">⚡</span>
-                    <span class="feature-text"><strong>7-10 Day Delivery</strong> - Design mockup in 72 hours, live site in 7-10 days</span>
+                    <span class="feature-text"><strong>7-10 Day Delivery</strong> - Design mockup in 72 hours, live site
+                        in 7-10 days</span>
                 </div>
             </div>
         </div>
@@ -716,7 +729,8 @@
                         Payment Details
                     </div>
                     <div id="stripe-card-element" class="stripe-card-container"></div>
-                    <input type="text" id="postal-code" class="form-input" placeholder="Postal Code" required style="margin-top: 16px;">
+                    <input type="text" id="postal-code" class="form-input" placeholder="Postal Code" required
+                        style="margin-top: 16px;">
                 </div>
 
                 <!-- Error Message -->
@@ -754,7 +768,8 @@
             <div class="success-icon">🎉</div>
             <h2 class="success-title">Payment Successful!</h2>
             <p class="success-message">
-                Thank you for your purchase! We've received your payment and will start building your custom store immediately.
+                Thank you for your purchase! We've received your payment and will start building your custom store
+                immediately.
                 You'll receive a confirmation email shortly with next steps.
             </p>
             <a href="/index.html" class="success-btn">Return to Home</a>
@@ -768,17 +783,17 @@
         // =======================================================================
         // UNIVERSAL STRIPE CHECKOUT ENGINE v2.0
         // =======================================================================
-        (function() {
+        (function () {
             // --- 1. CONFIGURATION ---
             // These keys should be for your PLATFORM account, as the backend handles routing.
-            const STRIPE_PUBLISHABLE_KEY = 'pk_test_51Rp7gdRuBpQt4n9NHC1N9DjWmBDfj6Q7N4sR8mTgkIlDFvPOpgE8VLhztsX0WWtfa1nnn1upiboEo8OzsaVzSrAj00g3wM9yCA'; // AARIE.ca Platform Publishable Key
+            const STRIPE_PUBLISHABLE_KEY = 'pk_live_51Rp7gdRuBpQt4n9NyNv9RHiHf3QOmJdETL8Boyu7uC2YUKJUz2OIXXzgAN4h91WC2F21qhXHs7T2QUbDEGCEwMeg00bJbhDvn6'; // AARIE.ca Platform Publishable Key
             const BACKEND_URL = 'https://stores-backend-52450564461.us-central1.run.app';
 
             // --- 2. GLOBAL STATE ---
             let clientSecret = null;
             let storeId = 'aarie-platform'; // Default, will be read from URL if present
             let productId = '7-day-launchpad'; // Default
-            
+
             // --- 3. INITIALIZE STRIPE ---
             const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
             let cardElement; // Will be initialized later
@@ -825,7 +840,7 @@
                 // We will need a new endpoint to get product data. Let's assume it's:
                 // GET /api/v1/{store_id}/products/{product_id}
                 // For now, we'll simulate this. Your dev needs to build this simple endpoint.
-                
+
                 // Let's assume we have a function to fetch product data.
                 // const productData = await fetchProductData(storeId, productId);
                 // For this example, we'll keep the map but acknowledge it's a placeholder for an API call.
@@ -891,7 +906,7 @@
                         const err = await response.json();
                         throw new Error(err.error?.message || 'Could not initialize payment.');
                     }
-                    
+
                     const data = await response.json();
                     clientSecret = data.clientSecret;
                     const amount = data.amount;
@@ -900,7 +915,7 @@
                     // Step D: Update UI with the dynamic price from the backend
                     document.querySelector('.product-price').textContent = displayPrice;
                     document.querySelector('.btn-text').textContent = 'Pay ' + displayPrice;
-                    
+
                     // Step E: Initialize and Mount Stripe Elements
                     const elements = stripe.elements({ clientSecret });
                     cardElement = elements.create('card', {
@@ -958,7 +973,7 @@
                     setLoading(false);
                 } else if (paymentIntent && paymentIntent.status === 'succeeded') {
                     document.getElementById('success-overlay').classList.add('visible');
-                    
+
                     // Asynchronously record the transaction in the background (fire and forget)
                     const transactionRecord = {
                         stripePaymentId: paymentIntent.id,
@@ -979,4 +994,5 @@
         })();
     </script>
 </body>
+
 </html>

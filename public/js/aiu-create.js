@@ -102,7 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function handlePurchase() {
+    function handlePurchase() {
+        // The original logic is now commented out.
+        /*
         if (!currentUser) {
             alert('You must be signed in to complete this purchase.');
             return;
@@ -148,6 +150,54 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Checkout failed: ${error.message}`);
             hideLoading(purchaseBtn, 'Pay $15 Setup Fee & Begin');
         }
+        */
+
+        // --- NEW LOGIC: Show a "Coming Soon" toast notification ---
+        showToast("🚀 Coming Soon! This feature is being finalized. Stay tuned!");
+    }
+
+    // --- NEW HELPER FUNCTION: Add this to the file ---
+    function showToast(message) {
+        // Remove any existing toast to prevent stacking
+        const existingToast = document.getElementById('aiu-toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        const toast = document.createElement('div');
+        toast.id = 'aiu-toast';
+        toast.textContent = message;
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translate(-50%, 20px);
+        `;
+
+        document.body.appendChild(toast);
+
+        // Animate in
+        setTimeout(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(-50%)';
+        }, 10);
+
+        // Animate out and remove after 4 seconds
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translate(-50%, 20px)';
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
     }
 
     // --- Start the process ---
