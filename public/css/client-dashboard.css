@@ -494,23 +494,66 @@ input:checked+.slider:before {
     border-radius: 24px;
 }
 
-/* Accordion (details/summary) Styles */
-summary {
-    cursor: pointer;
-    list-style: none;
-    /* Hide the default triangle */
-}
-
-summary::-webkit-details-marker {
-    display: none;
-    /* Hide the default triangle in Safari */
-}
-
-summary h2 {
-    display: inline-flex;
-    /* Make the h2 part of the clickable area */
+/* Accordion (Dynamic) Styles */
+.accordion .accordion-header {
+    display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.accordion .accordion-header:hover {
+    background-color: #f0f2f5;
+}
+
+.accordion .accordion-header h2 {
+    margin-bottom: 0;
+    /* Override existing margin */
+    flex-grow: 1;
+    /* Push other items to the right */
+}
+
+.accordion .accordion-summary {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.accordion .accordion-toggle-icon {
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.accordion .accordion-body {
+    padding: 20px;
+    border-top: 1px solid #e9ecef;
+    max-height: 2000px;
+    /* Or a large enough value */
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+}
+
+/* Styles for the collapsed state */
+.accordion.collapsed .accordion-body {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top: none;
+}
+
+.accordion.collapsed .accordion-toggle-icon {
+    transform: rotate(-90deg);
+}
+
+.accordion.collapsed .accordion-summary {
+    display: flex;
+    /* Ensure summary is visible when collapsed */
 }
 
 .slider.round:before {

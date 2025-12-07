@@ -44,22 +44,23 @@
         </div>
 
         <!-- NEW: Consultation Requests Section -->
-        <div class="consultations-section">
-            <details open>
-                <summary>
-                    <h2>
-                        📧 Consultation Requests
-                        <span id="consultationCountBadge" class="notification-badge" style="display: none;">0</span>
-                    </h2>
-                </summary>
-                <div id="consultationsContainer" class="consultations-list" style="margin-top: 20px;">
-                    <!-- Loading spinner shown by default -->
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Loading Consultations...</p>
-                    </div>
+        <div class="consultations-section accordion">
+            <!-- Clickable Header -->
+            <div class="accordion-header">
+                <h2>📧 Consultation Requests</h2>
+                <!-- This is where we'll put the dynamic summary -->
+                <div class="accordion-summary" id="consultationsSummary">
+                    <span class="notification-badge" id="consultationCountBadge">0</span> New Request(s)
                 </div>
-            </details>
+                <span class="accordion-toggle-icon">▼</span>
+            </div>
+            <!-- Collapsible Body -->
+            <div class="accordion-body" id="consultationsContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading Consultations...</p>
+                </div>
+            </div>
         </div>
 
         <!-- Content Grid -->
@@ -136,19 +137,23 @@
         </div>
 
         <!-- Transactions Section -->
-        <div class="transactions-section" style="margin-top: 30px;">
-            <details>
-                <summary>
-                    <h2>💳 Recent Transactions</h2>
-                </summary>
-                <div id="transactionsContainer" style="margin-top: 20px;">
-                    <!-- Loading spinner shown by default -->
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Loading Transactions...</p>
-                    </div>
+        <div class="transactions-section accordion collapsed" style="margin-top: 30px;">
+            <!-- Clickable Header -->
+            <div class="accordion-header">
+                <h2>💳 Recent Transactions</h2>
+                <!-- Dynamic summary for transactions -->
+                <div class="accordion-summary" id="transactionsSummary">
+                    <span>Total: $0.00</span>
                 </div>
-            </details>
+                <span class="accordion-toggle-icon">▶</span>
+            </div>
+            <!-- Collapsible Body -->
+            <div class="accordion-body" id="transactionsContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading Transactions...</p>
+                </div>
+            </div>
         </div>
     </div>
 

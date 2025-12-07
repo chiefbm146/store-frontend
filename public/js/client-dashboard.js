@@ -81,6 +81,8 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+  // Initialize accordions on DOMContentLoaded
+  initializeAccordions();
 });
 
 /**
@@ -126,31 +128,41 @@ async function loadDashboard() {
 
       // Load transactions
       if (dashboardData.transactions && dashboardData.transactions.length > 0) {
-        await loadTransactions();
+        // Updated to use renderTransactions directly
+        renderTransactions(dashboardData.transactions);
         await updateDashboardStats();
       } else {
         document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">💤</div><p>No transactions yet</p></div>';
+        // Still update stats even if no transactions, to show zeros
+        await updateDashboardStats(dashboardData.transactions || [], dashboardData.products || []);
       }
 
       // Load consultations - THIS IS THE KEY ADDITION
-      loadConsultations(dashboardData.consultations || []);
+      // Updated to use renderConsultations directly
+      renderConsultations(dashboardData.consultations || []);
 
     } catch (error) {
       // If dashboard data fetch fails, show empty state for products
       document.getElementById('productsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><div class="empty-state-icon">📭</div><p>No products yet - Setup Stripe first</p></div>';
 
       try {
-        await loadTransactions();
-        await updateDashboardStats();
-      } catch (error) {
+        // Attempt to load transactions and update stats even if products failed
+        const fallbackDashboardData = await apiCall('/api/client/dashboard-data', {
+          method: 'GET'
+        });
+        renderTransactions(fallbackDashboardData.transactions || []);
+        await updateDashboardStats(fallbackDashboardData.transactions || [], fallbackDashboardData.products || []);
+      } catch (transactionsError) {
         document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">💤</div><p>No transactions yet</p></div>';
+        await updateDashboardStats([], []); // Update stats with zeros
       }
 
       // Show empty consultations on error
-      loadConsultations([]);
+      renderConsultations([]);
     }
   } catch (error) {
-    // Silent error handling
+    // Silent error handling for the overall loadDashboard process
+    console.error("Error loading dashboard:", error);
   }
 }
 
@@ -158,25 +170,35 @@ async function loadDashboard() {
  * Renders the consultation requests into the dashboard UI.
  * @param {Array<object>} consultations An array of consultation objects from the API.
  */
-function loadConsultations(consultations) {
+function renderConsultations(consultations) {
   const container = document.getElementById('consultationsContainer');
-  const badge = document.getElementById('consultationCountBadge');
+  const summaryEl = document.getElementById('consultationsSummary');
+  const badgeEl = document.getElementById('consultationCountBadge');
+
   container.innerHTML = ''; // Clear previous entries
 
   if (!consultations || consultations.length === 0) {
     container.innerHTML = '<p class="empty-state" style="padding: 20px 0;">No new consultation requests.</p>';
-    badge.style.display = 'none';
+    if (badgeEl) badgeEl.style.display = 'none';
+    if (summaryEl) summaryEl.innerHTML = 'No New Requests';
     return;
   }
 
-  // Show and update the notification badge
+  // Show and update the notification badge and summary text
   const pendingCount = consultations.filter(c => c.status === 'pending').length;
-  if (pendingCount > 0) {
-    badge.textContent = pendingCount;
-    badge.style.display = 'inline-flex';
-  } else {
-    badge.style.display = 'none';
+  if (badgeEl) {
+    if (pendingCount > 0) {
+      badgeEl.textContent = pendingCount;
+      badgeEl.style.display = 'inline-flex';
+    } else {
+      badgeEl.style.display = 'none';
+    }
   }
+
+  if (summaryEl) {
+    summaryEl.innerHTML = `<span class="notification-badge">${pendingCount}</span> New Request(s)`;
+  }
+
 
   // Sort to show pending requests first
   consultations.sort((a, b) => {
@@ -219,7 +241,7 @@ function loadConsultations(consultations) {
                 </div>
                 ${consultation.address ? `
                     <div class="consultation-address">
-                        <span>📍</span> 
+                        <span>📍</span>
                         <a href="https://www.google.com/maps?q=${encodeURIComponent(consultation.address)}" target="_blank" title="View on Google Maps">
                             ${consultation.address}
                         </a>
@@ -239,15 +261,18 @@ function loadConsultations(consultations) {
 
 /**
  * Update dashboard stats after loading data
+ * Now accepts transactions and products arrays directly.
  */
-async function updateDashboardStats() {
+async function updateDashboardStats(transactions = [], products = []) {
   try {
-    const response = await apiCall('/api/client/dashboard-data', {
-      method: 'GET'
-    });
-
-    const transactions = response.transactions || [];
-    const products = response.products || [];
+    // If transactions/products not provided, fetch them (e.g., if called independently)
+    if (transactions.length === 0 && products.length === 0) {
+      const response = await apiCall('/api/client/dashboard-data', {
+        method: 'GET'
+      });
+      transactions = response.transactions || [];
+      products = response.products || [];
+    }
 
     // Calculate total revenue
     const totalRevenue = transactions.reduce((sum, txn) => sum + (txn.amount || 0), 0);
@@ -258,7 +283,10 @@ async function updateDashboardStats() {
     document.getElementById('totalTransactions').textContent = transactions.length.toString();
     document.getElementById('activeProducts').textContent = products.length.toString();
   } catch (error) {
-    // Silent error handling
+    // Silent error handling, ensure stats are reset or show '0'
+    document.getElementById('totalRevenue').textContent = '$0.00';
+    document.getElementById('totalTransactions').textContent = '0';
+    document.getElementById('activeProducts').textContent = '0';
   }
 }
 
@@ -444,48 +472,54 @@ function addProductEventListeners() {
 }
 
 /**
- * Load transactions from backend API - Sync from Stripe on-demand
+ * Renders transactions into the dashboard UI and updates the summary.
+ * @param {Array<object>} transactions An array of transaction objects from the API.
  */
-async function loadTransactions() {
-  try {
-    // Call the sync endpoint to fetch latest transactions from Stripe
-    const response = await apiCall('/api/client/sync-transactions', {
-      method: 'POST'
+async function renderTransactions(transactions) {
+  const container = document.getElementById('transactionsContainer');
+  const summaryEl = document.getElementById('transactionsSummary');
+
+  container.innerHTML = ''; // Clear previous entries
+
+  if (!transactions || transactions.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">💤</div><p>No transactions yet</p></div>';
+    if (summaryEl) summaryEl.innerHTML = '<span>Total: <strong>$0.00</strong></span><span style="color: #888;">|</span><span>0 Recent</span>';
+    return;
+  }
+
+  // Calculate total revenue and recent transaction count for the summary
+  const totalRevenue = transactions.reduce((sum, txn) => sum + (txn.amount || 0), 0);
+  const recentTxnCount = transactions.length;
+
+  if (summaryEl) {
+    summaryEl.innerHTML = `
+            <span>Total: <strong>$${(totalRevenue / 100).toFixed(2)}</strong></span>
+            <span style="color: #888;">|</span>
+            <span>${recentTxnCount} Recent</span>
+        `;
+  }
+
+  // Display transactions
+  let html = '<div class="transactions-list">';
+
+  transactions.forEach(txn => {
+    const amountInDollars = (txn.amount / 100).toFixed(2);
+    const dateObj = txn.createdAt instanceof Date ? txn.createdAt : new Date(txn.createdAt?.seconds * 1000 || Date.now());
+    const dateStr = dateObj.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
 
-    // Now fetch the updated transactions from dashboard-data
-    const dashboardResponse = await apiCall('/api/client/dashboard-data', {
-      method: 'GET'
-    });
+    // Calculate breakdown amounts if available
+    const customerCharged = txn.amount_total ? (txn.amount_total / 100).toFixed(2) : amountInDollars;
+    const platformFee = txn.amount_platform_fee ? (txn.amount_platform_fee / 100).toFixed(2) : '0.00';
+    const hasBreakdown = txn.amount_total && txn.amount_platform_fee;
 
-    const transactions = dashboardResponse.transactions || [];
-
-    if (!transactions || transactions.length === 0) {
-      document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">💤</div><p>No transactions yet</p></div>';
-      return;
-    }
-
-    // Display transactions
-    let html = '<div class="transactions-list">';
-
-    transactions.forEach(txn => {
-      const amountInDollars = (txn.amount / 100).toFixed(2);
-      const dateObj = txn.createdAt instanceof Date ? txn.createdAt : new Date(txn.createdAt?.seconds * 1000 || Date.now());
-      const dateStr = dateObj.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-
-      // Calculate breakdown amounts if available
-      const customerCharged = txn.amount_total ? (txn.amount_total / 100).toFixed(2) : amountInDollars;
-      const platformFee = txn.amount_platform_fee ? (txn.amount_platform_fee / 100).toFixed(2) : '0.00';
-      const hasBreakdown = txn.amount_total && txn.amount_platform_fee;
-
-      // Build detailed transaction info
-      html += `
+    // Build detailed transaction info
+    html += `
         <div class="transaction-item">
           <div class="transaction-header">
             <div class="transaction-date">${dateStr}</div>
@@ -563,14 +597,12 @@ async function loadTransactions() {
           </div>
         </div>
       `;
-    });
+  });
 
-    html += '</div>';
-    document.getElementById('transactionsContainer').innerHTML = html;
-  } catch (error) {
-    document.getElementById('transactionsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">⚠️</div><p>Could not load transactions - try refreshing the page</p></div>';
-  }
+  html += '</div>';
+  document.getElementById('transactionsContainer').innerHTML = html;
 }
+
 
 /**
  * Handle Stripe Connect setup
@@ -751,7 +783,9 @@ async function handleAdminSync() {
     try {
       data = await response.json();
     } catch (e) {
-      data = { error: `Server error: ${response.status} ${response.statusText}` };
+      data = {
+        error: `Server error: ${response.status} ${response.statusText}`
+      };
     }
 
     // Show result
@@ -790,3 +824,22 @@ async function handleAdminSync() {
   }
 }
 
+
+function initializeAccordions() {
+  document.querySelectorAll('.accordion .accordion-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const accordion = header.closest('.accordion');
+      const icon = header.querySelector('.accordion-toggle-icon');
+
+      if (accordion.classList.contains('collapsed')) {
+        // Open it
+        accordion.classList.remove('collapsed');
+        if (icon) icon.textContent = '▼';
+      } else {
+        // Close it
+        accordion.classList.add('collapsed');
+        if (icon) icon.textContent = '▶';
+      }
+    });
+  });
+}
