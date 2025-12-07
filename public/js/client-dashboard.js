@@ -212,7 +212,7 @@ function loadConsultations(consultations) {
                     <span class="consultation-from">${consultation.name}</span>
                     <span class="consultation-date">${date}</span>
                 </div>
-                <p class="consultation-body">${consultation.message || 'No message provided.'}</p>
+                <p class="consultation-body">${(consultation.message && typeof consultation.message === 'string') ? consultation.message : 'No message provided.'}</p>
                 <div class="consultation-contact">
                     <span>📧 <a href="mailto:${consultation.email}" target="_blank">${consultation.email}</a></span>
                     ${consultation.phone ? `<span>📞 <a href="tel:${consultation.phone}">${consultation.phone}</a></span>` : ''}
