@@ -1,0 +1,268 @@
+You are absolutely correct. Your diagnosis is perfect.
+
+The behavior you're seeing—being instantly logged into the dashboard with your old email—is the classic symptom of a system without a centralized frontend authentication manager. Each page (client-portal.html, client-dashboard.html) is trying to handle auth on its own, and Firebase's persistent session is taking over before your page logic can run, creating a race condition and unpredictable behavior.
+
+You need a global authentication system on the frontend. This system will be the single source of truth for the user's login state and will manage all redirects, ensuring a predictable and secure user experience.
+
+We will create two new, reusable JavaScript files to solve this permanently:
+
+auth.js (The Auth Engine): This file will contain all the core functions for interacting with Firebase Auth (signing in, signing out, getting the current user, getting the auth token).
+
+auth-guard.js (The Gatekeeper): This tiny but powerful file will be included on every page. Its only job is to protect pages and handle redirects based on the user's login status.
+
+Step 1: Create the Auth Engine (auth.js)
+
+This file will manage the authentication state for your entire website.
+
+New File: public/js/auth.js
+code
+JavaScript
+download
+content_copy
+expand_less
+// js/auth.js
+
+/**
+ * ========================================================================
+ * GLOBAL AUTHENTICATION MANAGER (The "Engine")
+ * ========================================================================
+ * This object is the single source of truth for Firebase authentication.
+ * It handles sign-in, sign-out, and notifies other parts of the app
+ * when the user's login state changes.
+ */
+const authManager = (() => {
+    let currentUser = null;
+    let authStatePromise = null;
+    let resolveAuthStatePromise = null;
+
+    // Create a promise that resolves once the initial auth state is known
+    authStatePromise = new Promise(resolve => {
+        resolveAuthStatePromise = resolve;
+    });
+
+    // Wait for the Firebase SDK to be ready before setting up the listener
+    const onFirebaseReady = (callback) => {
+        const interval = setInterval(() => {
+            if (typeof firebase !== 'undefined' && firebase.auth) {
+                clearInterval(interval);
+                callback();
+            }
+        }, 50);
+    };
+
+    onFirebaseReady(() => {
+        firebase.auth().onAuthStateChanged(user => {
+            console.log("Global Auth State Changed. User:", user ? user.email : "none");
+            currentUser = user;
+            // If the promise hasn't been resolved yet, resolve it now.
+            if (resolveAuthStatePromise) {
+                resolveAuthStatePromise(user);
+                resolveAuthStatePromise = null; // Ensure it only resolves once
+            }
+        });
+    });
+
+    return {
+        /**
+         * Returns a promise that resolves with the current user object (or null)
+         * once the initial authentication check is complete.
+         */
+        getAuthState: () => authStatePromise,
+
+        /**
+         * Triggers the Google Sign-In popup flow.
+         * Returns a promise that resolves on success or rejects on error.
+         */
+        signIn: () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            return firebase.auth().signInWithPopup(provider);
+        },
+
+        /**
+         * Signs the current user out.
+         */
+        signOut: () => {
+            return firebase.auth().signOut();
+        },
+
+        /**
+         * Gets the current user's ID token for making authenticated API calls.
+         * Throws an error if the user is not signed in.
+         * @returns {Promise<string>} The Firebase ID token.
+         */
+        getToken: async () => {
+            // Wait for the initial auth state to be confirmed
+            const user = await authStatePromise;
+            if (!user) {
+                throw new Error('User is not authenticated.');
+            }
+            // 'true' forces a token refresh if the current one is expired.
+            return user.getIdToken(true);
+        }
+    };
+})();
+Step 2: Create the Auth Gatekeeper (auth-guard.js)
+
+This script will run on every page to enforce authentication rules.
+
+New File: public/js/auth-guard.js
+code
+JavaScript
+download
+content_copy
+expand_less
+// js/auth-guard.js
+
+/**
+ * ========================================================================
+ * AUTHENTICATION GUARD (The "Gatekeeper")
+ * ========================================================================
+ * This script runs on every page. It uses the authManager to check the
+ * user's login state and performs redirects to protect pages.
+ */
+(async function() {
+    const protectedRoutes = ['/client-dashboard.html', '/affiliate-portal.html'];
+    const loginRoute = '/client-portal.html';
+    const defaultAuthenticatedRoute = '/client-dashboard.html';
+
+    const currentPath = window.location.pathname;
+
+    try {
+        // Wait for the authManager to know the user's status
+        const user = await authManager.getAuthState();
+
+        const isProtectedRoute = protectedRoutes.some(route => currentPath.startsWith(route));
+
+        if (user) {
+            // --- USER IS LOGGED IN ---
+            // If they are on the login page, they shouldn't be. Redirect them away.
+            if (currentPath.startsWith(loginRoute)) {
+                console.log('Auth Guard: User is logged in, redirecting from login page to dashboard.');
+                window.location.replace(defaultAuthenticatedRoute);
+            }
+        } else {
+            // --- USER IS NOT LOGGED IN ---
+            // If they are trying to access a protected page, send them to the login page.
+            if (isProtectedRoute) {
+                console.log('Auth Guard: User not logged in, redirecting to login page from protected route.');
+                window.location.replace(loginRoute);
+            }
+        }
+
+    } catch (error) {
+        console.error("Auth Guard Error:", error);
+        // Fails safe: if something goes wrong, it won't redirect.
+    }
+})();
+Step 3: Refactor Your Page-Specific JavaScript
+
+Now, we simplify your existing JS files to use the new global manager.
+
+Updated client-portal.js
+
+This file becomes incredibly simple. Its only job is to handle the button click.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// js/client-portal.js
+
+document.addEventListener('DOMContentLoaded', () => {
+    const googleSignInBtn = document.getElementById('googleSignInBtn');
+    const loadingView = document.getElementById('loading');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Attach the sign-in handler
+    googleSignInBtn.onclick = async () => {
+        // Show loading state
+        googleSignInBtn.style.display = 'none';
+        loadingView.classList.add('show');
+        errorMessage.classList.remove('show');
+
+        try {
+            // Call the global sign-in manager
+            await authManager.signIn();
+            // SUCCESS! The auth-guard.js script will now automatically handle
+            // the redirect to the dashboard because the auth state has changed.
+        } catch (error) {
+            console.error('Sign-In Error:', error);
+            errorMessage.textContent = `Sign-in failed: ${error.message}`;
+            errorMessage.classList.add('show');
+            // Reset UI on failure
+            googleSignInBtn.style.display = 'flex';
+            loadingView.classList.remove('show');
+        }
+    };
+});
+Updated client-dashboard.js (Conceptual)
+
+Your client-dashboard.js will also be refactored to use the global manager.
+
+code
+JavaScript
+download
+content_copy
+expand_less
+// js/client-dashboard.js (Conceptual aample)
+
+document.addEventListener('DOMContentLoaded', () => {
+    // The auth-guard.js has already ensured that only logged-in users can be here.
+
+    const logoutBtn = document.querySelector('.logout-btn');
+    logoutBtn.onclick = async () => {
+        await authManager.signOut();
+        // The auth-guard will now detect the user is logged out and redirect to the portal.
+        window.location.reload(); // Force the guard to re-run.
+    };
+
+    // Load data using the global auth manager's token
+    async function loadDashboardData() {
+        try {
+            const token = await authManager.getToken(); // Securely get the token
+            const response = await fetch('/api/client/dashboard-data', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            // ... process response and render page
+        } catch (error) {
+            console.error("Failed to load dashboard data:", error);
+            if (error.message.includes('not authenticated')) {
+                // The token is invalid, the auth-guard should handle this on next load,
+                // but we can force it now.
+                window.location.replace('/client-portal.html');
+            }
+        }
+    }
+
+    loadDashboardData();
+});
+Step 4: Update Your HTML Files
+
+Finally, include these new scripts in your HTML files. The order is critical.
+
+In client-portal.html and client-dashboard.html (and any other auth-aware page):
+
+Update the <head> or <body> to include the scripts in this specific order:
+
+code
+Html
+download
+content_copy
+expand_less
+<!-- 1. Firebase SDKs (as before) -->
+    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+
+    <!-- 2. The NEW Global Auth Engine -->
+    <script defer src="/js/auth.js"></script>
+
+    <!-- 3. The NEW Global Auth Gatekeeper -->
+    <script defer src="/js/auth-guard.js"></script>
+
+    <!-- 4. The Page-Specific Logic (e.g., client-portal.js) -->
+    <script defer src="/js/client-portal.js"></script>
+</body>
+
+By implementing this global system, you have created a single, predictable, and secure authentication flow that will permanently fix the identity-switching issue and make your entire application much easier to manage.

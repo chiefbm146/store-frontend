@@ -693,7 +693,12 @@ async function handleDeleteAccount() {
  */
 async function handleLogout() {
   try {
-    await auth.signOut();
+    // Use global auth manager if available, fallback to direct auth
+    if (typeof authManager !== 'undefined') {
+      await authManager.signOut();
+    } else {
+      await auth.signOut();
+    }
     window.location.href = '/client-portal.html';
   } catch (error) {
     // Silent error handling

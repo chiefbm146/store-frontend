@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Portal - AARIE.CA</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>📊</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>📊</text></svg>">
 
     <!-- Firebase SDK (using Firebase Hosting's built-in init) -->
     <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
     <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
     <script defer src="/__/firebase/12.4.0/firebase-firestore-compat.js"></script>
     <script defer src="/__/firebase/init.js"></script>
+
+    <!-- Global Auth System -->
+    <script defer src="/js/auth.js"></script>
+    <script defer src="/js/auth-guard.js"></script>
 
 
     <style>
@@ -123,8 +129,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .loading-text {
@@ -186,33 +197,41 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Back Button -->
     <a href="/booking" class="back-button">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                stroke-linejoin="round" />
         </svg>
         <span>Back</span>
     </a>
 
     <div class="auth-container">
-        <div class="portal-logo">📊</div>
-        <h1 class="portal-title">Client Portal</h1>
-        <p class="portal-subtitle">Sign in with your Google account to access your dashboard, products, and transaction history.</p>
+        <div class="portal-logo">🔐</div>
+        <h1 class="portal-title">Store Access</h1>
+        <p class="portal-subtitle">Enter your Business PIN to access the dashboard.</p>
 
         <div class="error-message" id="errorMessage"></div>
 
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p class="loading-text">Signing you in...</p>
+        <!-- PIN Input Section -->
+        <div class="pin-section" id="pinSection">
+            <input type="password" id="storePin" placeholder="Enter PIN"
+                style="width: 100%; padding: 14px; font-size: 24px; text-align: center; margin-bottom: 20px; border-radius: 8px; border: 2px solid #e0e0e0; letter-spacing: 4px;">
+
+            <button class="google-signin-btn" id="pinLoginBtn" style="background: #10b981; color: white; border: none;">
+                <span>Access Dashboard</span>
+            </button>
         </div>
 
-        <button class="google-signin-btn" id="googleSignInBtn" onclick="handleGoogleSignIn()">
-            <span class="google-signin-icon">🔐</span>
-            <span>Sign in with Google</span>
-        </button>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p class="loading-text">Authenticating...</p>
+        </div>
     </div>
 
     <script defer src="./js/client-portal.js"></script>
 </body>
+
 </html>

@@ -1,103 +1,71 @@
-/**
- * Client Portal - Firebase Auth & Login
- * Handles Google Sign-in and Firestore client creation
- */
-
-let db;
-let auth;
-let currentUser;
+// js/client-portal.js
 
 /**
- * Initialize Firebase when SDK loads
+ * Client Portal - PIN-Only Login
+ * Uses Firebase Custom Tokens for shared business access
  */
-document.addEventListener('DOMContentLoaded', function() {
-  if (typeof firebase !== 'undefined') {
-    auth = firebase.auth();
-    db = firebase.firestore();
 
-    // Set up auth state listener
-    auth.onAuthStateChanged(user => {
-      currentUser = user;
-    });
+// Backend API configuration
+const API_BASE_URL = 'https://stores-backend-phhl2xgwwa-uc.a.run.app';
 
-    // Initialize auth UI
-    initAuth();
-  }
-});
+document.addEventListener('DOMContentLoaded', () => {
+  const pinInput = document.getElementById('storePin');
+  const loginBtn = document.getElementById('pinLoginBtn');
+  const loadingView = document.getElementById('loading');
+  const errorMessage = document.getElementById('errorMessage');
+  const pinSection = document.getElementById('pinSection');
 
-/**
- * Initialize auth UI and event listeners
- */
-function initAuth() {
-  const googleSignInBtn = document.getElementById('googleSignInBtn');
+  loginBtn.onclick = async () => {
+    const pin = pinInput.value.trim();
 
-  if (!googleSignInBtn) {
-    // Auth not loaded yet, wait
-    setTimeout(initAuth, 100);
-    return;
-  }
+    if (!pin) {
+      showError("Please enter your PIN.");
+      return;
+    }
 
-  // Handle Google Sign-In
-  googleSignInBtn.addEventListener('click', async (e) => {
-    e.preventDefault();
+    // UI Loading State
+    pinSection.style.display = 'none';
+    loadingView.classList.add('show');
+    hideError();
+
     try {
-      showLoading(true);
+      // 1. Send PIN to Backend
+      const response = await fetch(`${API_BASE_URL}/api/client/login-with-pin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: pin })
+      });
 
-      // Create Google provider
-      const provider = new firebase.auth.GoogleAuthProvider();
+      const result = await response.json();
 
-      // Sign in with Google popup
-      const result = await auth.signInWithPopup(provider);
-      const user = result.user;
-
-      // Check if client document exists
-      const clientDoc = await db.collection('clients').doc(user.uid).get();
-
-      if (!clientDoc.exists) {
-        // First time user - create client document
-        const displayName = user.displayName || user.email.split('@')[0];
-        await db.collection('clients').doc(user.uid).set({
-          uid: user.uid,
-          email: user.email,
-          name: displayName,
-          photoURL: user.photoURL || '',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        });
+      if (!response.ok) {
+        throw new Error(result.error || 'Login failed');
       }
 
-      // Redirect to dashboard
-      setTimeout(() => {
-        window.location.href = '/client-dashboard.html';
-      }, 500);
+      // 2. Backend returns a Custom Token. Sign in with it.
+      // This logs the user into Firebase as the "Store Owner"
+      await firebase.auth().signInWithCustomToken(result.token);
+
+      // 3. Success! Redirect to dashboard
+      console.log("PIN Login Successful");
+      window.location.replace('/client-dashboard.html');
+
     } catch (error) {
+      console.error('Login Error:', error);
       showError(error.message);
-    } finally {
-      showLoading(false);
+      pinSection.style.display = 'block';
+      loadingView.classList.remove('show');
+      pinInput.value = ''; // Clear PIN on error
+    }
+  };
+
+  // Allow Enter key to submit
+  pinInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      loginBtn.click();
     }
   });
-
-  // Check if already signed in
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      setTimeout(() => {
-        window.location.href = '/client-dashboard.html';
-      }, 500);
-    }
-  });
-}
-
-/**
- * Show/hide loading state
- */
-function showLoading(show) {
-  const loading = document.getElementById('loading');
-  if (show) {
-    loading.classList.add('show');
-  } else {
-    loading.classList.remove('show');
-  }
-}
+});
 
 /**
  * Show error message
@@ -106,8 +74,12 @@ function showError(message) {
   const errorDiv = document.getElementById('errorMessage');
   errorDiv.textContent = message;
   errorDiv.classList.add('show');
+}
 
-  setTimeout(() => {
-    errorDiv.classList.remove('show');
-  }, 5000);
+/**
+ * Hide error message
+ */
+function hideError() {
+  const errorDiv = document.getElementById('errorMessage');
+  errorDiv.classList.remove('show');
 }
