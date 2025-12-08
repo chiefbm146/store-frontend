@@ -315,22 +315,6 @@
         "destination": "/checkout-aiu.html"
       },
       {
-        "source": "/cuzzins-mechanical",
-        "destination": "/cuzzins-index.html"
-      },
-      {
-        "source": "/cuzzins-mechanical/**",
-        "destination": "/cuzzins-index.html"
-      },
-      {
-        "source": "/cuzzins-project",
-        "destination": "/cuzzins-project/index.html"
-      },
-      {
-        "source": "/cuzzins-project/**",
-        "destination": "/cuzzins-project/index.html"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }
