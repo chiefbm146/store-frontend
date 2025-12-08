@@ -2,32 +2,32 @@ const projects = [
   {
     title: 'Underground Rough-In',
     category: 'New Construction',
-    image: 'https://images.pexels.com/photos/585419/pexels-photo-585419.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: './images/cuzzins/481054285_3902256753366776_4108173069898691919_n.jpg',
   },
   {
     title: 'Commercial HVAC Install',
     category: 'Commercial',
-    image: 'https://images.pexels.com/photos/159358/construction-site-build-construction-work-159358.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: './images/cuzzins/492367007_3958266844432433_4776578623748122226_n.jpg',
   },
   {
     title: 'Trenching & Gas Lines',
     category: 'Site Work',
-    image: 'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: './images/cuzzins/496947888_3980452578880526_139332101137315520_n.jpg',
   },
   {
     title: 'Residential Installation',
     category: 'Residential',
-    image: 'https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: './images/cuzzins/497934226_3980452588880525_2660420337153911252_n.jpg',
   },
   {
     title: 'Foundation Mechanical',
     category: 'New Construction',
-    image: 'https://images.pexels.com/photos/585419/pexels-photo-585419.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: './images/cuzzins/498594254_3980452595547191_1143407498091202096_n.jpg',
   },
   {
     title: 'Rooftop Unit Service',
     category: 'Commercial',
-    image: 'https://images.pexels.com/photos/159358/construction-site-build-construction-work-159358.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: './images/cuzzins/498632555_3980452605547190_1847504795826369628_n.jpg',
   },
 ];
 

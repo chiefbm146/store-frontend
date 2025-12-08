@@ -3,7 +3,7 @@ import { Phone, CheckCircle } from 'lucide-react';
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
-      <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1920')] bg-cover bg-center opacity-10"></div>
+      <img src="./images/cuzzins/492086004_3957220787870372_5534250774342681550_n.jpg" alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />
 
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/50 to-slate-900"></div>
 

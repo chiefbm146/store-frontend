@@ -1,0 +1,196 @@
+# **AARIE.CA REDESIGN: THE ULTIMATE WEBSITE AGENCY PLATFORM**
+
+## **CORE MISSION & ESSENCE**
+
+You are architecting the digital headquarters for **AARIE.CA** - not just another website builder, but **THE 7-DAY LAUNCHPAD** that transforms ideas into revenue-generating digital businesses. The soul of this platform is **SPEED, SUBSTANCE, and AI-POWERED INTELLIGENCE**.
+
+**The Transformation Needed:** Currently, this page feels like a "link tree" - disconnected, bland, lacking authority. It must become a **UNIFIED DIGITAL ECOSYSTEM** that screams: "This is where real businesses are born in 7 days."
+
+## **NON-NEGOTIABLE FUNCTIONALITY - EVERY ELEMENT MUST WORK**
+
+### **1. NAVIGATION SYSTEM**
+- **Affiliate Button Logic:** Must detect Firebase auth state
+  - Logged out: Shows "💵 Sign In to Earn" → triggers Google sign-in popup → redirects to appropriate affiliate portal
+  - Logged in: Shows "📊 Go to Dashboard" → direct link to /affiliate-portal or /affiliate-aarie
+- **Mobile Menu:** Hamburger → slides in from right, overlay backdrop
+- **All navigation links must remain functional**
+
+### **2. CLIENT SHOWCASE GRID (THE PROOF)**
+Four client categories with distinct status badges:
+1. **MOON TIDE RECONCILIATION** (ACTIVE)
+   - Badge: ✅ SERVING CLIENTS RIGHT NOW
+   - Link: https://moontide.ca (opens new tab)
+   - Image: /images/INDEX/moon-logo.png
+
+2. **RJ ROOFING BROS** (COMING SOON)
+   - Badge: 🚧 SERVING CLIENTS SOON
+   - Link: https://rjroofingbros.com (opens new tab)
+   - Image: /vickers-roofing/images/roof30.jpg
+
+3. **BERT PETERS SALISH ART** (COMING SOON)
+   - Badge: 🚀 SERVING CLIENTS SOON
+   - Link: https://bertpeterssalishart.com (opens new tab)
+   - Image: /images/INDEX/circle-carving.jpeg
+
+4. **SXEXET SPATH** (COMING SOON)
+   - Badge: 🚀 SERVING CLIENTS SOON
+   - Link: /david-peters (same window)
+   - Image: /images/INDEX/davids-meta.png
+
+**Each client card MUST have:**
+- Status badge with correct color coding
+- Working "Preview" button (external links open new tab)
+- Working "Build Your Site Like This" button → /booking
+
+### **3. A.I.U. PLATFORM SECTION**
+- **NEW PLATFORM** badge (purple gradient)
+- Link to /aiu-menu
+- Image: /images/INDEX/aiu.png
+- Core concept: "Turn your personality into a shareable AI"
+
+### **4. AMAZON AFFILIATE STORE**
+- **Working product grid** with images from /images/AMAZON/
+- **Primary CTA:** "🎁 Shop Our Curated Collection" → /aaries-store
+- **Secondary CTA:** "🏪 Build Your Own Store" → /booking
+- **Current context:** December 2025 holiday season
+- **Products display:** Name, price, discount badge
+
+### **5. AFFILIATE PROGRAM**
+- **Primary CTA:** "💵 Join Affiliate Program" → /affiliate
+- **Secondary CTA:** "🏪 Start Your Site" → /booking
+- **Value prop:** "Make 8% of every $499 sale"
+
+### **6. CORE VALUE PROPOSITIONS**
+**Section A: "This Is For You"**
+- Three audience types: Individuals, Sole Proprietors, Registered Businesses
+- 8 examples of what can be sold (art, courses, services, products, etc.)
+- Key message: "Start making money fast - mockup in 72 hours, live in 7-10 days"
+
+**Section B: "Why Choose AARIE.CA"**
+- Four feature cards: Sell Workshops, Sell Products, Sell Services, Custom AI Chatbots
+
+**Section C: About "The 7-Day Launchpad"**
+- Timeline: Day 1 kickoff, Day 3 mockup, Day 7-10 live
+- Every site includes custom AI chatbot
+
+### **7. CONVERSION FUNNEL**
+**Primary CTAs (MUST WORK):**
+- "Start Your Site Today" → /booking
+- "Build Your Site Like This" → /booking
+- "Explore Affiliate Opportunities" → /affiliate
+- "Try Our AI Assistant" → triggers AI chat widget
+
+### **8. SOCIAL SHARING & FOOTER**
+- **Share buttons:** Facebook, Twitter/X, LinkedIn with pre-filled URL
+- **Footer links:** /booking, /about-desk.html, /contact-desk.html, /privacy, /terms
+- **Smart message:** Default shows affiliate invitation, should detect if affiliate link is being used
+
+### **9. TECHNICAL INTEGRATIONS**
+- **Firebase Auth:** For affiliate system
+- **AI Chat Widget:** auto-configures with store-id="aarie-platform"
+- **Affiliate tracking:** Captures ?ref= parameter from URL
+- **Form submission:** All booking forms eventually route through /booking
+
+### **10. VISUAL ASSETS TO USE**
+- Primary logo: 🏪 AARIE.CA (emoji + text)
+- Client images as listed above
+- Amazon product images in /images/AMAZON/
+- Platform overview: /images/AARIES.jpeg
+
+## **THE DESIGN CHALLENGE: CREATE THE FUTURE OF WEBSITE BUILDING**
+
+### **Current Problems to Solve:**
+1. **Lacks visual hierarchy** - Everything competes equally
+2. **No clear conversion path** - Too many scattered CTAs
+3. **Feels cheap/untrustworthy** - Like a template farm
+4. **Cluttered presentation** - Information overload
+5. **No emotional connection** - Feels transactional, not transformational
+
+### **Required Emotional Experience:**
+When a visitor lands, they should feel within **3 seconds**:
+1. "This is professional and trustworthy"
+2. "They actually build real businesses"
+3. "I could have my site live next week"
+4. "The AI aspect is genuinely innovative"
+
+### **Visual Direction:**
+- **NOT:** Bland, link-tree, template-looking
+- **YES:** Futuristic but approachable, premium but not pretentious, clean but not sterile
+- **Inspiration:** Think Apple's clarity + Stripe's developer aesthetic + Midjourney's creative energy
+
+### **Strategic Framing:**
+Reposition from "website builder" to **"DIGITAL BUSINESS LAUNCHPAD"** with:
+1. **The Speed Angle:** "7 days" is your superpower
+2. **The AI Angle:** Not just chatbots - personality replication
+3. **The Proof Angle:** Real client showcase with status indicators
+4. **The Ecosystem Angle:** Websites + AI personas + Affiliate stores
+
+## **YOUR CREATIVE MANDATE**
+
+You are the world's most visionary digital product designer. You understand that this page must simultaneously:
+
+1. **Generate immediate leads** (booking conversions)
+2. **Showcase portfolio credibility** (client examples with real results)
+3. **Sell the vision** (A.I.U. platform - personality as AI)
+4. **Build community** (affiliate program + social sharing)
+5. **Educate** (who it's for + what you can sell)
+
+**Constraints:** All functionality must remain intact. All links must work. All authentication flows must function.
+
+**Freedom:** Reimagine the layout, interaction design, visual hierarchy, typography, color scheme, motion design, and user journey entirely.
+
+**Key Psychological Triggers to Build In:**
+- **Urgency:** "Only 4 projects per month"
+- **Social Proof:** "Serving clients right now"
+- **Exclusivity:** "Curated collection"
+- **Transformation:** "Turn your personality into AI"
+- **Accessibility:** "No business degree required"
+
+## **THE REDESIGNED USER JOURNEY**
+
+**Visitor Type 1: The Business Owner (Primary)**
+- Sees speed promise → Views client proof → Understands AI value → Clicks "Start Your Site"
+
+**Visitor Type 2: The Creative/Artist**
+- Sees Bert Peters example → Realizes they could sell art too → Clicks "Build Your Art Site"
+
+**Visitor Type 3: The Affiliate Marketer**
+- Notices affiliate program → Sees 8% commission → Clicks "Join Affiliate Program"
+
+**Visitor Type 4: The Tech-Curious**
+- Fascinated by A.I.U. → Wants to create AI persona → Clicks "Create Your AI Persona"
+
+## **SPECIFIC REQUESTS**
+
+1. **Hero Section:** Must communicate "Your Website Live in 7 Days" but in a more compelling, visual way
+2. **Client Showcase:** Should feel like a premium portfolio, not just boxes
+3. **A.I.U. Section:** Should feel magical and futuristic - this is your most innovative product
+4. **Amazon Store:** Should feel curated and valuable, not spammy
+5. **Affiliate Program:** Should feel like a legitimate business opportunity
+6. **Mobile Experience:** Must be flawless with sticky CTAs where appropriate
+7. **Loading States:** Consider animations for auth flows and transitions
+
+## **TECHNICAL EXECUTION**
+
+You may use:
+- **Framework:** React/Next.js preferred, but any modern stack
+- **Styling:** Tailwind CSS or equivalent
+- **Animations:** Framer Motion or equivalent for smooth transitions
+- **Images:** Use placeholder/stock images that match the described content
+- **Icons:** Modern icon set
+
+## **WHAT SUCCESS LOOKS LIKE**
+
+A completely redesigned page that:
+1. **Increases conversion rate** on /booking links
+2. **Builds excitement** for the A.I.U. platform
+3. **Showcases client work** in a premium, trustworthy way
+4. **Feels like a unified ecosystem** rather than disjointed sections
+5. **Works perfectly** on all devices with all functionality intact
+6. **Communicates "SPEED + AI"** as the core competitive advantage
+
+---
+
+**YOUR MISSION:** Take this functional but bland page and transform it into the digital headquarters of the future's most innovative website launchpad. Every button must work, every link must function, every auth flow must operate - but the experience must feel like stepping into a futuristic command center where businesses are born.
+
+**Output:** Complete, production-ready code with all functionality preserved and a visionary new design that makes competitors look outdated.
