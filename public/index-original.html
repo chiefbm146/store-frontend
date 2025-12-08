@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/clean-url.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AARIE.CA - Your Website Live in 7 Days</title>
+
+    <!-- ===== FINAL META TAGS FOR FACEBOOK PREVIEW ===== -->
+    <meta property="og:title" content="AARIE.CA - The 7-Day Launchpad">
+    <meta property="og:description"
+        content="See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aarie.ca/">
+    <meta property="og:site_name" content="AARIE.CA">
+    <meta property="og:see_also" content="https://www.facebook.com/profile.php?id=61578712383717">
+
+    <!-- The Image, Dimensions, and Your App ID -->
+    <meta property="og:image" content="https://aarie.ca/images/test.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="fb:app_id" content="3753347551626837">
+
+    <!-- Twitter Card for Consistency -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AARIE.CA - The 7-Day Launchpad">
+    <meta name="twitter:description"
+        content="See your first design mockup in 72 hours. Go live in 7-10 days. Professional websites with AI-powered chat.">
+    <meta name="twitter:image" content="https://aarie.ca/images/test.jpg">
+    <!-- ===== END OF FINAL META TAGS ===== -->
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🏪</text></svg>">
+
+    <!-- Font Awesome (local) -->
+    <link rel="stylesheet" href="./libs/fontawesome/all.min.css?v=11.0.12">
+
+    <!-- Linked CSS for Modals & Smart Messages -->
+    <link rel="stylesheet" href="./css/smart-message.css?v=11.0.12">
+    <link rel="stylesheet" href="./css/fullscreen-modals.css?v=11.0.12">
+    <link rel="stylesheet" href="./css/stripe-checkout.css?v=11.0.12">
+    <link rel="stylesheet" href="./css/amazon-affiliate.css">
+
+    <!-- Main Stylesheet for this page -->
+    <link rel="stylesheet" href="./css/style.css">
+
+    <!-- Device Detector (CRITICAL: Required for rate-limiting security system) -->
+    <script src="./js/device-detector.js?v=11.0.12"></script>
+
+    <!-- Three.js Libraries for 3D rendering and Water Background -->
+    <script src="./libs/three/three.min.js?v=11.0.12"></script>
+    <script>
+        // Fallback for Three.js
+        !window.THREE && document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" integrity="sha512-334dJpNOeaP5Eu6y+dE2e5vP5eK2w2oN2sA9i+l4prGOi/eQ/e1V5mksgr2iBf1GfCq3sT/iG2UvVb9bI/A64A==" crossorigin="anonymous"><\/script>');
+    </script>
+    <script src="./libs/three/GLTFLoader.js?v=11.0.12"></script>
+    <script>
+        // Fallback for GLTFLoader
+        !window.THREE || !window.THREE.GLTFLoader && document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.134/examples/js/loaders/GLTFLoader.js" integrity="sha256-gM3k2e/CWwjs72W22fP0vs6h3gSOx65j8s3Q229KBFo=" crossorigin="anonymous"><\/script>');
+    </script>
+</head>
+
+<body>
+    <!-- Firebase for Smart Affiliate Button -->
+    <script defer src="/__/firebase/12.4.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.4.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+
+    <!-- NEW NAVIGATION BAR -->
+    <nav
+        style="background: white; padding: 15px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1000;">
+        <a href="/"
+            style="font-size: 1.5rem; font-weight: 700; color: #0891b2; text-decoration: none; display: flex; align-items: center; gap: 10px;">
+            🏪 AARIE.CA
+        </a>
+        <div id="desktopNavLinks" style="display: flex; gap: 20px; align-items: center;">
+            <!-- Affiliate Button will be injected here by JavaScript -->
+        </div>
+        <button id="hamburgerMenuBtn"
+            style="display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #0891b2;">
+            ☰
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001;">
+    </div>
+    <div id="mobileMenu"
+        style="display: none; position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 1002; transition: right 0.3s ease; box-shadow: -5px 0 15px rgba(0,0,0,0.2); padding-top: 60px;">
+        <button id="closeMobileMenuBtn"
+            style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+        <div id="mobileNavLinks" style="display: flex; flex-direction: column; gap: 15px; padding: 20px;">
+            <!-- Affiliate Button will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+
+        function waitForFirebase(callback, attempts = 0) {
+            if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
+                callback();
+            } else if (attempts < 50) {
+                setTimeout(() => waitForFirebase(callback, attempts + 1), 100);
+            } else {
+                console.error("Firebase failed to initialize.");
+            }
+        }
+
+        function createAffiliateButton() {
+            const btn = document.createElement('button');
+            btn.id = 'affiliateBtn';
+            btn.className = 'nav-affiliate-btn';
+            btn.onclick = handleAffiliateClick;
+            btn.innerHTML = '💵 Sign In to Earn';
+            return btn;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const desktopNav = document.getElementById('desktopNavLinks');
+            const mobileNav = document.getElementById('mobileNavLinks');
+
+            const desktopBtn = createAffiliateButton();
+            const mobileBtn = createAffiliateButton();
+            mobileBtn.style.width = '100%';
+            mobileBtn.style.justifyContent = 'center';
+
+            if (desktopNav) desktopNav.appendChild(desktopBtn);
+            if (mobileNav) mobileNav.appendChild(mobileBtn);
+
+            const hamburgerBtn = document.getElementById('hamburgerMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileOverlay = document.getElementById('mobileMenuOverlay');
+            const closeMobileMenuBtn = document.getElementById('closeMobileMenuBtn');
+
+            const openMenu = () => {
+                mobileMenu.style.display = 'block';
+                mobileOverlay.style.display = 'block';
+                setTimeout(() => { mobileMenu.style.right = '0'; }, 10);
+            };
+
+            const closeMenu = () => {
+                mobileMenu.style.right = '-300px';
+                setTimeout(() => {
+                    mobileMenu.style.display = 'none';
+                    mobileOverlay.style.display = 'none';
+                }, 300);
+            };
+
+            if (hamburgerBtn) hamburgerBtn.addEventListener('click', openMenu);
+            if (closeMobileMenuBtn) closeMobileMenuBtn.addEventListener('click', closeMenu);
+            if (mobileOverlay) mobileOverlay.addEventListener('click', closeMenu);
+
+            waitForFirebase(() => {
+                firebase.auth().onAuthStateChanged(user => {
+                    currentUser = user;
+                    updateAllAffiliateButtons(user);
+                });
+            });
+        });
+
+        function updateAllAffiliateButtons(user) {
+            const buttons = document.querySelectorAll('#affiliateBtn');
+            buttons.forEach(btn => {
+                if (user) {
+                    btn.innerHTML = '📊 Go to Dashboard';
+                    btn.style.background = '#0891b2';
+                } else {
+                    btn.innerHTML = '💵 Sign In to Earn';
+                    btn.style.background = '#10b981';
+                }
+                btn.disabled = false;
+            });
+        }
+
+        function handleAffiliateClick() {
+            if (currentUser) {
+                showButtonSpinnerOnAll();
+                checkAndRouteAffiliate(currentUser);
+            } else {
+                waitForFirebase(() => {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    firebase.auth().signInWithPopup(provider)
+                        .then((result) => {
+                            showButtonSpinnerOnAll();
+                            checkAndRouteAffiliate(result.user);
+                        })
+                        .catch(error => {
+                            console.error('Sign-in error:', error);
+                            alert('Failed to sign in. Please try again.');
+                            updateAllAffiliateButtons(null);
+                        });
+                });
+            }
+        }
+
+        function showButtonSpinnerOnAll() {
+            const buttons = document.querySelectorAll('#affiliateBtn');
+            buttons.forEach(btn => {
+                btn.innerHTML = '<div class="affiliate-spinner affiliate-spinner-light"></div> Checking...';
+                btn.disabled = true;
+            });
+        }
+
+        async function checkAndRouteAffiliate(user) {
+            try {
+                const idToken = await user.getIdToken(true);
+                const response = await fetch('/api/client/affiliate-status', {
+                    headers: { 'Authorization': `Bearer ${idToken}` }
+                });
+
+                if (!response.ok) throw new Error('Failed to check status');
+                const data = await response.json();
+
+                if (data.isAffiliate) {
+                    window.location.href = '/affiliate-portal';
+                } else {
+                    window.location.href = '/affiliate-aarie';
+                }
+            } catch (error) {
+                console.error('Error checking affiliate status:', error);
+                window.location.href = '/affiliate';
+            }
+        }
+    </script>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <span class="hero-icon">🏪</span>
+            <h1 class="hero-title">Your Website, Live in 7 Days</h1>
+            <p class="hero-subtitle">AARIE.CA builds professional websites with AI-powered chat. See your first design
+                mockup within 72 hours.</p>
+            <p class="hero-description">We create custom websites for workshops, products, or services with intelligent
+                chatbots that help your customers 24/7. Only 4 projects per month to ensure quality.</p>
+            <div class="hero-buttons">
+                <a href="/booking" class="btn btn-primary">Start Your Site Today</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Moon Tide Section - SERVING CLIENTS RIGHT NOW -->
+    <section style="padding: 80px 20px; background: white; text-align: center; position: relative; overflow: hidden;">
+        <div
+            style="max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; padding: 40px; background: rgba(0, 0, 0, 0.05); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(0, 0, 0, 0.1);">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="/images/INDEX/moon-logo.png" alt="Moon Tide Logo"
+                    style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 20px;">
+            </div>
+            <span
+                style="background: #22c55e; color: white; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px;">
+                ✅ SERVING CLIENTS RIGHT NOW
+            </span>
+            <h2 style="color: black; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 20px; font-weight: 800;">Moon
+                Tide Reconciliation</h2>
+            <p
+                style="color: black; font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                A professional reconciliation services website featuring workshop bookings, educational resources, and
+                AI-powered client support. Built for transformative healing work.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://moontide.ca" target="_blank" rel="noopener" class="btn"
+                    style="background: white; color: #0284c7; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    🌊 Visit Moon Tide
+                </a>
+                <a href="/booking" class="btn"
+                    style="background: black; color: white; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    🏪 Build Your Site Like This
+                </a>
+            </div>
+        </div>
+        <!-- Subtle background pattern -->
+        <div
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; background-image: radial-gradient(circle at 25% 25%, #000000 2px, transparent 2px), radial-gradient(circle at 75% 75%, #000000 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;">
+        </div>
+    </section>
+
+    <!-- RJ Roofing Bros Section - SERVING CLIENTS SOON -->
+    <section style="padding: 80px 20px; background: white; text-align: center; position: relative; overflow: hidden;">
+        <div
+            style="max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; padding: 40px; background: rgba(0, 0, 0, 0.05); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(0, 0, 0, 0.1);">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="/vickers-roofing/images/roof30.jpg" alt="RJ Roofing Bros Logo"
+                    style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 20px;">
+            </div>
+            <span
+                style="background: #ef4444; color: white; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px;">
+                🚧 SERVING CLIENTS SOON
+            </span>
+            <h2 style="color: #b91c1c; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 20px; font-weight: 800;">
+                RJ Roofing Bros</h2>
+            <p
+                style="color: #ef4444; font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                A comprehensive website for RJ Roofing Bros, featuring service booking, detailed project showcases, and
+                an AI assistant providing expert advice on roofing issues.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://rjroofingbros.com" target="_blank" rel="noopener" class="btn"
+                    style="background: white; color: #b91c1c; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    🏠 Preview Roofing Site
+                </a>
+                <a href="/booking" class="btn"
+                    style="background: #b91c1c; color: white; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    🏪 Build Your Service Site
+                </a>
+            </div>
+        </div>
+        <!-- Subtle background pattern -->
+        <div
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; background-image: radial-gradient(circle at 25% 25%, #000000 2px, transparent 2px), radial-gradient(circle at 75% 75%, #000000 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;">
+        </div>
+    </section>
+
+    <!-- ======================================== -->
+    <!-- A.I.U. (Artificial Intelligence You) Section -->
+    <!-- ======================================== -->
+    <section style="padding: 80px 20px; background: #0f172a; text-align: center; position: relative; overflow: hidden;">
+        <!-- Background glow effect -->
+        <div
+            style="position: absolute; top: 50%; left: 50%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0) 70%); transform: translate(-50%, -50%); pointer-events: none;">
+        </div>
+
+        <div style="max-width: 1000px; margin: 0 auto; position: relative; z-index: 2;">
+            <!-- Image Container -->
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="/images/INDEX/aiu.png" alt="A.I.U. - Artificial Intelligence You"
+                    style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(168, 85, 247, 0.3);">
+            </div>
+
+            <!-- Badge -->
+            <span
+                style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px;">
+                ✨ NEW PLATFORM
+            </span>
+
+            <!-- Title -->
+            <h2 style="color: white; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 20px; font-weight: 800;">
+                Introducing A.I.U.
+            </h2>
+
+            <!-- Subtitle -->
+            <p
+                style="color: #94a3b8; font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Turn your personality and expertise into a shareable AI. Create a digital version of yourself that
+                anyone can talk to, 24/7.
+            </p>
+
+            <!-- Call to Action -->
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="/aiu-menu" class="btn"
+                    style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px; box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);">
+                    Create Your AI Persona
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- ======================================== -->
+    <!-- End of A.I.U. Section -->
+    <!-- ======================================== -->
+
+    <!-- Bert Peters Salish Art Section - SERVING CLIENTS SOON -->
+    <section style="padding: 80px 20px; background: white; text-align: center; position: relative; overflow: hidden;">
+        <div
+            style="max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; padding: 40px; background: rgba(0, 0, 0, 0.05); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(0, 0, 0, 0.1);">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="/images/INDEX/circle-carving.jpeg" alt="Bert Peters Circle Carving"
+                    style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 20px;">
+            </div>
+            <span
+                style="background: #eab308; color: white; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px;">
+                🚀 SERVING CLIENTS SOON
+            </span>
+            <h2 style="color: #ea580c; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 20px; font-weight: 800;">Bert
+                Peters Salish Art</h2>
+            <p
+                style="color: #fb923c; font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                A bespoke art gallery and e-commerce platform for master Salish artist Bert Peters, showcasing custom
+                commissions and original works with intelligent client interaction.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://bertpeterssalishart.com" target="_blank" rel="noopener" class="btn"
+                    style="background: white; color: #ea580c; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    🎨 Preview Gallery
+                </a>
+                <a href="/booking" class="btn"
+                    style="background: #ea580c; color: white; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    🏪 Build Your Art Site
+                </a>
+            </div>
+        </div>
+        <!-- Subtle background pattern -->
+        <div
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; background-image: radial-gradient(circle at 25% 25%, #000000 2px, transparent 2px), radial-gradient(circle at 75% 75%, #000000 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;">
+        </div>
+    </section>
+    <!-- Stó:lō Medicine Section - SERVING CLIENTS SOON -->
+    <section style="padding: 80px 20px; background: white; text-align: center; position: relative; overflow: hidden;">
+        <div
+            style="max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; padding: 40px; background: rgba(0, 0, 0, 0.05); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(0, 0, 0, 0.1);">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="/images/INDEX/davids-meta.png" alt="Sxexet Spath Logo"
+                    style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 20px;">
+            </div>
+            <span
+                style="background: #10b981; color: white; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px;">
+                🚀 SERVING CLIENTS SOON
+            </span>
+            <h2 style="color: #16a34a; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 20px; font-weight: 800;">
+                Sxexet Spath (Stó:lō Medicine)</h2>
+            <p
+                style="color: #4ade80; font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                A platform dedicated to traditional Stó:lō plant medicines, offering remedies and educational resources,
+                guided by an AI Knowledge Keeper for respectful cultural learning.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://aarie.ca/david-peters" class="btn"
+                    style="background: white; color: #16a34a; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    🌿 Learn More
+                </a>
+                <a href="/booking" class="btn"
+                    style="background: #16a34a; color: white; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    🏪 Build Your Wellness Site
+                </a>
+            </div>
+        </div>
+        <!-- Subtle background pattern -->
+        <div
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; background-image: radial-gradient(circle at 25% 25%, #000000 2px, transparent 2px), radial-gradient(circle at 75% 75%, #000000 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;">
+        </div>
+    </section>
+
+    <!-- Redesigned Amazon Affiliate Store Section -->
+    <section class="amazon-affiliate-section" role="region" aria-label="Holiday Gift Store">
+        <div class="section-bg-overlay"></div>
+        <div class="section-content">
+            <!-- Holiday Badge -->
+            <div class="holiday-badge">
+                <span class="badge-icon">🎄</span>
+                <span>December 2025 — Orders still arriving before Christmas with Prime</span>
+            </div>
+
+            <!-- Main Header -->
+            <header class="affiliate-header">
+                <h2>AARIE.CA's Amazon Affiliate Store</h2>
+                <p class="subtitle">Curated for great gift ideas or personal purchases for anyone.</p>
+                <p class="details">Powered by Amazon.ca · Updated daily for December 2025 · Cyber Monday Deals Active
+                </p>
+            </header>
+
+            <!-- CTAs -->
+            <div class="cta-buttons">
+                <a href="https://aarie.ca/aaries-store" class="btn btn-primary" aria-label="Shop curated holiday gifts">
+                    🎁 Shop Our Curated Collection
+                </a>
+                <a href="https://aarie.ca/booking" class="btn btn-secondary"
+                    aria-label="Build your own affiliate store">
+                    🏪 Build Your Own Store
+                </a>
+            </div>
+
+            <!-- Featured Products Grid -->
+            <div class="products-grid" role="list" aria-label="Featured holiday deals">
+                <article class="product-card" role="listitem">
+                    <img src="images/AMAZON/YETI TUMBLER.jpg"
+                        alt="YETI Tumbler - Insulated stainless steel cup for hot and cold drinks" loading="lazy">
+                    <div class="product-info">
+                        <h3>YETI Tumbler</h3>
+                        <div class="price-container">
+                            <span class="current-price">$33.60</span>
+                            <span class="original-price">$38.60</span>
+                            <span class="deal-badge">13% off</span>
+                        </div>
+                    </div>
+                    <a href="https://aarie.ca/aaries-store" class="product-link"
+                        aria-label="View YETI Tumbler on Amazon"></a>
+                </article>
+
+                <article class="product-card" role="listitem">
+                    <img src="images/AMAZON/noice cancelling headphones.jpg"
+                        alt="Sony Wireless Earbuds - Noise-cancelling true wireless headphones" loading="lazy">
+                    <div class="product-info">
+                        <h3>Sony Earbuds</h3>
+                        <div class="price-container">
+                            <span class="current-price">$298.00</span>
+                            <span class="original-price">$429.99</span>
+                            <span class="deal-badge">31% off</span>
+                        </div>
+                    </div>
+                    <a href="https://aarie.ca/aaries-store" class="product-link"
+                        aria-label="View Sony Earbuds on Amazon"></a>
+                </article>
+
+                <article class="product-card" role="listitem">
+                    <img src="images/AMAZON/whiskey.jpg"
+                        alt="Whiskey Smoker Kit - Infuse cocktails with wood smoke flavors" loading="lazy">
+                    <div class="product-info">
+                        <h3>Whiskey Smoker</h3>
+                        <div class="price-container">
+                            <span class="current-price">$47.99</span>
+                            <span class="original-price">$69.99</span>
+                            <span class="deal-badge">31% off</span>
+                        </div>
+                    </div>
+                    <a href="https://aarie.ca/aaries-store" class="product-link"
+                        aria-label="View Whiskey Smoker on Amazon"></a>
+                </article>
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Affiliate Program Section -->
+    <section
+        style="padding: 80px 20px; background: linear-gradient(135deg, #0F1111 0%, #232F3E 100%); text-align: center; position: relative; overflow: hidden;">
+        <div
+            style="max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; padding: 40px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2);">
+            <span
+                style="background: #8b5cf6; color: white; padding: 8px 20px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px;">
+                💰 PARTNER WITH US
+            </span>
+            <h2 style="color: white; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 20px; font-weight: 800;">Join
+                Our Affiliate Program</h2>
+            <p
+                style="color: rgba(255, 255, 255, 0.9); font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Earn commissions by sharing AARIE.CA with your network. Help others launch their digital presence
+                quickly while generating passive income. Make 8% of every $499 sale - we create Websites for Businesses
+                with A.I. Chat Bots and Stripe integration.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="/affiliate" class="btn"
+                    style="background: white; color: #7c3aed; border: none; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    💵 Join Affiliate Program
+                </a>
+                <a href="/booking" class="btn"
+                    style="background: rgba(255, 255, 255, 0.2); color: white; border: 2px solid white; min-width: 250px; font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border-radius: 50px;">
+                    🏪 Start Your Site
+                </a>
+            </div>
+        </div>
+        <!-- Subtle background pattern -->
+        <div
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; background-image: radial-gradient(circle at 25% 25%, #FFFFFF 2px, transparent 2px), radial-gradient(circle at 75% 75%, #FFFFFF 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;">
+        </div>
+    </section>
+
+    <!-- Who Is This For Section -->
+    <section class="who-section">
+        <div class="who-content">
+            <div class="section-header">
+                <h2 class="section-title">This Is For You</h2>
+                <p class="section-subtitle">Anyone can start selling online - no business degree required</p>
+            </div>
+            <div class="who-highlight">Accept payments through Stripe under your own name, sole proprietorship, or
+                registered business. You don't need a corporation to start making money.</div>
+            <div class="business-types-grid">
+                <div class="business-type-card"><span class="business-type-icon">👤</span>
+                    <div>
+                        <h3 class="business-type-title">Individuals</h3>
+                        <p class="business-type-description">Sell under your own name - artists, freelancers, creators,
+                            hobbyists turning passion into profit</p>
+                    </div>
+                </div>
+                <div class="business-type-card"><span class="business-type-icon">📋</span>
+                    <div>
+                        <h3 class="business-type-title">Sole Proprietors</h3>
+                        <p class="business-type-description">Small business owners ready to take their services online
+                            and reach more customers</p>
+                    </div>
+                </div>
+                <div class="business-type-card"><span class="business-type-icon">🏢</span>
+                    <div>
+                        <h3 class="business-type-title">Registered Businesses</h3>
+                        <p class="business-type-description">Established companies looking for a professional online
+                            presence with AI support</p>
+                    </div>
+                </div>
+            </div>
+            <div class="examples-section">
+                <h3 class="examples-title">What Can You Sell?</h3>
+                <div class="examples-grid">
+                    <div class="example-item"><span class="example-icon">🎨</span><span class="example-text">Art &
+                            Handmade Crafts</span></div>
+                    <div class="example-item"><span class="example-icon">📚</span><span class="example-text">Online
+                            Courses & Workshops</span></div>
+                    <div class="example-item"><span class="example-icon">💆</span><span class="example-text">Wellness &
+                            Healing Services</span></div>
+                    <div class="example-item"><span class="example-icon">🔧</span><span class="example-text">Consulting
+                            & Professional Services</span></div>
+                    <div class="example-item"><span class="example-icon">📦</span><span class="example-text">Physical
+                            Products & Merchandise</span></div>
+                    <div class="example-item"><span class="example-icon">🎵</span><span class="example-text">Music,
+                            Books & Digital Downloads</span></div>
+                    <div class="example-item"><span class="example-icon">🏋️</span><span class="example-text">Fitness &
+                            Coaching Programs</span></div>
+                    <div class="example-item"><span class="example-icon">🍰</span><span class="example-text">Food,
+                            Baking & Catering</span></div>
+                </div>
+            </div>
+            <div class="advantage-box"><span class="advantage-icon">⚡</span>
+                <h3 class="advantage-title">Start Making Money Fast</h3>
+                <p class="advantage-description">See your first design mockup in 72 hours. Your complete website goes
+                    live in just 7-10 days. While others wait months, you'll already be accepting orders.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="section-header">
+            <h2 class="section-title">Why Choose AARIE.CA</h2>
+            <p class="section-subtitle">Everything you need - we handle it all</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card"><span class="feature-icon">🎓</span>
+                <div>
+                    <h3 class="feature-title">Sell Workshops</h3>
+                    <p class="feature-description">We create stores that sell educational workshops with booking,
+                        scheduling, and payment processing built-in.</p>
+                </div>
+            </div>
+            <div class="feature-card"><span class="feature-icon">📦</span>
+                <div>
+                    <h3 class="feature-title">Sell Products</h3>
+                    <p class="feature-description">We launch product catalogs with inventory management, checkout, and
+                        order tracking automatically configured.</p>
+                </div>
+            </div>
+            <div class="feature-card"><span class="feature-icon">⚙️</span>
+                <div>
+                    <h3 class="feature-title">Sell Services</h3>
+                    <p class="feature-description">We build service pages with consultation booking, service packages,
+                        and client management tools.</p>
+                </div>
+            </div>
+            <div class="feature-card"><span class="feature-icon">🤖</span>
+                <div>
+                    <h3 class="feature-title">Custom AI Chatbots</h3>
+                    <p class="feature-description">Each store includes an intelligent AI assistant trained on your
+                        business to help customers 24/7.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AARIES Image Section -->
+    <section class="aaries-section">
+        <div class="aaries-content">
+            <div class="aaries-image-container">
+                <img src="/images/AARIES.jpeg" alt="AARIE.CA Platform Overview" class="aaries-image">
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Blurb Section (Mobile Only - replaces chat section) -->
+    <section class="ai-blurb-section">
+        <div class="ai-blurb-content">
+            <span class="ai-blurb-icon">🤖</span>
+            <h3 class="ai-blurb-title">Custom AI For Your Business</h3>
+            <p class="ai-blurb-text">Every store we build includes a custom AI chatbot with its own personality -
+                professional, helpful, and trained specifically on your business. Your customers get instant answers
+                about your offerings 24/7, and it's always safe and on-brand.</p>
+            <button class="ai-blurb-cta" id="aiBlurbCta">Try Our AI Assistant</button>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>The 7-Day Launchpad</h2>
+                <h3>From consultation to live website in just one week</h3>
+                <p>AARIE.CA builds professional websites for your business - you don't have to do anything. Whether
+                    you're selling workshops, physical products, or professional services, we handle everything. Day 1:
+                    kickoff call. Day 3: see your design mockup. Day 7-10: your site goes live.</p>
+                <p>Every website we build includes a custom AI chatbot trained on your specific business. Your customers
+                    get instant answers about your offerings, pricing, and availability 24/7. No coding required, no
+                    technical expertise needed - we build it, you run your business.</p>
+            </div>
+            <div class="about-visual"><span class="about-emoji">🚀</span></div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Launch Your Digital Presence?</h2>
+            <p>Our 7-Day Launchpad is designed to get you online fast with a professional, AI-powered store. Stop
+                waiting, start selling!</p>
+            <div class="cta-buttons">
+                <a href="/booking" class="btn btn-primary">Start Your Site Today</a>
+                <a href="/affiliate" class="btn btn-secondary">Explore Affiliate Opportunities</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Smart Share Section -->
+    <section
+        style="background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); padding: 80px 40px; text-align: center;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2 style="color: white; font-size: 2rem; margin-bottom: 20px; font-weight: 800;">Share AARIE.CA</h2>
+            <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.1rem; margin-bottom: 40px;">
+                <span id="shareMessage">Want to get paid to share? <a href="/affiliate-aarie"
+                        style="color: white; text-decoration: underline; font-weight: 700;">Join our Affiliate
+                        Program.</a></span>
+                <span id="affiliateBadge" style="display: none; color: white; font-weight: 700;">✅ Affiliate Link
+                    Active: Sharing this earns you commission.</span>
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a id="pageShareBtn_facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://aarie.ca/"
+                    target="_blank"
+                    style="display: inline-block; padding: 14px 30px; background: white; color: #1877f2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">📘
+                    Facebook</a>
+                <a id="pageShareBtn_twitter" href="https://twitter.com/intent/tweet?url=https://aarie.ca/"
+                    target="_blank"
+                    style="display: inline-block; padding: 14px 30px; background: white; color: #000; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">𝕏
+                    Twitter/X</a>
+                <a id="pageShareBtn_linkedin"
+                    href="https://www.linkedin.com/sharing/share-offsite/?url=https://aarie.ca/" target="_blank"
+                    style="display: inline-block; padding: 14px 30px; background: white; color: #0a66c2; text-decoration: none; border-radius: 8px; font-weight: 700; transition: all 0.3s; cursor: pointer;">in
+                    LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-tagline">AARIE.CA - Your Website Live in 7 Days</p>
+            <div class="footer-links">
+                <a href="/booking">GET A STORE</a>
+                <a href="/about-desk.html">About</a>
+                <a href="/contact-desk.html">Contact</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms and Conditions</a>
+            </div>
+            <p class="footer-copyright">© 2025 AARIE.CA. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Water Background for AI Chat -->
+    <script src="./js/water4chat.js"></script>
+
+    <!-- Universal AI Chat Widget v3.0 - Auto-configures for AARIE Platform -->
+    <script src="./js/ai-chat.js" data-store-id="aarie-platform"></script>
+
+    <!-- Affiliate Tracking Script -->
+    <script>
+        // Capture affiliate ref parameter from URL and store for booking flow
+        function captureAffiliateRef() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const affiliateRef = urlParams.get('ref');
+            if (affiliateRef) {
+                sessionStorage.setItem('affiliate_ref', affiliateRef.trim());
+            }
+        }
+        captureAffiliateRef();
+    </script>
+
+</body>
+
+</html>
