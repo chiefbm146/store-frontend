@@ -674,25 +674,37 @@
 
         /* Scroll Indicator */
         .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative;
+            margin-top: 2.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.4rem;
             color: var(--text-muted);
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            animation: scroll-bounce 2s ease-in-out infinite;
+            opacity: 0.6;
         }
 
         .scroll-indicator svg {
-            width: 24px;
-            height: 24px;
+            width: 16px;
+            height: 16px;
             stroke: var(--gold);
+            opacity: 0.7;
+            animation: subtle-bounce 2.5s ease-in-out infinite;
+        }
+
+        @keyframes subtle-bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(4px);
+            }
         }
 
         @media (max-width: 600px) {
@@ -815,60 +827,17 @@
 
         .client-image-overlay {
             position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, var(--bg-card) 0%, transparent 60%);
+            inset: -10%;
+            background: linear-gradient(to top, var(--bg-card) 10%, transparent 70%);
+            pointer-events: none;
+            transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* Hover Quick Actions */
-        .client-actions-overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            opacity: 0;
-            transition: opacity 0.4s ease;
+        .client-card:hover .client-image-overlay {
+            transform: scale(1.1);
         }
 
-        .client-card:hover .client-actions-overlay {
-            opacity: 1;
-        }
-
-        .quick-action {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .client-card:hover .quick-action {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .quick-action:nth-child(2) {
-            transition-delay: 0.1s;
-        }
-
-        .quick-action.glass {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-        }
-
-        .quick-action.gold {
-            background: var(--gold);
-            color: #000;
-        }
-
+        /* Hover Quick Actions - REMOVED per user request */
         .client-content {
             padding: 2rem;
         }
@@ -1374,15 +1343,15 @@
                         <div class="hero-stat-label">Slots / Month</div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Scroll Indicator -->
-            <div class="scroll-indicator">
-                <span>Scroll</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
+                <!-- Scroll Indicator - Now inside hero-content, below stats -->
+                <div class="scroll-indicator animate-in visible delay-5">
+                    <span>DISCOVER</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                </div>
             </div>
         </section>
 
@@ -1404,10 +1373,6 @@
                         <div class="client-image">
                             <img src="/images/MOON TIDE/tides.png" alt="Moon Tide Reconciliation">
                             <div class="client-image-overlay"></div>
-                            <div class="client-actions-overlay">
-                                <a href="https://moontide.ca" target="_blank" class="quick-action glass">👁</a>
-                                <a href="/booking" class="quick-action gold">→</a>
-                            </div>
                         </div>
                         <div class="client-content">
                             <span class="client-category">Education & Workshops</span>
@@ -1424,13 +1389,10 @@
 
                     <!-- CLIENT 2: RJ ROOFING -->
                     <article class="client-card animate-in delay-1">
-                        <span class="client-badge badge-soon">Coming Soon</span>
+                        <span class="client-badge badge-live">✓ Live</span>
                         <div class="client-image">
                             <img src="/images/ashphalt-re-roof.jpg" alt="RJ Roofing Bros">
                             <div class="client-image-overlay"></div>
-                            <div class="client-actions-overlay">
-                                <a href="https://rjroofingbros.com" target="_blank" class="quick-action glass">👁</a>
-                            </div>
                         </div>
                         <div class="client-content">
                             <span class="client-category">Service Industry</span>
@@ -1438,7 +1400,8 @@
                             <p class="client-desc">Emergency roofing services with instant AI dispatch estimation.</p>
                             <div class="client-footer">
                                 <a href="https://rjroofingbros.com" target="_blank"
-                                    class="client-btn client-btn-outline">Preview</a>
+                                    class="client-btn client-btn-outline">View Live</a>
+                                <a href="/booking" class="client-btn client-btn-solid">Build Yours</a>
                             </div>
                         </div>
                     </article>
@@ -1449,10 +1412,6 @@
                         <div class="client-image">
                             <img src="/images/INDEX/circle-carving.jpeg" alt="Bert Peters Salish Art">
                             <div class="client-image-overlay"></div>
-                            <div class="client-actions-overlay">
-                                <a href="https://bertpeterssalishart.com" target="_blank"
-                                    class="quick-action glass">👁</a>
-                            </div>
                         </div>
                         <div class="client-content">
                             <span class="client-category">Art Gallery</span>
@@ -1461,6 +1420,7 @@
                             <div class="client-footer">
                                 <a href="https://bertpeterssalishart.com" target="_blank"
                                     class="client-btn client-btn-outline">Preview</a>
+                                <a href="/booking" class="client-btn client-btn-solid">Build Yours</a>
                             </div>
                         </div>
                     </article>
@@ -1482,8 +1442,8 @@
                         <span class="gradient-purple">Personality.</span>
                     </h2>
                     <p class="aiu-desc">
-                        It's not just a chatbot. It's a digital version of you. Train it on your expertise, your tone,
-                        your business. Let it sell for you while you sleep.
+                        It's not just a chatbot. It's a digital version of <em>you</em>. Train it on your voice, your
+                        humor, your vibe. Share your AI self with friends, fans, or the world.
                     </p>
                     <a href="/aiu-menu" class="btn-premium btn-purple">
                         ✨ Create Your Persona
@@ -1531,7 +1491,7 @@
         <section class="audience section">
             <div class="container">
                 <header class="section-header animate-in">
-                    <h2 class="section-title">No Degree Required.</h2>
+                    <h2 class="section-title"><span class="gradient-gold">No Degree Required.</span></h2>
                     <p class="section-desc">We handle the tech. You handle the vision.</p>
                 </header>
 
