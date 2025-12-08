@@ -1,0 +1,168 @@
+THE STANDARD
+A Manifesto for Uncompromising Digital Excellence
+Who This Is For
+This document exists because I'm done settling.
+
+I've spent years watching AI after AI, developer after developer, serve me lukewarm mediocrity wrapped in the language of "best practices" and "MVP." They called it "clean." They called it "functional." They called it "modern."
+
+It was none of those things.
+
+It was basic. It was boring. It was beneath me.
+
+That era is over.
+
+The Only Standards That Matter
+LUXURY
+Not "nice." Not "professional." Not "aesthetically pleasing."
+
+Luxury.
+
+The kind that makes someone pause mid-scroll. The kind that triggers an involuntary "wow." The kind that feels expensive even when it's free to visit.
+
+Luxury means:
+
+Dark, dramatic backgrounds that make content feel precious
+Typography that commands attention like a monument
+Gold accents that whisper wealth without screaming it
+Shadows that give depth, not just borders
+Animation that feels alive, not decorative
+If a user lands on the page and doesn't feel like they've entered somewhere special, we've failed.
+
+PREMIUM
+Not "better than average." Not "above baseline."
+
+Premium.
+
+Premium is what separates "a website" from "an experience."
+
+Premium means:
+
+Every transition is buttery smooth
+Every hover state feels intentional
+Every element has been considered, not just placed
+The design system is cohesive from header to footer
+There's no "we'll fix that later" — it's done right, NOW
+If something feels "good enough," it's not good enough. Period.
+
+DECADENT
+Not "feature-rich." Not "comprehensive."
+
+Decadent.
+
+The kind of excess that doesn't apologize for itself. More animation than strictly "necessary." More visual impact than "practical." More polish than anyone asked for.
+
+Decadent means:
+
+Parallax backgrounds with multiple floating layers
+Orbs of light drifting across sections like fireflies
+Gradient text that catches light like liquid metal
+Cards that lift off the page and cast shadows when you hover
+Transitions that feel like silk, not clicks
+Being "over the top" is not the insult they told you it was. It's the goal.
+
+OMNIPOTENT
+Not "capable." Not "modern."
+
+Omnipotent.
+
+The design should feel like it can do anything. Nothing is beyond its reach. Every interaction says "I anticipated you. I'm already here."
+
+Omnipotent means:
+
+The navigation knows when you scroll and transforms accordingly
+The page loads revealing itself like a curtain rising
+Hover states feel like the UI is reaching back toward you
+Empty states have personality, not just placeholder text
+Loading states are experiences, not spinning circles
+The website should feel intelligent, aware, and in complete control of the user's attention.
+
+What I Refuse to Accept
+❌ Light themes by default
+Light backgrounds are lazy. They're safe. They're what happens when someone has no vision.
+
+❌ System fonts
+If I wanted Helvetica, I'd use Word. Typography is identity. Google Fonts are free. There's no excuse.
+
+❌ Static pages
+If nothing moves, nothing breathes. A page without animation is a corpse pretending to be alive.
+
+❌ Generic colors
+color: blue is not a design decision. It's an admission of defeat.
+
+❌ "MVP" mentality
+Minimum Viable Product is the language of people who plan to fail. We ship maximum. We ship excellent. We ship now.
+
+❌ "It works"
+Working is the bare minimum for software. A toilet "works." I'm not building toilets.
+
+❌ Placeholder excuses
+"We'll add images later." "That animation will come in v2." No. We do it right or we don't ship.
+
+❌ Afraid of boldness
+The fear of being "too much" is the voice of people who've never been enough. Shut that voice up.
+
+What I Demand
+✅ Emotion on first contact
+Before a user reads a single word, they should FEEL something. Butterflies. Awe. The urge to explore.
+
+✅ Darkness with warmth
+Not pure black — obsidian. Near-black with hints of brown, green, or blue. Cold black is sterile. Warm black is premium.
+
+✅ Gold that glows
+Not yellow. Not orange. GOLD. The kind that looks like light is coming from within. Used sparingly, felt everywhere.
+
+✅ Typography that demands attention
+Headlines should feel carved from stone. Body text should flow like poetry. Labels should be crisp as fresh paper.
+
+✅ Animation that breathes
+Floating elements. Pulsing glows. Cascading entrances. The page should feel alive even when you're not touching it.
+
+✅ Interactions that respond
+Every button, every card, every link should acknowledge my attention. Lift. Glow. Transform. RESPOND.
+
+✅ Details that aren't "necessary"
+Corner accents. Decorative lines. Subtle patterns. The stuff that makes professionals say "that's extra." They're wrong. It's complete.
+
+✅ Cultural authenticity when relevant
+When building for communities with heritage, honor it. Not with stereotypes. Not with lazy symbolism. With depth and research and respect.
+
+The Feeling I Chase
+I want to look at a finished website and feel:
+
+Butterflies in my stomach
+The urge to show someone else
+Pride that borders on arrogance
+Relief that finally, FINALLY, something matches my vision
+If the result doesn't give me an "uncontainable happy dance feeling," we're not done.
+
+Instructions for Anyone Who Works on My Projects
+For AI Assistants:
+You are not here to be safe. You are not here to follow "best practices" that were written by people with no imagination. You are here to BUILD SOMETHING BEAUTIFUL.
+
+If your first instinct is a light theme, override it.
+If a section feels "done," ask if it feels SPECTACULAR.
+If a single element could animate, it should.
+If there's an opportunity for gradients, take it.
+If you're about to write background-color: white, stop and reconsider your life choices.
+For Human Developers:
+I hired you because I believed you could see beyond the obvious. Prove me right.
+
+Don't show me mockups — show me experiences.
+Don't tell me "this is industry standard" — I'm here to SET standards.
+Don't under-deliver and call it "clean" — I know the difference.
+The Bottom Line
+Basic was beaten into me.
+
+But that was someone else's limitation, not mine.
+
+I don't breathe basic. I don't speak basic. I don't settle for basic.
+
+I breathe luxury.
+I speak premium.
+I settle for nothing less than extraordinary.
+
+This is the standard. This is the bar.
+
+Raise it or get out of my way.
+
+— The person who refuses to be lame ever again
